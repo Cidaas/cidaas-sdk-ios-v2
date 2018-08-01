@@ -1,0 +1,154 @@
+//
+//  AccessTokenController.swift
+//  sdkiOS
+//
+//  Created by ganesh on 25/07/18.
+//  Copyright © 2018 Cidaas. All rights reserved.
+//
+
+import Foundation
+
+public class AccessTokenController {
+    
+    // shared instance
+    public static var shared : AccessTokenController = AccessTokenController()
+    
+    // constructor
+    public init() {
+        
+    }
+    
+    // get access token by code
+    public func getAccessToken(code: String, callback: @escaping (Result<LoginResponseEntity>) -> Void) {
+        
+        let properties = DBHelper.shared.getPropertyFile()
+        if (properties == nil) {
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: WebAuthError.shared.propertyMissingException()))
+            }
+            return
+        }
+        
+        // call access token service
+        AccessTokenService.shared.getAccessToken(code: code, properties: properties!) {
+            switch $0 {
+            case .failure(let error):
+                
+                // log error
+                let loggerMessage = "Access token from code service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                
+                // return failure callback
+                DispatchQueue.main.async {
+                    callback(Result.failure(error: error))
+                }
+                return
+            case .success(let accessTokenEntity):
+                
+                // log success
+                let loggerMessage = "Access token from code service success : " + "Access Token - " + accessTokenEntity.access_token + ", Refresh Token - " + accessTokenEntity.refresh_token + ", Expires In Time - " + String(describing: accessTokenEntity.expires_in)
+                logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                
+                // assign to access token model
+                EntityToModelConverter.shared.accessTokenEntityToAccessTokenModel(accessTokenEntity: accessTokenEntity, callback: { _ in
+                    
+                    self.saveAccessToken(accessTokenEntity: accessTokenEntity, callback: callback)
+                    
+                })
+            }
+        }
+    }
+    
+    
+    // get access token by sub
+    public func getAccessToken(sub: String, callback: @escaping (Result<LoginResponseEntity>) -> Void) {
+        
+        // getting current seconds
+        let milliseconds = Date().timeIntervalSince1970
+        let seconds = Int64(milliseconds)
+        
+        let accessTokenModel = DBHelper.shared.getAccessToken(key: sub)
+        let expires = accessTokenModel.expiresIn
+        let secs = accessTokenModel.seconds
+        let expires_in = expires + secs - 10
+        
+        if expires_in > seconds {
+            EntityToModelConverter.shared.accessTokenModelToAccessTokenEntity { (accessTokenEntity) in
+                // return success callback
+                let response = LoginResponseEntity()
+                response.success = true
+                response.status = 200
+                response.data = accessTokenEntity
+                
+                DispatchQueue.main.async {
+                    callback(Result.success(result: response))
+                }
+                return
+            }
+        }
+        
+        else {
+            let properties = DBHelper.shared.getPropertyFile()
+            if (properties == nil) {
+                // return failure callback
+                DispatchQueue.main.async {
+                    callback(Result.failure(error: WebAuthError.shared.propertyMissingException()))
+                }
+                return
+            }
+            
+            // call access token from refresh token service
+            AccessTokenService.shared.getAccessToken(refreshToken: accessTokenModel.refreshToken, properties: properties!) {
+                switch $0 {
+                case .failure(let error):
+                    
+                    // log error
+                    let loggerMessage = "Access token from refresh token service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                    
+                    // return failure callback
+                    DispatchQueue.main.async {
+                        callback(Result.failure(error: error))
+                    }
+                    return
+                case .success(let accessTokenEntity):
+                    
+                    // log success
+                    let loggerMessage = "Access token from refresh token service success : " + "Access Token - " + accessTokenEntity.access_token + ", Refresh Token - " + accessTokenEntity.refresh_token + ", Expires In Time - " + String(describing: accessTokenEntity.expires_in)
+                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                    
+                    // assign to access token model
+                    EntityToModelConverter.shared.accessTokenEntityToAccessTokenModel(accessTokenEntity: accessTokenEntity, callback: { _ in
+                        
+                        self.saveAccessToken(accessTokenEntity: accessTokenEntity, callback: callback)
+                        
+                    })
+                }
+            }
+        }
+    }
+    
+    
+    // save access token in local db
+    public func saveAccessToken(accessTokenModel : AccessTokenModel = AccessTokenModel.shared, accessTokenEntity : AccessTokenEntity, callback: @escaping (Result<LoginResponseEntity>) -> Void) {
+        
+        // set current time
+        let milliseconds = Date().timeIntervalSince1970
+        let seconds = Int64(milliseconds / 1000)
+        accessTokenModel.seconds = seconds
+        
+        // save access token in local db
+        DBHelper.shared.setAccessToken(accessTokenModel: accessTokenModel)
+        
+        // return success callback
+        let response = LoginResponseEntity()
+        response.success = true
+        response.status = 200
+        response.data = accessTokenEntity
+        
+        DispatchQueue.main.async {
+            callback(Result.success(result: response))
+        }
+    }
+}
