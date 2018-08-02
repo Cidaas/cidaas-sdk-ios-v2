@@ -1,7 +1,5 @@
 # cidaas-sdk-ios-v2
 
-### Getting Started
-
 The steps here will guide you through setting up and managing authentication and authorization in your apps using cidaas SDK.    
 
 ### Requirements
@@ -15,10 +13,11 @@ iOS 10.0 or above | 9.0 or above | 3.3 or above
 
 #### CocoaPods Installations
 
-Cidaas is available through CocoaPods. To install it, simply add the following line to your Podfile:
+Cidaas is available through [CocoaPods](https://cocoapods.org/pods/Cidaas). To install it, simply add the following line to your Podfile:
 
+```
 pod 'Cidaas', '~> 0.0.1'
-
+```
 ### Getting started
 
 The following steps are to be followed to use this Cidaas-SDK.
@@ -35,7 +34,7 @@ The plist file should become like this :
         <key>DomainURL</key>
         <string>Your Domain URL</string>
         <key>RedirectURL</key>
-        <string>Your redirect uri</string>
+        <string>Your redirect url</string>
         <key>ClientID</key>
         <string>Your client id</string>
     </dict>
@@ -162,7 +161,7 @@ cidaas.getClientInfo(requestId: "45a921cf-ee26-46b0-9bf4-58636dced99f") {
         ],
         "policy_uri": "",
         "tos_uri": "",
-        "client_name": "demo-app1"
+        "client_name": "demo-app"
     }
 }
 
@@ -174,7 +173,7 @@ cidaas.getClientInfo(requestId: "45a921cf-ee26-46b0-9bf4-58636dced99f") {
 Before registration, you need to know what are all the fields must show to the user while registration. For getting the fields, call ****getRegistrationFields()****.
 
 ```swift
-cidaas.getRegistrationFields(requestId: "your_requestId") {
+cidaas.getRegistrationFields(requestId: "45a921cf-ee26-46b0-9bf4-58636dced99f") {
     switch $0 {
         case .failure(let error):
             // your failure code here
@@ -235,10 +234,9 @@ cidaas.getRegistrationFields(requestId: "your_requestId") {
 
 #### Register user
 
-Registration is the most important for all customers. To register a new user, call ****registerUser()****.
+Registration is the most important thing for all. To register a new user, call ****registerUser()****.
 
 ```swift 
-
 let customPostalCode: RegistrationCustomFieldsEntity = RegistrationCustomFieldsEntity()
 customPostalCode.key = "postal_code"
 customPostalCode.dataType = "TEXT"
@@ -261,7 +259,7 @@ registrationEntity.provider = "SELF" // either self or facebook or google or oth
 registrationEntity.mobile_number = "+919876543210"
 registrationEntity.username = "xxxxxxx"
 
-cidaas.registerUser(requestId: "your_requestId", registrationEntity: registrationEntity) {
+cidaas.registerUser(requestId: "45a921cf-ee26-46b0-9bf4-58636dced99f", registrationEntity: registrationEntity) {
     switch $0 {
         case .failure(let error):
             // your failure code here
@@ -285,6 +283,100 @@ cidaas.registerUser(requestId: "your_requestId", registrationEntity: registratio
         "email_verified": false,
         "suggested_action": "LOGIN"
     }
+}
+```
+
+#### Account Verification
+
+Once registration completed, you need to verify your account either by Email or SMS or IVR verification call. First you need to initiate the account verification.
+
+#### Initiate Email verification
+
+To receive a verification code via Email, call **initiateEmailVerification()**.
+
+```swift
+cidaas.initiateEmailVerification(requestId:"45a921cf-ee26-46b0-9bf4-58636dced99f", sub:"7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
+    switch $0 {
+        case .success(let configureSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+            break
+    }
+}
+```
+
+#### Initiate SMS verification
+
+To receive a verification code via SMS, call **initiateSMSVerification()**.
+
+```swift
+cidaas.initiateSMSVerification(requestId:"45a921cf-ee26-46b0-9bf4-58636dced99f", sub:"7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
+    switch $0 {
+        case .success(let configureSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+            break
+    }
+}
+```
+
+#### Initiate IVR verification
+
+To receive a verification code via IVR verification call, call **initiateIVRVerification()**.
+
+```swift
+cidaas.initiateIVRVerification(requestId:"45a921cf-ee26-46b0-9bf4-58636dced99f", sub:"7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
+    switch $0 {
+        case .success(let configureSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+            break
+    }
+}
+```
+
+**Response:**
+
+```json
+{
+    "success": true,
+    "status": 200,
+    "data": {
+        "accvid":"353446"
+    }
+}
+```
+
+#### Verify Account
+
+Once you received your verification code via any of the mediums like Email, SMS or IVR, you need to verify the code. For that verification, call **verifyAccount()**.
+
+```swift
+cidaas.verifyAccount(code:"658144") {
+    switch $0 {
+        case .success(let configureSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+            break
+    }
+}
+
+```
+
+**Response:**
+
+```json
+{
+    "success": true,
+    "status": 200
 }
 ```
 
@@ -327,896 +419,400 @@ cidaas.loginWithCredentials(requestId: "45a921cf-ee26-46b0-9bf4-58636dced99f", l
 }
 ```
 
-### Physical Verification
+#### Passwordless or Multifactor Authentication
 
-After successful login, we can add multifactor authentications.
+#### Email
 
-
-
-### EMAIL
-
-
+To use your Email as a passwordless login, you need to configure your Email first and verify your Email. If you already verify your Email through account verification, by default Email will be configured. 
 
 #### Configure Email
 
-
-
-To send a verification code to email, call 
-**configureEmail()**.
-
-
-
-##### Sample code
-
-
-
-```js
-
-
-
-cidaas.configureEmail(sub: "123123") {
-
-switch $0 {
-
-case .success(let configureSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break
-
-
-}
-
-}
-
-
-```
-
-
-
-##### Response
-
-
-
-```json
-
-
-
-{
-
-"success": 
-true,
-
-"status": 
-200,
-
-"data": {
-
-"statusId": 
-"5f5cbb84-4ceb-4975-b347-4bfac61e9248"
-
-}
-
-}
-
-
-
-```
-
-
-
-###Configure email with code
-
-##### Sample code
-
-
-
-```js
-
-
-
-cidaas.enrollEmail(code: "123123") {
-
-switch $0 {
-
-case .success(let configureSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break
-
-
-}
-
-}
-
-```
-
-
-
-##### Response
-
-
-
-```json
-
-
-
-{
-
-"success": 
-true,
-
-"status": 
-200,
-
-"data": {
-
-"sub": "5f5cbb84-4ceb-4975-b347-4bfac61e9248",
-
-"trackingCode":"122343"
-
-}
-
-}
-
-
-
-```
-
-
-
-#### Authenticate Email
-
-
-
-To verify the code, call **loginWithEmail()**.
-
-
-
-##### Sample code
-
-
-
-```js
-
-cidaas.loginWithEmail(email: "abc@gmail.com",trackId:"312424",requestId:"245dsf", usageType:
-"PASSWORDLESS_AUTHENTICATION") {
-
-switch $0 {
-
-case .success(let loginWithSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break
-
-
-}
-
-}
-
-
-```
-
-
-
-##### Response
-
-
-
-```json
-
-
-
-{
-
-"success": 
-true,
-
-"status": 
-200,
-
-"data": {
-
-"sub": "6f7e672c-1e69-4108-92c4-3556f13eda74",
-
-"trackingCode": 
-"5f5cbb84-4ceb-4975-b347-4bfac61e9248"
-
-}
-
-}
-
-
-
-```
-
-
-
-###Verify email with code
-
-##### Sample code
-
-
-
-```js
-
-
-
-cidaas.verifyEmail(code: "123123") {
-
-switch $0 {
-
-case .success(let configureSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break
-
-
-}
-
-}
-
-
-```
-
-##### Response
-
-
-
-```json
-
-
-
-{
-
-    "success": 
-true,
-
-    "status": 
-200,
-
-    "data": {
-
-        "token_type": 
-"Bearer",
-
-        "expires_in": 
-86400,
-
-        "access_token": 
-"eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxMGE5LTVmNDktNGZlYS04MGNlLTZmYTkzMzk2YjI4NyJ9*****",
-
-        "session_state": 
-"CNT7GGALeoKyTF6Og-cZHAuHUJBQ20M0jLL35oh3UGk.vcNxCNq4Y68",
-
-        "viewtype": 
-"login",
-
-        "grant_type": 
-"login"
-
+To receive a verification code via Email, call **configureEmail()**.
+
+```swift
+cidaas.configureEmail(sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
+    switch $0 {
+        case .success(let configureSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+            break
     }
-
 }
-
 ```
 
+**Response:**
 
+```json
+{
+    "success": true,
+    "status": 200,
+    "data": {
+        "statusId": "5f5cbb84-4ceb-4975-b347-4bfac61e9248"
+    }
+}
+```
 
-### SMS
+#### Verify Email by entering code
 
+Once you received your verification code via Email, you need to verify the code. For that verification, call **enrollEmail()**.
 
+```swift
+cidaas.enrollEmail(code: "658144") {
+    switch $0 {
+        case .success(let configureSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+            break
+    }
+}
+```
+
+**Response:**
+
+```json
+{
+    "success": true,
+    "status": 200,
+    "data": {
+        "sub": "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d",
+        "trackingCode":"5f5cbb84-4ceb-4975-b347-4bfac61e9248"
+    }
+}
+```
+
+#### Login via Email
+
+Once you configured your Email, you can also login with your Email via Passwordless authentication. To receive a verification code via Email, call **loginWithEmail()**.
+
+```swift
+let passwordlessEntity = PasswordlessEntity()
+passwordlessEntity.email = "xxx@gmail.com"
+passwordlessEntity.requestId = "45a921cf-ee26-46b0-9bf4-58636dced99f"
+passwordlessEntity.usageType = UsageTypes.PASSWORDLESS.rawValue
+
+cidaas.loginWithEmail(passwordlessEntity: passwordlessEntity) {
+    switch $0 {
+        case .success(let loginWithSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+            break
+    }
+}
+```
+
+**Response:**
+
+```json
+{
+    "success": true,
+    "status": 200,
+    "data": {
+        "statusId": "6f7e672c-1e69-4108-92c4-3556f13eda74"
+    }
+}
+```
+
+#### Verify Email by entering code
+
+Once you received your verification code via Email, you need to verify the code. For that verification, call **verifyEmail()**.
+
+```swift
+cidaas.verifyEmail(code: "123123") {
+    switch $0 {
+        case .success(let verifySuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+            break
+    }
+}
+```
+
+**Response:**
+```json
+{
+    "success": true,
+    "status": 200,
+    "data": {
+        "token_type": "Bearer",
+        "expires_in": 86400,
+        "access_token": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxMGE5LTV",
+        "session_state": "CNT7TF6Og-cCNq4Y68",
+        "viewtype": "login",
+        "grant_type": "login"
+    }
+}
+```
+
+#### SMS
+
+To use SMS as a passwordless login, you need to configure SMS physical verification first and verify your mobile number. If you already verify your mobile number through account verification via SMS, by default SMS will be configured. 
 
 #### Configure SMS
 
-
-
-To send a verification code to mobile via sms, call 
-**configureSMS()**.
-
-
-
-##### Sample code
-
-
-
-```js
-
-
-
-cidaas.configureSMS(sub: "123123") {
-
-switch $0 {
-
-case .success(let configureSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break
-
-
-}
-
-} 
-
-```
-
-
-
-##### Response
-
-
-
-```json
-
-
-
-{
-
-"success": 
-true,
-
-"status": 
-200,
-
-"data": {
-
-"statusId": 
-"5f5cbb84-4ceb-4975-b347-4bfac61e9248"
-
-}
-
-}
-
-
-
-```
-
-###Configure SMS with code
-
-##### Sample code
-
-
-
-```js
-
-
-
-cidaas.enrollSMS(code: "123123") {
-
-switch $0 {
-
-case .success(let configureSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break
-
-
-}
-
-}
-
-
-```
-
-##### Response
-
-
-
-```json
-
-
-
-{
-
-"success": 
-true,
-
-"status": 
-200,
-
-"data": {
-
-"sub": "5f5cbb84-4ceb-4975-b347-4bfac61e9248",
-
-"trackingCode":"122343"
-
-}
-
-}
-
-
-
-```
-
-
-
-#### Authenticate SMS
-
-
-
-To verify the code, call **loginWithSMS()**.
-
-
-
-
-
-##### Sample code
-
-
-
-```js
-
-cidaas.loginWithSMS(mobile: "+919543435187",trackId:"312424",requestId:"245dsf", usageType:
-"PASSWORDLESS_AUTHENTICATION") {
-
-switch $0 {
-
-case .success(let loginWithSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break
-
-
-}
-
-}
-
-
-```
-
-
-
-##### Response
-
-
-
-```json
-
-
-
-{
-
-"success": 
-true,
-
-"status": 
-200,
-
-"data": {
-
-"sub": "6f7e672c-1e69-4108-92c4-3556f13eda74",
-
-"trackingCode": 
-"5f5cbb84-4ceb-4975-b347-4bfac61e9248"
-
-}
-
-}
-
-
-
-```
-
-
-
-### Verify SMS with code
-
-##### Sample code
-
-
-
-```js
-
-
-
-cidaas.verifySMS(code: "123123") {
-
-switch $0 {
-
-case .success(let configureSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break
-
-
-}
-
-}
-
-
-```
-
-##### Response
-
-
-
-```json
-
-
-
-{
-
-    "success": 
-true,
-
-    "status": 
-200,
-
-    "data": {
-
-        "token_type": 
-"Bearer",
-
-        "expires_in": 
-86400,
-
-        "access_token": 
-"eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxMGE5LTVmNDktNGZlYS04MGNlLTZmYTkzMzk2YjI4NyJ9*****",
-
-        "session_state": 
-"CNT7GGALeoKyTF6Og-cZHAuHUJBQ20M0jLL35oh3UGk.vcNxCNq4Y68",
-
-        "viewtype": 
-"login",
-
-        "grant_type": 
-"login"
-
+To receive a verification code via SMS, call **configureSMS()**.
+
+```swift
+    cidaas.configureSMS(sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
+        switch $0 {
+        case .success(let configureSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+            break
     }
-
-}
-
+} 
 ```
 
+**Response:**
 
+```json
+{
+    "success": true,
+    "status": 200,
+    "data": {
+        "statusId": "5f5cbb84-4ceb-4975-b347-4bfac61e9248"
+    }
+}
+```
 
-### IVR
+#### Verify SMS by entering code
 
+Once you received your verification code via SMS, you need to verify the code. For that verification, call **enrollSMS()**.
 
+```swift
+    cidaas.enrollSMS(code: "123123") {
+        switch $0 {
+        case .success(let configureSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+            break
+    }
+}
+```
+
+**Response:**
+
+```json
+{
+    "success": true,
+    "status": 200,
+    "data": {
+        "sub": "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d",
+        "trackingCode":"5f5cbb84-4ceb-4975-b347-4bfac61e9248"
+    }
+}
+```
+
+#### Login via SMS
+
+Once you configured SMS, you can also login with SMS via Passwordless authentication. To receive a verification code via SMS, call **loginWithSMS()**.
+
+```swift
+let passwordlessEntity = PasswordlessEntity()
+passwordlessEntity.mobile = "+919876543210" // must starts with country code
+passwordlessEntity.requestId = "45a921cf-ee26-46b0-9bf4-58636dced99f"
+passwordlessEntity.usageType = UsageTypes.PASSWORDLESS.rawValue
+
+cidaas.loginWithSMS(passwordlessEntity: passwordlessEntity) {
+    switch $0 {
+        case .success(let loginWithSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+            break
+    }
+}
+```
+
+**Response:**
+
+```json
+{
+    "success": true,
+    "status": 200,
+    "data": {
+        "statusId": "6f7e672c-1e69-4108-92c4-3556f13eda74"
+    }
+}
+```
+
+#### Verify SMS by entering code
+
+Once you received your verification code via SMS, you need to verify the code. For that verification, call **verifySMS()**.
+
+```swift
+cidaas.verifySMS(code: "123123") {
+    switch $0 {
+        case .success(let configureSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+            break
+    }
+}
+```
+
+**Response:**
+
+```json
+{
+    "success": true,
+    "status": 200,
+    "data": {
+        "token_type": "Bearer",
+        "expires_in": 86400,
+        "access_token": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxMGE5LTV",
+        "session_state": "CNT7TF6Og-cCNq4Y68",
+        "viewtype": "login",
+        "grant_type": "login"
+    }
+}
+```
+
+#### IVR
+
+To use IVR as a passwordless login, you need to configure IVR physical verification first and verify your mobile number. If you already verify your mobile number through account verification via IVR, by default IVR will be configured. 
 
 #### Configure IVR
 
-
-
-To send a verification code to mobile via IVR, call 
-**configureIVR()**.
-
-
-
-##### Sample code
-
-
-
-```js
-
-
-
-cidaas.configureIVR(sub: "123123") {
-
-switch $0 {
-
-case .success(let configureSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break
-
-
-}
-
-}
-
-
-```
-
-
-
-##### Response
-
-
-
-```json
-
-
-
-{
-
-"success": 
-true,
-
-"status": 
-200,
-
-"data": {
-
-"statusId": 
-"5f5cbb84-4ceb-4975-b347-4bfac61e9248"
-
-}
-
-}
-
-
-
-```
-
-###Configure IVR with code
-
-##### Sample code
-
-
-
-```js
-
-
-
-cidaas.enrollIVR(code: "123123") {
-
-switch $0 {
-
-case .success(let configureSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break
-
-
-}
-
-}
-
-
-```
-
-##### Response
-
-
-
-```json
-
-
-
-{
-
-"success": 
-true,
-
-"status": 
-200,
-
-"data": {
-
-"sub": "5f5cbb84-4ceb-4975-b347-4bfac61e9248",
-
-"trackingCode":"122343"
-
-}
-
-}
-
-
-
-```
-
-
-
-#### Authenticate IVR
-
-
-
-To verify the code, call **loginWithIVR()**.
-
-
-
-
-
-##### Sample code
-
-
-
-```js
-
-cidaas.loginWithIVR(mobile: "+919543435187",trackId:"312424",requestId:"245dsf", usageType:
-"PASSWORDLESS_AUTHENTICATION") {
-
-switch $0 {
-
-case .success(let loginWithSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break
-
-
-}
-
-}
-
-
-```
-
-
-
-##### Response
-
-
-
-```json
-
-
-
-{
-
-"success": 
-true,
-
-"status": 
-200,
-
-"data": {
-
-"sub": "6f7e672c-1e69-4108-92c4-3556f13eda74",
-
-"trackingCode": 
-"5f5cbb84-4ceb-4975-b347-4bfac61e9248"
-
-}
-
-}
-
-
-
-```
-
-
-
-### Verify IVR with code
-
-##### Sample code
-
-
-
-```js
-
-
-
-cidaas.verifyIVR(code: "123123") {
-
-switch $0 {
-
-case .success(let configureSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break
-
-
-}
-
-}
-
-
-```
-
-##### Response
-
-
-
-```json
-
-
-
-{
-
-    "success": 
-true,
-
-    "status": 
-200,
-
-    "data": {
-
-        "token_type": 
-"Bearer",
-
-        "expires_in": 
-86400,
-
-        "access_token": 
-"eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxMGE5LTVmNDktNGZlYS04MGNlLTZmYTkzMzk2YjI4NyJ9*****",
-
-        "session_state": 
-"CNT7GGALeoKyTF6Og-cZHAuHUJBQ20M0jLL35oh3UGk.vcNxCNq4Y68",
-
-        "viewtype": 
-"login",
-
-        "grant_type": 
-"login"
-
+To receive a verification code via IVR, call **configureIVR()**.
+
+```swift
+cidaas.configureIVR(sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
+    switch $0 {
+        case .success(let configureSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+            break
     }
-
 }
+```
 
+**Response:**
+
+```json
+{
+    "success": true,
+    "status": 200,
+    "data": {
+        "statusId": "5f5cbb84-4ceb-4975-b347-4bfac61e9248"
+    }
+}
+```
+
+#### Verify IVR by entering code
+
+Once you received your verification code via IVR verification call, you need to verify the code. For that verification, call **enrollIVR()**.
+
+```swift
+cidaas.enrollIVR(code: "123123") {
+    switch $0 {
+        case .success(let configureSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+            break
+    }
+}
+```
+
+**Response:**
+
+```json
+{
+    "success": true,
+    "status": 200,
+    "data": {
+        "sub": "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d",
+        "trackingCode":"5f5cbb84-4ceb-4975-b347-4bfac61e9248"
+    }
+}
+```
+
+#### Login via IVR
+
+Once you configured IVR, you can also login with IVR via Passwordless authentication. To receive a verification code via IVR verification call, call **loginWithIVR()**.
+
+```swift
+let passwordlessEntity = PasswordlessEntity()
+passwordlessEntity.mobile = "+919876543210" // must starts with country code
+passwordlessEntity.requestId = "45a921cf-ee26-46b0-9bf4-58636dced99f"
+passwordlessEntity.usageType = UsageTypes.PASSWORDLESS.rawValue
+
+cidaas.loginWithIVR(passwordlessEntity: passwordlessEntity){
+    switch $0 {
+        case .success(let loginWithSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+            break
+    }
+}
+```
+
+**Response:**
+
+```json
+{
+    "success": true,
+    "status": 200,
+    "data": {
+        "statusId": "6f7e672c-1e69-4108-92c4-3556f13eda74"
+    }
+}
+```
+
+
+
+#### Verify IVR by entering code
+
+Once you received your verification code via IVR, you need to verify the code. For that verification, call **verifyIVR()**.
+
+```swift
+cidaas.verifyIVR(code: "123123") {
+    switch $0 {
+        case .success(let verifySuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+            break
+    }
+}
+```
+
+**Response:**
+
+```json
+{
+    "success": true,
+    "status": 200,
+    "data": {
+        "token_type": "Bearer",
+        "expires_in": 86400,
+        "access_token": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxMGE5LTV",
+        "session_state": "CNT7TF6Og-cCNq4Y68",
+        "viewtype": "login",
+        "grant_type": "login"
+    }
+}
 ```
 
 
@@ -1384,143 +980,7 @@ true,
 }
 
 
-
 ```
-
-
-
-#### Initiate Account Verification
-
-
-
-To configure the initiate Account Verification, call 
-**initiateAccountVerification()**.
-
-
-
-##### Sample code
-
-
-
-```js
-
-
-
-cidaas.initiateAccountVerification(requestId:"2423", sub:"123123", VerificationMedium:
-"email") {
-
-switch $0 {
-
-case .success(let configureSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break
-
-
-}
-
-}
-
-
-```
-
-
-
-##### Response
-
-
-
-```json
-
-
-
-{
-
-"success": 
-true,
-
-"status": 
-200,
-
-"data": {
-
-"accvid":"353446"
-
-}
-
-}
-
-```
-
-
-
-#### Verify Account
-
-
-
-To verify the Account Verification, call 
-**verifyAccount()**.
-
-
-
-##### Sample code
-
-
-
-```js
-
-cidaas.verifyAccount(code:"6544") {
-
-switch $0 {
-
-case .success(let configureSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break
-
-
-}
-
-}
-
-```
-
-
-
-##### Response
-
-
-
-```json
-
-
-
-{
-
-"success": 
-true,
-
-"status": 
-200
-
-}
-
-```
-
 
 
 ### Forgot Password
