@@ -421,15 +421,14 @@ cidaas.loginWithCredentials(requestId: "45a921cf-ee26-46b0-9bf4-58636dced99f", l
 
 #### Forgot Password
 
-Remembering passwords all time is impossible, if you forget your password, you have an option to reset it.
+Remembering passwords all the time is impossible, if you forget your password, you have an option to reset it.
 
 #### Initiate Reset Password
 
-
+For resetting password, you will get a verification code either via Email or SMS. For that you need to call ****initateRestPassword()****.
 
 ```swift
-
-cidaas.initateRestPassword(requestId:"465465",processingType:"",email:"",resetMedium:"email") {
+cidaas.initateRestPassword(requestId:"45a921cf-ee26-46b0-9bf4-58636dced99f",email:"xxx@gmail.com") {
     switch $0 {
         case .success(let configureSuccess):
             // your success code here
@@ -441,159 +440,91 @@ cidaas.initateRestPassword(requestId:"465465",processingType:"",email:"",resetMe
 } 
 ```
 
+```swift
+cidaas.initateRestPassword(requestId:"45a921cf-ee26-46b0-9bf4-58636dced99f",mobile:"+919876543210") {
+    switch $0 {
+        case .success(let configureSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+            break
+    }
+} 
+```
 
-
-##### Response
-
-
+**Response:**
 
 ```json
-
 {
-
-"data": {
-
-"rprq": "f595edfb-754e-444c-ba01-6b69b89fb42a",
-
-"reset_initiated": 
-true
-
-},
-
-"success": 
-true,
-
-"status": 
-200
-
+    "success": true,
+    "status": 200,
+    "data": {
+        "rprq": "f595edfb-754e-444c-ba01-6b69b89fb42a",
+        "reset_initiated": true
+    }
 }
 
 ```
-
-
 
 #### Handle Reset Password
 
+Once verification code received, verify that code by calling ****handleRestPassword()****.
 
-
-##### Sample code
-
-
-
-```js
-
-cidaas.handleRestPassword(code:"6576") {
-
-switch $0 {
-
-case .success(let configureSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break
-
-
-}
-
+```swift
+cidaas.handleRestPassword(code:"65864776") {
+    switch $0 {
+        case .success(let configureSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+            break
+    }
 } 
 
 ```
 
-
-
-##### Response
-
-
+**Response:**
 
 ```json
-
 {
-
-"data": {
-
-"exchangeId": 
-"1c4176bd-12b0-4672-b20c-9616e93457ed",
-
-"resetRequestId": 
-"f595edfb-754e-444c-ba01-6b69b89fb42a"
-
-},
-
-"success": 
-true,
-
-"status": 
-200
-
+    "success": true,
+    "status": 200,
+    "data": {
+        "exchangeId": "1c4176bd-12b0-4672-b20c-9616e93457ed",
+        "resetRequestId": "f595edfb-754e-444c-ba01-6b69b89fb42a"
+    }
 }
-
 ```
-
-
 
 #### Reset Password
 
+Once verifying the code, reset your password with your new password. To reset your password, call ****restPassword()****.
 
-
-##### Sample code
-
-
-
-```js
-
-cidaas.restPassword(password:"465465",confirmPassword:"465465") {
-
-switch $0 {
-
-case .success(let configureSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break
-
-
-}
-
+```swift
+cidaas.restPassword(password:"test#123",confirmPassword:"test#123") {
+    switch $0 {
+        case .success(let configureSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+            break
+    }
 } 
-
 ```
 
-
-
-##### Response
-
-
+**Response:**
 
 ```json
-
 {
-
-"data": {
-
-"reseted":true
-
-},
-
-"success": 
-true,
-
-"status": 
-200
-
+    "success": true,
+    "status": 200,
+    "data": {
+        "reseted":true
+    }
 }
-
 ```
 
 #### Passwordless or Multifactor Authentication
