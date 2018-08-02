@@ -419,6 +419,183 @@ cidaas.loginWithCredentials(requestId: "45a921cf-ee26-46b0-9bf4-58636dced99f", l
 }
 ```
 
+#### Forgot Password
+
+Remembering passwords all time is impossible, if you forget your password, you have an option to reset it.
+
+#### Initiate Reset Password
+
+
+
+```swift
+
+cidaas.initateRestPassword(requestId:"465465",processingType:"",email:"",resetMedium:"email") {
+    switch $0 {
+        case .success(let configureSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+            break
+    }
+} 
+```
+
+
+
+##### Response
+
+
+
+```json
+
+{
+
+"data": {
+
+"rprq": "f595edfb-754e-444c-ba01-6b69b89fb42a",
+
+"reset_initiated": 
+true
+
+},
+
+"success": 
+true,
+
+"status": 
+200
+
+}
+
+```
+
+
+
+#### Handle Reset Password
+
+
+
+##### Sample code
+
+
+
+```js
+
+cidaas.handleRestPassword(code:"6576") {
+
+switch $0 {
+
+case .success(let configureSuccess):
+
+// your success code here
+
+break
+
+case .failure(let error):
+
+// your failure code here
+
+break
+
+
+}
+
+} 
+
+```
+
+
+
+##### Response
+
+
+
+```json
+
+{
+
+"data": {
+
+"exchangeId": 
+"1c4176bd-12b0-4672-b20c-9616e93457ed",
+
+"resetRequestId": 
+"f595edfb-754e-444c-ba01-6b69b89fb42a"
+
+},
+
+"success": 
+true,
+
+"status": 
+200
+
+}
+
+```
+
+
+
+#### Reset Password
+
+
+
+##### Sample code
+
+
+
+```js
+
+cidaas.restPassword(password:"465465",confirmPassword:"465465") {
+
+switch $0 {
+
+case .success(let configureSuccess):
+
+// your success code here
+
+break
+
+case .failure(let error):
+
+// your failure code here
+
+break
+
+
+}
+
+} 
+
+```
+
+
+
+##### Response
+
+
+
+```json
+
+{
+
+"data": {
+
+"reseted":true
+
+},
+
+"success": 
+true,
+
+"status": 
+200
+
+}
+
+```
+
 #### Passwordless or Multifactor Authentication
 
 #### Email
@@ -779,8 +956,6 @@ cidaas.loginWithIVR(passwordlessEntity: passwordlessEntity){
 }
 ```
 
-
-
 #### Verify IVR by entering code
 
 Once you received your verification code via IVR, you need to verify the code. For that verification, call **verifyIVR()**.
@@ -815,367 +990,84 @@ cidaas.verifyIVR(code: "123123") {
 }
 ```
 
+#### BackupCode
 
-
-### BackupCode
-
-
+To use Backupcode as a passwordless login, you need to configure Backupcode physical verification first.
 
 #### Configure BackupCode
 
-
-
-To configure or view the backupcode, call 
-**configureBackupcode()**.
-
-
-
-##### Sample code
-
-
-
-```js
-
-
-
-cidaas.configureBackupcode(sub: "123123") {
-
-switch $0 {
-
-case .success(let configureSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break
-
-
-}
-
-}
-
-
-```
-
-
-
-##### Response
-
-
-
-```json
-
-
-
-{
-
-"success": 
-true,
-
-"status": 
-200,
-
-"data": {
-
-"statusId": 
-"5f5cbb84-4ceb-4975-b347-4bfac61e9248"
-
-}
-
-}
-
-
-
-
-
-```
-
-
-
-#### Authenticate Backupcode
-
-
-
-To verify the backupcode, call 
-**loginWithBackupcode()**.
-
-
-
-##### Sample code
-
-
-
-```js
-
-cidaas.loginWithBackupcode(email: "abc@gmail.com",trackId:"312424",requestId:"245dsf",code:"6543", usageType:
-"PASSWORDLESS_AUTHENTICATION") {
-
-switch $0 {
-
-case .success(let loginWithSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break
-
-
-}
-
-}
-
-
-```
-
-
-
-##### Response
-
-
-
-```json
-
-
-
-{
-
-    "success": 
-true,
-
-    "status": 
-200,
-
-    "data": {
-
-        "token_type": 
-"Bearer",
-
-        "expires_in": 
-86400,
-
-        "access_token": 
-"eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxMGE5LTVmNDktNGZlYS04MGNlLTZmYTkzMzk2YjI4NyJ9*****",
-
-        "session_state": 
-"CNT7GGALeoKyTF6Og-cZHAuHUJBQ20M0jLL35oh3UGk.vcNxCNq4Y68",
-
-        "viewtype": 
-"login",
-
-        "grant_type": 
-"login"
-
+To configure or view the Backupcode, call **configureBackupcode()**.
+
+```swift
+cidaas.configureBackupcode(sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
+    switch $0 {
+        case .success(let configureSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+            break
     }
-
 }
-
-
 ```
 
-
-### Forgot Password
-
-
-
-#### Initiate Reset Password
-
-
-
-##### Sample code
-
-
-
-```js
-
-cidaas.initateRestPassword(requestId:"465465",processingType:"",email:"",resetMedium:"email") {
-
-switch $0 {
-
-case .success(let configureSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break
-
-
+**Response:**
+```json
+{
+    "success": true,
+    "status": 200,
+    "data": {
+        "statusId": "6f7e672c-1e69-4108-92c4-3556f13eda74",
+        "backupCodes": [{
+            "code": "63537876",
+            "used": false,
+        },
+        {
+            "code": "76482357",
+            "used": false,        
+        }]
+    }
 }
-
-} 
-
 ```
 
+#### Login via Backupcode
 
+Once you configured Backupcode, you can also login with Backupcode via Passwordless authentication. To login with Backupcode, call **loginWithBackupcode()**.
 
-##### Response
+```swift
+let passwordlessEntity = PasswordlessEntity()
+passwordlessEntity.mobile = "+919876543210" // must starts with country code
+passwordlessEntity.requestId = "45a921cf-ee26-46b0-9bf4-58636dced99f"
+passwordlessEntity.usageType = UsageTypes.PASSWORDLESS.rawValue
 
+cidaas.loginWithBackupcode(code: String, passwordlessEntity: passwordlessEntity){
+    switch $0 {
+        case .success(let loginWithSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+            break
+    }
+}
+```
 
+**Response:**
 
 ```json
-
 {
-
-"data": {
-
-"rprq": "f595edfb-754e-444c-ba01-6b69b89fb42a",
-
-"reset_initiated": 
-true
-
-},
-
-"success": 
-true,
-
-"status": 
-200
-
+    "success": true,
+    "status": 200,
+    "data": {
+        "token_type": "Bearer",
+        "expires_in": 86400,
+        "access_token": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxMGE5LTV",
+        "session_state": "CNT7TF6Og-cCNq4Y68",
+        "viewtype": "login",
+        "grant_type": "login"
+    }
 }
-
 ```
-
-
-
-#### Handle Reset Password
-
-
-
-##### Sample code
-
-
-
-```js
-
-cidaas.handleRestPassword(code:"6576") {
-
-switch $0 {
-
-case .success(let configureSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break
-
-
-}
-
-} 
-
-```
-
-
-
-##### Response
-
-
-
-```json
-
-{
-
-"data": {
-
-"exchangeId": 
-"1c4176bd-12b0-4672-b20c-9616e93457ed",
-
-"resetRequestId": 
-"f595edfb-754e-444c-ba01-6b69b89fb42a"
-
-},
-
-"success": 
-true,
-
-"status": 
-200
-
-}
-
-```
-
-
-
-#### Reset Password
-
-
-
-##### Sample code
-
-
-
-```js
-
-cidaas.restPassword(password:"465465",confirmPassword:"465465") {
-
-switch $0 {
-
-case .success(let configureSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break
-
-
-}
-
-} 
-
-```
-
-
-
-##### Response
-
-
-
-```json
-
-{
-
-"data": {
-
-"reseted":true
-
-},
-
-"success": 
-true,
-
-"status": 
-200
-
-}
-
-```
-
-
 
 ### Consent Management
 
