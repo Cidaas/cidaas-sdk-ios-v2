@@ -967,11 +967,11 @@ Once you configured Backupcode, you can also login with Backupcode via Passwordl
 
 ```swift
 let passwordlessEntity = PasswordlessEntity()
-passwordlessEntity.mobile = "+919876543210" // must starts with country code
+passwordlessEntity.email = "xxx@gmail.com"
 passwordlessEntity.requestId = "45a921cf-ee26-46b0-9bf4-58636dced99f"
 passwordlessEntity.usageType = UsageTypes.PASSWORDLESS.rawValue
 
-cidaas.loginWithBackupcode(code: String, passwordlessEntity: passwordlessEntity){
+cidaas.loginWithBackupcode(code: "63537876", passwordlessEntity: passwordlessEntity){
     switch $0 {
         case .success(let loginWithSuccess):
             // your success code here
@@ -1000,1363 +1000,635 @@ cidaas.loginWithBackupcode(code: String, passwordlessEntity: passwordlessEntity)
 }
 ```
 
-### Consent Management
+#### TOTP
 
-#### Get Consent Details 
-
-##### Sample code
-
-
-
-```js
-
-cidaas.getConsentDetails(consent_name:"test", consent_version:1, track_Id:
-"432523") {
-
-switch $0 {
-
-case .success(let configureSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break
-
-
-}
-
-} 
-
-```
-
-
-
-##### Response
-
-
-
-```json
-
-{
-
-"data": {
-
-"_id":"3543trr",
-
-"decription":"test consent",
-
-"title":"test",
-
-"userAgreeText":"term and condition",
-
-"url":"https://acb.com"
-
-},
-
-"success": 
-true,
-
-"status": 
-200
-
-}
-
-```
-
-
-
-#### Login After Consent
-
-##### Sample code
-
-
-
-```js
-
-cidaas.loginAfterConsent(sub:"2423", accepted:true) {
-
-switch $0 {
-
-case .success(let configureSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break
-
-
-}
-
-} 
-
-```
-
-
-
-##### Response
-
-
-
-```json
-
-{
-
-    "success": 
-true,
-
-    "status": 
-200,
-
-    "data": {
-
-        "token_type": 
-"Bearer",
-
-        "expires_in": 
-86400,
-
-        "access_token": 
-"eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxMGE5LTVmNDktNGZlYS04MGNlLTZmYTkzMzk2YjI4NyJ9*****",
-
-        "session_state": 
-"CNT7GGALeoKyTF6Og-cZHAuHUJBQ20M0jLL35oh3UGk.vcNxCNq4Y68",
-
-        "viewtype": 
-"login",
-
-        "grant_type": 
-"login"
-
-    }
-
-}
-
-```
-
-### De-duplication
-
-
-
-#### Get Deduplication Details
-
-
-
-##### Sample code
-
-
-
-```js
-
-cidaas.getDeduplicationDetails(track_id:"5475765") {
-
-switch $0 {
-
-case .success(let configureSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break
-
-
-}
-
-} 
-
-```
-
-
-
-##### Response
-
-
-
-```json
-
-{
-
-"success": 
-true,
-
-"status": 
-200,
-
-"data": {
-
-"email": 
-"raja@fn.com",
-
-"deduplicationList": [
-
-{
-
-"provider": 
-"SELF",
-
-"sub": "39363935-4d04-4411-8606-6805c4e673b4",
-
-"email": 
-"raja********n2716@g***l.com",
-
-"emailName": 
-"raja********n2716",
-
-"firstname": 
-"Raja123",
-
-"lastname": 
-"SK1",
-
-"displayName": 
-"Raja123 SK1",
-
-"currentLocale": 
-"IN",
-
-"country": 
-"India",
-
-"region": 
-"Delhi",
-
-"city": "Delhi",
-
-"zipcode": 
-"110008"
-
-},
-
-{
-
-"provider": 
-"SELF",
-
-"sub": "488b8128-5584-4c25-9776-6ed34c6e7017",
-
-"email": 
-"ra****n21@g***l.com",
-
-"emailName": 
-"ra****n21",
-
-"firstname": 
-"RajaSK",
-
-"lastname": 
-"RsdfsdfN",
-
-"displayName": 
-"RajaSK RsdfsdfN",
-
-"currentLocale": 
-"IN",
-
-"country": 
-"India",
-
-"region": 
-"Delhi",
-
-"city": "Delhi",
-
-"zipcode": 
-"110008"
-
-}
-
-]
-
-}
-
-}
-
-```
-
-
-
-#### Register Deduplication Details
-
-
-
-##### Sample code
-
-
-
-```js
-
-cidaas.registerDeduplication(track_id:"5475765") {
-
-switch $0 {
-
-case .success(let configureSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break
-
-
-}
-
-} 
-
-```
-
-
-
-##### Response
-
-
-
-```swift 
-
-{
-
-"success": true,
-
-"status": 200,
-
-"data": {
-
-"sub": "51701ec8-f2d7-4361-a727-f8df476a711a",
-
-"userStatus": "VERIFIED",
-
-"email_verified": false,
-
-"suggested_action": "LOGIN"
-
-}
-
-} 
-
-```
-
-
-
-
-
-### TOTP
-
-
+To use TOTP as a passwordless login, you need to configure TOTP physical verification first.
 
 #### Configure TOTP
 
-
-
-To configure the TOTP, call 
-**configureTOTP()**.
-
-
-
-##### Sample code
-
-
+To configure TOTP verification, call **configureTOTP()**.
 
 ```swift
-
-
-
-cidaas.configureTOTP(sub: "123123") {
-
-switch $0 {
-
-case .success(let configureSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break 
-
+cidaas.configureTOTP(sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
+    switch $0 {
+        case .success(let configureSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+            break 
+    }
 }
-
-}
-
-
 ```
 
-
-
-##### Response
-
-
-
-```swifton
-
-
-
-{
-
-"success": true,
-
-"status": 200,
-
-"data": {
-
-"statusId": "5f5cbb84-4ceb-4975-b347-4bfac61e9248"
-
-}
-
-}
-
-```
-
-
-
-#### Authenticate TOTP
-
-
-
-To verify the TOTP, call **loginWithTOTP()**.
-
-
-
-
-
-##### Sample code
-
-
+**Response:**
 
 ```swift
-
-cidaas.loginWithTOTP(email: "abc@gmail.com",trackId:"312424",requestId:"245dsf", usageType: "PASSWORDLESS_AUTHENTICATION") {
-
-switch $0 
-
-case .success(let loginWithSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break
-
-
-}
-
-}
-
-
-```
-
-
-
-##### Response
-
-
-
-```json
-
-
-
 {
-
-    "success": 
-true,
-
-    "status": 
-200,
-
+    "success": true,
+    "status": 200,
     "data": {
-
-        "token_type": 
-"Bearer",
-
-        "expires_in": 
-86400,
-
-        "access_token": 
-"eyJhbGciOiswiftUzI1NiIsImtpZCI6IjUxNWYxMGE5LTVmNDktNGZlYS04MGNlLTZmYTkzMzk2YjI4NyJ9*****",
-
-        "session_state": 
-"CNT7GGALeoKyTF6Og-cZHAuHUJBQ20M0jLL35oh3UGk.vcNxCNq4Y68",
-
-        "viewtype": 
-"login",
-
-        "grant_type": 
-"login"
-
+        "statusId": "5f5cbb84-4ceb-4975-b347-4bfac61e9248"
     }
-
 }
-
-
-
 ```
 
+#### Login via TOTP
 
-
-### Pattern
-
-
-
-#### Configure Pattern
-
-
-
-To configure the pattern, call 
-**configurePatternRecognition()**.
-
-
-
-##### Sample code
-
-
+Once you configured TOTP, you can also login with TOTP via Passwordless authentication. To login, call **loginWithTOTP()**.
 
 ```swift
-
-
-
-cidaas.configurePatternRecognition(sub: "123123") {
-
-switch $0 {
-
-case .success(let configureSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break
-
-
-}
-
-}
-
-
-```
-
-
-
-##### Response
-
-
-
-```json
-
-
-
-{
-
-"success": 
-true,
-
-"status": 
-200,
-
-"data": {
-
-"statusId": 
-"5f5cbb84-4ceb-4975-b347-4bfac61e9248"
-
-}
-
-}
-
-
-
-
-
-```
-
-
-
-#### Authenticate Pattern
-
-
-
-To verify the pattern, call 
-**loginWithPatternRecognition()**.
-
-
-
-
-
-##### Sample code
-
-
-
-```js
-
-cidaas.loginWithPatternRecognition(pattern: "RED[1,2,3], email: "abc@gmail.com",trackId:"312424",requestId:"245dsf",
- usageType: "PASSWORDLESS_AUTHENTICATION") 
-{
-
-switch $0 
-
-case .success(let loginWithSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break
-
-
-}
-
-}
-
-
-```
-
-
-
-##### Response
-
-
-
-```json
-
-
-
-{
-
-    "success": 
-true,
-
-    "status": 
-200,
-
-    "data": {
-
-        "token_type": 
-"Bearer",
-
-        "expires_in": 
-86400,
-
-        "access_token": 
-"eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxMGE5LTVmNDktNGZlYS04MGNlLTZmYTkzMzk2YjI4NyJ9*****",
-
-        "session_state": 
-"CNT7GGALeoKyTF6Og-cZHAuHUJBQ20M0jLL35oh3UGk.vcNxCNq4Y68",
-
-        "viewtype": 
-"login",
-
-        "grant_type": 
-"login"
-
+let passwordlessEntity = PasswordlessEntity()
+passwordlessEntity.email = "xxx@gmail.com"
+passwordlessEntity.requestId = "45a921cf-ee26-46b0-9bf4-58636dced99f"
+passwordlessEntity.usageType = UsageTypes.PASSWORDLESS.rawValue
+
+cidaas.loginWithTOTP(passwordlessEntity: passwordlessEntity) {
+    switch $0 
+        case .success(let loginWithSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+            break
     }
-
 }
-
-
-
 ```
 
-### TouchId
-
-
-
-#### Configure TouchId
-
-
-
-To configure the TouchId, call 
-**configureTouchId()**.
-
-
-
-##### Sample code
-
-
-
-```js
-
-
-
-cidaas.configureTouchId(sub: "123123") {
-
-switch $0 {
-
-case .success(let configureSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break
-
-
-}
-
-}
-
-
-```
-
-
-
-##### Response
-
-
+**Response:**
 
 ```json
-
-
-
 {
-
-"success": 
-true,
-
-"status": 
-200,
-
-"data": {
-
-"statusId": 
-"5f5cbb84-4ceb-4975-b347-4bfac61e9248"
-
-}
-
-}
-
-
-
-
-
-```
-
-
-
-#### Authenticate TouchId
-
-
-
-To verify the TouchId, call 
-**loginWithTouchId()**.
-
-
-
-
-
-##### Sample code
-
-
-
-```js
-
-cidaas.loginWithTouchId(email: "abc@gmail.com",trackId:"312424",requestId:"245dsf", usageType:
-"PASSWORDLESS_AUTHENTICATION") {
-
-switch $0 
-
-case .success(let loginWithSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break
-
-
-}
-
-}
-
-
-```
-
-
-
-##### Response
-
-
-
-```json
-
-
-
-{
-
-    "success": 
-true,
-
-    "status": 
-200,
-
+    "success": true,
+    "status": 200,
     "data": {
-
-        "token_type": 
-"Bearer",
-
-        "expires_in": 
-86400,
-
-        "access_token": 
-"eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxMGE5LTVmNDktNGZlYS04MGNlLTZmYTkzMzk2YjI4NyJ9*****",
-
-        "session_state": 
-"CNT7GGALeoKyTF6Og-cZHAuHUJBQ20M0jLL35oh3UGk.vcNxCNq4Y68",
-
-        "viewtype": 
-"login",
-
-        "grant_type": 
-"login"
-
+        "token_type": "Bearer",
+        "expires_in": 86400,
+        "access_token": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxMGE5LTV",
+        "session_state": "CNT7TF6Og-cCNq4Y68",
+        "viewtype": "login",
+        "grant_type": "login"
     }
-
 }
+```
 
 
 
+#### Pattern Recognition
+
+To use Pattern Recognition as a passwordless login, you need to configure it first.
+
+#### Configure Pattern Recognition
+
+To configure Pattern Recognition, call **configurePatternRecognition()**.
+
+```swift
+cidaas.configurePatternRecognition(pattern: "RED[1,2,3], sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
+    switch $0 {
+        case .success(let configureSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+            break
+    }
+}
+```
+
+**Response:**
+
+```swift
+{
+    "success": true,
+    "status": 200,
+    "data": {
+        "statusId": "5f5cbb84-4ceb-4975-b347-4bfac61e9248"
+    }
+}
+```
+
+#### Login via Pattern Recognition
+
+Once you configured Pattern Recognition, you can also login with Pattern Recognition via Passwordless authentication. To login, call **loginWithPatternRecognition()**.
+
+```swift
+let passwordlessEntity = PasswordlessEntity()
+passwordlessEntity.email = "xxx@gmail.com"
+passwordlessEntity.requestId = "45a921cf-ee26-46b0-9bf4-58636dced99f"
+passwordlessEntity.usageType = UsageTypes.PASSWORDLESS.rawValue
+
+cidaas.loginWithPatternRecognition(pattern: "RED[1,2,3], passwordlessEntity: passwordlessEntity) {
+    switch $0 {
+        case .success(let loginWithSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+        break
+    }
+}
+```
+
+**Response:**
+
+```json
+{
+    "success": true,
+    "status": 200,
+    "data": {
+        "token_type": "Bearer",
+        "expires_in": 86400,
+        "access_token": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxMGE5LTV",
+        "session_state": "CNT7TF6Og-cCNq4Y68",
+        "viewtype": "login",
+        "grant_type": "login"
+    }
+}
+```
+
+#### TouchId Verification
+
+To use TouchId Verification as a passwordless login, you need to configure it first.
+
+#### Configure TouchId Verification
+
+To configure TouchId Verification, call **configureTouchId()**.
+
+```swift
+cidaas.configureTouchId(sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
+    switch $0 {
+        case .success(let configureSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+            break
+    }
+}
+```
+
+**Response:**
+
+```swift
+{
+    "success": true,
+    "status": 200,
+    "data": {
+        "statusId": "5f5cbb84-4ceb-4975-b347-4bfac61e9248"
+    }
+}
+```
+
+#### Login via Touch Id Verification
+
+Once you configured Touch Id Verification, you can also login with Touch Id Verification via Passwordless authentication. To login, call **loginWithTouchId()**.
+
+```swift
+let passwordlessEntity = PasswordlessEntity()
+passwordlessEntity.email = "xxx@gmail.com"
+passwordlessEntity.requestId = "45a921cf-ee26-46b0-9bf4-58636dced99f"
+passwordlessEntity.usageType = UsageTypes.PASSWORDLESS.rawValue
+
+cidaas.loginWithTouchId(passwordlessEntity: passwordlessEntity) {
+    switch $0 {
+        case .success(let loginWithSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+        break
+    }
+}
+```
+
+**Response:**
+
+```json
+{
+    "success": true,
+    "status": 200,
+    "data": {
+        "token_type": "Bearer",
+        "expires_in": 86400,
+        "access_token": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxMGE5LTV",
+        "session_state": "CNT7TF6Og-cCNq4Y68",
+        "viewtype": "login",
+        "grant_type": "login"
+    }
+}
 ```
 
 ### SmartPush Notification
 
-
-
-#### Configure SmartPush
-
-
-
-To configure the SmartPush, call 
-**configureSmartPush()**.
-
-
-
-##### Sample code
-
-
-
-```js
-
-
-
-cidaas.configureSmartPush(sub: "123123") {
-
-switch $0 {
-
-case .success(let configureSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break
-
-
-}
-
-}
-
-
-```
-
-
-
-##### Response
-
-
-
-```json
-
-
-
-{
-
-"success": 
-true,
-
-"status": 
-200,
-
-"data": {
-
-"statusId": 
-"5f5cbb84-4ceb-4975-b347-4bfac61e9248"
-
-}
-
-}
-
-
-
-
-
-```
-
-
-
-#### Authenticate SmartPush
-
-
-
-To verify the SmartPush, call 
-**loginWithSmartPush()**.
-
-
-
-
-
-##### Sample code
-
-
-
-```js
-
-cidaas.loginWithSmartPush(email: "abc@gmail.com",trackId:"312424",requestId:"245dsf", usageType:
-"PASSWORDLESS_AUTHENTICATION") {
-
-switch $0 
-
-case .success(let loginWithSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break
-
-
-}
-
-}
-
-
-```
-
-
-
-##### Response
-
-
-
-```json
-
-
-
-{
-
-    "success": 
-true,
-
-    "status": 
-200,
-
-    "data": {
-
-        "token_type": 
-"Bearer",
-
-        "expires_in": 
-86400,
-
-        "access_token": 
-"eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxMGE5LTVmNDktNGZlYS04MGNlLTZmYTkzMzk2YjI4NyJ9*****",
-
-        "session_state": 
-"CNT7GGALeoKyTF6Og-cZHAuHUJBQ20M0jLL35oh3UGk.vcNxCNq4Y68",
-
-        "viewtype": 
-"login",
-
-        "grant_type": 
-"login"
-
+To use SmartPush Notification as a passwordless login, you need to configure it first.
+
+#### Configure SmartPush Notification
+
+To configure SmartPush Notification, call **configureSmartPush()**.
+
+```swift
+cidaas.configureSmartPush(sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
+    switch $0 {
+        case .success(let configureSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+            break
     }
-
 }
-
-
-
 ```
 
+**Response:**
 
-
-### FaceRecognition
-
-
-
-#### Configure Face
-
-
-
-To configure the FaceRecognition, call 
-**configureFaceRecognition()**.
-
-
-
-##### Sample code
-
-
-
-```js
-
-
-
-cidaas.configureFaceRecognition(photo: image,sub: 
-"123123") {
-
-switch $0 {
-
-case .success(let configureSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break
-
-
-}
-
-}
-
-
-```
-
-
-
-##### Response
-
-
-
-```json
-
-
-
+```swift
 {
-
-"success": 
-true,
-
-"status": 
-200,
-
-"data": {
-
-"statusId": 
-"5f5cbb84-4ceb-4975-b347-4bfac61e9248"
-
-}
-
-}
-
-
-
-
-
-```
-
-#### Authenticate FaceRecognition
-
-
-
-To verify the FaceRecognition, call 
-**loginWithFaceRecognition()**.
-
-
-
-
-
-##### Sample code
-
-
-
-```js
-
-cidaas.loginWithFaceRecognition(photo:image, email: 
-"abc@gmail.com",trackId:"312424",requestId:"245dsf", usageType:
-"PASSWORDLESS_AUTHENTICATION") {
-
-switch $0 
-
-case .success(let loginWithSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break
-
-
-}
-
-}
-
-
-```
-
-
-
-##### Response
-
-
-
-```json
-
-
-
-{
-
-    "success": 
-true,
-
-    "status": 
-200,
-
+    "success": true,
+    "status": 200,
     "data": {
-
-        "token_type": 
-"Bearer",
-
-        "expires_in": 
-86400,
-
-        "access_token": 
-"eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxMGE5LTVmNDktNGZlYS04MGNlLTZmYTkzMzk2YjI4NyJ9*****",
-
-        "session_state": 
-"CNT7GGALeoKyTF6Og-cZHAuHUJBQ20M0jLL35oh3UGk.vcNxCNq4Y68",
-
-        "viewtype": 
-"login",
-
-        "grant_type": 
-"login"
-
+        "statusId": "5f5cbb84-4ceb-4975-b347-4bfac61e9248"
     }
-
 }
-
-
-
 ```
 
+#### Login via SmartPush Notification
 
+Once you configured SmartPush Notification, you can also login with SmartPush Notification via Passwordless authentication. To login, call **loginWithSmartPush()**.
 
-### VoiceRecognition
+```swift
+let passwordlessEntity = PasswordlessEntity()
+passwordlessEntity.email = "xxx@gmail.com"
+passwordlessEntity.requestId = "45a921cf-ee26-46b0-9bf4-58636dced99f"
+passwordlessEntity.usageType = UsageTypes.PASSWORDLESS.rawValue
 
-
-
-#### Configure Voice
-
-
-
-To configure the Voice Recognition, call 
-**configureVoiceRecognition()**.
-
-
-
-##### Sample code
-
-
-
-```js
-
-
-
-cidaas.configureVoiceRecognition(voice: data, sub: 
-"123123") {
-
-switch $0 {
-
-case .success(let configureSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break
-
-
+cidaas.loginWithSmartPush(passwordlessEntity: passwordlessEntity) {
+    switch $0 {
+        case .success(let loginWithSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+        break
+    }
 }
-
-}
-
-
 ```
 
-
-
-##### Response
-
-
+**Response:**
 
 ```json
-
-
-
 {
-
-"success": 
-true,
-
-"status": 
-200,
-
-"data": {
-
-"statusId": 
-"5f5cbb84-4ceb-4975-b347-4bfac61e9248"
-
-}
-
-}
-
-
-
-
-
-```
-
-#### Authenticate Voice Recognition
-
-
-
-To verify the Voice Recognition, call 
-**loginWithVoiceRecognition()**.
-
-
-
-
-
-##### Sample code
-
-
-
-```js
-
-cidaas.loginWithVoiceRecognition(voice:data,email: 
-"abc@gmail.com",trackId:"312424",requestId:"245dsf",usageType:
-"PASSWORDLESS_AUTHENTICATION") {
-
-switch $0 
-
-case .success(let loginWithSuccess):
-
-// your success code here
-
-break
-
-case .failure(let error):
-
-// your failure code here
-
-break
-
-
-}
-
-}
-
-
-```
-
-
-
-##### Response
-
-
-
-```json
-
-
-
-{
-
-    "success": 
-true,
-
-    "status": 
-200,
-
+    "success": true,
+    "status": 200,
     "data": {
-
-        "token_type": 
-"Bearer",
-
-        "expires_in": 
-86400,
-
-        "access_token": 
-"eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxMGE5LTVmNDktNGZlYS04MGNlLTZmYTkzMzk2YjI4NyJ9*****",
-
-        "session_state": 
-"CNT7GGALeoKyTF6Og-cZHAuHUJBQ20M0jLL35oh3UGk.vcNxCNq4Y68",
-
-        "viewtype": 
-"login",
-
-        "grant_type": 
-"login"
-
+        "token_type": "Bearer",
+        "expires_in": 86400,
+        "access_token": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxMGE5LTV",
+        "session_state": "CNT7TF6Og-cCNq4Y68",
+        "viewtype": "login",
+        "grant_type": "login"
     }
-
 }
+```
+
+#### Face Recognition
+
+Biometric plays an important role in the modern world. cidaas authenticates you by verifying your Face. To use Face Recognition as a passwordless login, you need to configure it first.
+
+#### Configure Face Recognition
+
+To configure Face Recognition, call **configureFaceRecognition()**.
+
+```swift
+cidaas.configureFaceRecognition(photo: photo, sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
+    switch $0 {
+        case .success(let configureSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+            break
+    }
+}
+```
+
+**Response:**
+
+```swift
+{
+    "success": true,
+    "status": 200,
+    "data": {
+        "statusId": "5f5cbb84-4ceb-4975-b347-4bfac61e9248"
+    }
+}
+```
+
+#### Login via Face Recognition
+
+Once you configured Face Recognition, you can also login with Face Recognition via Passwordless authentication. To login, call **loginWithFaceRecognition()**.
+
+```swift
+let passwordlessEntity = PasswordlessEntity()
+passwordlessEntity.email = "xxx@gmail.com"
+passwordlessEntity.requestId = "45a921cf-ee26-46b0-9bf4-58636dced99f"
+passwordlessEntity.usageType = UsageTypes.PASSWORDLESS.rawValue
+
+cidaas.loginWithFaceRecognition(photo: photo, passwordlessEntity: passwordlessEntity) {
+    switch $0 {
+        case .success(let loginWithSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+        break
+    }
+}
+```
+
+**Response:**
+
+```json
+{
+    "success": true,
+    "status": 200,
+    "data": {
+        "token_type": "Bearer",
+        "expires_in": 86400,
+        "access_token": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxMGE5LTV",
+        "session_state": "CNT7TF6Og-cCNq4Y68",
+        "viewtype": "login",
+        "grant_type": "login"
+    }
+}
+```
+
+#### Voice Recognition
+
+Biometric plays an important role in the modern world. cidaas authenticates you by verifying your voice. To use Voice Recognition as a passwordless login, you need to configure it first.
+ 
+#### Configure Voice Recognition
+
+To configure Voice Recognition, call **configureVoiceRecognition()**.
+
+```swift
+cidaas.configureVoiceRecognition(voice: audioData, sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
+    switch $0 {
+        case .success(let configureSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+            break
+    }
+}
+```
+
+**Response:**
+
+```swift
+{
+    "success": true,
+    "status": 200,
+    "data": {
+        "statusId": "5f5cbb84-4ceb-4975-b347-4bfac61e9248"
+    }
+}
+```
+
+#### Login via Voice Recognition
+
+Once you configured Voice Recognition, you can also login with Voice Recognition via Passwordless authentication. To login, call **loginWithVoiceRecognition()**.
+
+```swift
+let passwordlessEntity = PasswordlessEntity()
+passwordlessEntity.email = "xxx@gmail.com"
+passwordlessEntity.requestId = "45a921cf-ee26-46b0-9bf4-58636dced99f"
+passwordlessEntity.usageType = UsageTypes.PASSWORDLESS.rawValue
+
+cidaas.loginWithVoiceRecognition(voice: audioData, passwordlessEntity: passwordlessEntity) {
+    switch $0 {
+        case .success(let loginWithSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+        break
+    }
+}
+```
+
+**Response:**
+
+```json
+{
+    "success": true,
+    "status": 200,
+    "data": {
+        "token_type": "Bearer",
+        "expires_in": 86400,
+        "access_token": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxMGE5LTV",
+        "session_state": "CNT7TF6Og-cCNq4Y68",
+        "viewtype": "login",
+        "grant_type": "login"
+    }
+}
+```
+
+#### Consent Management
+
+Once user successfully logged in, they need to accept the terms and conditions. 
+
+#### Getting Consent Details 
+
+To get the consent details call **getConsentDetails()**.
+
+```swift
+cidaas.getConsentDetails(consent_name:"default", consent_version:1, track_Id: "45a921cf-ee26-46b0-9bf4-58636dced99f") {
+    switch $0 {
+        case .success(let configureSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+        break
+    }
+} 
+```
+
+**Response:**
+
+```json
+{
+    "success": true,
+    "status": 200,
+    "data": {
+        "_id":"3543trr",
+        "decription":"test consent",
+        "title":"test",
+        "userAgreeText":"term and condition",
+        "url":"https://acb.com"
+    }
+}
+```
+
+#### Login After Consent
+
+After accepting the consent you need to continue further by calling ****loginAfterConsent()****
+
+```swift
+cidaas.loginAfterConsent(sub:"7dfb2122-fa5e-4f7a-8494-dadac9b43f9d", accepted:true) {
+    switch $0 {
+        case .success(let configureSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+            break
+    }
+} 
+```
+
+**Response:**
+
+```json
+{
+    "success": true,
+    "status": 200,
+    "data": {
+        "token_type": "Bearer",
+        "expires_in": 86400,
+        "access_token": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxMGE5LTVmNDktNGZlYS04MGNlLTZmYTkzMzk2YjI4NyJ9*****",
+        "session_state": "CNT7GGALeoKyTF6Og-cZHAuHUJBQ20M0jLL35oh3UGk.vcNxCNq4Y68",
+        "viewtype": "login",
+        "grant_type": "login"
+    }
+}
+```
+
+#### De-duplication
+
+#### Get Deduplication Details
+
+To get the list of similar users, call ****getDeduplicationDetails()****
+
+```swift
+cidaas.getDeduplicationDetails(track_id:"45a921cf-ee26-46b0-9bf4-58636dced99f") {
+    switch $0 {
+        case .success(let configureSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+            break
+    }
+} 
+
+```
+
+**Response:**
+
+```json
+{
+    "success": true,
+    "status": 200,
+    "data": {
+        "email": "xxx@gmail.com",
+        "deduplicationList": [
+        {
+            "provider": "SELF",
+            "sub": "39363935-4d04-4411-8606-6805c4e673b4",
+            "email": "xxx********n2716@g***l.com",
+            "emailName": "xxx********n2716",
+            "firstname": "xxx",
+            "lastname": "yyy",
+            "displayName": "xxx yyy",
+            "currentLocale": "IN",
+            "country": "India",
+            "region": "Delhi",
+            "city": "Delhi",
+            "zipcode": "110008"
+        },
+        {
+            "provider": "SELF",
+            "sub": "488b8128-5584-4c25-9776-6ed34c6e7017",
+            "email": "xx****n21@g***l.com",
+            "emailName": "xx****n21",
+            "firstname": "xxx",
+            "lastname": "yyy",
+            "displayName": "xxx yyy",
+            "currentLocale": "IN",
+            "country": "India",
+            "region": "Delhi",
+            "city": "Delhi",
+            "zipcode": "110008"
+        }]
+    }
+}
+```
+
+#### Register User
+
+If the user not exists in the similar users, call ****registerUser()****
+
+```swift
+cidaas.registerUser(track_id:"45a921cf-ee26-46b0-9bf4-58636dced99f") {
+    switch $0 {
+        case .success(let configureSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+            break
+    }
+} 
+```
+
+**Response:**
+
+```swift 
+{
+    "success": true,
+    "status": 200,
+    "data": {
+        "sub": "51701ec8-f2d7-4361-a727-f8df476a711a",
+        "userStatus": "VERIFIED",
+        "email_verified": false,
+        "suggested_action": "LOGIN"
+    }
+} 
+```
 
 
+#### Login With Deduplication
 
+If the user not exists in the similar users, call ****registerUser()****
+
+```swift
+cidaas.loginWithDeduplication(track_id:"45a921cf-ee26-46b0-9bf4-58636dced99f") {
+    switch $0 {
+        case .success(let loginWithSuccess):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+            break
+    }
+} 
+```
+**Response:**
+
+```json
+{
+    "success": true,
+    "status": 200,
+    "data": {
+        "token_type": "Bearer",
+        "expires_in": 86400,
+        "access_token": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxMGE5LTVmNDktNGZlYS04MGNlLTZmYTkzMzk2YjI4NyJ9*****",
+        "session_state": "CNT7GGALeoKyTF6Og-cZHAuHUJBQ20M0jLL35oh3UGk.vcNxCNq4Y68",
+        "viewtype": "login",
+        "grant_type": "login"
+    }
+}
+```
 ```
