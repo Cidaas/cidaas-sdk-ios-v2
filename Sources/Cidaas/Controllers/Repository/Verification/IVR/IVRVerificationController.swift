@@ -11,12 +11,11 @@ import Foundation
 public class IVRVerificationController {
     
     // local variables
-    private var statusId: String
     private var authenticationType: String
     private var sub: String
     private var trackId: String
     private var requestId: String
-    private var usageType: UsageTypes = UsageTypes.MFA
+    private var usageType: String = UsageTypes.MFA.rawValue
     
     // shared instance
     public static var shared : IVRVerificationController = IVRVerificationController()
@@ -24,7 +23,6 @@ public class IVRVerificationController {
     // constructor
     public init() {
         self.sub = ""
-        self.statusId = ""
         self.requestId = ""
         self.trackId = ""
         self.authenticationType = AuthenticationTypes.CONFIGURE.rawValue
@@ -91,7 +89,6 @@ public class IVRVerificationController {
                         let loggerMessage = "Configure IVR service success : " + "Status Id  - " + String(describing: serviceResponse.data.statusId)
                         logw(loggerMessage, cname: "cidaas-sdk-success-log")
                         
-                        self.statusId = serviceResponse.data.statusId
                         self.authenticationType = AuthenticationTypes.CONFIGURE.rawValue
                         self.sub = sub
                         
@@ -106,7 +103,7 @@ public class IVRVerificationController {
     }
     
     // configrue IVR from properties
-    public func configureIVR(code: String, properties: Dictionary<String, String>, callback: @escaping(Result<VerifyIVRResponseEntity>) -> Void) {
+    public func configureIVR(statusId: String, code: String, properties: Dictionary<String, String>, callback: @escaping(Result<VerifyIVRResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -121,7 +118,7 @@ public class IVRVerificationController {
         }
         
         // validating fields
-        if (self.statusId == "" || code == "") {
+        if (statusId == "" || code == "") {
             let error = WebAuthError.shared.propertyMissingException()
             error.error = "statusId or code must not be empty"
             DispatchQueue.main.async {
@@ -162,7 +159,7 @@ public class IVRVerificationController {
                     // construct object
                     let enrollIVREntity = EnrollIVREntity()
                     enrollIVREntity.code = code
-                    enrollIVREntity.statusId = self.statusId
+                    enrollIVREntity.statusId = statusId
                     
                     // call setup service
                     IVRVerificationService.shared.enrollIVR(access_token: tokenResponse.data.access_token, enrollIVREntity: enrollIVREntity, properties: properties) {
@@ -194,7 +191,7 @@ public class IVRVerificationController {
     }
     
     // login with IVR from properties
-    public func loginWithIVR(email : String, mobile: String, sub: String, trackId: String, requestId: String, usageType: UsageTypes, properties: Dictionary<String, String>, callback: @escaping(Result<InitiateIVRResponseEntity>) -> Void) {
+    public func loginWithIVR(email : String, mobile: String, sub: String, trackId: String, requestId: String, usageType: String, properties: Dictionary<String, String>, callback: @escaping(Result<InitiateIVRResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -218,10 +215,20 @@ public class IVRVerificationController {
             return
         }
         
-        if (usageType == UsageTypes.MFA) {
+        if (usageType == UsageTypes.MFA.rawValue) {
             if (trackId == "") {
                 let error = WebAuthError.shared.propertyMissingException()
                 error.error = "trackId must not be empty"
+                DispatchQueue.main.async {
+                    callback(Result.failure(error: error))
+                }
+                return
+            }
+        }
+        else {
+            if (usageType != UsageTypes.PASSWORDLESS.rawValue) {
+                let error = WebAuthError.shared.propertyMissingException()
+                error.error = "Invalid usageType. usageType should be either PASSWORDLESS_AUTHENTICATION or MULTIFACTOR_AUTHENTICATION"
                 DispatchQueue.main.async {
                     callback(Result.failure(error: error))
                 }
@@ -236,7 +243,7 @@ public class IVRVerificationController {
         initiateIVREntity.email = email
         initiateIVREntity.mobile = mobile
         initiateIVREntity.sub = sub
-        initiateIVREntity.usageType = usageType.rawValue
+        initiateIVREntity.usageType = usageType
         
         // call initiateIVR service
         IVRVerificationService.shared.initiateIVR(initiateIVREntity: initiateIVREntity, properties: properties) {
@@ -256,7 +263,6 @@ public class IVRVerificationController {
                 let loggerMessage = "Initiate IVR service success : " + "Status Id  - " + String(describing: serviceResponse.data.statusId)
                 logw(loggerMessage, cname: "cidaas-sdk-success-log")
                 
-                self.statusId = serviceResponse.data.statusId
                 self.authenticationType = AuthenticationTypes.LOGIN.rawValue
                 self.sub = sub
                 self.trackId = trackId
@@ -271,7 +277,7 @@ public class IVRVerificationController {
     }
     
     // verify IVR from properties
-    public func verifyIVR(code: String, properties: Dictionary<String, String>, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+    public func verifyIVR(statusId: String, code: String, properties: Dictionary<String, String>, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -286,9 +292,9 @@ public class IVRVerificationController {
         }
         
         // validating fields
-        if (self.statusId == "") {
+        if (statusId == "" || code == "" || self.requestId == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "statusId must not be empty"
+            error.error = "statusId or code or requestId must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -298,7 +304,7 @@ public class IVRVerificationController {
             // construct object
             let authenticateIVREntity = AuthenticateIVREntity()
             authenticateIVREntity.code = code
-            authenticateIVREntity.statusId = self.statusId
+            authenticateIVREntity.statusId = statusId
             
             // call setup service
             IVRVerificationService.shared.authenticateIVR(authenticateIVREntity: authenticateIVREntity, properties: properties) {
@@ -325,7 +331,7 @@ public class IVRVerificationController {
                     mfaContinueEntity.trackingCode = serviceResponse.data.trackingCode
                     mfaContinueEntity.verificationType = "IVR"
                     
-                    if(self.usageType == UsageTypes.PASSWORDLESS) {
+                    if(self.usageType == UsageTypes.PASSWORDLESS.rawValue) {
                         VerificationSettingsService.shared.passwordlessContinue(mfaContinueEntity: mfaContinueEntity, properties: properties) {
                             switch $0 {
                             case .failure(let error):

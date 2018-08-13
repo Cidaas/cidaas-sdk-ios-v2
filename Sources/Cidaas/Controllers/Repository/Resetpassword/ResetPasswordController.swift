@@ -13,10 +13,6 @@ public class ResetPasswordController {
     // shared instance
     public static var shared : ResetPasswordController = ResetPasswordController()
     
-    // local variables
-    private var rprq: String = ""
-    private var exchangeId: String = ""
-    
     // constructor
     public init() {
         
@@ -89,8 +85,6 @@ public class ResetPasswordController {
                 let loggerMessage = "Initiate reset password service success : " + "Reset Request Id - " + serviceResponse.data.rprq
                 logw(loggerMessage, cname: "cidaas-sdk-success-log")
                 
-                self.rprq = serviceResponse.data.rprq
-                
                 // return callback
                 DispatchQueue.main.async {
                     callback(Result.success(result: serviceResponse))
@@ -100,7 +94,7 @@ public class ResetPasswordController {
     }
     
     // handle reset password from properties
-    public func handleResetPassword(code: String, properties: Dictionary<String, String>, callback: @escaping(Result<HandleResetPasswordResponseEntity>) -> Void) {
+    public func handleResetPassword(rprq: String, code: String, properties: Dictionary<String, String>, callback: @escaping(Result<HandleResetPasswordResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -115,7 +109,7 @@ public class ResetPasswordController {
         }
         
         // validating fields
-        if (code == "" || self.rprq == "") {
+        if (code == "" || rprq == "") {
             let error = WebAuthError.shared.propertyMissingException()
             error.error = "code or rprq must not be empty"
             DispatchQueue.main.async {
@@ -127,7 +121,7 @@ public class ResetPasswordController {
         // construct object
         let handleResetPasswordEntity = HandleResetPasswordEntity()
         handleResetPasswordEntity.code = code
-        handleResetPasswordEntity.resetRequestId = self.rprq
+        handleResetPasswordEntity.resetRequestId = rprq
         
         // call handleResetPassword service
         ResetPasswordService.shared.handleResetPassword(handleResetPasswordEntity: handleResetPasswordEntity, properties: properties) {
@@ -147,8 +141,6 @@ public class ResetPasswordController {
                 let loggerMessage = "Handle reset password service success : " + "Exchange Id - " + serviceResponse.data.exchangeId
                 logw(loggerMessage, cname: "cidaas-sdk-success-log")
                 
-                self.exchangeId = serviceResponse.data.exchangeId
-                
                 // return callback
                 DispatchQueue.main.async {
                     callback(Result.success(result: serviceResponse))
@@ -158,7 +150,7 @@ public class ResetPasswordController {
     }
     
     // reset password from properties
-    public func resetPassword(password: String, confirmPassword: String, properties: Dictionary<String, String>, callback: @escaping(Result<ResetPasswordResponseEntity>) -> Void) {
+    public func resetPassword(rprq: String, exchangeId: String, password: String, confirmPassword: String, properties: Dictionary<String, String>, callback: @escaping(Result<ResetPasswordResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -173,9 +165,9 @@ public class ResetPasswordController {
         }
         
         // validating fields
-        if (password == "" || confirmPassword == "" || self.exchangeId == "" || self.rprq == "") {
+        if (password == "" || confirmPassword == "" || exchangeId == "" || rprq == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "password or confirmPassword or exchangeId or resetRequestId must not be empty"
+            error.error = "password or confirmPassword or exchangeId or rprq must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -194,8 +186,8 @@ public class ResetPasswordController {
         let resetPasswordEntity = ResetPasswordEntity()
         resetPasswordEntity.password = password
         resetPasswordEntity.confirmPassword = confirmPassword
-        resetPasswordEntity.exchangeId = self.exchangeId
-        resetPasswordEntity.resetRequestId = self.rprq
+        resetPasswordEntity.exchangeId = exchangeId
+        resetPasswordEntity.resetRequestId = rprq
         
         // call initiateResetPassword service
         ResetPasswordService.shared.resetPassword(resetPasswordEntity: resetPasswordEntity, properties: properties) {

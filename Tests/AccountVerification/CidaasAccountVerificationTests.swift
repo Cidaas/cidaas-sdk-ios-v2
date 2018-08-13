@@ -93,7 +93,7 @@ class CidaasAccountVerificationTests: XCTestCase {
         var properties = Dictionary<String, String>()
         properties["DomainURL"] = "https://localmanagement.cidaas.de"
         
-        accountVerificationController.verifyAccount(code: "34234234", properties: properties){
+        accountVerificationController.verifyAccount(accvid: "8716782367237", code: "34234234", properties: properties){
             switch $0 {
             case .success(let response):
                 print(response.success)

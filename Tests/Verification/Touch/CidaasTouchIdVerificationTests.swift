@@ -124,7 +124,8 @@ class CidaasTouchIdVerificationTests: XCTestCase {
     }
     
     func testLoginWithTouchId() {
-        self.cidaas.loginWithTouchId(email: "abc@gmail.com", requestId: "123123234", usageType: UsageTypes.PASSWORDLESS) {
+        let passwordlessEntity = PasswordlessEntity()
+        self.cidaas.loginWithTouchId(passwordlessEntity: passwordlessEntity) {
             switch $0 {
             case .success(let loginWithTouchIdSuccess):
                 print("\nSub : \(loginWithTouchIdSuccess.data.sub)")
@@ -156,7 +157,7 @@ class CidaasTouchIdVerificationTests: XCTestCase {
     func testLoginWithTouchIdController() {
         var properties = Dictionary<String, String>()
         properties["DomainURL"] = "https://localmanagement.cidaas.de"
-        self.touchController.loginWithTouchId(email: "abc@gmail.com", mobile: "", sub: "", trackId: "", requestId: "123123234", usageType: .PASSWORDLESS, properties: properties) {
+        self.touchController.loginWithTouchId(email: "abc@gmail.com", mobile: "", sub: "", trackId: "", requestId: "123123234", usageType: UsageTypes.PASSWORDLESS.rawValue, properties: properties) {
             switch $0 {
             case .success(let loginWithTouchIdSuccess):
                 print("\nSub : \(loginWithTouchIdSuccess.data.sub)")

@@ -11,12 +11,11 @@ import Foundation
 public class EmailVerificationController {
     
     // local variables
-    private var statusId: String
     private var authenticationType: String
     private var sub: String
     private var trackId: String
     private var requestId: String
-    private var usageType: UsageTypes = UsageTypes.MFA
+    private var usageType: String = UsageTypes.MFA.rawValue
     
     // shared instance
     public static var shared : EmailVerificationController = EmailVerificationController()
@@ -24,7 +23,6 @@ public class EmailVerificationController {
     // constructor
     public init() {
         self.sub = ""
-        self.statusId = ""
         self.trackId = ""
         self.requestId = ""
         self.authenticationType = AuthenticationTypes.CONFIGURE.rawValue
@@ -91,7 +89,6 @@ public class EmailVerificationController {
                         let loggerMessage = "Configure Email service success : " + "Status Id  - " + String(describing: serviceResponse.data.statusId)
                         logw(loggerMessage, cname: "cidaas-sdk-success-log")
                         
-                        self.statusId = serviceResponse.data.statusId
                         self.authenticationType = AuthenticationTypes.CONFIGURE.rawValue
                         self.sub = sub
                         
@@ -106,7 +103,7 @@ public class EmailVerificationController {
     }
     
     // verify email from properties
-    public func configureEmail(code: String, properties: Dictionary<String, String>, callback: @escaping(Result<VerifyEmailResponseEntity>) -> Void) {
+    public func configureEmail(statusId: String, code: String, properties: Dictionary<String, String>, callback: @escaping(Result<VerifyEmailResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -121,7 +118,7 @@ public class EmailVerificationController {
         }
         
         // validating fields
-        if (self.statusId == "" || code == "") {
+        if (statusId == "" || code == "") {
             let error = WebAuthError.shared.propertyMissingException()
             error.error = "statusId or code must not be empty"
             DispatchQueue.main.async {
@@ -163,7 +160,7 @@ public class EmailVerificationController {
                 // construct object
                 let enrollEmailEntity = EnrollEmailEntity()
                 enrollEmailEntity.code = code
-                enrollEmailEntity.statusId = self.statusId
+                enrollEmailEntity.statusId = statusId
                 
                 // call setup service
                 EmailVerificationService.shared.enrollEmail(access_token: tokenResponse.data.access_token, enrollEmailEntity: enrollEmailEntity, properties: properties) {
@@ -195,7 +192,7 @@ public class EmailVerificationController {
     }
     
     // login with email from properties
-    public func loginWithEmail(email : String, mobile: String, sub: String, trackId: String, requestId: String, usageType: UsageTypes, properties: Dictionary<String, String>, callback: @escaping(Result<InitiateEmailResponseEntity>) -> Void) {
+    public func loginWithEmail(email : String, mobile: String, sub: String, trackId: String, requestId: String, usageType: String, properties: Dictionary<String, String>, callback: @escaping(Result<InitiateEmailResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -219,10 +216,20 @@ public class EmailVerificationController {
             return
         }
         
-        if (usageType == UsageTypes.MFA) {
+        if (usageType == UsageTypes.MFA.rawValue) {
             if (trackId == "") {
                 let error = WebAuthError.shared.propertyMissingException()
                 error.error = "trackId must not be empty"
+                DispatchQueue.main.async {
+                    callback(Result.failure(error: error))
+                }
+                return
+            }
+        }
+        else {
+            if (usageType != UsageTypes.PASSWORDLESS.rawValue) {
+                let error = WebAuthError.shared.propertyMissingException()
+                error.error = "Invalid usageType. usageType should be either PASSWORDLESS_AUTHENTICATION or MULTIFACTOR_AUTHENTICATION"
                 DispatchQueue.main.async {
                     callback(Result.failure(error: error))
                 }
@@ -237,7 +244,7 @@ public class EmailVerificationController {
         initiateEmailEntity.email = email
         initiateEmailEntity.sub = sub
         initiateEmailEntity.mobile = mobile
-        initiateEmailEntity.usageType = usageType.rawValue
+        initiateEmailEntity.usageType = usageType
         
         // call initiateEmail service
         EmailVerificationService.shared.initiateEmail(initiateEmailEntity: initiateEmailEntity, properties: properties) {
@@ -257,7 +264,6 @@ public class EmailVerificationController {
                 let loggerMessage = "Initiate Email service success : " + "Status Id  - " + String(describing: serviceResponse.data.statusId)
                 logw(loggerMessage, cname: "cidaas-sdk-success-log")
                 
-                self.statusId = serviceResponse.data.statusId
                 self.authenticationType = AuthenticationTypes.LOGIN.rawValue
                 self.sub = sub
                 self.requestId = requestId
@@ -272,7 +278,7 @@ public class EmailVerificationController {
     }
     
     // verify email from properties
-    public func verifyEmail(code: String, properties: Dictionary<String, String>, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+    public func verifyEmail(statusId: String, code: String, properties: Dictionary<String, String>, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -287,7 +293,7 @@ public class EmailVerificationController {
         }
         
         // validating fields
-        if (self.statusId == "" || code == "" || requestId == "") {
+        if (statusId == "" || code == "" || self.requestId == "") {
             let error = WebAuthError.shared.propertyMissingException()
             error.error = "statusId or code or requestId must not be empty"
             DispatchQueue.main.async {
@@ -299,7 +305,7 @@ public class EmailVerificationController {
         // construct object
         let authenticateEmailEntity = AuthenticateEmailEntity()
         authenticateEmailEntity.code = code
-        authenticateEmailEntity.statusId = self.statusId
+        authenticateEmailEntity.statusId = statusId
         
         // call setup service
         EmailVerificationService.shared.authenticateEmail(authenticateEmailEntity: authenticateEmailEntity, properties: properties) {
@@ -326,7 +332,7 @@ public class EmailVerificationController {
                 mfaContinueEntity.trackingCode = serviceResponse.data.trackingCode
                 mfaContinueEntity.verificationType = "EMAIL"
                 
-                if(self.usageType == UsageTypes.PASSWORDLESS) {
+                if(self.usageType == UsageTypes.PASSWORDLESS.rawValue) {
                     VerificationSettingsService.shared.passwordlessContinue(mfaContinueEntity: mfaContinueEntity, properties: properties) {
                         switch $0 {
                         case .failure(let error):

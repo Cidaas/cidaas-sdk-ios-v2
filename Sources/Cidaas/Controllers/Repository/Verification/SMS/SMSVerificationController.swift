@@ -11,12 +11,11 @@ import Foundation
 public class SMSVerificationController {
     
     // local variables
-    private var statusId: String
     private var authenticationType: String
     private var sub: String
     private var trackId: String
     private var requestId: String
-    private var usageType: UsageTypes = UsageTypes.MFA
+    private var usageType: String = UsageTypes.MFA.rawValue
     
     // shared instance
     public static var shared : SMSVerificationController = SMSVerificationController()
@@ -24,7 +23,6 @@ public class SMSVerificationController {
     // constructor
     public init() {
         self.sub = ""
-        self.statusId = ""
         self.requestId = ""
         self.trackId = ""
         self.authenticationType = AuthenticationTypes.CONFIGURE.rawValue
@@ -91,7 +89,6 @@ public class SMSVerificationController {
                         let loggerMessage = "Configure SMS service success : " + "Status Id  - " + String(describing: serviceResponse.data.statusId)
                         logw(loggerMessage, cname: "cidaas-sdk-success-log")
                         
-                        self.statusId = serviceResponse.data.statusId
                         self.authenticationType = AuthenticationTypes.CONFIGURE.rawValue
                         self.sub = sub
                         
@@ -107,7 +104,7 @@ public class SMSVerificationController {
     
     
     // configure SMS from properties
-    public func configureSMS(code: String, properties: Dictionary<String, String>, callback: @escaping(Result<VerifySMSResponseEntity>) -> Void) {
+    public func configureSMS(statusId: String, code: String, properties: Dictionary<String, String>, callback: @escaping(Result<VerifySMSResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -122,7 +119,7 @@ public class SMSVerificationController {
         }
         
         // validating fields
-        if (self.statusId == "" || code == "") {
+        if (statusId == "" || code == "") {
             let error = WebAuthError.shared.propertyMissingException()
             error.error = "statusId or code must not be empty"
             DispatchQueue.main.async {
@@ -165,7 +162,7 @@ public class SMSVerificationController {
                 // construct object
                 let enrollSMSEntity = EnrollSMSEntity()
                 enrollSMSEntity.code = code
-                enrollSMSEntity.statusId = self.statusId
+                enrollSMSEntity.statusId = statusId
                 
                 // call setup service
                 SMSVerificationService.shared.enrollSMS(access_token: tokenResponse.data.access_token, enrollSMSEntity: enrollSMSEntity, properties: properties) {
@@ -198,7 +195,7 @@ public class SMSVerificationController {
     
     
     // verify SMS from properties
-    public func verifySMS(code: String, properties: Dictionary<String, String>, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+    public func verifySMS(statusId: String, code: String, properties: Dictionary<String, String>, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -213,9 +210,9 @@ public class SMSVerificationController {
         }
         
         // validating fields
-        if (self.statusId == "") {
+        if (statusId == "" || code == "" || self.requestId == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "statusId must not be empty"
+            error.error = "statusId or code or requestId must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -224,7 +221,7 @@ public class SMSVerificationController {
         // construct object
         let authenticateSMSEntity = AuthenticateSMSEntity()
         authenticateSMSEntity.code = code
-        authenticateSMSEntity.statusId = self.statusId
+        authenticateSMSEntity.statusId = statusId
         
         // call setup service
         SMSVerificationService.shared.authenticateSMS(authenticateSMSEntity: authenticateSMSEntity, properties: properties) {
@@ -251,7 +248,7 @@ public class SMSVerificationController {
                 mfaContinueEntity.trackingCode = serviceResponse.data.trackingCode
                 mfaContinueEntity.verificationType = "SMS"
                 
-                if(self.usageType == UsageTypes.PASSWORDLESS) {
+                if(self.usageType == UsageTypes.PASSWORDLESS.rawValue) {
                     VerificationSettingsService.shared.passwordlessContinue(mfaContinueEntity: mfaContinueEntity, properties: properties) {
                         switch $0 {
                         case .failure(let error):
@@ -304,7 +301,7 @@ public class SMSVerificationController {
     }
     
     // login with SMS from properties
-    public func loginWithSMS(email : String, mobile: String, sub: String, trackId: String, requestId: String, usageType: UsageTypes, properties: Dictionary<String, String>, callback: @escaping(Result<InitiateSMSResponseEntity>) -> Void) {
+    public func loginWithSMS(email : String, mobile: String, sub: String, trackId: String, requestId: String, usageType: String, properties: Dictionary<String, String>, callback: @escaping(Result<InitiateSMSResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -328,10 +325,20 @@ public class SMSVerificationController {
             return
         }
         
-        if (usageType == UsageTypes.MFA) {
+        if (usageType == UsageTypes.MFA.rawValue) {
             if (trackId == "") {
                 let error = WebAuthError.shared.propertyMissingException()
                 error.error = "trackId must not be empty"
+                DispatchQueue.main.async {
+                    callback(Result.failure(error: error))
+                }
+                return
+            }
+        }
+        else {
+            if (usageType != UsageTypes.PASSWORDLESS.rawValue) {
+                let error = WebAuthError.shared.propertyMissingException()
+                error.error = "Invalid usageType. usageType should be either PASSWORDLESS_AUTHENTICATION or MULTIFACTOR_AUTHENTICATION"
                 DispatchQueue.main.async {
                     callback(Result.failure(error: error))
                 }
@@ -346,7 +353,7 @@ public class SMSVerificationController {
         initiateSMSEntity.email = email
         initiateSMSEntity.mobile = mobile
         initiateSMSEntity.sub = sub
-        initiateSMSEntity.usageType = usageType.rawValue
+        initiateSMSEntity.usageType = usageType
         
         // call initiateSMS service
         SMSVerificationService.shared.initiateSMS(initiateSMSEntity: initiateSMSEntity, properties: properties) {
@@ -366,7 +373,6 @@ public class SMSVerificationController {
                 let loggerMessage = "Initiate SMS service success : " + "Status Id  - " + String(describing: serviceResponse.data.statusId)
                 logw(loggerMessage, cname: "cidaas-sdk-success-log")
                 
-                self.statusId = serviceResponse.data.statusId
                 self.authenticationType = AuthenticationTypes.LOGIN.rawValue
                 self.sub = sub
                 self.requestId = requestId

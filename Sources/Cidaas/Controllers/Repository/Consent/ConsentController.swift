@@ -12,9 +12,6 @@ public class ConsentController {
     
     // shared instance
     public static var shared : ConsentController = ConsentController()
-    public var consent_name: String = ""
-    public var consent_version: Int16 = 0
-    public var track_id: String = ""
     
     // constructor
     public init() {
@@ -22,7 +19,7 @@ public class ConsentController {
     }
     
     // getConsentDetails from properties
-    public func getConsentDetails(consent_name: String, consent_version: Int16, track_id: String, properties: Dictionary<String, String>, callback: @escaping(Result<ConsentDetailsResponseEntity>) -> Void) {
+    public func getConsentDetails(consent_name: String, properties: Dictionary<String, String>, callback: @escaping(Result<ConsentDetailsResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -37,26 +34,21 @@ public class ConsentController {
         }
         
         // validating fields
-        if (consent_name == "" || consent_version == 0 || track_id == "") {
+        if (consent_name == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "consent_name or track_id must not be empty"
+            error.error = "consent_name must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
             return
         }
         
-        // keep in temporary memory
-        self.track_id = track_id
-        self.consent_name = consent_name
-        self.consent_version = consent_version
-        
-        // call getConsentURL service
-        ConsentService.shared.getConsentURL(consent_name: consent_name, consent_version: consent_version, properties: properties) {
+        // call getConsentDetails service
+        ConsentService.shared.getConsentDetails(consent_name: consent_name, properties: properties) {
             switch $0 {
             case .failure(let error):
                 // log error
-                let loggerMessage = "Get Consent URL service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                let loggerMessage = "Get Consent Details service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
                 logw(loggerMessage, cname: "cidaas-sdk-error-log")
                 
                 // return failure callback
@@ -64,45 +56,21 @@ public class ConsentController {
                     callback(Result.failure(error: error))
                 }
                 return
-            case .success(let serviceResponse):
+            case .success(let consentDetailsResponse):
                 // log success
-                let loggerMessage = "Get Consent URL service success : " + "Consent URL  - " + String(describing: serviceResponse.data)
+                let loggerMessage = "Get Consent Details service success : " + "Consent URL  - " + String(describing: consentDetailsResponse.data)
                 logw(loggerMessage, cname: "cidaas-sdk-success-log")
                 
-                
-                // call getConsentDetails service
-                ConsentService.shared.getConsentDetails(consent_name: consent_name, properties: properties) {
-                    switch $0 {
-                    case .failure(let error):
-                        // log error
-                        let loggerMessage = "Get Consent Details service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                        logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                        
-                        // return failure callback
-                        DispatchQueue.main.async {
-                            callback(Result.failure(error: error))
-                        }
-                        return
-                    case .success(let consentDetailsResponse):
-                        // log success
-                        let loggerMessage = "Get Consent Details service success : " + "Consent URL  - " + String(describing: consentDetailsResponse.data)
-                        logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                        
-                        // assign consent url to the response
-                        consentDetailsResponse.data.url = serviceResponse.data
-                        
-                        // return callback
-                        DispatchQueue.main.async {
-                            callback(Result.success(result: consentDetailsResponse))
-                        }
-                    }
+                // return callback
+                DispatchQueue.main.async {
+                    callback(Result.success(result: consentDetailsResponse))
                 }
             }
         }
     }
     
     // login after consent from properties
-    public func loginAfterConsent(sub: String, accepted: Bool, properties: Dictionary<String, String>, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+    public func loginAfterConsent(consentEntity: ConsentEntity, properties: Dictionary<String, String>, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil || properties["ClientId"] == "" || properties["ClientId"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -117,9 +85,9 @@ public class ConsentController {
         }
         
         // validating fields
-        if (self.consent_name == "" || sub == "" || accepted == false || self.track_id == "") {
+        if (consentEntity.consent_name == "" || consentEntity.version == "" || consentEntity.sub == "" || consentEntity.accepted == false || consentEntity.track_id == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "consent_name or sub or accepted or track_id must not be empty"
+            error.error = "consent_name or version or sub or accepted or track_id must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -128,10 +96,10 @@ public class ConsentController {
         
         // constrcut accept consent entity
         let acceptConsentEntity = AcceptConsentEntity()
-        acceptConsentEntity.name = consent_name
-        acceptConsentEntity.version = consent_version
-        acceptConsentEntity.sub = sub
-        acceptConsentEntity.accepted = accepted
+        acceptConsentEntity.name = consentEntity.consent_name
+        acceptConsentEntity.sub = consentEntity.sub
+        acceptConsentEntity.accepted = consentEntity.accepted
+        acceptConsentEntity.version = consentEntity.version
         
         // call getConsentDetails service
         ConsentService.shared.acceptConsent(acceptConsentEntity: acceptConsentEntity, properties: properties) {
@@ -154,10 +122,10 @@ public class ConsentController {
                 // prepare consent continue entity
                 let consentContinueEntity = ConsentContinueEntity()
                 consentContinueEntity.client_id = properties["ClientId"] ?? ""
-                consentContinueEntity.name = self.consent_name
-                consentContinueEntity.sub = sub
-                consentContinueEntity.version = self.consent_version
-                consentContinueEntity.trackId = self.track_id
+                consentContinueEntity.name = consentEntity.consent_name
+                consentContinueEntity.sub = consentEntity.sub
+                consentContinueEntity.trackId = consentEntity.track_id
+                consentContinueEntity.version = consentEntity.version
                 
                 // call consentContinue service
                 ConsentService.shared.consentContinue(consentContinueEntity: consentContinueEntity, properties: properties) {

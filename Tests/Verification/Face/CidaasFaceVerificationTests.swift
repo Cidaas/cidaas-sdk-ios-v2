@@ -110,7 +110,7 @@ class CidaasFaceVerificationTests: XCTestCase {
     
     func testConfigureFace() {
         let photo = UIImage()
-        self.cidaas.configureFaceRecognition(sub: "123", photo: photo) {
+        self.cidaas.configureFaceRecognition(photo: photo, sub: "123") {
             switch $0 {
             case .success(let configureFaceSuccess):
                 print("\nSub : \(configureFaceSuccess.data.sub)")
@@ -125,7 +125,8 @@ class CidaasFaceVerificationTests: XCTestCase {
     
     func testLoginWithFace() {
         let photo = UIImage()
-        self.cidaas.loginWithFaceRecognition(email: "abc@gmail.com", requestId: "123123", photo: photo, usageType: .PASSWORDLESS) {
+        let passwordlessEntity = PasswordlessEntity()
+        self.cidaas.loginWithFaceRecognition(photo: photo, passwordlessEntity: passwordlessEntity) {
             switch $0 {
             case .success(let loginWithFaceSuccess):
                 print("\nSub : \(loginWithFaceSuccess.data.sub)")
@@ -159,7 +160,7 @@ class CidaasFaceVerificationTests: XCTestCase {
         let photo = UIImage()
         var properties = Dictionary<String, String>()
         properties["DomainURL"] = "https://localmanagement.cidaas.de"
-        self.faceController.loginWithFace(email: "abc@gmail.com", mobile: "", sub: "", trackId: "", requestId: "123123", photo: photo, usageType: .PASSWORDLESS, properties: properties) {
+        self.faceController.loginWithFace(email: "abc@gmail.com", mobile: "", sub: "", trackId: "", requestId: "123123", photo: photo, usageType: UsageTypes.PASSWORDLESS.rawValue, properties: properties) {
             switch $0 {
             case .success(let loginWithFaceSuccess):
                 print("\nSub : \(loginWithFaceSuccess.data.sub)")

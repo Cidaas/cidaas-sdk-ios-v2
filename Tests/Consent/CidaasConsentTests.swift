@@ -85,10 +85,10 @@ class CidaasConsentTests: XCTestCase {
     
     func testGetConsentDetails() {
         
-        self.cidaas.getConsentDetails(consent_name: "default", consent_version: 0, track_id: "1232323") {
+        self.cidaas.getConsentDetails(consent_name: "default") {
             switch $0 {
             case .success(let consentDetailsSuccess):
-                print("\nTitle : \(consentDetailsSuccess.data.title)")
+                print("\nTitle : \(consentDetailsSuccess.data.name)")
                 break
             case .failure(let error):
                 print("\nError : \(error.errorMessage)")
@@ -100,7 +100,9 @@ class CidaasConsentTests: XCTestCase {
     
     func testLoginAfterConsent() {
         
-        self.cidaas.loginAfterConsent(sub: "123123", accepted: true) {
+        let consentEntity = ConsentEntity()
+        
+        self.cidaas.loginAfterConsent(consentEntity: consentEntity) {
             switch $0 {
             case .success(let loginAfterConsentSuccess):
                 print("\nSub : \(loginAfterConsentSuccess.data.sub)")
@@ -118,10 +120,10 @@ class CidaasConsentTests: XCTestCase {
         var properties = Dictionary<String, String>()
         properties["DomainURL"] = "https://localmanagement.cidaas.de"
         
-        self.consentController.getConsentDetails(consent_name: "default", consent_version: 0, track_id: "1232323", properties: properties) {
+        self.consentController.getConsentDetails(consent_name: "default", properties: properties) {
             switch $0 {
             case .success(let consentDetailsSuccess):
-                print("\nTitle : \(consentDetailsSuccess.data.title)")
+                print("\nTitle : \(consentDetailsSuccess.data.name)")
                 break
             case .failure(let error):
                 print("\nError : \(error.errorMessage)")
@@ -136,7 +138,9 @@ class CidaasConsentTests: XCTestCase {
         var properties = Dictionary<String, String>()
         properties["DomainURL"] = "https://localmanagement.cidaas.de"
         
-        self.consentController.loginAfterConsent(sub: "123123", accepted: true, properties: properties) {
+        let consentEntity = ConsentEntity()
+        
+        self.consentController.loginAfterConsent(consentEntity: consentEntity, properties: properties) {
             switch $0 {
             case .success(let loginAfterConsentSuccess):
                 print("\nSub : \(loginAfterConsentSuccess.data.sub)")
@@ -157,7 +161,7 @@ class CidaasConsentTests: XCTestCase {
         self.consentService.getConsentDetails(consent_name: "default", properties: properties) {
             switch $0 {
             case .success(let consentDetailsSuccess):
-                print("\nTitle : \(consentDetailsSuccess.data.title)")
+                print("\nTitle : \(consentDetailsSuccess.data.name)")
                 break
             case .failure(let error):
                 print("\nError : \(error.errorMessage)")
@@ -193,7 +197,6 @@ class CidaasConsentTests: XCTestCase {
         acceptConsentEntity.accepted = true
         acceptConsentEntity.client_id = "123123123"
         acceptConsentEntity.name = "default"
-        acceptConsentEntity.version = 1
         
         self.consentService.acceptConsent(acceptConsentEntity: acceptConsentEntity, properties: properties) {
             switch $0 {
@@ -218,7 +221,6 @@ class CidaasConsentTests: XCTestCase {
         consentContinueEntity.name = "default"
         consentContinueEntity.sub = "238742834"
         consentContinueEntity.trackId = "23423"
-        consentContinueEntity.version = 1
         
         self.consentService.consentContinue(consentContinueEntity: consentContinueEntity, properties: properties) {
             switch $0 {

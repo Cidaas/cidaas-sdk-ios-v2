@@ -15,7 +15,7 @@ public class PatternVerificationController {
     private var authenticationType: String
     private var sub: String
     private var verificationType: String
-    private var usageType: UsageTypes = UsageTypes.MFA
+    private var usageType: String = UsageTypes.MFA.rawValue
     
     // shared instance
     public static var shared : PatternVerificationController = PatternVerificationController()
@@ -213,7 +213,7 @@ public class PatternVerificationController {
     
     
     // login with pattern recognition from properties
-    public func loginWithPatternRecognition(pattern: String, email : String, mobile: String, sub: String, trackId: String, requestId: String, usageType: UsageTypes, properties: Dictionary<String, String>, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+    public func loginWithPatternRecognition(pattern: String, email : String, mobile: String, sub: String, trackId: String, requestId: String, usageType: String, properties: Dictionary<String, String>, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -221,6 +221,15 @@ public class PatternVerificationController {
             let loggerMessage = "Read properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
             logw(loggerMessage, cname: "cidaas-sdk-error-log")
             
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+        
+        if (DBHelper.shared.getUserDeviceId(key: properties["DomailURL"] ?? "OAuthUserDeviceId") == "") {
+            let error = WebAuthError.shared.propertyMissingException()
+            error.error = "There is no physical verification configured in this mobile"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -242,10 +251,20 @@ public class PatternVerificationController {
             return
         }
         
-        if (usageType == UsageTypes.MFA) {
+        if (usageType == UsageTypes.MFA.rawValue) {
             if (trackId == "") {
                 let error = WebAuthError.shared.propertyMissingException()
                 error.error = "trackId must not be empty"
+                DispatchQueue.main.async {
+                    callback(Result.failure(error: error))
+                }
+                return
+            }
+        }
+        else {
+            if (usageType != UsageTypes.PASSWORDLESS.rawValue) {
+                let error = WebAuthError.shared.propertyMissingException()
+                error.error = "Invalid usageType. usageType should be either PASSWORDLESS_AUTHENTICATION or MULTIFACTOR_AUTHENTICATION"
                 DispatchQueue.main.async {
                     callback(Result.failure(error: error))
                 }
@@ -259,7 +278,7 @@ public class PatternVerificationController {
         let initiatePatternEntity = InitiatePatternEntity()
         initiatePatternEntity.email = email
         initiatePatternEntity.sub = sub
-        initiatePatternEntity.usageType = usageType.rawValue
+        initiatePatternEntity.usageType = usageType
         
         // call initiatePattern service
         PatternVerificationService.shared.initiatePattern(initiatePatternEntity: initiatePatternEntity, properties: properties) {
@@ -363,7 +382,7 @@ public class PatternVerificationController {
                                                 mfaContinueEntity.trackingCode = patternResponse.data.trackingCode
                                                 mfaContinueEntity.verificationType = "PATTERN"
                                                 
-                                                if(self.usageType == UsageTypes.PASSWORDLESS) {
+                                                if(self.usageType == UsageTypes.PASSWORDLESS.rawValue) {
                                                     VerificationSettingsService.shared.passwordlessContinue(mfaContinueEntity: mfaContinueEntity, properties: properties) {
                                                         switch $0 {
                                                         case .failure(let error):

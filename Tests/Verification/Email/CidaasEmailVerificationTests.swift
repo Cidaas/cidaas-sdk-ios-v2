@@ -81,7 +81,7 @@ class CidaasEmailVerificationTests: XCTestCase {
     }
     
     func testVerifyEmail() {
-        self.cidaas.verifyEmail(code: "123123") {
+        self.cidaas.verifyEmail(statusId: "8712735267", code: "123123") {
             switch $0 {
             case .success(let verifyEmailSuccess):
                 print("\nSub : \(verifyEmailSuccess.data.sub)")
@@ -95,7 +95,8 @@ class CidaasEmailVerificationTests: XCTestCase {
     }
     
     func testLoginWithEmail() {
-        self.cidaas.loginWithEmail(email: "abc@gmail.com", requestId: "86284682", usageType: UsageTypes.PASSWORDLESS) {
+        let passwordlessEntity = PasswordlessEntity()
+        self.cidaas.loginWithEmail(passwordlessEntity: passwordlessEntity) {
             switch $0 {
             case .success(let loginWithEmailSuccess):
                 print("\nStatus Id : \(loginWithEmailSuccess.data.statusId)")
@@ -127,7 +128,7 @@ class CidaasEmailVerificationTests: XCTestCase {
     func testLoginWithEmailController() {
         var properties = Dictionary<String, String>()
         properties["DomainURL"] = "https://localmanagement.cidaas.de"
-        self.emailController.loginWithEmail(email: "abc@gmail.com", mobile: "+919736357236", sub: "123123", trackId: "123123123414", requestId: "876287823647234", usageType: UsageTypes.PASSWORDLESS, properties: properties) {
+        self.emailController.loginWithEmail(email: "abc@gmail.com", mobile: "+919736357236", sub: "123123", trackId: "123123123414", requestId: "876287823647234", usageType: UsageTypes.PASSWORDLESS.rawValue, properties: properties) {
             switch $0 {
             case .success(let loginWithEmailSuccess):
                 print("\nStatus Id : \(loginWithEmailSuccess.data.statusId)")
@@ -143,7 +144,7 @@ class CidaasEmailVerificationTests: XCTestCase {
     func testVerifyEmailController() {
         var properties = Dictionary<String, String>()
         properties["DomainURL"] = "https://localmanagement.cidaas.de"
-        self.emailController.verifyEmail(code: "123123", properties: properties) {
+        self.emailController.verifyEmail(statusId: "8716254524543523", code: "123123", properties: properties) {
             switch $0 {
             case .success(let verifyEmailSuccess):
                 print("\nSub : \(verifyEmailSuccess.data.sub)")

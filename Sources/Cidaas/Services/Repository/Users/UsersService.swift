@@ -104,4 +104,97 @@ public class UsersService {
             }
         }
     }
+    
+    // upload image
+    public func uploadImage(accessToken: String, photo: UIImage, properties : Dictionary<String, String>, callback: @escaping(Result<UploadImageResponseEntity>) -> Void) {
+        // local variables
+        var headers : HTTPHeaders
+        var urlString : String
+        var baseURL : String
+        
+        // construct headers
+        headers = [
+            "user-agent": "cidaas-ios",
+            "access_token" : accessToken
+        ]
+        
+        // assign base url
+        baseURL = (properties["DomainURL"]) ?? ""
+        
+        if (baseURL == "") {
+            callback(Result.failure(error: WebAuthError.shared.propertyMissingException()))
+            return
+        }
+        
+        // construct url
+        urlString = baseURL + URLHelper.shared.getImageUploadURL()
+        
+        // call service
+        var enrolledURL = try! URLRequest(url: URL(string: urlString)!, method: .post, headers: headers)
+        
+        // call service
+        Alamofire.upload(
+            multipartFormData: { multipartFormData in
+
+                let uploadImage = UIImageJPEGRepresentation(photo, 0.01)
+                
+                multipartFormData.append(uploadImage!, withName: "photo", fileName: "photo.jpg", mimeType: "image/jpeg")
+                enrolledURL.addValue(multipartFormData.contentType, forHTTPHeaderField: "Content-Type")
+                
+        }, with: enrolledURL,
+           encodingCompletion: { encodingResult in
+            switch encodingResult {
+            case .success(let upload, _, _):
+                upload.responseString { response in
+                    if response.response?.statusCode == 200 {
+                        if let jsonString = response.result.value {
+                            let decoder = JSONDecoder()
+                            do {
+                                let data = jsonString.data(using: .utf8)!
+                                // decode the json data to object
+                                let enrollFaceResponseEntity = try decoder.decode(UploadImageResponseEntity.self, from: data)
+                                
+                                // return success
+                                callback(Result.success(result: enrollFaceResponseEntity))
+                            }
+                            catch(let error) {
+                                // return failure
+                                callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.EMPTY_IMAGE_UPLOAD_SERVICE.rawValue, errorMessage: error.localizedDescription, statusCode: 400)))
+                            }
+                        }
+                        else {
+                            // return failure
+                            callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.EMPTY_IMAGE_UPLOAD_SERVICE.rawValue, errorMessage: StringsHelper.shared.EMPTY_IMAGE_UPLOAD_SERVICE, statusCode: response.response?.statusCode ?? 400)))
+                        }
+                    }
+                    else {
+                        if let jsonString = response.result.value {
+                            let decoder = JSONDecoder()
+                            do {
+                                let data = jsonString.data(using: .utf8)!
+                                // decode the json data to object
+                                let errorResponseEntity = try decoder.decode(ErrorResponseEntity.self, from: data)
+                                
+                                // return failure
+                                callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.IMAGE_UPLOAD_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error:errorResponseEntity)))
+                            }
+                            catch(let error) {
+                                // return failure
+                                callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.EMPTY_IMAGE_UPLOAD_SERVICE.rawValue, errorMessage: error.localizedDescription, statusCode: 400)))
+                            }
+                        }
+                        else {
+                            // return failure
+                            callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.IMAGE_UPLOAD_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.IMAGE_UPLOAD_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
+                        }
+                    }
+                }
+                break
+            case .failure(let error):
+                // return failure
+                callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.IMAGE_UPLOAD_SERVICE_FAILURE.rawValue, errorMessage: error.localizedDescription, statusCode: 400)))
+                break
+            }
+        })
+    }
 }

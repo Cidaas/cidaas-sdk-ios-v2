@@ -82,7 +82,8 @@ class CidaasBackupcodeVerificationTests: XCTestCase {
     }
     
     func testLoginWithBackupcode() {
-        self.cidaas.loginWithBackupcode(code: "123", requestId: "1231231", usageType: .PASSWORDLESS) {
+        let passwordlessEntity = PasswordlessEntity()
+        self.cidaas.loginWithBackupcode(code: "123", passwordlessEntity: passwordlessEntity) {
             switch $0 {
             case .success(let response):
                 print(response.success)
@@ -114,7 +115,7 @@ class CidaasBackupcodeVerificationTests: XCTestCase {
     func testLoginWithBackupcodeController() {
         var properties = Dictionary<String, String>()
         properties["DomainURL"] = "https://localmanagement.cidaas.de"
-        self.backupcodeController.loginWithBackupcode(email: "1123132", mobile: "", sub: "asasdq", code: "123", trackId: "asasdasdas861837", requestId: "1231231", usageType: .PASSWORDLESS, properties: properties) {
+        self.backupcodeController.loginWithBackupcode(email: "1123132", mobile: "", sub: "asasdq", code: "123", trackId: "asasdasdas861837", requestId: "1231231", usageType: UsageTypes.PASSWORDLESS.rawValue, properties: properties) {
             switch $0 {
             case .success(let response):
                 print(response.success)

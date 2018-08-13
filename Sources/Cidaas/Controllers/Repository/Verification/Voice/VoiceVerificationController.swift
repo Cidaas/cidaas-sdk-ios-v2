@@ -15,7 +15,7 @@ public class VoiceVerificationController {
     private var authenticationType: String
     private var sub: String
     private var verificationType: String
-    private var usageType: UsageTypes = UsageTypes.MFA
+    private var usageType: String = UsageTypes.MFA.rawValue
     
     // shared instance
     public static var shared : VoiceVerificationController = VoiceVerificationController()
@@ -202,7 +202,7 @@ public class VoiceVerificationController {
     
     
     // login with Voice from properties
-    public func loginWithVoice(email : String, mobile: String, sub: String, trackId: String, requestId: String, voice: Data, usageType: UsageTypes, properties: Dictionary<String, String>, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+    public func loginWithVoice(email : String, mobile: String, sub: String, trackId: String, requestId: String, voice: Data, usageType: String, properties: Dictionary<String, String>, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -210,6 +210,15 @@ public class VoiceVerificationController {
             let loggerMessage = "Read properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
             logw(loggerMessage, cname: "cidaas-sdk-error-log")
             
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+        
+        if (DBHelper.shared.getUserDeviceId(key: properties["DomailURL"] ?? "OAuthUserDeviceId") == "") {
+            let error = WebAuthError.shared.propertyMissingException()
+            error.error = "There is no physical verification configured in this mobile"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -231,10 +240,20 @@ public class VoiceVerificationController {
             return
         }
         
-        if (usageType == UsageTypes.MFA) {
+        if (usageType == UsageTypes.MFA.rawValue) {
             if (trackId == "") {
                 let error = WebAuthError.shared.propertyMissingException()
                 error.error = "trackId must not be empty"
+                DispatchQueue.main.async {
+                    callback(Result.failure(error: error))
+                }
+                return
+            }
+        }
+        else {
+            if (usageType != UsageTypes.PASSWORDLESS.rawValue) {
+                let error = WebAuthError.shared.propertyMissingException()
+                error.error = "Invalid usageType. usageType should be either PASSWORDLESS_AUTHENTICATION or MULTIFACTOR_AUTHENTICATION"
                 DispatchQueue.main.async {
                     callback(Result.failure(error: error))
                 }
@@ -249,7 +268,7 @@ public class VoiceVerificationController {
         let initiateVoiceEntity = InitiateVoiceEntity()
         initiateVoiceEntity.email = email
         initiateVoiceEntity.sub = sub
-        initiateVoiceEntity.usageType = usageType.rawValue
+        initiateVoiceEntity.usageType = usageType
         
         // call initiateVoice service
         VoiceVerificationService.shared.initiateVoice(initiateVoiceEntity: initiateVoiceEntity, properties: properties) {
@@ -353,7 +372,7 @@ public class VoiceVerificationController {
                                                 mfaContinueEntity.trackingCode = VoiceResponse.data.trackingCode
                                                 mfaContinueEntity.verificationType = "VOICE"
                                                 
-                                                if(self.usageType == UsageTypes.PASSWORDLESS) {
+                                                if(self.usageType == UsageTypes.PASSWORDLESS.rawValue) {
                                                     VerificationSettingsService.shared.passwordlessContinue(mfaContinueEntity: mfaContinueEntity, properties: properties) {
                                                         switch $0 {
                                                         case .failure(let error):

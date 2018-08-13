@@ -110,7 +110,7 @@ class CidaasVoiceVerificationTests: XCTestCase {
     
     func testConfigureVoice() {
         let voice = Data()
-        self.cidaas.configureVoiceRecognition(sub: "123", voice: voice) {
+        self.cidaas.configureVoiceRecognition(voice: voice, sub: "123") {
             switch $0 {
             case .success(let configureVoiceSuccess):
                 print("\nSub : \(configureVoiceSuccess.data.sub)")
@@ -125,7 +125,8 @@ class CidaasVoiceVerificationTests: XCTestCase {
     
     func testLoginWithVoice() {
         let voice = Data()
-        self.cidaas.loginWithVoiceRecognition(email: "abc@gmail.com", requestId: "iu383487563", voice: voice, usageType: .PASSWORDLESS) {
+        let passwordlessEntity = PasswordlessEntity()
+        self.cidaas.loginWithVoiceRecognition(voice: voice, passwordlessEntity: passwordlessEntity) {
             switch $0 {
             case .success(let loginWithVoiceSuccess):
                 print("\nSub : \(loginWithVoiceSuccess.data.sub)")
@@ -159,7 +160,7 @@ class CidaasVoiceVerificationTests: XCTestCase {
         let voice = Data()
         var properties = Dictionary<String, String>()
         properties["DomainURL"] = "https://localmanagement.cidaas.de"
-        self.voiceController.loginWithVoice(email: "abc@gmail.com", mobile: "", sub: "", trackId: "", requestId: "iu383487563", voice: voice, usageType: .PASSWORDLESS, properties: properties) {
+        self.voiceController.loginWithVoice(email: "abc@gmail.com", mobile: "", sub: "", trackId: "", requestId: "iu383487563", voice: voice, usageType: UsageTypes.PASSWORDLESS.rawValue, properties: properties) {
             switch $0 {
             case .success(let loginWithVoiceSuccess):
                 print("\nSub : \(loginWithVoiceSuccess.data.sub)")

@@ -72,23 +72,6 @@ class CidaasGeneralTests: XCTestCase {
         XCTAssertEqual(userInfo.userName, "abc")
     }
     
-//    func testUserInfoEntity() {
-//        let userInfo = UserInfoEntity()
-//        userInfo.active = true
-//        userInfo.displayName = "test"
-//        userInfo.email = "abc@gmail.com"
-//        userInfo.emailVerified = true
-//        userInfo.firstname = "asd"
-//        userInfo.lastname = "asddf"
-//        userInfo.mobile = "+921929332"
-//        userInfo.mobileNoVerified = true
-//        userInfo.provider = "self"
-//        userInfo.ssoId = "8idugusdf"
-//        userInfo.username = "abc"
-//
-//        XCTAssertEqual(userInfo.username, "abc")
-//    }
-    
     func testErrorResponseEntity() {
         var authzCodeEntity = ErrorResponseEntity()
         

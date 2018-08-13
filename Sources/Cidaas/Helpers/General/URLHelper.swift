@@ -22,8 +22,8 @@ public class URLHelper {
     public var loginWithCredentialsURL = "/login-srv/login/sdk"
     
     public var consentURL = "/consent-management-srv/tenant/version/pageurl"
-    public var consentDetailsURL = "/consent-management-srv/tenant/group/public"
-    public var acceptConsentURL = "/consent-management-srv/tenant/user/status"
+    public var consentDetailsURL = "/consent-management-srv/settings/public"
+    public var acceptConsentURL = "/consent-management-srv/user/status"
     
     public var mfaListURL = "/verification-srv/settings/list"
     
@@ -98,6 +98,13 @@ public class URLHelper {
     
     public var changePasswordURL = "/users-srv/changepassword"
     
+    public var userActivityURL = "/useractivity-srv/latestactivity"
+    public var updateUserURL = "/users-srv/user/profile"
+    public var imageUploadURL = "/image-srv/profile/upload"
+    public var linkUserURL = "/users-srv/user/linkaccount"
+    public var linkedUsersURL = "/users-srv/userinfo/social"
+    public var unlinkUserURL = "/users-srv/user/unlinkaccount"
+    
     public func getRequestIdURL() -> String {
         return requestIdURL
     }
@@ -119,7 +126,7 @@ public class URLHelper {
     }
     
     public func getConsentDetailsURL(consent_name: String) -> String {
-        return consentDetailsURL + "/" + consent_name
+        return consentDetailsURL + "?name=" + consent_name
     }
     
     public func getAcceptConsentURL() -> String {
@@ -228,6 +235,10 @@ public class URLHelper {
     
     public func getRegistrationURL() -> String {
         return registrationURL
+    }
+    
+    public func getUpdateUserURL(sub: String) -> String {
+        return updateUserURL + "/" + sub
     }
     
     public func getSetupPatternURL() -> String {
@@ -354,6 +365,10 @@ public class URLHelper {
         return userInfoURL
     }
     
+    public func getUserActivityURL() -> String {
+        return userActivityURL
+    }
+    
     public func getDeduplicationDetailsURL(track_id: String) -> String {
         return deduplicationDetails + "/" + track_id
     }
@@ -368,5 +383,21 @@ public class URLHelper {
     
     public func getChangePasswordURL() -> String {
         return changePasswordURL
+    }
+    
+    public func getImageUploadURL() -> String {
+        return imageUploadURL
+    }
+    
+    public func getLinkUserURL() -> String {
+        return linkUserURL
+    }
+    
+    public func getUnlinkUserURL(identityId: String) -> String {
+        return unlinkUserURL + "/" + identityId
+    }
+    
+    public func getLinkedUsersListURL(sub: String) -> String {
+        return linkedUsersURL + "/" + sub
     }
 }

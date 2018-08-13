@@ -81,7 +81,7 @@ class CidaasIVRVerificationTests: XCTestCase {
     }
     
     func testVerifyIVR() {
-        self.cidaas.verifyIVR(code: "123123") {
+        self.cidaas.verifyIVR(statusId: "13876273562345", code: "123123") {
             switch $0 {
             case .success(let verifyIVRSuccess):
                 print("\nSub : \(verifyIVRSuccess.data.sub)")
@@ -95,7 +95,8 @@ class CidaasIVRVerificationTests: XCTestCase {
     }
     
     func testLoginWithIVR() {
-        self.cidaas.loginWithIVR(email: "abc@gmail.com", usageType: .PASSWORDLESS) {
+        let passwordlessEntity = PasswordlessEntity()
+        self.cidaas.loginWithIVR(passwordlessEntity: passwordlessEntity) {
             switch $0 {
             case .success(let loginWithIVRSuccess):
                 print("\nStatus Id : \(loginWithIVRSuccess.data.statusId)")
@@ -127,7 +128,7 @@ class CidaasIVRVerificationTests: XCTestCase {
     func testVerifyIVRController() {
         var properties = Dictionary<String, String>()
         properties["DomainURL"] = "https://localmanagement.cidaas.de"
-        self.ivrController.verifyIVR(code: "123123", properties: properties) {
+        self.ivrController.verifyIVR(statusId: "17635275723458723", code: "123123", properties: properties) {
             switch $0 {
             case .success(let verifyIVRSuccess):
                 print("\nSub : \(verifyIVRSuccess.data.sub)")
@@ -143,7 +144,7 @@ class CidaasIVRVerificationTests: XCTestCase {
     func testLoginWithIVRController() {
         var properties = Dictionary<String, String>()
         properties["DomainURL"] = "https://localmanagement.cidaas.de"
-        self.ivrController.loginWithIVR(email: "abc@gmail.com", mobile: "+91932984728", sub: "123123", trackId: "12312313487", requestId: "82736482734", usageType: .PASSWORDLESS, properties: properties) {
+        self.ivrController.loginWithIVR(email: "abc@gmail.com", mobile: "+91932984728", sub: "123123", trackId: "12312313487", requestId: "82736482734", usageType: UsageTypes.PASSWORDLESS.rawValue, properties: properties) {
             switch $0 {
             case .success(let loginWithIVRSuccess):
                 print("\nStatus Id : \(loginWithIVRSuccess.data.statusId)")

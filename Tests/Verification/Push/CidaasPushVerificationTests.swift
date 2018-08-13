@@ -123,7 +123,8 @@ class CidaasPushVerificationTests: XCTestCase {
     }
     
     func testLoginWithSmartPush() {
-        self.cidaas.loginWithSmartPush(email: "abc@gmail.com", requestId: "1322343", usageType: .PASSWORDLESS) {
+        let passwordlessEntity = PasswordlessEntity()
+        self.cidaas.loginWithSmartPush(passwordlessEntity: passwordlessEntity) {
             switch $0 {
             case .success(let loginWithSmartPushSuccess):
                 print("\nSub : \(loginWithSmartPushSuccess.data.sub)")
@@ -155,7 +156,7 @@ class CidaasPushVerificationTests: XCTestCase {
     func testLoginWithSmartPushController() {
         var properties = Dictionary<String, String>()
         properties["DomainURL"] = "https://localmanagement.cidaas.de"
-        self.pushController.loginWithPush(email: "abc@gmail.com", mobile: "", sub: "", trackId: "", requestId: "1322343", usageType: .PASSWORDLESS, properties: properties) {
+        self.pushController.loginWithPush(email: "abc@gmail.com", mobile: "", sub: "", trackId: "", requestId: "1322343", usageType: UsageTypes.PASSWORDLESS.rawValue, properties: properties) {
             switch $0 {
             case .success(let loginWithSmartPushSuccess):
                 print("\nSub : \(loginWithSmartPushSuccess.data.sub)")

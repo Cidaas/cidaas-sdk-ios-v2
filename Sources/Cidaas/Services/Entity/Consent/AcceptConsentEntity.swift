@@ -13,7 +13,7 @@ public class AcceptConsentEntity : Codable {
     public var name: String = ""
     public var client_id: String = ""
     public var sub: String = ""
-    public var version: Int16 = 0
+    public var version: String = ""
     public var accepted: Bool = false
     
     // Constructors

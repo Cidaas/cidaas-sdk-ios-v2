@@ -117,7 +117,7 @@ public class AccessTokenService {
         
         // construct body params
         var bodyParams = Dictionary<String, String>()
-        bodyParams["grant_type"] = properties["refresh_token"]
+        bodyParams["grant_type"] = "refresh_token"
         bodyParams["refresh_token"] = refreshToken
         bodyParams["redirect_uri"] = properties["RedirectURL"]
         bodyParams["client_id"] = properties["ClientId"]

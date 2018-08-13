@@ -187,4 +187,21 @@ public class StringsHelper {
     public var EMPTY_CHANGE_PASSWORD_SERVICE : String = "Change password is empty"
     public var CHANGE_PASSWORD_SERVICE_FAILURE : String = "Change password service failure"
     
+    public var EMPTY_USER_ACTIVITY_SERVICE : String = "User Activity is empty"
+    public var USER_ACTIVITY_SERVICE_FAILURE : String = "User Activity service failure"
+    
+    public var EMPTY_UPDATE_USER_SERVICE : String = "Update User is empty"
+    public var UPDATE_USER_SERVICE_FAILURE : String = "Update User service failure"
+    
+    public var EMPTY_IMAGE_UPLOAD_SERVICE : String = "Image upload is empty"
+    public var IMAGE_UPLOAD_SERVICE_FAILURE : String = "Image upload service failure"
+ 
+    public var EMPTY_LINK_ACCOUNT_SERVICE : String = "Link account is empty"
+    public var LINK_ACCOUNT_SERVICE_FAILURE : String = "Link account service failure"
+    
+    public var EMPTY_UNLINK_ACCOUNT_SERVICE : String = "Unlink account is empty"
+    public var UNLINK_ACCOUNT_SERVICE_FAILURE : String = "Unlink account service failure"
+    
+    public var EMPTY_GET_LINKED_USERS_SERVICE : String = "Get Linked users is empty"
+    public var GET_LINKED_USERS_SERVICE_FAILURE : String = "Get Linked users service failure"
 }

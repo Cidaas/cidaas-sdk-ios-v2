@@ -153,7 +153,7 @@ class CidaasResetPasswordTests: XCTestCase {
         var properties = Dictionary<String, String>()
         properties["DomainURL"] = "https://localmanagement.cidaas.de"
         
-        self.resetPasswordController.handleResetPassword(code: "323424", properties: properties) {
+        self.resetPasswordController.handleResetPassword(rprq: "87682736723562345236", code: "323424", properties: properties) {
             switch $0 {
             case .success(let response):
                 print(response.success)
@@ -171,7 +171,7 @@ class CidaasResetPasswordTests: XCTestCase {
         var properties = Dictionary<String, String>()
         properties["DomainURL"] = "https://localmanagement.cidaas.de"
         
-        self.resetPasswordController.resetPassword(password: "123", confirmPassword: "123", properties: properties) {
+        self.resetPasswordController.resetPassword(rprq: "2365283645263764", exchangeId: "8627536456", password: "123", confirmPassword: "123", properties: properties) {
             switch $0 {
             case .success(let response):
                 print(response.success)

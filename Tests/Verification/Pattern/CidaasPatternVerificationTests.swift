@@ -123,7 +123,9 @@ class CidaasPatternVerificationTests: XCTestCase {
     }
     
     func testLoginWithPattern() {
-        self.cidaas.loginWithPatternRecognition(pattern: "RED[12345]", email: "abc@gmail.com", requestId: "123123", usageType: UsageTypes.PASSWORDLESS) {
+        let passwordlessEntity = PasswordlessEntity()
+        
+        self.cidaas.loginWithPatternRecognition(pattern: "RED[12345]", passwordlessEntity: passwordlessEntity) {
             switch $0 {
             case .success(let loginWithPatternSuccess):
                 print("\nSub : \(loginWithPatternSuccess.data.sub)")
@@ -155,7 +157,7 @@ class CidaasPatternVerificationTests: XCTestCase {
     func testLoginWithPatternController() {
         var properties = Dictionary<String, String>()
         properties["DomainURL"] = "https://localmanagement.cidaas.de"
-        self.patternController.loginWithPatternRecognition(pattern: "RED[12345]", email: "abc@gmail.com", mobile: "", sub: "", trackId: "", requestId: "123123", usageType: UsageTypes.PASSWORDLESS, properties: properties) {
+        self.patternController.loginWithPatternRecognition(pattern: "RED[12345]", email: "abc@gmail.com", mobile: "", sub: "", trackId: "", requestId: "123123", usageType: UsageTypes.PASSWORDLESS.rawValue, properties: properties) {
             switch $0 {
             case .success(let loginWithPatternSuccess):
                 print("\nSub : \(loginWithPatternSuccess.data.sub)")

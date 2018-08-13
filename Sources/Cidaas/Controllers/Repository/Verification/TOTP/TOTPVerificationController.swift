@@ -18,7 +18,7 @@ public class TOTPVerificationController {
     private var email: String
     private var verificationType: String
     private var qrcode: String
-    private var usageType: UsageTypes = UsageTypes.MFA
+    private var usageType: String = UsageTypes.MFA.rawValue
     
     // shared instance
     public static var shared : TOTPVerificationController = TOTPVerificationController()
@@ -216,7 +216,7 @@ public class TOTPVerificationController {
     
     
     // login with pattern recognition from properties
-    public func loginWithTOTP(email : String, sub: String, mobile: String, trackId: String, requestId: String, usageType: UsageTypes, properties: Dictionary<String, String>, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+    public func loginWithTOTP(email : String, sub: String, mobile: String, trackId: String, requestId: String, usageType: String, properties: Dictionary<String, String>, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -247,10 +247,20 @@ public class TOTPVerificationController {
             return
         }
         
-        if (usageType == UsageTypes.MFA) {
+        if (usageType == UsageTypes.MFA.rawValue) {
             if (trackId == "") {
                 let error = WebAuthError.shared.propertyMissingException()
                 error.error = "trackId must not be empty"
+                DispatchQueue.main.async {
+                    callback(Result.failure(error: error))
+                }
+                return
+            }
+        }
+        else {
+            if (usageType != UsageTypes.PASSWORDLESS.rawValue) {
+                let error = WebAuthError.shared.propertyMissingException()
+                error.error = "Invalid usageType. usageType should be either PASSWORDLESS_AUTHENTICATION or MULTIFACTOR_AUTHENTICATION"
                 DispatchQueue.main.async {
                     callback(Result.failure(error: error))
                 }
@@ -264,7 +274,7 @@ public class TOTPVerificationController {
         let initiateTOTPEntity = InitiateTOTPEntity()
         initiateTOTPEntity.email = email
         initiateTOTPEntity.sub = sub
-        initiateTOTPEntity.usageType = usageType.rawValue
+        initiateTOTPEntity.usageType = usageType
         
         // call initiateTOTP service
         TOTPVerificationService.shared.initiateTOTP(initiateTOTPEntity: initiateTOTPEntity, properties: properties) {
@@ -373,7 +383,7 @@ public class TOTPVerificationController {
                                                 mfaContinueEntity.trackingCode = patternResponse.data.trackingCode
                                                 mfaContinueEntity.verificationType = "TOTP"
                                                 
-                                                if(self.usageType == UsageTypes.PASSWORDLESS) {
+                                                if(self.usageType == UsageTypes.PASSWORDLESS.rawValue) {
                                                     VerificationSettingsService.shared.passwordlessContinue(mfaContinueEntity: mfaContinueEntity, properties: properties) {
                                                         switch $0 {
                                                         case .failure(let error):

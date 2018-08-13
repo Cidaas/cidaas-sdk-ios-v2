@@ -16,7 +16,7 @@ public class TouchIdVerificationController {
     private var authenticationType: String
     private var sub: String
     private var verificationType: String
-    private var usageType: UsageTypes = UsageTypes.MFA
+    private var usageType: String = UsageTypes.MFA.rawValue
     
     // shared instance
     public static var shared : TouchIdVerificationController = TouchIdVerificationController()
@@ -204,7 +204,7 @@ public class TouchIdVerificationController {
     
     
     // login with TouchId from properties
-    public func loginWithTouchId(email : String, mobile: String, sub: String, trackId: String, requestId: String, usageType: UsageTypes, properties: Dictionary<String, String>, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+    public func loginWithTouchId(email : String, mobile: String, sub: String, trackId: String, requestId: String, usageType: String, properties: Dictionary<String, String>, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -212,6 +212,15 @@ public class TouchIdVerificationController {
             let loggerMessage = "Read properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
             logw(loggerMessage, cname: "cidaas-sdk-error-log")
             
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+        
+        if (DBHelper.shared.getUserDeviceId(key: properties["DomailURL"] ?? "OAuthUserDeviceId") == "") {
+            let error = WebAuthError.shared.propertyMissingException()
+            error.error = "There is no physical verification configured in this mobile"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -233,10 +242,20 @@ public class TouchIdVerificationController {
             return
         }
         
-        if (usageType == UsageTypes.MFA) {
+        if (usageType == UsageTypes.MFA.rawValue) {
             if (trackId == "") {
                 let error = WebAuthError.shared.propertyMissingException()
                 error.error = "trackId must not be empty"
+                DispatchQueue.main.async {
+                    callback(Result.failure(error: error))
+                }
+                return
+            }
+        }
+        else {
+            if (usageType != UsageTypes.PASSWORDLESS.rawValue) {
+                let error = WebAuthError.shared.propertyMissingException()
+                error.error = "Invalid usageType. usageType should be either PASSWORDLESS_AUTHENTICATION or MULTIFACTOR_AUTHENTICATION"
                 DispatchQueue.main.async {
                     callback(Result.failure(error: error))
                 }
@@ -251,7 +270,7 @@ public class TouchIdVerificationController {
         let initiateTouchIdEntity = InitiateTouchEntity()
         initiateTouchIdEntity.email = email
         initiateTouchIdEntity.sub = sub
-        initiateTouchIdEntity.usageType = usageType.rawValue
+        initiateTouchIdEntity.usageType = usageType
         
         // call initiateTouchId service
         TouchIdVerificationService.shared.initiateTouchId(initiateTouchIdEntity: initiateTouchIdEntity, properties: properties) {
@@ -353,7 +372,7 @@ public class TouchIdVerificationController {
                                                 mfaContinueEntity.trackingCode = TouchIdResponse.data.trackingCode
                                                 mfaContinueEntity.verificationType = "TOUCHID"
                                                 
-                                                if(self.usageType == UsageTypes.PASSWORDLESS) {
+                                                if(self.usageType == UsageTypes.PASSWORDLESS.rawValue) {
                                                     VerificationSettingsService.shared.passwordlessContinue(mfaContinueEntity: mfaContinueEntity, properties: properties) {
                                                         switch $0 {
                                                         case .failure(let error):

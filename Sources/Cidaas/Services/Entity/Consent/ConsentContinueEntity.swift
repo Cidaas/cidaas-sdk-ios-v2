@@ -13,7 +13,7 @@ public class ConsentContinueEntity : Codable {
     public var client_id: String = ""
     public var trackId: String = ""
     public var sub: String = ""
-    public var version: Int16 = 0
+    public var version: String = ""
     public var name: String = ""
     
     // Constructors

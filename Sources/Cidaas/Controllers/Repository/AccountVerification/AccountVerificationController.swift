@@ -13,9 +13,6 @@ public class AccountVerificationController {
     // shared instance
     public static var shared : AccountVerificationController = AccountVerificationController()
     
-    // local variables
-    private var accvid: String = ""
-    
     // constructor
     public init() {
         
@@ -71,8 +68,6 @@ public class AccountVerificationController {
                 let loggerMessage = "Initiate account verification service success : " + "Account Verification Id - " + serviceResponse.data.accvid
                 logw(loggerMessage, cname: "cidaas-sdk-success-log")
                 
-                self.accvid = serviceResponse.data.accvid
-                
                 // return callback
                 DispatchQueue.main.async {
                     callback(Result.success(result: serviceResponse))
@@ -82,7 +77,7 @@ public class AccountVerificationController {
     }
     
     // verify account
-    public func verifyAccount(code: String, properties: Dictionary<String, String>, callback: @escaping(Result<VerifyAccountResponseEntity>) -> Void) {
+    public func verifyAccount(accvid: String, code: String, properties: Dictionary<String, String>, callback: @escaping(Result<VerifyAccountResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -97,7 +92,7 @@ public class AccountVerificationController {
         }
         
         // validating fields
-        if (code == "" || self.accvid == "") {
+        if (code == "" || accvid == "") {
             let error = WebAuthError.shared.propertyMissingException()
             error.error = "code or accvid must not be empty"
             DispatchQueue.main.async {
@@ -109,7 +104,7 @@ public class AccountVerificationController {
         // construct object
         let accountVerificationEntity = VerifyAccountEntity()
         accountVerificationEntity.code = code
-        accountVerificationEntity.accvid = self.accvid
+        accountVerificationEntity.accvid = accvid
         
         // call verifyAccount service
         AccountVerificationService.shared.verifyAccount(accountVerificationEntity: accountVerificationEntity, properties: properties) {

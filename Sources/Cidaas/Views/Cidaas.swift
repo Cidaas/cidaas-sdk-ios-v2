@@ -13,7 +13,7 @@ public class Cidaas {
     // shared instance
     public static var shared : Cidaas = Cidaas()
     
-    // private local variablesa
+    // private local variables
     var requestId : String = ""
     var loginURLString : String = ""
     var redirectURLString : String = ""
@@ -331,11 +331,11 @@ public class Cidaas {
     // 2. Call getConsentDetails method
     // 3. Maintain logs based on flags
     
-    public func getConsentDetails(consent_name: String, consent_version: Int16, track_id: String, callback: @escaping(Result<ConsentDetailsResponseEntity>) -> Void) {
+    public func getConsentDetails(consent_name: String, callback: @escaping(Result<ConsentDetailsResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            ConsentController.shared.getConsentDetails(consent_name: consent_name, consent_version: consent_version, track_id: track_id, properties: savedProp!, callback: callback)
+            ConsentController.shared.getConsentDetails(consent_name: consent_name, properties: savedProp!, callback: callback)
         }
         else {
             // read file properties
@@ -371,7 +371,7 @@ public class Cidaas {
                             return
                         case .success( _):
                             // call getConsentDetails with properties
-                            ConsentController.shared.getConsentDetails(consent_name: consent_name, consent_version: consent_version, track_id: track_id, properties: properties, callback: callback)
+                            ConsentController.shared.getConsentDetails(consent_name: consent_name, properties: properties, callback: callback)
                         }
                     }
                 }
@@ -386,11 +386,11 @@ public class Cidaas {
     // 2. Call loginAfterConsent method
     // 3. Maintain logs based on flags
     
-    public func loginAfterConsent(sub: String, accepted: Bool, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+    public func loginAfterConsent(consentEntity: ConsentEntity, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            ConsentController.shared.loginAfterConsent(sub: sub, accepted: true, properties: savedProp!, callback: callback)
+            ConsentController.shared.loginAfterConsent(consentEntity: consentEntity, properties: savedProp!, callback: callback)
         }
         else {
             // read file properties
@@ -426,7 +426,7 @@ public class Cidaas {
                             return
                         case .success( _):
                             // call loginAfterConsent with properties
-                            ConsentController.shared.loginAfterConsent(sub: sub, accepted: true, properties: properties, callback: callback)
+                            ConsentController.shared.loginAfterConsent(consentEntity: consentEntity, properties: properties, callback: callback)
                         }
                     }
                 }
@@ -496,11 +496,11 @@ public class Cidaas {
     // 2. Call enrollEmail method
     // 3. Maintain logs based on flags
     
-    public func enrollEmail(code: String, callback: @escaping(Result<VerifyEmailResponseEntity>) -> Void) {
+    public func enrollEmail(statusId: String, code: String, callback: @escaping(Result<VerifyEmailResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            EmailVerificationController.shared.configureEmail(code: code, properties: savedProp!, callback: callback)
+            EmailVerificationController.shared.configureEmail(statusId: statusId, code: code, properties: savedProp!, callback: callback)
         }
         else {
             // read file properties
@@ -536,7 +536,7 @@ public class Cidaas {
                             return
                         case .success( _):
                             // call configureEmail with properties
-                            EmailVerificationController.shared.configureEmail(code: code, properties: properties, callback: callback)
+                            EmailVerificationController.shared.configureEmail(statusId: statusId, code: code, properties: properties, callback: callback)
                         }
                     }
                 }
@@ -551,11 +551,11 @@ public class Cidaas {
     // 2. Call configureEmail method
     // 3. Maintain logs based on flags
     
-    public func verifyEmail(code: String, callback: @escaping(Result<VerifyEmailResponseEntity>) -> Void) {
+    public func verifyEmail(statusId: String, code: String, callback: @escaping(Result<VerifyEmailResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            EmailVerificationController.shared.configureEmail(code: code, properties: savedProp!, callback: callback)
+            EmailVerificationController.shared.configureEmail(statusId: statusId, code: code, properties: savedProp!, callback: callback)
         }
         else {
             // read file properties
@@ -591,7 +591,7 @@ public class Cidaas {
                             return
                         case .success( _):
                             // call configureEmail with properties
-                            EmailVerificationController.shared.configureEmail(code: code, properties: properties, callback: callback)
+                            EmailVerificationController.shared.configureEmail(statusId: statusId, code: code, properties: properties, callback: callback)
                         }
                     }
                 }
@@ -606,11 +606,11 @@ public class Cidaas {
     // 2. Call loginWithEmail method
     // 3. Maintain logs based on flags
     
-    public func loginWithEmail(email: String = "", mobile: String = "", sub: String = "", trackId: String = "", requestId: String, usageType: UsageTypes, callback: @escaping(Result<InitiateEmailResponseEntity>) -> Void) {
+    public func loginWithEmail(passwordlessEntity: PasswordlessEntity, callback: @escaping(Result<InitiateEmailResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            EmailVerificationController.shared.loginWithEmail(email: email, mobile: mobile, sub: sub, trackId: trackId, requestId: requestId, usageType: usageType, properties: savedProp!, callback: callback)
+            EmailVerificationController.shared.loginWithEmail(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
         }
         else {
             // read file properties
@@ -646,7 +646,7 @@ public class Cidaas {
                             return
                         case .success( _):
                             // call loginWithEmail with properties
-                            EmailVerificationController.shared.loginWithEmail(email: email, mobile: mobile, sub: sub, trackId: trackId, requestId: requestId, usageType: usageType, properties: properties, callback: callback)
+                            EmailVerificationController.shared.loginWithEmail(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: properties, callback: callback)
                         }
                     }
                 }
@@ -717,11 +717,11 @@ public class Cidaas {
     // 2. Call configureSMS method
     // 3. Maintain logs based on flags
     
-    public func enrollSMS(code: String, callback: @escaping(Result<VerifySMSResponseEntity>) -> Void) {
+    public func enrollSMS(statusId: String, code: String, callback: @escaping(Result<VerifySMSResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            SMSVerificationController.shared.configureSMS(code: code, properties: savedProp!, callback: callback)
+            SMSVerificationController.shared.configureSMS(statusId: statusId, code: code, properties: savedProp!, callback: callback)
         }
         else {
             // read file properties
@@ -757,7 +757,7 @@ public class Cidaas {
                             return
                         case .success( _):
                             // call configureSMS with properties
-                            SMSVerificationController.shared.configureSMS(code: code, properties: properties, callback: callback)
+                            SMSVerificationController.shared.configureSMS(statusId: statusId, code: code, properties: properties, callback: callback)
                         }
                     }
                 }
@@ -772,11 +772,11 @@ public class Cidaas {
     // 2. Call verifySMS method
     // 3. Maintain logs based on flags
     
-    public func verifySMS(code: String, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+    public func verifySMS(statusId: String, code: String, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            SMSVerificationController.shared.verifySMS(code: code, properties: savedProp!, callback: callback)
+            SMSVerificationController.shared.verifySMS(statusId: statusId, code: code, properties: savedProp!, callback: callback)
         }
         else {
             // read file properties
@@ -812,7 +812,7 @@ public class Cidaas {
                             return
                         case .success( _):
                             // call verifySMS with properties
-                            SMSVerificationController.shared.verifySMS(code: code, properties: properties, callback: callback)
+                            SMSVerificationController.shared.verifySMS(statusId: statusId, code: code, properties: properties, callback: callback)
                         }
                     }
                 }
@@ -827,11 +827,11 @@ public class Cidaas {
     // 2. Call loginWithSMS method
     // 3. Maintain logs based on flags
     
-    public func loginWithSMS(email: String = "", mobile: String = "", sub: String = "", trackId: String = "", requestId: String, usageType: UsageTypes, callback: @escaping(Result<InitiateSMSResponseEntity>) -> Void) {
+    public func loginWithSMS(passwordlessEntity: PasswordlessEntity, callback: @escaping(Result<InitiateSMSResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            SMSVerificationController.shared.loginWithSMS(email: email, mobile: mobile, sub: sub, trackId: trackId, requestId: requestId, usageType: usageType, properties: savedProp!, callback: callback)
+            SMSVerificationController.shared.loginWithSMS(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
         }
         else {
             // read file properties
@@ -867,7 +867,7 @@ public class Cidaas {
                             return
                         case .success( _):
                             // call loginWithSMS with properties
-                            SMSVerificationController.shared.loginWithSMS(email: email, mobile: mobile, sub: sub, trackId: trackId, requestId: requestId, usageType: usageType, properties: properties, callback: callback)
+                            SMSVerificationController.shared.loginWithSMS(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: properties, callback: callback)
                         }
                     }
                 }
@@ -937,11 +937,11 @@ public class Cidaas {
     // 2. Call configureIVR method
     // 3. Maintain logs based on flags
     
-    public func enrollIVR(code: String, callback: @escaping(Result<VerifyIVRResponseEntity>) -> Void) {
+    public func enrollIVR(statusId: String, code: String, callback: @escaping(Result<VerifyIVRResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            IVRVerificationController.shared.configureIVR(code: code, properties: savedProp!, callback: callback)
+            IVRVerificationController.shared.configureIVR(statusId: statusId, code: code, properties: savedProp!, callback: callback)
         }
         else {
             // read file properties
@@ -977,7 +977,7 @@ public class Cidaas {
                             return
                         case .success( _):
                             // call configureIVR with properties
-                            IVRVerificationController.shared.configureIVR(code: code, properties: properties, callback: callback)
+                            IVRVerificationController.shared.configureIVR(statusId: statusId, code: code, properties: properties, callback: callback)
                         }
                     }
                 }
@@ -992,11 +992,11 @@ public class Cidaas {
     // 2. Call verifyIVR method
     // 3. Maintain logs based on flags
     
-    public func verifyIVR(code: String, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+    public func verifyIVR(statusId: String, code: String, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            IVRVerificationController.shared.verifyIVR(code: code, properties: savedProp!, callback: callback)
+            IVRVerificationController.shared.verifyIVR(statusId: statusId, code: code, properties: savedProp!, callback: callback)
         }
         else {
             // read file properties
@@ -1032,7 +1032,7 @@ public class Cidaas {
                             return
                         case .success( _):
                             // call verifyIVR with properties
-                            IVRVerificationController.shared.verifyIVR(code: code, properties: properties, callback: callback)
+                            IVRVerificationController.shared.verifyIVR(statusId: statusId, code: code, properties: properties, callback: callback)
                         }
                     }
                 }
@@ -1047,11 +1047,11 @@ public class Cidaas {
     // 2. Call loginWithIVR method
     // 3. Maintain logs based on flags
     
-    public func loginWithIVR(email: String = "", mobile: String = "", sub: String = "", trackId: String = "", requestId: String = "", usageType: UsageTypes, callback: @escaping(Result<InitiateIVRResponseEntity>) -> Void) {
+    public func loginWithIVR(passwordlessEntity: PasswordlessEntity, callback: @escaping(Result<InitiateIVRResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            IVRVerificationController.shared.loginWithIVR(email: email, mobile: mobile, sub: sub, trackId: trackId, requestId: requestId, usageType: usageType, properties: savedProp!, callback: callback)
+            IVRVerificationController.shared.loginWithIVR(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
         }
         else {
             // read file properties
@@ -1087,7 +1087,7 @@ public class Cidaas {
                             return
                         case .success( _):
                             // call loginWithIVR with properties
-                            IVRVerificationController.shared.loginWithIVR(email: email, mobile: mobile, sub: sub, trackId: trackId, requestId: requestId, usageType: usageType, properties: properties, callback: callback)
+                            IVRVerificationController.shared.loginWithIVR(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: properties, callback: callback)
                         }
                     }
                 }
@@ -1157,11 +1157,11 @@ public class Cidaas {
     // 2. Call loginWithBackupcode method
     // 3. Maintain logs based on flags
     
-    public func loginWithBackupcode(code: String, email: String = "", mobile: String = "", sub: String = "", trackId: String = "", requestId: String, usageType: UsageTypes, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+    public func loginWithBackupcode(code: String, passwordlessEntity: PasswordlessEntity, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            BackupcodeVerificationController.shared.loginWithBackupcode(email: email, mobile: mobile, sub: sub, code: code, trackId: trackId, requestId: requestId, usageType: usageType, properties: savedProp!, callback: callback)
+            BackupcodeVerificationController.shared.loginWithBackupcode(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, code: code, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
         }
         else {
             // read file properties
@@ -1197,7 +1197,7 @@ public class Cidaas {
                             return
                         case .success( _):
                             // call loginWithBackupcode with properties
-                            BackupcodeVerificationController.shared.loginWithBackupcode(email: email, mobile: mobile, sub: sub, code: code, trackId: trackId, requestId: requestId, usageType: usageType, properties: properties, callback: callback)
+                            BackupcodeVerificationController.shared.loginWithBackupcode(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, code: code, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: properties, callback: callback)
                         }
                     }
                 }
@@ -1267,11 +1267,11 @@ public class Cidaas {
     // 2. Call loginWithPatternRecognition method
     // 3. Maintain logs based on flags
     
-    public func loginWithPatternRecognition(pattern: String, email: String = "", mobile: String = "", sub: String = "", trackId: String = "", requestId: String, usageType: UsageTypes, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+    public func loginWithPatternRecognition(pattern: String, passwordlessEntity: PasswordlessEntity, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            PatternVerificationController.shared.loginWithPatternRecognition(pattern: pattern, email: email, mobile: mobile, sub: sub, trackId: trackId, requestId: requestId, usageType: usageType, properties: savedProp!, callback: callback)
+            PatternVerificationController.shared.loginWithPatternRecognition(pattern: pattern, email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
         }
         else {
             // read file properties
@@ -1307,7 +1307,7 @@ public class Cidaas {
                             return
                         case .success( _):
                             // call loginWithPatternRecognition with properties
-                            PatternVerificationController.shared.loginWithPatternRecognition(pattern: pattern, email: email, mobile: mobile, sub: sub, trackId: trackId, requestId: requestId, usageType: usageType, properties: properties, callback: callback)
+                            PatternVerificationController.shared.loginWithPatternRecognition(pattern: pattern, email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: properties, callback: callback)
                         }
                     }
                 }
@@ -1377,11 +1377,11 @@ public class Cidaas {
     // 2. Call loginWithTouchId method
     // 3. Maintain logs based on flags
     
-    public func loginWithTouchId(email: String = "", mobile: String = "", sub: String = "", trackId: String = "", requestId: String, usageType: UsageTypes, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+    public func loginWithTouchId(passwordlessEntity: PasswordlessEntity, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            TouchIdVerificationController.shared.loginWithTouchId(email: email, mobile: mobile, sub: sub, trackId: trackId, requestId: requestId, usageType: usageType, properties: savedProp!, callback: callback)
+            TouchIdVerificationController.shared.loginWithTouchId(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
         }
         else {
             // read file properties
@@ -1417,7 +1417,7 @@ public class Cidaas {
                             return
                         case .success( _):
                             // call loginWithTouchId with properties
-                            TouchIdVerificationController.shared.loginWithTouchId(email: email, mobile: mobile, sub: sub, trackId: trackId, requestId: requestId, usageType: usageType, properties: properties, callback: callback)
+                            TouchIdVerificationController.shared.loginWithTouchId(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: properties, callback: callback)
                         }
                     }
                 }
@@ -1432,7 +1432,7 @@ public class Cidaas {
     // 2. Call configureFace method
     // 3. Maintain logs based on flags
     
-    public func configureFaceRecognition(sub: String, photo: UIImage, callback: @escaping(Result<EnrollFaceResponseEntity>) -> Void) {
+    public func configureFaceRecognition(photo: UIImage, sub: String, callback: @escaping(Result<EnrollFaceResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
@@ -1487,11 +1487,11 @@ public class Cidaas {
     // 2. Call loginWithFaceRecognition method
     // 3. Maintain logs based on flags
     
-    public func loginWithFaceRecognition(email: String = "", mobile: String = "", sub: String = "", trackId: String = "", requestId: String, photo: UIImage, usageType: UsageTypes, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+    public func loginWithFaceRecognition(photo: UIImage, passwordlessEntity: PasswordlessEntity, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            FaceVerificationController.shared.loginWithFace(email: email, mobile: mobile, sub: sub, trackId: trackId, requestId: requestId, photo: photo, usageType: usageType, properties: savedProp!, callback: callback)
+            FaceVerificationController.shared.loginWithFace(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, photo: photo, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
         }
         else {
             // read file properties
@@ -1527,7 +1527,7 @@ public class Cidaas {
                             return
                         case .success( _):
                             // call loginWithFace with properties
-                            FaceVerificationController.shared.loginWithFace(email: email, mobile: mobile, sub: sub, trackId: trackId, requestId: requestId, photo: photo, usageType: usageType, properties: properties, callback: callback)
+                            FaceVerificationController.shared.loginWithFace(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, photo: photo, usageType: passwordlessEntity.usageType, properties: properties, callback: callback)
                         }
                     }
                 }
@@ -1542,7 +1542,7 @@ public class Cidaas {
     // 2. Call configureVoiceRecognition method
     // 3. Maintain logs based on flags
     
-    public func configureVoiceRecognition(sub: String, voice: Data, callback: @escaping(Result<EnrollVoiceResponseEntity>) -> Void) {
+    public func configureVoiceRecognition(voice: Data, sub: String, callback: @escaping(Result<EnrollVoiceResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
@@ -1597,11 +1597,11 @@ public class Cidaas {
     // 2. Call loginWithVoiceRecognition method
     // 3. Maintain logs based on flags
     
-    public func loginWithVoiceRecognition(email: String = "", mobile: String = "", sub: String = "", trackId: String = "", requestId: String, voice: Data, usageType: UsageTypes, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+    public func loginWithVoiceRecognition(voice: Data, passwordlessEntity: PasswordlessEntity, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            VoiceVerificationController.shared.loginWithVoice(email: email, mobile: mobile, sub: sub, trackId: trackId, requestId: requestId, voice: voice, usageType: usageType, properties: savedProp!, callback: callback)
+            VoiceVerificationController.shared.loginWithVoice(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, voice: voice, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
         }
         else {
             // read file properties
@@ -1637,7 +1637,7 @@ public class Cidaas {
                             return
                         case .success( _):
                             // call loginWithVoice with properties
-                            VoiceVerificationController.shared.loginWithVoice(email: email, mobile: mobile, sub: sub, trackId: trackId, requestId: requestId, voice: voice, usageType: usageType, properties: properties, callback: callback)
+                            VoiceVerificationController.shared.loginWithVoice(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, voice: voice, usageType: passwordlessEntity.usageType, properties: properties, callback: callback)
                         }
                     }
                 }
@@ -1707,11 +1707,11 @@ public class Cidaas {
     // 2. Call loginWithSmartPush method
     // 3. Maintain logs based on flags
     
-    public func loginWithSmartPush(email: String = "", mobile: String = "", sub: String = "", trackId: String = "", requestId: String, usageType: UsageTypes, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+    public func loginWithSmartPush(passwordlessEntity: PasswordlessEntity, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            PushVerificationController.shared.loginWithPush(email: email, mobile: mobile, sub: sub, trackId: trackId, requestId: requestId, usageType: usageType, properties: savedProp!, callback: callback)
+            PushVerificationController.shared.loginWithPush(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
         }
         else {
             // read file properties
@@ -1747,7 +1747,7 @@ public class Cidaas {
                             return
                         case .success( _):
                             // call loginWithPush with properties
-                            PushVerificationController.shared.loginWithPush(email: email, mobile: mobile, sub: sub, trackId: trackId, requestId: requestId, usageType: usageType, properties: properties, callback: callback)
+                            PushVerificationController.shared.loginWithPush(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: properties, callback: callback)
                         }
                     }
                 }
@@ -1818,11 +1818,11 @@ public class Cidaas {
     // 2. Call loginWithTOTP method
     // 3. Maintain logs based on flags
     
-    public func loginWithTOTP(email: String = "", mobile: String = "", sub: String = "", trackId: String = "", requestId: String, usageType: UsageTypes, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+    public func loginWithTOTP(passwordlessEntity: PasswordlessEntity, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            TOTPVerificationController.shared.loginWithTOTP(email: email, sub: sub, mobile: mobile, trackId: trackId, requestId: requestId, usageType: usageType, properties: savedProp!, callback: callback)
+            TOTPVerificationController.shared.loginWithTOTP(email: passwordlessEntity.email, sub: passwordlessEntity.sub, mobile: passwordlessEntity.mobile, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
         }
         else {
             // read file properties
@@ -1858,7 +1858,7 @@ public class Cidaas {
                             return
                         case .success( _):
                             // call loginWithTOTP with properties
-                            TOTPVerificationController.shared.loginWithTOTP(email: email, sub: sub, mobile: mobile, trackId: trackId, requestId: requestId, usageType: usageType, properties: properties, callback: callback)
+                            TOTPVerificationController.shared.loginWithTOTP(email: passwordlessEntity.email, sub: passwordlessEntity.sub, mobile: passwordlessEntity.mobile, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: properties, callback: callback)
                         }
                     }
                 }
@@ -1868,16 +1868,16 @@ public class Cidaas {
     
 // -------------------------------------------------------------------------------------------------- //
     
-    // initiate account verification from plist
+    // initiate email verification from plist
     // 1. Read properties from file
-    // 2. Call initiateAccountVerification method
+    // 2. Call initiateEmailVerification method
     // 3. Maintain logs based on flags
     
-    public func initiateAccountVerification(requestId: String, sub: String, verificationMedium: VerificationMedium, callback: @escaping(Result<InitiateAccountVerificationResponseEntity>) -> Void) {
+    public func initiateEmailVerification(requestId: String, sub: String, callback: @escaping(Result<InitiateAccountVerificationResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            AccountVerificationController.shared.initiateAccountVerification(requestId: requestId, sub: sub, verificationMedium: verificationMedium.rawValue, properties: savedProp!, callback: callback)
+            AccountVerificationController.shared.initiateAccountVerification(requestId: requestId, sub: sub, verificationMedium: VerificationMedium.EMAIL.rawValue, properties: savedProp!, callback: callback)
         }
         else {
             // read file properties
@@ -1913,7 +1913,117 @@ public class Cidaas {
                             return
                         case .success( _):
                             // call initiateAccountVerification with properties
-                            AccountVerificationController.shared.initiateAccountVerification(requestId: requestId, sub: sub, verificationMedium: verificationMedium.rawValue, properties: properties, callback: callback)
+                            AccountVerificationController.shared.initiateAccountVerification(requestId: requestId, sub: sub, verificationMedium: VerificationMedium.EMAIL.rawValue, properties: properties, callback: callback)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // initiate sms verification from plist
+    // 1. Read properties from file
+    // 2. Call initiateSMSVerification method
+    // 3. Maintain logs based on flags
+    
+    public func initiateSMSVerification(requestId: String, sub: String, callback: @escaping(Result<InitiateAccountVerificationResponseEntity>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            AccountVerificationController.shared.initiateAccountVerification(requestId: requestId, sub: sub, verificationMedium: VerificationMedium.SMS.rawValue, properties: savedProp!, callback: callback)
+        }
+        else {
+            // read file properties
+            FileHelper.shared.readProperties {
+                switch $0 {
+                case .failure(let error):
+                    // log error
+                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                    
+                    // return failure callback
+                    DispatchQueue.main.async {
+                        callback(Result.failure(error: error))
+                    }
+                    return
+                case .success(let properties):
+                    // log success
+                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
+                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                    
+                    
+                    self.saveProperties(properties: properties) {
+                        switch $0 {
+                        case .failure (let error):
+                            // log error
+                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                            
+                            // return failure callback
+                            DispatchQueue.main.async {
+                                callback(Result.failure(error: error))
+                            }
+                            return
+                        case .success( _):
+                            // call initiateAccountVerification with properties
+                            AccountVerificationController.shared.initiateAccountVerification(requestId: requestId, sub: sub, verificationMedium: VerificationMedium.SMS.rawValue, properties: properties, callback: callback)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // initiate ivr verification from plist
+    // 1. Read properties from file
+    // 2. Call initiateIVRVerification method
+    // 3. Maintain logs based on flags
+    
+    public func initiateIVRVerification(requestId: String, sub: String, callback: @escaping(Result<InitiateAccountVerificationResponseEntity>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            AccountVerificationController.shared.initiateAccountVerification(requestId: requestId, sub: sub, verificationMedium: VerificationMedium.IVR.rawValue, properties: savedProp!, callback: callback)
+        }
+        else {
+            // read file properties
+            FileHelper.shared.readProperties {
+                switch $0 {
+                case .failure(let error):
+                    // log error
+                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                    
+                    // return failure callback
+                    DispatchQueue.main.async {
+                        callback(Result.failure(error: error))
+                    }
+                    return
+                case .success(let properties):
+                    // log success
+                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
+                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                    
+                    
+                    self.saveProperties(properties: properties) {
+                        switch $0 {
+                        case .failure (let error):
+                            // log error
+                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                            
+                            // return failure callback
+                            DispatchQueue.main.async {
+                                callback(Result.failure(error: error))
+                            }
+                            return
+                        case .success( _):
+                            // call initiateAccountVerification with properties
+                            AccountVerificationController.shared.initiateAccountVerification(requestId: requestId, sub: sub, verificationMedium: VerificationMedium.IVR.rawValue, properties: properties, callback: callback)
                         }
                     }
                 }
@@ -1928,11 +2038,11 @@ public class Cidaas {
     // 2. Call verifyAccount method
     // 3. Maintain logs based on flags
     
-    public func verifyAccount(code: String, callback: @escaping(Result<VerifyAccountResponseEntity>) -> Void) {
+    public func verifyAccount(accvid: String, code: String, callback: @escaping(Result<VerifyAccountResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            AccountVerificationController.shared.verifyAccount(code: code, properties: savedProp!, callback: callback)
+            AccountVerificationController.shared.verifyAccount(accvid: accvid, code: code, properties: savedProp!, callback: callback)
         }
         else {
             // read file properties
@@ -1968,7 +2078,7 @@ public class Cidaas {
                             return
                         case .success( _):
                             // call verifyAccount with properties
-                            AccountVerificationController.shared.verifyAccount(code: code, properties: properties, callback: callback)
+                            AccountVerificationController.shared.verifyAccount(accvid: accvid, code: code, properties: properties, callback: callback)
                         }
                     }
                 }
@@ -1983,11 +2093,11 @@ public class Cidaas {
     // 2. Call initiateResetPassword method
     // 3. Maintain logs based on flags
     
-    public func initiateResetPassword(requestId: String, email: String = "", mobile: String = "", resetMedium: ResetMedium, callback: @escaping(Result<InitiateResetPasswordResponseEntity>) -> Void) {
+    public func initiateResetPassword(requestId: String, email: String, callback: @escaping(Result<InitiateResetPasswordResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            ResetPasswordController.shared.initiateResetPassword(requestId: requestId, email: email, mobile: mobile, resetMedium: resetMedium.rawValue, properties: savedProp!, callback: callback)
+            ResetPasswordController.shared.initiateResetPassword(requestId: requestId, email: email, mobile: "", resetMedium: ResetMedium.EMAIL.rawValue, properties: savedProp!, callback: callback)
         }
         else {
             // read file properties
@@ -2023,7 +2133,62 @@ public class Cidaas {
                             return
                         case .success( _):
                             // call initiateResetPassword with properties
-                            ResetPasswordController.shared.initiateResetPassword(requestId: requestId, email: email, mobile: mobile, resetMedium: resetMedium.rawValue, properties: properties, callback: callback)
+                            ResetPasswordController.shared.initiateResetPassword(requestId: requestId, email: email, mobile: "", resetMedium: ResetMedium.EMAIL.rawValue, properties: properties, callback: callback)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // initiate reset password from plist
+    // 1. Read properties from file
+    // 2. Call initiateResetPassword method
+    // 3. Maintain logs based on flags
+    
+    public func initiateResetPassword(requestId: String, mobile: String, callback: @escaping(Result<InitiateResetPasswordResponseEntity>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            ResetPasswordController.shared.initiateResetPassword(requestId: requestId, email: "", mobile: mobile, resetMedium: ResetMedium.SMS.rawValue, properties: savedProp!, callback: callback)
+        }
+        else {
+            // read file properties
+            FileHelper.shared.readProperties {
+                switch $0 {
+                case .failure(let error):
+                    // log error
+                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                    
+                    // return failure callback
+                    DispatchQueue.main.async {
+                        callback(Result.failure(error: error))
+                    }
+                    return
+                case .success(let properties):
+                    // log success
+                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
+                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                    
+                    
+                    self.saveProperties(properties: properties) {
+                        switch $0 {
+                        case .failure (let error):
+                            // log error
+                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                            
+                            // return failure callback
+                            DispatchQueue.main.async {
+                                callback(Result.failure(error: error))
+                            }
+                            return
+                        case .success( _):
+                            // call initiateResetPassword with properties
+                            ResetPasswordController.shared.initiateResetPassword(requestId: requestId, email: "", mobile: mobile, resetMedium: ResetMedium.SMS.rawValue, properties: properties, callback: callback)
                         }
                     }
                 }
@@ -2038,11 +2203,11 @@ public class Cidaas {
     // 2. Call handleResetPassword method
     // 3. Maintain logs based on flags
     
-    public func handleResetPassword(code: String, callback: @escaping(Result<HandleResetPasswordResponseEntity>) -> Void) {
+    public func handleResetPassword(rprq: String, code: String, callback: @escaping(Result<HandleResetPasswordResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            ResetPasswordController.shared.handleResetPassword(code: code, properties: savedProp!, callback: callback)
+            ResetPasswordController.shared.handleResetPassword(rprq: rprq, code: code, properties: savedProp!, callback: callback)
         }
         else {
             // read file properties
@@ -2078,7 +2243,7 @@ public class Cidaas {
                             return
                         case .success( _):
                             // call handleResetPassword with properties
-                            ResetPasswordController.shared.handleResetPassword(code: code, properties: properties, callback: callback)
+                            ResetPasswordController.shared.handleResetPassword(rprq: rprq, code: code, properties: properties, callback: callback)
                         }
                     }
                 }
@@ -2093,11 +2258,11 @@ public class Cidaas {
     // 2. Call resetPassword method
     // 3. Maintain logs based on flags
     
-    public func resetPassword(password: String, confirmPassword: String, callback: @escaping(Result<ResetPasswordResponseEntity>) -> Void) {
+    public func resetPassword(rprq: String, exchangeId: String, password: String, confirmPassword: String, callback: @escaping(Result<ResetPasswordResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            ResetPasswordController.shared.resetPassword(password: password, confirmPassword: confirmPassword, properties: savedProp!, callback: callback)
+            ResetPasswordController.shared.resetPassword(rprq: rprq, exchangeId: exchangeId, password: password, confirmPassword: confirmPassword, properties: savedProp!, callback: callback)
         }
         else {
             // read file properties
@@ -2132,8 +2297,8 @@ public class Cidaas {
                             }
                             return
                         case .success( _):
-                            // call handleResetPassword with properties
-                            ResetPasswordController.shared.resetPassword(password: password, confirmPassword: confirmPassword, properties: properties, callback: callback)
+                            // call resetPassword with properties
+                            ResetPasswordController.shared.resetPassword(rprq: rprq, exchangeId: exchangeId, password: password, confirmPassword: confirmPassword, properties: properties, callback: callback)
                         }
                     }
                 }
@@ -2424,11 +2589,11 @@ public class Cidaas {
     // 2. Call getUserInfo method
     // 3. Maintain logs based on flags
     
-    public func getUserInfo(accessToken: String, callback: @escaping(Result<UserInfoEntity>) -> Void) {
+    public func getUserInfo(sub: String, callback: @escaping(Result<UserInfoEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            UsersController.shared.getUserInfo(access_token: accessToken, properties: savedProp!, callback: callback)
+            UsersController.shared.getUserInfo(sub: sub, properties: savedProp!, callback: callback)
         }
         else {
             // read file properties
@@ -2464,12 +2629,30 @@ public class Cidaas {
                             return
                         case .success( _):
                             // call getUserInfo with properties
-                            UsersController.shared.getUserInfo(access_token: accessToken, properties: properties, callback: callback)
+                            UsersController.shared.getUserInfo(sub: sub, properties: properties, callback: callback)
                         }
                     }
                 }
             }
         }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // get access token from sub
+    // 1. Call getAccessToken method
+    
+    public func getAccessToken(sub: String, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+        AccessTokenController.shared.getAccessToken(sub: sub, callback: callback)
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // get access token from refresh token
+    // 1. Call getAccessToken method
+    
+    public func getAccessToken(refreshToken: String, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+        AccessTokenController.shared.getAccessToken(refreshToken: refreshToken, callback: callback)
     }
     
 // -------------------------------------------------------------------------------------------------- //
@@ -2531,10 +2714,10 @@ public class Cidaas {
     
     // register deduplication from plist
     // 1. Read properties from file
-    // 2. Call registerDeduplication method
+    // 2. Call registerUser method
     // 3. Maintain logs based on flags
     
-    public func registerDeduplication(track_id: String, callback: @escaping(Result<RegistrationResponseEntity>) -> Void) {
+    public func registerUser(track_id: String, callback: @escaping(Result<RegistrationResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
@@ -2589,7 +2772,7 @@ public class Cidaas {
     // 2. Call deduplicationDetails method
     // 3. Maintain logs based on flags
     
-    public func deduplicationLogin(requestId: String, sub: String, password: String, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+    public func loginWithDeduplication(requestId: String, sub: String, password: String, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
@@ -2644,11 +2827,11 @@ public class Cidaas {
     // 2. Call changePassword method
     // 3. Maintain logs based on flags
     
-    public func changePassword(access_token: String, changePasswordEntity: ChangePasswordEntity, callback: @escaping(Result<ChangePasswordResponseEntity>) -> Void) {
+    public func changePassword(sub: String, changePasswordEntity: ChangePasswordEntity, callback: @escaping(Result<ChangePasswordResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            ChangepasswordController.shared.changePassword(access_token: access_token, changePasswordEntity: changePasswordEntity, properties: savedProp!, callback: callback)
+            ChangepasswordController.shared.changePassword(sub: sub, changePasswordEntity: changePasswordEntity, properties: savedProp!, callback: callback)
         }
         else {
             // read file properties
@@ -2684,7 +2867,7 @@ public class Cidaas {
                             return
                         case .success( _):
                             // call changePassword with properties
-                            ChangepasswordController.shared.changePassword(access_token: access_token, changePasswordEntity: changePasswordEntity, properties: properties, callback: callback)
+                            ChangepasswordController.shared.changePassword(sub: sub, changePasswordEntity: changePasswordEntity, properties: properties, callback: callback)
                         }
                     }
                 }
@@ -2803,18 +2986,353 @@ public class Cidaas {
     }
     
 // -------------------------------------------------------------------------------------------------- //
+    
+    // get user Activity from plist
+    // 1. Read properties from file
+    // 2. Call getUserActivity method
+    // 3. Maintain logs based on flags
+    
+    public func getUserActivity(sub: String, userActivity: UserActivityEntity, callback: @escaping(Result<UserActivityResponseEntity>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            UserActivityController.shared.getUserActivity(sub: sub, userActivity: userActivity, properties: savedProp!, callback: callback)
+        }
+        else {
+            // read file properties
+            FileHelper.shared.readProperties {
+                switch $0 {
+                case .failure(let error):
+                    // log error
+                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                    
+                    // return failure callback
+                    DispatchQueue.main.async {
+                        callback(Result.failure(error: error))
+                    }
+                    return
+                case .success(let properties):
+                    // log success
+                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
+                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                    
+                    
+                    self.saveProperties(properties: properties) {
+                        switch $0 {
+                        case .failure (let error):
+                            // log error
+                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                            
+                            // return failure callback
+                            DispatchQueue.main.async {
+                                callback(Result.failure(error: error))
+                            }
+                            return
+                        case .success( _):
+                            // call getUserActivity with properties
+                            UserActivityController.shared.getUserActivity(sub: sub, userActivity: userActivity, properties: properties, callback: callback)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // update user from plist
+    // 1. Read properties from file
+    // 2. Call updateUser method
+    // 3. Maintain logs based on flags
+    
+    public func updateUser(sub: String, registrationEntity: RegistrationEntity, callback: @escaping(Result<UpdateUserResponseEntity>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            RegistrationController.shared.updateUser(sub: sub, registrationEntity: registrationEntity, properties: savedProp!, callback: callback)
+        }
+        else {
+            // read file properties
+            FileHelper.shared.readProperties {
+                switch $0 {
+                case .failure(let error):
+                    // log error
+                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                    
+                    // return failure callback
+                    DispatchQueue.main.async {
+                        callback(Result.failure(error: error))
+                    }
+                    return
+                case .success(let properties):
+                    // log success
+                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
+                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                    
+                    
+                    self.saveProperties(properties: properties) {
+                        switch $0 {
+                        case .failure (let error):
+                            // log error
+                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                            
+                            // return failure callback
+                            DispatchQueue.main.async {
+                                callback(Result.failure(error: error))
+                            }
+                            return
+                        case .success( _):
+                            // call updateUser with properties
+                            RegistrationController.shared.updateUser(sub: sub, registrationEntity: registrationEntity, properties: properties, callback: callback)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // upload image from plist
+    // 1. Read properties from file
+    // 2. Call uploadImage method
+    // 3. Maintain logs based on flags
+    
+    public func uploadImage(sub: String, photo: UIImage, callback: @escaping(Result<UploadImageResponseEntity>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            UsersController.shared.uploadImage(sub: sub, photo: photo, properties: savedProp!, callback: callback)
+        }
+        else {
+            // read file properties
+            FileHelper.shared.readProperties {
+                switch $0 {
+                case .failure(let error):
+                    // log error
+                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                    
+                    // return failure callback
+                    DispatchQueue.main.async {
+                        callback(Result.failure(error: error))
+                    }
+                    return
+                case .success(let properties):
+                    // log success
+                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
+                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                    
+                    
+                    self.saveProperties(properties: properties) {
+                        switch $0 {
+                        case .failure (let error):
+                            // log error
+                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                            
+                            // return failure callback
+                            DispatchQueue.main.async {
+                                callback(Result.failure(error: error))
+                            }
+                            return
+                        case .success( _):
+                            // call uploadImage with properties
+                            UsersController.shared.uploadImage(sub: sub, photo: photo, properties: properties, callback: callback)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // link account from plist
+    // 1. Read properties from file
+    // 2. Call linkAccount method
+    // 3. Maintain logs based on flags
+    
+    public func linkAccount(master_sub: String, sub_to_link: String, callback: @escaping(Result<LinkAccountResponseEntity>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            LinkUnlinkController.shared.linkAccount(master_sub: master_sub, sub_to_link: sub_to_link, properties: savedProp!, callback: callback)
+        }
+        else {
+            // read file properties
+            FileHelper.shared.readProperties {
+                switch $0 {
+                case .failure(let error):
+                    // log error
+                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                    
+                    // return failure callback
+                    DispatchQueue.main.async {
+                        callback(Result.failure(error: error))
+                    }
+                    return
+                case .success(let properties):
+                    // log success
+                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
+                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                    
+                    
+                    self.saveProperties(properties: properties) {
+                        switch $0 {
+                        case .failure (let error):
+                            // log error
+                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                            
+                            // return failure callback
+                            DispatchQueue.main.async {
+                                callback(Result.failure(error: error))
+                            }
+                            return
+                        case .success( _):
+                            // call linkAccount with properties
+                            LinkUnlinkController.shared.linkAccount(master_sub: master_sub, sub_to_link: sub_to_link, properties: properties, callback: callback)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // get linked users from plist
+    // 1. Read properties from file
+    // 2. Call getLinkedUsers method
+    // 3. Maintain logs based on flags
+    
+    public func getLinkedUsers(sub: String, callback: @escaping(Result<LinkedUserListResponseEntity>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            LinkUnlinkController.shared.getLinkedUsers(sub: sub, properties: savedProp!, callback: callback)
+        }
+        else {
+            // read file properties
+            FileHelper.shared.readProperties {
+                switch $0 {
+                case .failure(let error):
+                    // log error
+                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                    
+                    // return failure callback
+                    DispatchQueue.main.async {
+                        callback(Result.failure(error: error))
+                    }
+                    return
+                case .success(let properties):
+                    // log success
+                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
+                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                    
+                    
+                    self.saveProperties(properties: properties) {
+                        switch $0 {
+                        case .failure (let error):
+                            // log error
+                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                            
+                            // return failure callback
+                            DispatchQueue.main.async {
+                                callback(Result.failure(error: error))
+                            }
+                            return
+                        case .success( _):
+                            // call getLinkedUsers with properties
+                            LinkUnlinkController.shared.getLinkedUsers(sub: sub, properties: properties, callback: callback)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // unlink account from plist
+    // 1. Read properties from file
+    // 2. Call unlinkAccount method
+    // 3. Maintain logs based on flags
+    
+    public func unlinkAccount(identityId: String, sub: String, callback: @escaping(Result<LinkAccountResponseEntity>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            LinkUnlinkController.shared.unlinkAccount(identityId: identityId, sub: sub, properties: savedProp!, callback: callback)
+        }
+        else {
+            // read file properties
+            FileHelper.shared.readProperties {
+                switch $0 {
+                case .failure(let error):
+                    // log error
+                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                    
+                    // return failure callback
+                    DispatchQueue.main.async {
+                        callback(Result.failure(error: error))
+                    }
+                    return
+                case .success(let properties):
+                    // log success
+                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
+                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                    
+                    
+                    self.saveProperties(properties: properties) {
+                        switch $0 {
+                        case .failure (let error):
+                            // log error
+                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                            
+                            // return failure callback
+                            DispatchQueue.main.async {
+                                callback(Result.failure(error: error))
+                            }
+                            return
+                        case .success( _):
+                            // call unlinkAccount with properties
+                            LinkUnlinkController.shared.unlinkAccount(identityId: identityId, sub: sub, properties: properties, callback: callback)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
 
     // get TOTP frequently
-    public func listenTOTP() {
-        let qrcode = DBHelper.shared.getTOTPSecret()
-
+    public func listenTOTP(sub: String) {
+        let qrcode = DBHelper.shared.getTOTPSecret(key: sub)
+        
+        if (qrcode == "") {
+            // TODO handle error message
+            return
+        }
+        
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (timer_response) in
             let totp_entity = TOTPVerificationController.shared.gettingTOTPCode(url: URL(string: qrcode)!)
             NotificationCenter.default.post(name: .totp, object: totp_entity)
         })
     }
     
-    // cancel listen TOTP frequently
+    // cancel listen TOTP
     public func cancelListenTOTP() {
         timer.invalidate()
     }

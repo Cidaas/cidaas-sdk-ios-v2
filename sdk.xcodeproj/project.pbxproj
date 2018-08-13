@@ -229,6 +229,22 @@
 		1F217F44211178C900360730 /* ChangePasswordResponseEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F217F43211178C900360730 /* ChangePasswordResponseEntity.swift */; };
 		1F217F46211180AA00360730 /* VerificationMedium.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F217F45211180AA00360730 /* VerificationMedium.swift */; };
 		1F217F482111815900360730 /* ResetMedium.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F217F472111815900360730 /* ResetMedium.swift */; };
+		1F217F4A2112D67C00360730 /* UsernameType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F217F492112D67C00360730 /* UsernameType.swift */; };
+		1F217F4C2112DB5200360730 /* PasswordlessEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F217F4B2112DB5200360730 /* PasswordlessEntity.swift */; };
+		1F217F4E211D77D800360730 /* ConsentEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F217F4D211D77D800360730 /* ConsentEntity.swift */; };
+		1F217F51211D862700360730 /* UserActivityEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F217F50211D862700360730 /* UserActivityEntity.swift */; };
+		1F217F53211D86AC00360730 /* UserActivityResponseEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F217F52211D86AC00360730 /* UserActivityResponseEntity.swift */; };
+		1F217F56211D97B600360730 /* UserActivityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F217F55211D97B600360730 /* UserActivityService.swift */; };
+		1F217F59211D9B0200360730 /* UserActivityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F217F58211D9B0200360730 /* UserActivityController.swift */; };
+		1F217F5B211DA6EA00360730 /* UpdateUserResponseEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F217F5A211DA6EA00360730 /* UpdateUserResponseEntity.swift */; };
+		1F217F5D211DABE700360730 /* UploadImageResponseEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F217F5C211DABE700360730 /* UploadImageResponseEntity.swift */; };
+		1F217F60211DB29E00360730 /* LinkAccountResponseEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F217F5F211DB29E00360730 /* LinkAccountResponseEntity.swift */; };
+		1F217F63211DB33C00360730 /* LinkUnlinkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F217F62211DB33C00360730 /* LinkUnlinkService.swift */; };
+		1F217F66211DB62D00360730 /* LinkUnlinkController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F217F65211DB62D00360730 /* LinkUnlinkController.swift */; };
+		1F217F68211DB88400360730 /* LinkedUserListResponseEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F217F67211DB88400360730 /* LinkedUserListResponseEntity.swift */; };
+		1F217F6B211DC54900360730 /* ChangepasswordTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F217F6A211DC54900360730 /* ChangepasswordTests.swift */; };
+		1F217F6E211DC61100360730 /* CidaasDeduplicationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F217F6D211DC61100360730 /* CidaasDeduplicationTests.swift */; };
+		1F217F71211DC71400360730 /* CidaasLinkUnlinkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F217F70211DC71400360730 /* CidaasLinkUnlinkTests.swift */; };
 		BCAD51D0E635A51D7E0526D3 /* Pods_CidaasTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A54423558EFC27A6B1F8EC4 /* Pods_CidaasTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -476,6 +492,22 @@
 		1F217F43211178C900360730 /* ChangePasswordResponseEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordResponseEntity.swift; sourceTree = "<group>"; };
 		1F217F45211180AA00360730 /* VerificationMedium.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationMedium.swift; sourceTree = "<group>"; };
 		1F217F472111815900360730 /* ResetMedium.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetMedium.swift; sourceTree = "<group>"; };
+		1F217F492112D67C00360730 /* UsernameType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameType.swift; sourceTree = "<group>"; };
+		1F217F4B2112DB5200360730 /* PasswordlessEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordlessEntity.swift; sourceTree = "<group>"; };
+		1F217F4D211D77D800360730 /* ConsentEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsentEntity.swift; sourceTree = "<group>"; };
+		1F217F50211D862700360730 /* UserActivityEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserActivityEntity.swift; sourceTree = "<group>"; };
+		1F217F52211D86AC00360730 /* UserActivityResponseEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserActivityResponseEntity.swift; sourceTree = "<group>"; };
+		1F217F55211D97B600360730 /* UserActivityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserActivityService.swift; sourceTree = "<group>"; };
+		1F217F58211D9B0200360730 /* UserActivityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserActivityController.swift; sourceTree = "<group>"; };
+		1F217F5A211DA6EA00360730 /* UpdateUserResponseEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateUserResponseEntity.swift; sourceTree = "<group>"; };
+		1F217F5C211DABE700360730 /* UploadImageResponseEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadImageResponseEntity.swift; sourceTree = "<group>"; };
+		1F217F5F211DB29E00360730 /* LinkAccountResponseEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkAccountResponseEntity.swift; sourceTree = "<group>"; };
+		1F217F62211DB33C00360730 /* LinkUnlinkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkUnlinkService.swift; sourceTree = "<group>"; };
+		1F217F65211DB62D00360730 /* LinkUnlinkController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkUnlinkController.swift; sourceTree = "<group>"; };
+		1F217F67211DB88400360730 /* LinkedUserListResponseEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkedUserListResponseEntity.swift; sourceTree = "<group>"; };
+		1F217F6A211DC54900360730 /* ChangepasswordTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangepasswordTests.swift; sourceTree = "<group>"; };
+		1F217F6D211DC61100360730 /* CidaasDeduplicationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CidaasDeduplicationTests.swift; sourceTree = "<group>"; };
+		1F217F70211DC71400360730 /* CidaasLinkUnlinkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CidaasLinkUnlinkTests.swift; sourceTree = "<group>"; };
 		20821FED8E51503D323F400B /* Pods_sdkiOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_sdkiOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2AA35354376681371411D1BC /* Pods-sdkiOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-sdkiOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-sdkiOSTests/Pods-sdkiOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		366E61B09C5DD281ED9D26A4 /* Pods-CidaasTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CidaasTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-CidaasTests/Pods-CidaasTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -540,6 +572,9 @@
 		1F2173A12108793400360730 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				1F217F6F211DC70600360730 /* LinkUnlink */,
+				1F217F6C211DC5FF00360730 /* Deduplication */,
+				1F217F69211DC52A00360730 /* Changepassword */,
 				1F2178E8211001CD00360730 /* General */,
 				1F2178D3210F303F00360730 /* AccessToken */,
 				1F2177A6210E16D200360730 /* Registration */,
@@ -615,6 +650,8 @@
 		1F2175AD210AE74900360730 /* Repository */ = {
 			isa = PBXGroup;
 			children = (
+				1F217F64211DB62000360730 /* LinkUnlink */,
+				1F217F57211D9AE300360730 /* UserActivities */,
 				1F217F372110AEBB00360730 /* Deduplication */,
 				1F217F2E21106C5300360730 /* Users */,
 				1F21776B210B371900360730 /* AccountVerification */,
@@ -848,6 +885,7 @@
 				1F217F2C21103FA800360730 /* UsageTypes.swift */,
 				1F217F45211180AA00360730 /* VerificationMedium.swift */,
 				1F217F472111815900360730 /* ResetMedium.swift */,
+				1F217F492112D67C00360730 /* UsernameType.swift */,
 			);
 			path = Enums;
 			sourceTree = "<group>";
@@ -916,6 +954,8 @@
 		1F2175F4210AE74900360730 /* Repository */ = {
 			isa = PBXGroup;
 			children = (
+				1F217F61211DB32B00360730 /* LinkUnlink */,
+				1F217F54211D97A800360730 /* UserActivities */,
 				1F217F312110A83300360730 /* Deduplication */,
 				1F217763210B2DA400360730 /* Users */,
 				1F217759210B2A8000360730 /* AccountVerification */,
@@ -1099,6 +1139,8 @@
 		1F21761A210AE74900360730 /* Entity */ = {
 			isa = PBXGroup;
 			children = (
+				1F217F5E211DB27500360730 /* LinkUnlink */,
+				1F217F4F211D861500360730 /* UserActivities */,
 				1F217F3D2111756A00360730 /* Changepassword */,
 				1F217F342110A9C500360730 /* Deduplication */,
 				1F217779210B59C500360730 /* Resetpassword */,
@@ -1331,6 +1373,7 @@
 				1F217686210AE74900360730 /* ConsentDetailsResponseEntity.swift */,
 				1F217687210AE74900360730 /* ConsentContinueEntity.swift */,
 				1F217688210AE74900360730 /* AcceptConsentEntity.swift */,
+				1F217F4D211D77D800360730 /* ConsentEntity.swift */,
 			);
 			path = Consent;
 			sourceTree = "<group>";
@@ -1362,6 +1405,7 @@
 				1F217693210AE74900360730 /* LoginEntity.swift */,
 				1F217694210AE74900360730 /* LoginErrorResponseEntity.swift */,
 				1F217695210AE74900360730 /* LoginResponseEntity.swift */,
+				1F217F4B2112DB5200360730 /* PasswordlessEntity.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -1446,6 +1490,7 @@
 				1F21775D210B2C6E00360730 /* RegistrationFieldsResponseEntity.swift */,
 				1F21775F210B2D0200360730 /* RegistrationEntity.swift */,
 				1F217761210B2D3200360730 /* RegistrationResponseEntity.swift */,
+				1F217F5A211DA6EA00360730 /* UpdateUserResponseEntity.swift */,
 			);
 			path = Registration;
 			sourceTree = "<group>";
@@ -1462,6 +1507,7 @@
 			isa = PBXGroup;
 			children = (
 				1F217767210B2DDE00360730 /* UserInfoEntity.swift */,
+				1F217F5C211DABE700360730 /* UploadImageResponseEntity.swift */,
 			);
 			path = Users;
 			sourceTree = "<group>";
@@ -1699,6 +1745,80 @@
 			path = Changepassword;
 			sourceTree = "<group>";
 		};
+		1F217F4F211D861500360730 /* UserActivities */ = {
+			isa = PBXGroup;
+			children = (
+				1F217F50211D862700360730 /* UserActivityEntity.swift */,
+				1F217F52211D86AC00360730 /* UserActivityResponseEntity.swift */,
+			);
+			path = UserActivities;
+			sourceTree = "<group>";
+		};
+		1F217F54211D97A800360730 /* UserActivities */ = {
+			isa = PBXGroup;
+			children = (
+				1F217F55211D97B600360730 /* UserActivityService.swift */,
+			);
+			path = UserActivities;
+			sourceTree = "<group>";
+		};
+		1F217F57211D9AE300360730 /* UserActivities */ = {
+			isa = PBXGroup;
+			children = (
+				1F217F58211D9B0200360730 /* UserActivityController.swift */,
+			);
+			path = UserActivities;
+			sourceTree = "<group>";
+		};
+		1F217F5E211DB27500360730 /* LinkUnlink */ = {
+			isa = PBXGroup;
+			children = (
+				1F217F5F211DB29E00360730 /* LinkAccountResponseEntity.swift */,
+				1F217F67211DB88400360730 /* LinkedUserListResponseEntity.swift */,
+			);
+			path = LinkUnlink;
+			sourceTree = "<group>";
+		};
+		1F217F61211DB32B00360730 /* LinkUnlink */ = {
+			isa = PBXGroup;
+			children = (
+				1F217F62211DB33C00360730 /* LinkUnlinkService.swift */,
+			);
+			path = LinkUnlink;
+			sourceTree = "<group>";
+		};
+		1F217F64211DB62000360730 /* LinkUnlink */ = {
+			isa = PBXGroup;
+			children = (
+				1F217F65211DB62D00360730 /* LinkUnlinkController.swift */,
+			);
+			path = LinkUnlink;
+			sourceTree = "<group>";
+		};
+		1F217F69211DC52A00360730 /* Changepassword */ = {
+			isa = PBXGroup;
+			children = (
+				1F217F6A211DC54900360730 /* ChangepasswordTests.swift */,
+			);
+			path = Changepassword;
+			sourceTree = "<group>";
+		};
+		1F217F6C211DC5FF00360730 /* Deduplication */ = {
+			isa = PBXGroup;
+			children = (
+				1F217F6D211DC61100360730 /* CidaasDeduplicationTests.swift */,
+			);
+			path = Deduplication;
+			sourceTree = "<group>";
+		};
+		1F217F6F211DC70600360730 /* LinkUnlink */ = {
+			isa = PBXGroup;
+			children = (
+				1F217F70211DC71400360730 /* CidaasLinkUnlinkTests.swift */,
+			);
+			path = LinkUnlink;
+			sourceTree = "<group>";
+		};
 		5AF64DE8683DD6CEF79E3B7F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1919,6 +2039,7 @@
 				1F2176DB210AE74900360730 /* InitiateFaceEntity.swift in Sources */,
 				1F2176C8210AE74900360730 /* VoiceVerificationService.swift in Sources */,
 				1F217F362110A9D700360730 /* DeduplicationDetailsResponseEntity.swift in Sources */,
+				1F217F4E211D77D800360730 /* ConsentEntity.swift in Sources */,
 				1F21769F210AE74900360730 /* BackupcodeVerificationController.swift in Sources */,
 				1F2176A7210AE74900360730 /* ClientController.swift in Sources */,
 				1F2176EE210AE74900360730 /* SetupTouchResponseEntity.swift in Sources */,
@@ -1957,6 +2078,7 @@
 				1F21775B210B2C0500360730 /* RegistrationService.swift in Sources */,
 				1F2176E0210AE74900360730 /* VerifySMSResponseEntity.swift in Sources */,
 				1F2176BB210AE74900360730 /* CustomLoaderDelegate.swift in Sources */,
+				1F217F63211DB33C00360730 /* LinkUnlinkService.swift in Sources */,
 				1F217703210AE74A00360730 /* EnrollVoiceEntity.swift in Sources */,
 				1F21770B210AE74A00360730 /* InitiateIVREntity.swift in Sources */,
 				1F217701210AE74A00360730 /* SetupVoiceEntity.swift in Sources */,
@@ -1977,6 +2099,7 @@
 				1F2176D0210AE74900360730 /* LoginService.swift in Sources */,
 				1F21771F210AE74A00360730 /* ScannedTOTPResponseEntity.swift in Sources */,
 				1F217721210AE74A00360730 /* SetupTOTPResponseEntity.swift in Sources */,
+				1F217F68211DB88400360730 /* LinkedUserListResponseEntity.swift in Sources */,
 				1F217697210AE74900360730 /* AccessTokenModel.swift in Sources */,
 				1F217787210B5F5400360730 /* ResetPasswordResponseEntity.swift in Sources */,
 				1F2176B8210AE74900360730 /* WebAuthError.swift in Sources */,
@@ -1985,13 +2108,16 @@
 				1F2176A2210AE74900360730 /* IVRVerificationController.swift in Sources */,
 				1F2176DA210AE74900360730 /* AuthenticateFaceResponseEntity.swift in Sources */,
 				1F2176D3210AE74900360730 /* MFAContinueEntity.swift in Sources */,
+				1F217F53211D86AC00360730 /* UserActivityResponseEntity.swift in Sources */,
 				1F2176B9210AE74900360730 /* OauthExceptionDelegate.swift in Sources */,
 				1F217774210B39AA00360730 /* VerifyAccountResponseEntity.swift in Sources */,
 				1F217702210AE74A00360730 /* SetupVoiceResponseEntity.swift in Sources */,
 				1F21772B210AE74A00360730 /* AcceptConsentResponseEntity.swift in Sources */,
 				1F2176F2210AE74900360730 /* AuthenticateBackupcodeEntity.swift in Sources */,
 				1F21771B210AE74A00360730 /* ScannedTOTPEntity.swift in Sources */,
+				1F217F4A2112D67C00360730 /* UsernameType.swift in Sources */,
 				1F217718210AE74A00360730 /* SetupPatternEntity.swift in Sources */,
+				1F217F5B211DA6EA00360730 /* UpdateUserResponseEntity.swift in Sources */,
 				1F217713210AE74A00360730 /* SetupPatternResponseEntity.swift in Sources */,
 				1F2176FD210AE74A00360730 /* InitiatePushEntity.swift in Sources */,
 				1F21777F210B5B0100360730 /* ResetPasswordService.swift in Sources */,
@@ -2002,6 +2128,7 @@
 				1F21772E210AE74A00360730 /* AcceptConsentEntity.swift in Sources */,
 				1F2176D8210AE74900360730 /* EnrollFaceEntity.swift in Sources */,
 				1F21769E210AE74900360730 /* TouchIdVerificationController.swift in Sources */,
+				1F217F5D211DABE700360730 /* UploadImageResponseEntity.swift in Sources */,
 				1F2176BE210AE74900360730 /* TransactionStore.swift in Sources */,
 				1F2176EB210AE74900360730 /* InitiateTouchEntity.swift in Sources */,
 				1F21770F210AE74A00360730 /* ValidateDeviceResponseEntity.swift in Sources */,
@@ -2015,8 +2142,10 @@
 				1F21771E210AE74A00360730 /* AuthenticateTOTPEntity.swift in Sources */,
 				1F2176F3210AE74900360730 /* InitiateBackupcodeResponseEntity.swift in Sources */,
 				1F2176BD210AE74900360730 /* Hardware.swift in Sources */,
+				1F217F60211DB29E00360730 /* LinkAccountResponseEntity.swift in Sources */,
 				1F2176DF210AE74900360730 /* InitiateSMSEntity.swift in Sources */,
 				1F217727210AE74A00360730 /* InitiateEmailEntity.swift in Sources */,
+				1F217F66211DB62D00360730 /* LinkUnlinkController.swift in Sources */,
 				1F217726210AE74A00360730 /* SetupEmailResponseEntity.swift in Sources */,
 				1F2176F7210AE74A00360730 /* InitiatePushResponseEntity.swift in Sources */,
 				1F217717210AE74A00360730 /* ScannedPatternResponseEntity.swift in Sources */,
@@ -2049,8 +2178,10 @@
 				1F217720210AE74A00360730 /* EnrollTOTPResponseEntity.swift in Sources */,
 				1F217737210AE74A00360730 /* LoginErrorResponseEntity.swift in Sources */,
 				1F2176B3210AE74900360730 /* AuthenticationTypes.swift in Sources */,
+				1F217F56211D97B600360730 /* UserActivityService.swift in Sources */,
 				1F217707210AE74A00360730 /* AuthenticateVoiceEntity.swift in Sources */,
 				1F2176C4210AE74900360730 /* SMSVerificationService.swift in Sources */,
+				1F217F4C2112DB5200360730 /* PasswordlessEntity.swift in Sources */,
 				1F2176F5210AE74A00360730 /* EnrollPushEntity.swift in Sources */,
 				1F2176E4210AE74900360730 /* SetupSMSResponseEntity.swift in Sources */,
 				1F217724210AE74A00360730 /* VerifyEmailResponseEntity.swift in Sources */,
@@ -2072,6 +2203,7 @@
 				1F2176CE210AE74900360730 /* ConsentService.swift in Sources */,
 				1F217F46211180AA00360730 /* VerificationMedium.swift in Sources */,
 				1F2176D9210AE74900360730 /* ScannedFaceEntity.swift in Sources */,
+				1F217F59211D9B0200360730 /* UserActivityController.swift in Sources */,
 				1F217765210B2DB400360730 /* UsersService.swift in Sources */,
 				1F21769D210AE74900360730 /* SMSVerificationController.swift in Sources */,
 				1F2176DE210AE74900360730 /* SetupFaceResponseEntity.swift in Sources */,
@@ -2092,6 +2224,7 @@
 				1F2176A0210AE74900360730 /* PushVerificationController.swift in Sources */,
 				1F217700210AE74A00360730 /* ScannedVoiceEntity.swift in Sources */,
 				1F21771D210AE74A00360730 /* InitiateTOTPResponseEntity.swift in Sources */,
+				1F217F51211D862700360730 /* UserActivityEntity.swift in Sources */,
 				1F21772A210AE74A00360730 /* ConsentResponseEntity.swift in Sources */,
 				1F21772D210AE74A00360730 /* ConsentContinueEntity.swift in Sources */,
 				1F2176D1210AE74900360730 /* TenantInfoResponseEntity.swift in Sources */,
@@ -2111,11 +2244,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				1F217576210A23B600360730 /* CidaasPatternVerificationTests.swift in Sources */,
+				1F217F71211DC71400360730 /* CidaasLinkUnlinkTests.swift in Sources */,
 				1F21779B210C8E5100360730 /* CidaasTenantTests.swift in Sources */,
 				1F217572210A23AC00360730 /* CidaasEmailVerificationTests.swift in Sources */,
 				1F2178ED211015DD00360730 /* CidaasTOTPTests.swift in Sources */,
 				1F21779D210C8E7F00360730 /* CidaasClientTests.swift in Sources */,
 				1F217564210A213E00360730 /* CidaasTests.swift in Sources */,
+				1F217F6E211DC61100360730 /* CidaasDeduplicationTests.swift in Sources */,
 				1F2178D5210F304F00360730 /* CidaasAccessTokenTests.swift in Sources */,
 				1F2178E7210F6CA500360730 /* CidaasDeviceTests.swift in Sources */,
 				1F217577210A23B800360730 /* CidaasTouchIdVerificationTests.swift in Sources */,
@@ -2131,6 +2266,7 @@
 				1F21757A210A23BF00360730 /* CidaasVoiceVerificationTests.swift in Sources */,
 				1F21756E210A233F00360730 /* CidaasRequestIdTests.swift in Sources */,
 				1F21779F210C8EE800360730 /* CidaasConsentTests.swift in Sources */,
+				1F217F6B211DC54900360730 /* ChangepasswordTests.swift in Sources */,
 				1F2177A5210CCFF200360730 /* CidaasAccountVerificationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2280,7 +2416,11 @@
 				INFOPLIST_FILE = Cidaas/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.widas.Cidaas;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = NO;
@@ -2304,7 +2444,11 @@
 				INFOPLIST_FILE = Cidaas/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.widas.Cidaas;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = NO;
@@ -2322,7 +2466,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = BWMM72Q5M6;
 				INFOPLIST_FILE = CidaasTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.widas.CidaasTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = NO;
@@ -2339,7 +2487,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = BWMM72Q5M6;
 				INFOPLIST_FILE = CidaasTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.widas.CidaasTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = NO;

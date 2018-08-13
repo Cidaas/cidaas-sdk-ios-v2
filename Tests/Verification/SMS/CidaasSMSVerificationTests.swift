@@ -81,7 +81,7 @@ class CidaasSMSVerificationTests: XCTestCase {
     }
     
     func testVerifySMS() {
-        self.cidaas.verifySMS(code: "123123") {
+        self.cidaas.verifySMS(statusId: "843756876734534", code: "123123") {
             switch $0 {
             case .success(let verifySMSSuccess):
                 print("\nSub : \(verifySMSSuccess.data.sub)")
@@ -95,7 +95,8 @@ class CidaasSMSVerificationTests: XCTestCase {
     }
     
     func testLoginWithSMS() {
-        self.cidaas.loginWithSMS(email: "abc@gmail.com", requestId: "82736482734", usageType: .PASSWORDLESS) {
+        let passwordlessEntity = PasswordlessEntity()
+        self.cidaas.loginWithSMS(passwordlessEntity: passwordlessEntity) {
             switch $0 {
             case .success(let loginWithSMSSuccess):
                 print("\nStatus Id : \(loginWithSMSSuccess.data.statusId)")
@@ -127,7 +128,7 @@ class CidaasSMSVerificationTests: XCTestCase {
     func testVerifySMSController() {
         var properties = Dictionary<String, String>()
         properties["DomainURL"] = "https://localmanagement.cidaas.de"
-        self.smsController.verifySMS(code: "123123", properties: properties) {
+        self.smsController.verifySMS(statusId: "2543676754735275", code: "123123", properties: properties) {
             switch $0 {
             case .success(let verifySMSSuccess):
                 print("\nSub : \(verifySMSSuccess.data.sub)")
@@ -143,7 +144,7 @@ class CidaasSMSVerificationTests: XCTestCase {
     func testLoginWithSMSController() {
         var properties = Dictionary<String, String>()
         properties["DomainURL"] = "https://localmanagement.cidaas.de"
-        self.smsController.loginWithSMS(email: "abc@gmail.com", mobile: "+91932984728", sub: "123123", trackId: "12312313487", requestId: "82736482734", usageType: .PASSWORDLESS, properties: properties) {
+        self.smsController.loginWithSMS(email: "abc@gmail.com", mobile: "+91932984728", sub: "123123", trackId: "12312313487", requestId: "82736482734", usageType: UsageTypes.PASSWORDLESS.rawValue, properties: properties) {
             switch $0 {
             case .success(let loginWithSMSSuccess):
                 print("\nStatus Id : \(loginWithSMSSuccess.data.statusId)")

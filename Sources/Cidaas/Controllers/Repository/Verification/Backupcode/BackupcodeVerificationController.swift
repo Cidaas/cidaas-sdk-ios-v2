@@ -14,7 +14,7 @@ public class BackupcodeVerificationController {
     private var statusId: String
     private var authenticationType: String
     private var sub: String
-    private var usageType: UsageTypes = UsageTypes.MFA
+    private var usageType: String = UsageTypes.MFA.rawValue
     
     // shared instance
     public static var shared : BackupcodeVerificationController = BackupcodeVerificationController()
@@ -88,7 +88,7 @@ public class BackupcodeVerificationController {
     }
     
     // login with Backupcode from properties
-    public func loginWithBackupcode(email : String, mobile: String, sub: String, code: String, trackId: String, requestId: String, usageType: UsageTypes, properties: Dictionary<String, String>, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+    public func loginWithBackupcode(email : String, mobile: String, sub: String, code: String, trackId: String, requestId: String, usageType: String, properties: Dictionary<String, String>, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -103,19 +103,29 @@ public class BackupcodeVerificationController {
         }
         
         // validating fields
-        if ((email == "" && sub == "" && mobile == "") || requestId == "") {
+        if ((email == "" && sub == "" && mobile == "") || requestId == "" || code == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "email or sub or mobile or requestId must not be empty"
+            error.error = "email or sub or mobile or requestId or code must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
             return
         }
         
-        if (usageType == UsageTypes.MFA) {
+        if (usageType == UsageTypes.MFA.rawValue) {
             if (trackId == "") {
                 let error = WebAuthError.shared.propertyMissingException()
                 error.error = "trackId must not be empty"
+                DispatchQueue.main.async {
+                    callback(Result.failure(error: error))
+                }
+                return
+            }
+        }
+        else {
+            if (usageType != UsageTypes.PASSWORDLESS.rawValue) {
+                let error = WebAuthError.shared.propertyMissingException()
+                error.error = "Invalid usageType. usageType should be either PASSWORDLESS_AUTHENTICATION or MULTIFACTOR_AUTHENTICATION"
                 DispatchQueue.main.async {
                     callback(Result.failure(error: error))
                 }
@@ -129,7 +139,7 @@ public class BackupcodeVerificationController {
         let initiateBackupcodeEntity = InitiateBackupcodeEntity()
         initiateBackupcodeEntity.email = email
         initiateBackupcodeEntity.sub = sub
-        initiateBackupcodeEntity.usageType = usageType.rawValue
+        initiateBackupcodeEntity.usageType = usageType
         
         // call initiateBackupcode service
         BackupcodeVerificationService.shared.initiateBackupcode(initiateBackupcodeEntity: initiateBackupcodeEntity, properties: properties) {
@@ -183,7 +193,7 @@ public class BackupcodeVerificationController {
                         mfaContinueEntity.trackingCode = serviceResponse.data.trackingCode
                         mfaContinueEntity.verificationType = "BACKUPCODE"
                         
-                        if(self.usageType == UsageTypes.PASSWORDLESS) {
+                        if(self.usageType == UsageTypes.PASSWORDLESS.rawValue) {
                             VerificationSettingsService.shared.passwordlessContinue(mfaContinueEntity: mfaContinueEntity, properties: properties) {
                                 switch $0 {
                                 case .failure(let error):
