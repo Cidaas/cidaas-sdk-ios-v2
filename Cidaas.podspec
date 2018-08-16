@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 s.name         = "Cidaas"
-s.version      = "0.0.1.1"
+s.version      = "0.0.1.2"
 s.summary      = "Native SDK for iOS providing login, registration and verification functionalities"
 s.homepage     = "https://github.com/Cidaas/cidaas-sdk-ios-v2"
 s.license      = "MIT"
