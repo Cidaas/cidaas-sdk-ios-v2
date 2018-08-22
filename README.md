@@ -8,23 +8,23 @@ Operating System | Xcode | Swift
 --- | --- | ---
 iOS 10.0 or above | 9.0 or above | 3.3 or above 
 
+### Steps for integrate native iOS SDKs:
+#### Installation
 
-### Installation
-
-#### CocoaPods Installations
+##### CocoaPods Installations
 
 Cidaas is available through [CocoaPods](https://cocoapods.org/pods/Cidaas). To install it, simply add the following line to your Podfile:
 
 ```
 pod 'Cidaas', '~> 0.0.1'
 ```
-### Getting started
+#### Getting started
 
 The following steps are to be followed to use this Cidaas-SDK.
 
 Create a plist file named as <b>cidaas.plist</b> and fill all the inputs in key value pair. The inputs are below mentioned.
 
-The plist file should become like this :
+A sample plist file would look like this :
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -41,11 +41,11 @@ The plist file should become like this :
 </plist>
 ```
 
-### Getting App Id and urls
+Following sections will help you to generate some of the information that is needed for plist.
 
-You will get the property file for your application from the cidaas AdminUI.
+#### Getting Client Id and urls
+You can get this by creating your App in App settings section of cidaas Admin portal. Once you select the right scope and application type, and fill in all mandatory fields, you can use the generated Client ID and re-direct URLs.
 
-### Steps for integrate native iOS SDKs:
 
 #### Initialisation
 
@@ -63,8 +63,9 @@ var cidaas = Cidaas.shared
 ### Usage
 
 #### Getting Request Id
+You have to first get RequestId and use this in your subsequent calls. Server provides a unique Id based on urls configured for your application. Henceforth, in all requests like login, registration, you have to pass requestId, which is utilized to identify your client between two consecutive independant calls. To get the requestId, call 
 
-All the login and registration process done with the help of requestId. To get the requestId, call ****getRequestId()****.
+****getRequestId()****.
 
 ```swift
 cidaas.getRequestId() {
@@ -95,8 +96,8 @@ cidaas.getRequestId() {
 ```
 
 #### Getting Tenant Info
-
-It is more important to get the tenant information such as Tenant name and what are all the login ways ('Email', 'Mobile', 'Username') available for the particular tenant. To get the tenant information, call ****getTenantInfo()****.
+Sometimes you may want to lookup different types of login available ('Email', 'Mobile', 'Username') for a particular tenant. 
+ To get the tenant information, call ****getTenantInfo()****.
 
 ```swift
 cidaas.getTenantInfo() {
@@ -131,7 +132,7 @@ cidaas.getTenantInfo() {
 
 #### Get Client Info
 
-Once getting tenant information, next you need to get client information that contains client name, logo url specified for the client in the Admin's Apps section and what are all the social providers configured for the App. To get the client information, call ****getClientInfo()****.
+Once you get tenant information, if you need to find client information you can call following method. It  contains client name, logo url specified for the client in the Admin's Apps section and details of what all social providers are configured for the App. To get the client information, call ****getClientInfo()****.
 
 ```swift
 cidaas.getClientInfo(requestId: "45a921cf-ee26-46b0-9bf4-58636dced99f") {
@@ -170,7 +171,7 @@ cidaas.getClientInfo(requestId: "45a921cf-ee26-46b0-9bf4-58636dced99f") {
 #### Registration
 #### Getting Registration Fields
 
-Before registration, you need to know what are all the fields must show to the user while registration. For getting the fields, call ****getRegistrationFields()****.
+Before registration, you may want to know what all are the fields that you must show to your user. For getting these fields, call ****getRegistrationFields()****.
 
 ```swift
 cidaas.getRegistrationFields(requestId: "45a921cf-ee26-46b0-9bf4-58636dced99f") {
@@ -234,7 +235,7 @@ cidaas.getRegistrationFields(requestId: "45a921cf-ee26-46b0-9bf4-58636dced99f") 
 
 #### Register user
 
-Registration is the most important thing for all. To register a new user, call ****registerUser()****.
+To register a new user, call ****registerUser()****.
 
 ```swift 
 let customPostalCode: RegistrationCustomFieldsEntity = RegistrationCustomFieldsEntity()
@@ -287,12 +288,14 @@ cidaas.registerUser(requestId: "45a921cf-ee26-46b0-9bf4-58636dced99f", registrat
 ```
 
 #### Account Verification
-
-Once registration completed, you need to verify your account either by Email or SMS or IVR verification call. First you need to initiate the account verification.
+In order to avoid misuse of user registration functions, it is a good practise to include account verification along with it.
+Once registering is done, you can verify your account either by Email, SMS or IVR verification call. To do this, first you have to initiate the account verification. You can invoke any of the following as it suits your use case.
 
 #### Initiate Email verification
 
-To receive a verification code via Email, call **initiateEmailVerification()**.
+This method is to be used when you want to receive a verification code via Email:
+
+**initiateEmailVerification()**.
 
 ```swift
 cidaas.initiateEmailVerification(requestId:"45a921cf-ee26-46b0-9bf4-58636dced99f", sub:"7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
@@ -309,7 +312,7 @@ cidaas.initiateEmailVerification(requestId:"45a921cf-ee26-46b0-9bf4-58636dced99f
 
 #### Initiate SMS verification
 
-To receive a verification code via SMS, call **initiateSMSVerification()**.
+If you would like to receive a verification code via SMS, call **initiateSMSVerification()**.
 
 ```swift
 cidaas.initiateSMSVerification(requestId:"45a921cf-ee26-46b0-9bf4-58636dced99f", sub:"7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
@@ -326,7 +329,7 @@ cidaas.initiateSMSVerification(requestId:"45a921cf-ee26-46b0-9bf4-58636dced99f",
 
 #### Initiate IVR verification
 
-To receive a verification code via IVR verification call, call **initiateIVRVerification()**.
+In order to receive a verification code via IVR verification call, call **initiateIVRVerification()**.
 
 ```swift
 cidaas.initiateIVRVerification(requestId:"45a921cf-ee26-46b0-9bf4-58636dced99f", sub:"7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
@@ -421,7 +424,7 @@ cidaas.loginWithCredentials(requestId: "45a921cf-ee26-46b0-9bf4-58636dced99f", l
 
 #### Forgot Password
 
-Remembering passwords all the time is impossible, if you forget your password, you have an option to reset it.
+There is an option to reset password if you forget password.
 
 #### Initiate Reset Password
 
@@ -500,7 +503,7 @@ cidaas.handleRestPassword(code:"65864776") {
 
 #### Reset Password
 
-Once verifying the code, reset your password with your new password. To reset your password, call ****restPassword()****.
+Once code is verified, reset your password with your new password. To reset your password, call ****restPassword()****.
 
 ```swift
 cidaas.restPassword(password:"test#123",confirmPassword:"test#123") {
@@ -529,9 +532,11 @@ cidaas.restPassword(password:"test#123",confirmPassword:"test#123") {
 
 #### Passwordless or Multifactor Authentication
 
+cidaas provides numerous options to ensure safe and diverse mechanisms for login. It is a good practise to enable multiple factors during login, to ensure there is no misuse of authentication mechanism. To improve convenience, cidaas offers passwordless mechanisms as well. Depending on the end user's comfort, you can offer any of the multi-factor authentication available in cidaas. 
+
 #### Email
 
-To use your Email as a passwordless login, you need to configure your Email first and verify your Email. If you already verify your Email through account verification, by default Email will be configured. 
+To setup a passwordless login, where user types only an Email, you need to configure your Email first and verify. By default, when you verify your Email during account verification, you are setup for passwordless login.
 
 #### Configure Email
 
@@ -564,7 +569,7 @@ cidaas.configureEmail(sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
 
 #### Verify Email by entering code
 
-Once you received your verification code via Email, you need to verify the code. For that verification, call **enrollEmail()**.
+Once you received your verification code via Email, you need to verify that code. For that verification, call **enrollEmail()**.
 
 ```swift
 cidaas.enrollEmail(code: "658144") {
@@ -594,7 +599,7 @@ cidaas.enrollEmail(code: "658144") {
 
 #### Login via Email
 
-Once you configured your Email, you can also login with your Email via Passwordless authentication. To receive a verification code via Email, call **loginWithEmail()**.
+Once you have configured for Email login, you can also login with your Email via Passwordless authentication. To receive a verification code via Email, call **loginWithEmail()**.
 
 ```swift
 let passwordlessEntity = PasswordlessEntity()
@@ -661,7 +666,7 @@ cidaas.verifyEmail(code: "123123") {
 
 #### SMS
 
-To use SMS as a passwordless login, you need to configure SMS physical verification first and verify your mobile number. If you already verify your mobile number through account verification via SMS, by default SMS will be configured. 
+To use SMS as a passwordless login, you need to configure SMS physical verification first, and verify your mobile number. If you already verified your mobile number using SMS during account verification, it is by default setup for passwordless login. 
 
 #### Configure SMS
 
@@ -792,7 +797,7 @@ cidaas.verifySMS(code: "123123") {
 
 #### IVR
 
-To use IVR as a passwordless login, you need to configure IVR physical verification first and verify your mobile number. If you already verify your mobile number through account verification via IVR, by default IVR will be configured. 
+To use IVR as a passwordless login, you need to configure IVR physical verification first and verify your mobile number. If you already verified your mobile number through account verification via IVR, it is already configured. 
 
 #### Configure IVR
 
@@ -1001,8 +1006,7 @@ cidaas.loginWithBackupcode(code: "63537876", passwordlessEntity: passwordlessEnt
 ```
 
 #### TOTP
-
-To use TOTP as a passwordless login, you need to configure TOTP physical verification first.
+You can configure passwordless login with an OTP that has to be valid only for a fixed duration. To use TOTP as a passwordless login, you need to configure TOTP physical verification first.
 
 #### Configure TOTP
 
@@ -1035,7 +1039,7 @@ cidaas.configureTOTP(sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
 
 #### Login via TOTP
 
-Once you configured TOTP, you can also login with TOTP via Passwordless authentication. To login, call **loginWithTOTP()**.
+Once you configure TOTP, you can login with TOTP via Passwordless authentication. To login, call **loginWithTOTP()**.
 
 ```swift
 let passwordlessEntity = PasswordlessEntity()
@@ -1075,8 +1079,7 @@ cidaas.loginWithTOTP(passwordlessEntity: passwordlessEntity) {
 
 
 #### Pattern Recognition
-
-To use Pattern Recognition as a passwordless login, you need to configure it first.
+If you want to offer a passwordless login after securing it with the secure pattern that user can define on their device, you can use this option.  To use Pattern Recognition as a passwordless login, you need to configure it first.
 
 #### Configure Pattern Recognition
 
@@ -1109,7 +1112,7 @@ cidaas.configurePatternRecognition(pattern: "RED[1,2,3], sub: "7dfb2122-fa5e-4f7
 
 #### Login via Pattern Recognition
 
-Once you configured Pattern Recognition, you can also login with Pattern Recognition via Passwordless authentication. To login, call **loginWithPatternRecognition()**.
+Once you have configured Pattern Recognition, you can also login with Pattern Recognition via Passwordless authentication. To login, call **loginWithPatternRecognition()**.
 
 ```swift
 let passwordlessEntity = PasswordlessEntity()
@@ -1147,8 +1150,7 @@ cidaas.loginWithPatternRecognition(pattern: "RED[1,2,3], passwordlessEntity: pas
 ```
 
 #### TouchId Verification
-
-To use TouchId Verification as a passwordless login, you need to configure it first.
+You may want to allow users to use their touchId on their mobile devices or computer peripheral to be used for passwordless login.To do this TouchId Verification as a passwordless login, you need to configure it first.
 
 #### Configure TouchId Verification
 
@@ -1181,7 +1183,7 @@ cidaas.configureTouchId(sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
 
 #### Login via Touch Id Verification
 
-Once you configured Touch Id Verification, you can also login with Touch Id Verification via Passwordless authentication. To login, call **loginWithTouchId()**.
+Once you have configured Touch Id Verification, you can also login with Touch Id Verification via Passwordless authentication. To login, call **loginWithTouchId()**.
 
 ```swift
 let passwordlessEntity = PasswordlessEntity()
@@ -1219,8 +1221,7 @@ cidaas.loginWithTouchId(passwordlessEntity: passwordlessEntity) {
 ```
 
 ### SmartPush Notification
-
-To use SmartPush Notification as a passwordless login, you need to configure it first.
+SmartPush notification can be used when you would like users to recieve a number on their device and use that to authenticate instead of password. To use SmartPush Notification as a passwordless login, you need to configure it first.
 
 #### Configure SmartPush Notification
 
@@ -1292,7 +1293,7 @@ cidaas.loginWithSmartPush(passwordlessEntity: passwordlessEntity) {
 
 #### Face Recognition
 
-Biometric plays an important role in the modern world. cidaas authenticates you by verifying your Face. To use Face Recognition as a passwordless login, you need to configure it first.
+Biometrics plays an important role in the modern world. cidaas can register a user's face, extract unique features from it, and use that to identify when they present their face for identification.  To use Face Recognition as a passwordless login, you need to configure it first.
 
 #### Configure Face Recognition
 
@@ -1325,7 +1326,7 @@ cidaas.configureFaceRecognition(photo: photo, sub: "7dfb2122-fa5e-4f7a-8494-dada
 
 #### Login via Face Recognition
 
-Once you configured Face Recognition, you can also login with Face Recognition via Passwordless authentication. To login, call **loginWithFaceRecognition()**.
+Once you configured Face Recognition, you can login with Face Recognition for Passwordless authentication. To login, call **loginWithFaceRecognition()**.
 
 ```swift
 let passwordlessEntity = PasswordlessEntity()
@@ -1364,7 +1365,7 @@ cidaas.loginWithFaceRecognition(photo: photo, passwordlessEntity: passwordlessEn
 
 #### Voice Recognition
 
-Biometric plays an important role in the modern world. cidaas authenticates you by verifying your voice. To use Voice Recognition as a passwordless login, you need to configure it first.
+Biometric plays an important role in the modern world. cidaas can record your user's voice, extract unique features and use that to verify. To use Voice Recognition as a passwordless login, you need to configure it first.
  
 #### Configure Voice Recognition
 
@@ -1397,7 +1398,7 @@ cidaas.configureVoiceRecognition(voice: audioData, sub: "7dfb2122-fa5e-4f7a-8494
 
 #### Login via Voice Recognition
 
-Once you configured Voice Recognition, you can also login with Voice Recognition via Passwordless authentication. To login, call **loginWithVoiceRecognition()**.
+Once you configured Voice Recognition, you can also login with Voice Recognition as Passwordless authentication. To login, call **loginWithVoiceRecognition()**.
 
 ```swift
 let passwordlessEntity = PasswordlessEntity()
@@ -1436,7 +1437,7 @@ cidaas.loginWithVoiceRecognition(voice: audioData, passwordlessEntity: passwordl
 
 #### Consent Management
 
-Once user successfully logged in, they need to accept the terms and conditions. 
+Once user has successfully logged in, you may want your user's to accept the terms and conditions. You can configure different consent forms during setup, and present that to the user after login.
 
 #### Getting Consent Details 
 
