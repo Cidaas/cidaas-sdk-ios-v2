@@ -8,10 +8,23 @@
 
 /* Begin PBXBuildFile section */
 		1762EBBD9E7A2793DF21A793 /* Pods_Cidaas_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77825790066838DAF6F23B69 /* Pods_Cidaas_Tests.framework */; };
+		1F5600F7212ECF9B00F842A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5600F6212ECF9B00F842A4 /* AppDelegate.swift */; };
+		1F5600FA212ECFA800F842A4 /* Checkbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5600F8212ECFA800F842A4 /* Checkbox.swift */; };
+		1F5600FB212ECFA800F842A4 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5600F9212ECFA800F842A4 /* CustomTextField.swift */; };
+		1F5600FD212ECFC000F842A4 /* TextFieldEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5600FC212ECFC000F842A4 /* TextFieldEffects.swift */; };
+		1F5600FF212ECFF800F842A4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1F5600FE212ECFF800F842A4 /* LaunchScreen.storyboard */; };
+		1F560103212ED01D00F842A4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1F560102212ED01D00F842A4 /* Main.storyboard */; };
+		1F560106212ED06700F842A4 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F560105212ED06700F842A4 /* MBProgressHUD.m */; };
+		1F560109212ED07700F842A4 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F560107212ED07600F842A4 /* RegisterViewController.swift */; };
+		1F56010A212ED07700F842A4 /* RegisterSuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F560108212ED07700F842A4 /* RegisterSuccessViewController.swift */; };
+		1F56010C212ED08000F842A4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F56010B212ED08000F842A4 /* ViewController.swift */; };
+		1F56010E212ED08F00F842A4 /* CustomLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F56010D212ED08F00F842A4 /* CustomLoader.swift */; };
+		1F560110212ED09800F842A4 /* UnverifiedUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F56010F212ED09800F842A4 /* UnverifiedUserViewController.swift */; };
+		1F560112212ED0AC00F842A4 /* ConsentManagementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F560111212ED0AC00F842A4 /* ConsentManagementViewController.swift */; };
+		1F560115212ED0B700F842A4 /* DeduplicationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F560113212ED0B600F842A4 /* DeduplicationTableViewCell.swift */; };
+		1F560116212ED0B700F842A4 /* DeduplicationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F560114212ED0B600F842A4 /* DeduplicationViewController.swift */; };
+		1F560119212ED12900F842A4 /* Cidaas.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1F560118212ED12900F842A4 /* Cidaas.plist */; };
 		23F03CC1BA1783D5193AD673 /* Pods_Cidaas_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED7403D168AB4E369E5C9FA /* Pods_Cidaas_Example.framework */; };
-		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
-		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
-		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
@@ -28,20 +41,35 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0B711B9EE75AA6FCBEAD305C /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		124297B2E684D107CF975325 /* Cidaas.podspec */ = {isa = PBXFileReference; includeInIndex = 1; name = Cidaas.podspec; path = ../Cidaas.podspec; sourceTree = "<group>"; };
+		0B711B9EE75AA6FCBEAD305C /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		124297B2E684D107CF975325 /* Cidaas.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Cidaas.podspec; path = ../Cidaas.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		1F5600C6212ECE1900F842A4 /* Cidaas_Example-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Cidaas_Example-Bridging-Header.h"; sourceTree = "<group>"; };
+		1F5600F6212ECF9B00F842A4 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		1F5600F8212ECFA800F842A4 /* Checkbox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Checkbox.swift; sourceTree = "<group>"; };
+		1F5600F9212ECFA800F842A4 /* CustomTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
+		1F5600FC212ECFC000F842A4 /* TextFieldEffects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldEffects.swift; sourceTree = "<group>"; };
+		1F5600FE212ECFF800F842A4 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		1F560102212ED01D00F842A4 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		1F560104212ED06700F842A4 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
+		1F560105212ED06700F842A4 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
+		1F560107212ED07600F842A4 /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
+		1F560108212ED07700F842A4 /* RegisterSuccessViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterSuccessViewController.swift; sourceTree = "<group>"; };
+		1F56010B212ED08000F842A4 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		1F56010D212ED08F00F842A4 /* CustomLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomLoader.swift; sourceTree = "<group>"; };
+		1F56010F212ED09800F842A4 /* UnverifiedUserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnverifiedUserViewController.swift; sourceTree = "<group>"; };
+		1F560111212ED0AC00F842A4 /* ConsentManagementViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConsentManagementViewController.swift; sourceTree = "<group>"; };
+		1F560113212ED0B600F842A4 /* DeduplicationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeduplicationTableViewCell.swift; sourceTree = "<group>"; };
+		1F560114212ED0B600F842A4 /* DeduplicationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeduplicationViewController.swift; sourceTree = "<group>"; };
+		1F560118212ED12900F842A4 /* Cidaas.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Cidaas.plist; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* Cidaas_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cidaas_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		607FACD71AFB9204008FA782 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		607FACDA1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		607FACDC1AFB9204008FA782 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		607FACE51AFB9204008FA782 /* Cidaas_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Cidaas_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		77825790066838DAF6F23B69 /* Pods_Cidaas_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Cidaas_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8B908A42B68FF2EDE01D2BB0 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		8B908A42B68FF2EDE01D2BB0 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		9B89D8F5472963BD03263BED /* Pods-Cidaas_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Cidaas_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Cidaas_Tests/Pods-Cidaas_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		BED7403D168AB4E369E5C9FA /* Pods_Cidaas_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Cidaas_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D85FF3D284D9C20A17AA452E /* Pods-Cidaas_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Cidaas_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Cidaas_Tests/Pods-Cidaas_Tests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -104,12 +132,27 @@
 		607FACD21AFB9204008FA782 /* Example for Cidaas */ = {
 			isa = PBXGroup;
 			children = (
-				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
-				607FACD71AFB9204008FA782 /* ViewController.swift */,
-				607FACD91AFB9204008FA782 /* Main.storyboard */,
+				1F5600F6212ECF9B00F842A4 /* AppDelegate.swift */,
+				1F5600F8212ECFA800F842A4 /* Checkbox.swift */,
+				1F5600F9212ECFA800F842A4 /* CustomTextField.swift */,
+				1F5600FC212ECFC000F842A4 /* TextFieldEffects.swift */,
+				1F5600FE212ECFF800F842A4 /* LaunchScreen.storyboard */,
+				1F560104212ED06700F842A4 /* MBProgressHUD.h */,
+				1F56010D212ED08F00F842A4 /* CustomLoader.swift */,
+				1F560105212ED06700F842A4 /* MBProgressHUD.m */,
+				1F560102212ED01D00F842A4 /* Main.storyboard */,
+				1F56010F212ED09800F842A4 /* UnverifiedUserViewController.swift */,
+				1F560113212ED0B600F842A4 /* DeduplicationTableViewCell.swift */,
+				1F560114212ED0B600F842A4 /* DeduplicationViewController.swift */,
+				1F560108212ED07700F842A4 /* RegisterSuccessViewController.swift */,
+				1F560107212ED07600F842A4 /* RegisterViewController.swift */,
+				1F560111212ED0AC00F842A4 /* ConsentManagementViewController.swift */,
+				1F56010B212ED08000F842A4 /* ViewController.swift */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
 				607FACD31AFB9204008FA782 /* Supporting Files */,
+				1F5600C6212ECE1900F842A4 /* Cidaas_Example-Bridging-Header.h */,
+				1F560118212ED12900F842A4 /* Cidaas.plist */,
 			);
 			name = "Example for Cidaas";
 			path = Cidaas;
@@ -208,12 +251,13 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0830;
-				LastUpgradeCheck = 0830;
+				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = CocoaPods;
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
-						LastSwiftMigration = 0900;
+						DevelopmentTeam = BWMM72Q5M6;
+						LastSwiftMigration = 0940;
 					};
 					607FACE41AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
@@ -246,9 +290,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
+				1F5600FF212ECFF800F842A4 /* LaunchScreen.storyboard in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
+				1F560119212ED12900F842A4 /* Cidaas.plist in Resources */,
+				1F560103212ED01D00F842A4 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -287,11 +333,23 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Cidaas_Example/Pods-Cidaas_Example-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/Base32/Base32.framework",
 				"${BUILT_PRODUCTS_DIR}/Cidaas/Cidaas.framework",
+				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/OneTimePassword/OneTimePassword.framework",
+				"${BUILT_PRODUCTS_DIR}/SCLAlertView/SCLAlertView.framework",
+				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Base32.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Cidaas.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptoSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OneTimePassword.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SCLAlertView.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -347,8 +405,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
-				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
+				1F5600FA212ECFA800F842A4 /* Checkbox.swift in Sources */,
+				1F5600F7212ECF9B00F842A4 /* AppDelegate.swift in Sources */,
+				1F56010E212ED08F00F842A4 /* CustomLoader.swift in Sources */,
+				1F560112212ED0AC00F842A4 /* ConsentManagementViewController.swift in Sources */,
+				1F56010A212ED07700F842A4 /* RegisterSuccessViewController.swift in Sources */,
+				1F560106212ED06700F842A4 /* MBProgressHUD.m in Sources */,
+				1F560115212ED0B700F842A4 /* DeduplicationTableViewCell.swift in Sources */,
+				1F560109212ED07700F842A4 /* RegisterViewController.swift in Sources */,
+				1F560110212ED09800F842A4 /* UnverifiedUserViewController.swift in Sources */,
+				1F5600FD212ECFC000F842A4 /* TextFieldEffects.swift in Sources */,
+				1F56010C212ED08000F842A4 /* ViewController.swift in Sources */,
+				1F5600FB212ECFA800F842A4 /* CustomTextField.swift in Sources */,
+				1F560116212ED0B700F842A4 /* DeduplicationViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -371,14 +440,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		607FACD91AFB9204008FA782 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				607FACDA1AFB9204008FA782 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		607FACDE1AFB9204008FA782 /* LaunchScreen.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -402,12 +463,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -435,7 +498,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -455,12 +518,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -481,7 +546,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -494,11 +559,15 @@
 			baseConfigurationReference = DA50B9BA5012D07B24E7E4E9 /* Pods-Cidaas_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = BWMM72Q5M6;
 				INFOPLIST_FILE = Cidaas/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Cidaas/Cidaas_Example-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 			};
@@ -509,11 +578,14 @@
 			baseConfigurationReference = FB66D09617EB4B4521A49EE9 /* Pods-Cidaas_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = BWMM72Q5M6;
 				INFOPLIST_FILE = Cidaas/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Cidaas/Cidaas_Example-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 			};
@@ -523,6 +595,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D85FF3D284D9C20A17AA452E /* Pods-Cidaas_Tests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -545,6 +618,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9B89D8F5472963BD03263BED /* Pods-Cidaas_Tests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
