@@ -1,0 +1,6 @@
+framework module Cidaas {
+  umbrella header "Cidaas-umbrella.h"
+
+  export *
+  module * { export * }
+}
