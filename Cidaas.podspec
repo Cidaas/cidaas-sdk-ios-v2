@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #
 # Be sure to run `pod lib lint Cidaas.podspec' to ensure this is a
 # valid spec before submitting.
