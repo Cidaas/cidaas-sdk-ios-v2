@@ -1,6 +1,8 @@
 # cidaas-sdk-ios-v2
 [![Build Status](https://api.travis-ci.org/Cidaas/cidaas-sdk-ios-v2.svg?branch=development)](https://api.travis-ci.org/Cidaas/cidaas-sdk-ios-v2) 
 [![codecov.io](https://codecov.io/gh/Cidaas/cidaas-sdk-ios-v2/branch/development/graphs/badge.svg)](https://codecov.io/gh/Cidaas/cidaas-sdk-ios-v2/branch/development)
+[![Swift support](https://img.shields.io/badge/Swift-4.0%20%7C%204.1-lightgrey.svg?colorA=28a745&colorB=4E4E4E)](#swift-versions-support)
+[![CocoaPods Compatible](https://img.shields.io/cocoapods/v/Cidaas.svg?style=flat&label=CocoaPods&colorA=28a745&&colorB=4E4E4E)](https://cocoapods.org/pods/Cidaas)
 [![Badge w/ Platform](https://img.shields.io/cocoapods/p/Cidaas.svg)](https://cocoadocs.org/docsets/Cidaas)
 
 The steps here will guide you through setting up and managing authentication and authorization in your apps using cidaas SDK.    
