@@ -11,5 +11,6 @@ language: objective-c
 # - pod install --project-directory=Example
 script:
   - cd Example
+  - pod install
   - xcodebuild test -workspace Cidaas.xcworkspace -scheme Cidaas -destination 'platform=iOS Simulator,name=iPhone 7,OS=11.0' -enableCodeCoverage YES | xcpretty -s
   - bash <(curl -s https://codecov.io/bash) -cF ios
