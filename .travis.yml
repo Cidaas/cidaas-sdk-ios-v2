@@ -5,14 +5,13 @@
 osx_image: xcode9
 language: objective-c
 # cache: cocoapods
-# podfile: Example/Podfile
-# before_install:
-# - gem install cocoapods # Since Travis is not always on latest version
-# - pod install --project-directory=Example
-script:
+podfile: Example/Podfile
+before_install:
   - cd Example
   - sudo gem install cocoapods
   - pod update
+script:
   - xcodebuild test -workspace Cidaas.xcworkspace -scheme Cidaas -destination 'platform=iOS Simulator,name=iPhone 7,OS=11.0' -enableCodeCoverage YES | xcpretty -s
   - cd ..
-  - bash <(curl -s https://codecov.io/bash) -t CODECOV_TOKEN
+after_success:
+  - bash <(curl -s https://codecov.io/bash) -t 000fddc0-7c1f-475d-9f1b-e0165de5f569
