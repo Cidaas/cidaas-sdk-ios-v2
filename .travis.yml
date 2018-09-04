@@ -14,4 +14,4 @@ script:
   - xcodebuild test -workspace Cidaas.xcworkspace -scheme Cidaas -destination 'platform=iOS Simulator,name=iPhone 7,OS=11.4' -enableCodeCoverage YES | xcpretty -s
   - cd ..
 after_success:
-  - bash <(curl -s https://codecov.io/bash) -t CODECOV_TOKEN
+  - bash <(curl -s https://codecov.io/bash) -t 'CODECOV_TOKEN'
