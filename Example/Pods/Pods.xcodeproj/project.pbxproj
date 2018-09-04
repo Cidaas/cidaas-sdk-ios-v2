@@ -718,7 +718,7 @@
 
 /* Begin PBXFileReference section */
 		006F6827E8551D690EA5B0C696C395D3 /* UIImage+MultiFormat.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIImage+MultiFormat.m"; path = "SDWebImage/UIImage+MultiFormat.m"; sourceTree = "<group>"; };
-		00C6498B1A04BB404622853A060038B7 /* Alamofire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Alamofire.framework; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		00C6498B1A04BB404622853A060038B7 /* Alamofire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		014989163DBEFD4F67E5A493B8594C59 /* WebAuthErrorCode.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WebAuthErrorCode.swift; sourceTree = "<group>"; };
 		01B1A38EF4C049B846D75F40C9539DB0 /* SetupVoiceResponseEntity.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SetupVoiceResponseEntity.swift; sourceTree = "<group>"; };
 		01D6886976E985E9EDD0A3363BE0F6DC /* SHA2.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SHA2.swift; path = Sources/CryptoSwift/SHA2.swift; sourceTree = "<group>"; };
@@ -747,7 +747,7 @@
 		09A9A2509A84D08E41BDA76F646EC3A4 /* QuickSpec.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = QuickSpec.h; path = Sources/QuickObjectiveC/QuickSpec.h; sourceTree = "<group>"; };
 		09D30B3E96ABC997C8F1E0A8BE141673 /* AllPass.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AllPass.swift; path = Sources/Nimble/Matchers/AllPass.swift; sourceTree = "<group>"; };
 		0A45BE0E6BD3DF31943B63036DA2CEB9 /* Request.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Request.swift; path = Source/Request.swift; sourceTree = "<group>"; };
-		0AA919153585F65914338D9D80ED6986 /* SDWebImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SDWebImage.framework; path = SDWebImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0AA919153585F65914338D9D80ED6986 /* SDWebImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SDWebImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AB9DC94B28CCDF5080A5CD39FCF7F99 /* IQTitleBarButtonItem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IQTitleBarButtonItem.swift; path = IQKeyboardManagerSwift/IQToolbar/IQTitleBarButtonItem.swift; sourceTree = "<group>"; };
 		0C05D73C9654F8A4DB0F16F0A2CC92AA /* UIView+WebCache.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIView+WebCache.h"; path = "SDWebImage/UIView+WebCache.h"; sourceTree = "<group>"; };
 		0C599BE2DDB920D1925D12E2C8E798D2 /* Nimble-Snapshots.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Nimble-Snapshots.xcconfig"; sourceTree = "<group>"; };
@@ -760,7 +760,7 @@
 		0EAE75BE78787A1F6E467F157BA8E54C /* QCKDSL.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = QCKDSL.m; path = Sources/QuickObjectiveC/DSL/QCKDSL.m; sourceTree = "<group>"; };
 		0EE7C1DC9C5653219FBF11C670DF98F5 /* Pods-Cidaas_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Cidaas_Example-dummy.m"; sourceTree = "<group>"; };
 		0F117104A0C6D8FBB5242AB82ABAC512 /* ScannedPushResponseEntity.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ScannedPushResponseEntity.swift; sourceTree = "<group>"; };
-		0F33F16C19E459EB912465751D12842B /* Base32.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Base32.framework; path = Base32.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0F33F16C19E459EB912465751D12842B /* Base32.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Base32.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F458E3081D7DB6C1B4AAEB000A1FDCA /* AccountVerificationListResponseEntity.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AccountVerificationListResponseEntity.swift; sourceTree = "<group>"; };
 		0FCCBEEA8998FF5B1C843DD84C337786 /* InitiateBackupcodeResponseEntity.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = InitiateBackupcodeResponseEntity.swift; sourceTree = "<group>"; };
 		0FDAD3FB90D196A3948716155A8CD7F2 /* DeviceHelper.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DeviceHelper.swift; sourceTree = "<group>"; };
@@ -786,7 +786,7 @@
 		17333DBDF5F89781ACE204111E048160 /* Cidaas.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Cidaas.modulemap; sourceTree = "<group>"; };
 		1771A42600C0E6AE9DBA5937AA882570 /* DeduplicationController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DeduplicationController.swift; sourceTree = "<group>"; };
 		184017C317E86B7A0D8A7AA816956591 /* InitiatePatternResponseEntity.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = InitiatePatternResponseEntity.swift; sourceTree = "<group>"; };
-		193BB92BF5D63452060C64B4032568E5 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		193BB92BF5D63452060C64B4032568E5 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		197C77D1B5F68A7CBA4A36F991B4B064 /* UIImage+ForceDecode.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIImage+ForceDecode.m"; path = "SDWebImage/UIImage+ForceDecode.m"; sourceTree = "<group>"; };
 		19870D5B328AA74BB8A12B668287F888 /* SHA1.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SHA1.swift; path = Sources/CryptoSwift/SHA1.swift; sourceTree = "<group>"; };
 		1A369EB993EFC416705094F5E97A8209 /* DSL.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DSL.swift; path = Sources/Quick/DSL/DSL.swift; sourceTree = "<group>"; };
@@ -883,7 +883,7 @@
 		3D1172EDE706FC30B06C1618F11FA36C /* Cryptors.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Cryptors.swift; path = Sources/CryptoSwift/Cryptors.swift; sourceTree = "<group>"; };
 		3D49668A6EEC3370750DE2AB3B2360D6 /* SDWebImageImageIOCoder.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDWebImageImageIOCoder.m; path = SDWebImage/SDWebImageImageIOCoder.m; sourceTree = "<group>"; };
 		3D85D702FB6E9A5A157C69C94A585187 /* SDWebImageTransition.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDWebImageTransition.h; path = SDWebImage/SDWebImageTransition.h; sourceTree = "<group>"; };
-		3E22999BA77EDA53D4DBF6BA810352EF /* SCLAlertView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SCLAlertView.framework; path = SCLAlertView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3E22999BA77EDA53D4DBF6BA810352EF /* SCLAlertView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SCLAlertView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E39967A422E81DC7B3B23E782A61B7B /* LoginErrorResponseEntity.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LoginErrorResponseEntity.swift; sourceTree = "<group>"; };
 		3ECD1C265BC6AE06D570E0D445295DAC /* XCTestObservationCenter+CurrentTestCaseTracker.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "XCTestObservationCenter+CurrentTestCaseTracker.m"; sourceTree = "<group>"; };
 		3ED066758270E77C173E8A58F597B081 /* WebAuthError.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WebAuthError.swift; sourceTree = "<group>"; };
@@ -914,7 +914,7 @@
 		4B33B97666689B9694CF5445EC4FCF8A /* String+FoundationExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "String+FoundationExtension.swift"; path = "Sources/CryptoSwift/Foundation/String+FoundationExtension.swift"; sourceTree = "<group>"; };
 		4B6C663DFC94348D769F05F39C49E59B /* AuthenticateTOTPResponseEntity.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AuthenticateTOTPResponseEntity.swift; sourceTree = "<group>"; };
 		4BCE6731439AD2CA9680199AE55FD953 /* SDImageCacheConfig.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDImageCacheConfig.m; path = SDWebImage/SDImageCacheConfig.m; sourceTree = "<group>"; };
-		4C1A12AE4B8C230BA0DDAE620815ADA4 /* IQKeyboardManagerSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = IQKeyboardManagerSwift.framework; path = IQKeyboardManagerSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C1A12AE4B8C230BA0DDAE620815ADA4 /* IQKeyboardManagerSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = IQKeyboardManagerSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C31C1291DB8EDFDD4F56672D3F1A074 /* FBSnapshotTestCasePlatform.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FBSnapshotTestCasePlatform.m; path = FBSnapshotTestCase/FBSnapshotTestCasePlatform.m; sourceTree = "<group>"; };
 		4C614B53C0EBF9C205087FBD4F8F20ED /* TOTP.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TOTP.swift; sourceTree = "<group>"; };
 		4CF43C80B867F8EF51DE02B77A948DFC /* QuickSpecBase.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = QuickSpecBase.h; path = Sources/QuickSpecBase/include/QuickSpecBase.h; sourceTree = "<group>"; };
@@ -974,7 +974,7 @@
 		5EDF5A8ECE2786D8E8FB30C3B32910C4 /* String+Extension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "String+Extension.swift"; path = "Sources/CryptoSwift/String+Extension.swift"; sourceTree = "<group>"; };
 		5F5B68ED15182440A4602A57863FBA76 /* TouchIdVerificationService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TouchIdVerificationService.swift; sourceTree = "<group>"; };
 		5F8236214D2F0A074F2402D0D816DDED /* Nimble-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Nimble-prefix.pch"; sourceTree = "<group>"; };
-		5F942C9FCB841DEA4BF55F89786E1098 /* Pods_Cidaas_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_Cidaas_Example.framework; path = "Pods-Cidaas_Example.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5F942C9FCB841DEA4BF55F89786E1098 /* Pods_Cidaas_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Cidaas_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		60048D3CEB634CC2B7A2F01C2A45B63E /* Cryptor.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Cryptor.swift; path = Sources/CryptoSwift/Cryptor.swift; sourceTree = "<group>"; };
 		614A3F02EEB6F5CDD535FCF34673D57D /* Timeline.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Timeline.swift; path = Source/Timeline.swift; sourceTree = "<group>"; };
 		61BA3968A188DC68BC16A626A5665CCA /* SecureBytes.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SecureBytes.swift; path = Sources/CryptoSwift/SecureBytes.swift; sourceTree = "<group>"; };
@@ -989,7 +989,7 @@
 		6400EF5A8C8594425C1BCA38504D0B75 /* SDWebImage-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SDWebImage-umbrella.h"; sourceTree = "<group>"; };
 		64768D85FC78A059E6FA44707B06AE29 /* Cipher.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Cipher.swift; path = Sources/CryptoSwift/Cipher.swift; sourceTree = "<group>"; };
 		6480A0C700F9031587437CE9070E848D /* ValidateDeviceResponseEntity.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ValidateDeviceResponseEntity.swift; sourceTree = "<group>"; };
-		65AA23F645C3802625706EB4CC0A773D /* Pods_Cidaas_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_Cidaas_Tests.framework; path = "Pods-Cidaas_Tests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		65AA23F645C3802625706EB4CC0A773D /* Pods_Cidaas_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Cidaas_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		664BA256AD7716E7EB36591E510D32EE /* RegistrationService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RegistrationService.swift; sourceTree = "<group>"; };
 		66B7ABA086027CEAB9BC01F1AD796EEA /* EnrollTOTPResponseEntity.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EnrollTOTPResponseEntity.swift; sourceTree = "<group>"; };
 		681D886886A1CF302988D8B6C4600FD8 /* Nimble-Snapshots-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Nimble-Snapshots-dummy.m"; sourceTree = "<group>"; };
@@ -1015,7 +1015,7 @@
 		72986BB1DAC5835E649BE158E9B94B98 /* StringsHelper.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StringsHelper.swift; sourceTree = "<group>"; };
 		72B98D8EC411604991B3AB96E88C055F /* SDWebImageGIFCoder.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDWebImageGIFCoder.h; path = SDWebImage/SDWebImageGIFCoder.h; sourceTree = "<group>"; };
 		730AC039DB054E0C567B0E329EF24B71 /* ConsentDetailsResponseEntity.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ConsentDetailsResponseEntity.swift; sourceTree = "<group>"; };
-		7328D72A26E5A301F606BCB2CE704A24 /* OneTimePassword.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = OneTimePassword.framework; path = OneTimePassword.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7328D72A26E5A301F606BCB2CE704A24 /* OneTimePassword.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OneTimePassword.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7388972A83EC08C90201D78899C51E3C /* EnrollPushEntity.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EnrollPushEntity.swift; sourceTree = "<group>"; };
 		738C74B3F4F53870FCD2072789F81497 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
 		73FDC526EB7975A6E84165EE1EC13E5A /* CwlPreconditionTesting.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = CwlPreconditionTesting.h; path = Carthage/Checkouts/CwlPreconditionTesting/Sources/CwlPreconditionTesting/Mach/CwlPreconditionTesting.h; sourceTree = "<group>"; };
@@ -1096,10 +1096,10 @@
 		92478BC40F1C8E539D29AE09A876114E /* Rabbit+Foundation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Rabbit+Foundation.swift"; path = "Sources/CryptoSwift/Foundation/Rabbit+Foundation.swift"; sourceTree = "<group>"; };
 		92657A056EDB17FD1505D6D1E5551EA2 /* VerificationTypes.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = VerificationTypes.swift; sourceTree = "<group>"; };
 		92A6851479DC9CF56C2A8CC636D15161 /* Nimble.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Nimble.h; path = Sources/Nimble/Nimble.h; sourceTree = "<group>"; };
-		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		93A67CA4A1B3A6874F1F02CE356032DD /* SDWebImageImageIOCoder.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDWebImageImageIOCoder.h; path = SDWebImage/SDWebImageImageIOCoder.h; sourceTree = "<group>"; };
 		95029DBA0B1D832DE61BB4CDA8BEF560 /* SDWebImageCompat.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDWebImageCompat.m; path = SDWebImage/SDWebImageCompat.m; sourceTree = "<group>"; };
-		9526B94173B83606473F51A12A9D5ED9 /* FBSnapshotTestCase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = FBSnapshotTestCase.framework; path = FBSnapshotTestCase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9526B94173B83606473F51A12A9D5ED9 /* FBSnapshotTestCase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FBSnapshotTestCase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9534E1E78A19FD7949E8D9B692802486 /* AccountVerificationService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AccountVerificationService.swift; sourceTree = "<group>"; };
 		953E7B10F660F67BEC8EB2D0EE8F1956 /* InitiateResetPasswordEntity.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = InitiateResetPasswordEntity.swift; sourceTree = "<group>"; };
 		95E53AEA1E0A8A4216B9EBBC33666237 /* ResponseSerialization.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ResponseSerialization.swift; path = Source/ResponseSerialization.swift; sourceTree = "<group>"; };
@@ -1119,7 +1119,7 @@
 		9BD8F2E700BDE4D377CBE99F0F0715F0 /* ChaCha20.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChaCha20.swift; path = Sources/CryptoSwift/ChaCha20.swift; sourceTree = "<group>"; };
 		9C8862779BDE3A840F394B4991525770 /* UInt16+Extension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UInt16+Extension.swift"; path = "Sources/CryptoSwift/UInt16+Extension.swift"; sourceTree = "<group>"; };
 		9D60167529CEA2C13928C2D4055FFDA7 /* UIButton+WebCache.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIButton+WebCache.h"; path = "SDWebImage/UIButton+WebCache.h"; sourceTree = "<group>"; };
-		9D9B8D3EBA322D9B7D64BAD2002B40F3 /* Nimble_Snapshots.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Nimble_Snapshots.framework; path = "Nimble-Snapshots.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9D9B8D3EBA322D9B7D64BAD2002B40F3 /* Nimble_Snapshots.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Nimble_Snapshots.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E943DDF2FE9D88166A2816FA221559C /* MatcherProtocols.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MatcherProtocols.swift; path = Sources/Nimble/Matchers/MatcherProtocols.swift; sourceTree = "<group>"; };
 		9F164F29953AC31F83688B49B7CA3149 /* FBSnapshotTestCase.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FBSnapshotTestCase.h; path = FBSnapshotTestCase/FBSnapshotTestCase.h; sourceTree = "<group>"; };
 		9FD33DF1BB4A8B20302B67C7AAAED9C6 /* UIImage+Snapshot.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIImage+Snapshot.h"; path = "FBSnapshotTestCase/Categories/UIImage+Snapshot.h"; sourceTree = "<group>"; };
@@ -1132,7 +1132,7 @@
 		A2FF6561A05E1852D0D769028ED94167 /* InitiatePatternEntity.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = InitiatePatternEntity.swift; sourceTree = "<group>"; };
 		A34DDB218E9467EAB2F4EC88FDE25BD4 /* Digest.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Digest.swift; path = Sources/CryptoSwift/Digest.swift; sourceTree = "<group>"; };
 		A38F26A42EB76CD6D42B6DF34665CA99 /* CMAC.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CMAC.swift; path = Sources/CryptoSwift/CMAC.swift; sourceTree = "<group>"; };
-		A496A0A063A072C61DBF15CCA6BE0A2D /* Cidaas.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; path = Cidaas.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		A496A0A063A072C61DBF15CCA6BE0A2D /* Cidaas.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; path = Cidaas.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		A51916B3BF02A02D122D10770AA8C7B0 /* Alamofire.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Alamofire.modulemap; sourceTree = "<group>"; };
 		A5A69F73A2041559CA42358B84E05B54 /* IQKeyboardManagerSwift.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = IQKeyboardManagerSwift.xcconfig; sourceTree = "<group>"; };
 		A5AB60C683FEE35CCE63EE6E3BE11CD4 /* AssertionRecorder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AssertionRecorder.swift; path = Sources/Nimble/Adapters/AssertionRecorder.swift; sourceTree = "<group>"; };
@@ -1246,7 +1246,7 @@
 		D84DB09B87BD3F1614F30183BEFD8746 /* FailureMessage.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FailureMessage.swift; path = Sources/Nimble/FailureMessage.swift; sourceTree = "<group>"; };
 		D9F2A6C1635C0CDDC14BD493A13E83DE /* RequestIdService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RequestIdService.swift; sourceTree = "<group>"; };
 		DA7CD5E40E7FFE991B95539A4450FCF4 /* Expectation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Expectation.swift; path = Sources/Nimble/Expectation.swift; sourceTree = "<group>"; };
-		DA910C5A40546F201BEE6DA5F1D782CB /* Quick.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Quick.framework; path = Quick.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA910C5A40546F201BEE6DA5F1D782CB /* Quick.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Quick.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB4BCE6127C5A2F983832A00AC806AF8 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DB50C2F1AA36D7D7AD528AF8518BDD4D /* OneTimePassword-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "OneTimePassword-umbrella.h"; sourceTree = "<group>"; };
 		DB8919DE5B1575FA98486F9BC8438E23 /* AuthenticatePatternResponseEntity.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AuthenticatePatternResponseEntity.swift; sourceTree = "<group>"; };
@@ -1260,12 +1260,12 @@
 		DF6DB44F5AC8A6C63EBEE46FBCA12DD5 /* Log.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		DFC5BBDE19552C8561AC0726B49AA140 /* ThrowError.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ThrowError.swift; path = Sources/Nimble/Matchers/ThrowError.swift; sourceTree = "<group>"; };
 		DFF0861EC797F72D6177860059208B54 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
-		DFF7A22AFAFB5291EFAABE30CC589F88 /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = CryptoSwift.framework; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DFF7A22AFAFB5291EFAABE30CC589F88 /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E05EBFA6818DE0F08F597D47303F429B /* OneTimePassword-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "OneTimePassword-prefix.pch"; sourceTree = "<group>"; };
 		E0F1AD5536A3D79D97526002B7EA7314 /* Utils.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Utils.swift; path = Sources/CryptoSwift/Utils.swift; sourceTree = "<group>"; };
 		E0FB8B7781C5BCCDD84692D199788212 /* ContainElementSatisfying.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ContainElementSatisfying.swift; path = Sources/Nimble/Matchers/ContainElementSatisfying.swift; sourceTree = "<group>"; };
 		E15BCAFEADEB47718EC050201EDE4299 /* HMAC+Foundation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "HMAC+Foundation.swift"; path = "Sources/CryptoSwift/Foundation/HMAC+Foundation.swift"; sourceTree = "<group>"; };
-		E1AE0341408FCEACE3B4FFE8629CAE8D /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
+		E1AE0341408FCEACE3B4FFE8629CAE8D /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		E1C2091CE0DAD2466E4B0AE097719410 /* FBSnapshotTestCase-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "FBSnapshotTestCase-umbrella.h"; sourceTree = "<group>"; };
 		E2A49AEB756795D3F58B13FA8B3354C8 /* BeNil.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BeNil.swift; path = Sources/Nimble/Matchers/BeNil.swift; sourceTree = "<group>"; };
 		E35D239BAE2648610420D98E37E26B90 /* IQUIViewController+Additions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "IQUIViewController+Additions.swift"; path = "IQKeyboardManagerSwift/Categories/IQUIViewController+Additions.swift"; sourceTree = "<group>"; };
@@ -1322,10 +1322,10 @@
 		F403272EB2F14D3A12FC2FED1C2CE286 /* Authenticator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Authenticator.swift; path = Sources/CryptoSwift/Authenticator.swift; sourceTree = "<group>"; };
 		F48BB6895186EFFEB6E76E8F90F54F38 /* IQKeyboardManagerSwift.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = IQKeyboardManagerSwift.modulemap; sourceTree = "<group>"; };
 		F49B13C5BDE4447ACE164CC550D01497 /* Quick.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Quick.h; path = Sources/QuickObjectiveC/Quick.h; sourceTree = "<group>"; };
-		F4E153EEC275686195EE7902AD911DFC /* Cidaas.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Cidaas.framework; path = Cidaas.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F4E153EEC275686195EE7902AD911DFC /* Cidaas.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Cidaas.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F54D85C55950D54C7E962A5310473F67 /* InitiateFaceEntity.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = InitiateFaceEntity.swift; sourceTree = "<group>"; };
 		F5B2C93958B922D4A7BE55D555AF2C10 /* SetupPushEntity.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SetupPushEntity.swift; sourceTree = "<group>"; };
-		F67C1457520D5D58BD9C8F9DA5FAB3B9 /* mach_excServer.c */ = {isa = PBXFileReference; includeInIndex = 1; name = mach_excServer.c; path = Carthage/Checkouts/CwlPreconditionTesting/Sources/CwlMachBadInstructionHandler/mach_excServer.c; sourceTree = "<group>"; };
+		F67C1457520D5D58BD9C8F9DA5FAB3B9 /* mach_excServer.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; name = mach_excServer.c; path = Carthage/Checkouts/CwlPreconditionTesting/Sources/CwlMachBadInstructionHandler/mach_excServer.c; sourceTree = "<group>"; };
 		F70C9E0026679F4ADB58AC1E7521D04D /* HKDF.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = HKDF.swift; path = Sources/CryptoSwift/HKDF.swift; sourceTree = "<group>"; };
 		F7BEFAEF4298AADE0273C4E66D2A9325 /* AcceptConsentResponseEntity.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AcceptConsentResponseEntity.swift; sourceTree = "<group>"; };
 		F7EE12DEFE430A3068EE20B579D812B6 /* VerifyAccountResponseEntity.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = VerifyAccountResponseEntity.swift; sourceTree = "<group>"; };
@@ -1339,7 +1339,7 @@
 		FCBAA48117BB3D4387074E9BF4CCB041 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FCBB7CF93689AC2836A3AAF8C6CE553C /* URLHelper.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = URLHelper.swift; sourceTree = "<group>"; };
 		FD23AB5438BB40B4761653E80A453B8A /* Int+Extension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Int+Extension.swift"; path = "Sources/CryptoSwift/Int+Extension.swift"; sourceTree = "<group>"; };
-		FD9CC902A56551FD67605A51ADD7C3EE /* Nimble.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Nimble.framework; path = Nimble.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FD9CC902A56551FD67605A51ADD7C3EE /* Nimble.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Nimble.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FDBF3F01C2FFB867342E00B32E05E075 /* ScannedTouchResponseEntity.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ScannedTouchResponseEntity.swift; sourceTree = "<group>"; };
 		FEC7A6DF0C677B05AFE6DED22BA4DF5E /* RegistrationFieldsResponseEntity.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RegistrationFieldsResponseEntity.swift; sourceTree = "<group>"; };
 		FF460787EC047457E19FB21853CBEA00 /* SDWebImageCodersManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDWebImageCodersManager.m; path = SDWebImage/SDWebImageCodersManager.m; sourceTree = "<group>"; };
@@ -1485,7 +1485,6 @@
 				709E1DBEBB8D5C34F4F28DCB11CE522F /* OAuthChallengeGenerator.h */,
 				70DF21DBA978A893A5B633B7F379BDCD /* OAuthChallengeGenerator.m */,
 			);
-			name = PKCE;
 			path = PKCE;
 			sourceTree = "<group>";
 		};
@@ -1554,7 +1553,6 @@
 			children = (
 				CEBE8DBFD1FC7CA593927D09DF67829C /* DeviceVerificationService.swift */,
 			);
-			name = Device;
 			path = Device;
 			sourceTree = "<group>";
 		};
@@ -1597,7 +1595,6 @@
 				7644583CD7380317F891C732AF47DF96 /* Token+URL.swift */,
 				C447EE162F9A262A62D5006E42B13F5A /* Support Files */,
 			);
-			name = OneTimePassword;
 			path = OneTimePassword;
 			sourceTree = "<group>";
 		};
@@ -1606,7 +1603,6 @@
 			children = (
 				1EAFF7373094BF0F51F10D5359893725 /* TenantController.swift */,
 			);
-			name = Tenant;
 			path = Tenant;
 			sourceTree = "<group>";
 		};
@@ -1639,7 +1635,6 @@
 			children = (
 				57F2A8932C67069064146DED2514F77E /* LoginController.swift */,
 			);
-			name = Login;
 			path = Login;
 			sourceTree = "<group>";
 		};
@@ -1662,7 +1657,6 @@
 				BECD3A24BB870F4705837F2185C973DE /* Users */,
 				F0C22F53F62686E4D9C7C1B9F589D498 /* Verification */,
 			);
-			name = Repository;
 			path = Repository;
 			sourceTree = "<group>";
 		};
@@ -1671,7 +1665,6 @@
 			children = (
 				681DBD54AFDEF0E0FC0F5B3ABB378892 /* TOTPVerificationService.swift */,
 			);
-			name = TOTP;
 			path = TOTP;
 			sourceTree = "<group>";
 		};
@@ -1682,7 +1675,6 @@
 				89B2B9028D5710F508D75E9E8ED0C830 /* Support Files */,
 				8EEB0C23DDD5ED2DB98A3E2B37FC9A78 /* SwiftSupport */,
 			);
-			name = FBSnapshotTestCase;
 			path = FBSnapshotTestCase;
 			sourceTree = "<group>";
 		};
@@ -1702,7 +1694,6 @@
 			children = (
 				EBF2464D27883AF58F752A32F4BB4260 /* EmailVerificationController.swift */,
 			);
-			name = Email;
 			path = Email;
 			sourceTree = "<group>";
 		};
@@ -1732,7 +1723,6 @@
 			children = (
 				263F7489D068940FB02128412394E634 /* PatternVerificationService.swift */,
 			);
-			name = Pattern;
 			path = Pattern;
 			sourceTree = "<group>";
 		};
@@ -1741,7 +1731,6 @@
 			children = (
 				D9F2A6C1635C0CDDC14BD493A13E83DE /* RequestIdService.swift */,
 			);
-			name = RequestId;
 			path = RequestId;
 			sourceTree = "<group>";
 		};
@@ -1750,7 +1739,6 @@
 			children = (
 				E97146825923D89D61613FADFAEAD92A /* FaceVerificationController.swift */,
 			);
-			name = Face;
 			path = Face;
 			sourceTree = "<group>";
 		};
@@ -1759,7 +1747,6 @@
 			children = (
 				1F361695C9CC374A9D0731ADC76E4547 /* RegistrationController.swift */,
 			);
-			name = Registration;
 			path = Registration;
 			sourceTree = "<group>";
 		};
@@ -1768,7 +1755,6 @@
 			children = (
 				F2D568D24F5F2361DCD99A48E33893BD /* LoginService.swift */,
 			);
-			name = Login;
 			path = Login;
 			sourceTree = "<group>";
 		};
@@ -1791,7 +1777,6 @@
 			children = (
 				070600D2759C7A648BB0CDDC002AE87C /* CustomLoaderDelegate.swift */,
 			);
-			name = Loaders;
 			path = Loaders;
 			sourceTree = "<group>";
 		};
@@ -1811,7 +1796,6 @@
 				40D0E6B6E60C73D65D178957ABCC462D /* Touch */,
 				E921221F8FA13AF0DAA6B150D10F0CF7 /* Voice */,
 			);
-			name = Verification;
 			path = Verification;
 			sourceTree = "<group>";
 		};
@@ -1834,7 +1818,6 @@
 				865562202132E3EEA0F8FBFEA320CDF1 /* Users */,
 				2BBF023F4C7BD6508E6608E72F0712B3 /* Verification */,
 			);
-			name = Entity;
 			path = Entity;
 			sourceTree = "<group>";
 		};
@@ -1843,7 +1826,6 @@
 			children = (
 				ABA0D064EE7F5B053E13834AE0AC9107 /* DeduplicationService.swift */,
 			);
-			name = Deduplication;
 			path = Deduplication;
 			sourceTree = "<group>";
 		};
@@ -1852,7 +1834,6 @@
 			children = (
 				5B47A78A2866118389E66E0BA672E83A /* SMSVerificationService.swift */,
 			);
-			name = SMS;
 			path = SMS;
 			sourceTree = "<group>";
 		};
@@ -1861,7 +1842,6 @@
 			children = (
 				24C721F32E8B6E2435F50E489EE25C38 /* AccountVerificationController.swift */,
 			);
-			name = AccountVerification;
 			path = AccountVerification;
 			sourceTree = "<group>";
 		};
@@ -1875,7 +1855,6 @@
 				F8F2E9479CC8DADFFA86B2047C4A46FA /* ResetPasswordEntity.swift */,
 				EE1BC05D6254F7B07C3DE0BF41FBDBC4 /* ResetPasswordResponseEntity.swift */,
 			);
-			name = Resetpassword;
 			path = Resetpassword;
 			sourceTree = "<group>";
 		};
@@ -1884,7 +1863,6 @@
 			children = (
 				B077F60BF586799E1958C76CB301CC42 /* EntityToModelConverter.swift */,
 			);
-			name = Converter;
 			path = Converter;
 			sourceTree = "<group>";
 		};
@@ -1894,7 +1872,6 @@
 				C908368E8BE705D4D855AC891799295A /* LinkAccountResponseEntity.swift */,
 				4E1A708EA1DAE2AAD63D03E3BB3A9536 /* LinkedUserListResponseEntity.swift */,
 			);
-			name = LinkUnlink;
 			path = LinkUnlink;
 			sourceTree = "<group>";
 		};
@@ -1962,7 +1939,6 @@
 				43E56B5C755AC960EE7867101A4BE032 /* ErrorResponseEntity.swift */,
 				6259D7A968E30749545BB453BB217771 /* VerificationErrorResponseEntity.swift */,
 			);
-			name = Error;
 			path = Error;
 			sourceTree = "<group>";
 		};
@@ -1971,7 +1947,6 @@
 			children = (
 				752D7340F0DD1DE5279B39C8BB2EF131 /* DeduplicationDetailsResponseEntity.swift */,
 			);
-			name = Deduplication;
 			path = Deduplication;
 			sourceTree = "<group>";
 		};
@@ -1980,7 +1955,6 @@
 			children = (
 				DF6DB44F5AC8A6C63EBEE46FBCA12DD5 /* Log.swift */,
 			);
-			name = Logger;
 			path = Logger;
 			sourceTree = "<group>";
 		};
@@ -1998,7 +1972,6 @@
 				B06D9859E56499D52307AE692C4DA19E /* SetupTouchEntity.swift */,
 				C04BD3B9D8E0300F49DCA94DB10DDD5C /* SetupTouchResponseEntity.swift */,
 			);
-			name = Touch;
 			path = Touch;
 			sourceTree = "<group>";
 		};
@@ -2010,7 +1983,6 @@
 				978A79A4C85799A6A374D67813818EAF /* RegistrationResponseEntity.swift */,
 				83111776A9FFA66013D4AA823E8E99EE /* UpdateUserResponseEntity.swift */,
 			);
-			name = Registration;
 			path = Registration;
 			sourceTree = "<group>";
 		};
@@ -2019,7 +1991,6 @@
 			children = (
 				B3B03043B1527A8CEB09576A259A3D6C /* TOTPVerificationController.swift */,
 			);
-			name = TOTP;
 			path = TOTP;
 			sourceTree = "<group>";
 		};
@@ -2042,7 +2013,6 @@
 			children = (
 				EB180F123467F94DB5E2514D94A1E07D /* ResetPasswordController.swift */,
 			);
-			name = Resetpassword;
 			path = Resetpassword;
 			sourceTree = "<group>";
 		};
@@ -2056,7 +2026,6 @@
 				23AE11FED1E699AEE7D09D2EA84359A3 /* SetupEmailResponseEntity.swift */,
 				469C918AD22D7A653E90656EE682A3A0 /* VerifyEmailResponseEntity.swift */,
 			);
-			name = Email;
 			path = Email;
 			sourceTree = "<group>";
 		};
@@ -2065,7 +2034,6 @@
 			children = (
 				C7627D94A426FADA00B45322C0BBC964 /* PatternVerificationController.swift */,
 			);
-			name = Pattern;
 			path = Pattern;
 			sourceTree = "<group>";
 		};
@@ -2091,7 +2059,6 @@
 			children = (
 				C31B8E4479892D51D26E028E6F25BCB7 /* ConsentController.swift */,
 			);
-			name = Consent;
 			path = Consent;
 			sourceTree = "<group>";
 		};
@@ -2100,7 +2067,6 @@
 			children = (
 				B10AA91D73961EAEA6087CAC7FD3E35A /* RequestIdController.swift */,
 			);
-			name = RequestId;
 			path = RequestId;
 			sourceTree = "<group>";
 		};
@@ -2110,7 +2076,6 @@
 				0920BE95D8FC574C46E935E8BD8E4F14 /* Core */,
 				0E98CF0ADCE69316C547DB3B56347DC5 /* Support Files */,
 			);
-			name = SDWebImage;
 			path = SDWebImage;
 			sourceTree = "<group>";
 		};
@@ -2144,7 +2109,6 @@
 				60AFA850AA2528046F90FCD9B160D5D0 /* Resources */,
 				E6B3E57774123ABE76B1C80BB83286F9 /* Support Files */,
 			);
-			name = IQKeyboardManagerSwift;
 			path = IQKeyboardManagerSwift;
 			sourceTree = "<group>";
 		};
@@ -2154,7 +2118,6 @@
 				0FDAD3FB90D196A3948716155A8CD7F2 /* DeviceHelper.swift */,
 				4DA8542A136BFC01EE8B7E67C5BEBB8E /* Hardware.swift */,
 			);
-			name = Devices;
 			path = Devices;
 			sourceTree = "<group>";
 		};
@@ -2163,7 +2126,6 @@
 			children = (
 				9534E1E78A19FD7949E8D9B692802486 /* AccountVerificationService.swift */,
 			);
-			name = AccountVerification;
 			path = AccountVerification;
 			sourceTree = "<group>";
 		};
@@ -2172,7 +2134,6 @@
 			children = (
 				98D7DB0D8CAFBB00E98980605B1F59A6 /* AccessTokenService.swift */,
 			);
-			name = AccessToken;
 			path = AccessToken;
 			sourceTree = "<group>";
 		};
@@ -2181,7 +2142,6 @@
 			children = (
 				347645FE57D9DBE9B21577993480F170 /* LinkUnlinkController.swift */,
 			);
-			name = LinkUnlink;
 			path = LinkUnlink;
 			sourceTree = "<group>";
 		};
@@ -2194,7 +2154,6 @@
 				3722393F2CC84826EF75DA3EEDA47666 /* VerifyAccountEntity.swift */,
 				F7EE12DEFE430A3068EE20B579D812B6 /* VerifyAccountResponseEntity.swift */,
 			);
-			name = AccountVerification;
 			path = AccountVerification;
 			sourceTree = "<group>";
 		};
@@ -2203,7 +2162,6 @@
 			children = (
 				2263AFFDB68A6778266C57209C86A311 /* SMSVerificationController.swift */,
 			);
-			name = SMS;
 			path = SMS;
 			sourceTree = "<group>";
 		};
@@ -2212,7 +2170,6 @@
 			children = (
 				4EA758B39E1BDD6C4E59CEDDAD056A2A /* UserActivityController.swift */,
 			);
-			name = UserActivities;
 			path = UserActivities;
 			sourceTree = "<group>";
 		};
@@ -2221,7 +2178,6 @@
 			children = (
 				5225A77655CF8BB7996B453CF8697F9E /* RequestIdResponseEntity.swift */,
 			);
-			name = RequestId;
 			path = RequestId;
 			sourceTree = "<group>";
 		};
@@ -2230,7 +2186,6 @@
 			children = (
 				CA3DDA65517DB222846B05739CB15DC8 /* EmailVerificationService.swift */,
 			);
-			name = Email;
 			path = Email;
 			sourceTree = "<group>";
 		};
@@ -2244,7 +2199,6 @@
 				B33301E6774BB2E217D8EBF190630592 /* SetupSMSResponseEntity.swift */,
 				068CCB1B7A1E15E5A58B73C2206C08A6 /* VerifySMSResponseEntity.swift */,
 			);
-			name = SMS;
 			path = SMS;
 			sourceTree = "<group>";
 		};
@@ -2270,7 +2224,6 @@
 				0D963CF42487223A430793D3ADF1FCFD /* SetupFaceEntity.swift */,
 				A2E9EF63A7B4CCE7EA538C44981D2226 /* SetupFaceResponseEntity.swift */,
 			);
-			name = Face;
 			path = Face;
 			sourceTree = "<group>";
 		};
@@ -2298,7 +2251,6 @@
 			children = (
 				2F7D751A450A86669294055E8D075E22 /* ResetPasswordService.swift */,
 			);
-			name = Resetpassword;
 			path = Resetpassword;
 			sourceTree = "<group>";
 		};
@@ -2312,7 +2264,6 @@
 				C09B6EC779232679F093B025F5E316EF /* SetupIVRResponseEntity.swift */,
 				9038A4394175AEE459B4740D08FBD104 /* VerifyIVRResponseEntity.swift */,
 			);
-			name = IVR;
 			path = IVR;
 			sourceTree = "<group>";
 		};
@@ -2356,7 +2307,6 @@
 				1E20DF70BE8B3AEC37135E1DA7CBAB4C /* Validation.swift */,
 				43C6A43ABF70E93261787FC665EDB621 /* Support Files */,
 			);
-			name = Alamofire;
 			path = Alamofire;
 			sourceTree = "<group>";
 		};
@@ -2379,7 +2329,6 @@
 			children = (
 				7418875702E4D0B02B8975B726241162 /* TouchIdVerificationController.swift */,
 			);
-			name = Touch;
 			path = Touch;
 			sourceTree = "<group>";
 		};
@@ -2390,7 +2339,6 @@
 				D0B48ABA2B0D98592CCB2F45FDED5FF5 /* FileHelper.swift */,
 				FCBB7CF93689AC2836A3AAF8C6CE553C /* URLHelper.swift */,
 			);
-			name = General;
 			path = General;
 			sourceTree = "<group>";
 		};
@@ -2414,7 +2362,6 @@
 				4B271550A13D56B4B5167EB1A6868030 /* ValidateDeviceEntity.swift */,
 				6480A0C700F9031587437CE9070E848D /* ValidateDeviceResponseEntity.swift */,
 			);
-			name = Device;
 			path = Device;
 			sourceTree = "<group>";
 		};
@@ -2463,7 +2410,6 @@
 			children = (
 				A7BDE18A7B3BAC1225716FE44962ECBF /* TenantService.swift */,
 			);
-			name = Tenant;
 			path = Tenant;
 			sourceTree = "<group>";
 		};
@@ -2473,7 +2419,6 @@
 				BC9C6692ADFD806B3D1F359C63C2AD1B /* MFAContinueEntity.swift */,
 				4E6DE5AE8AEE3775E7EDFC1D562E1722 /* MFAListResponseEntity.swift */,
 			);
-			name = Settings;
 			path = Settings;
 			sourceTree = "<group>";
 		};
@@ -2492,7 +2437,6 @@
 				75618CD0938D457944DE32130265ABFB /* Touch */,
 				E231EA74C6AE881E240639B29C895711 /* Voice */,
 			);
-			name = Verification;
 			path = Verification;
 			sourceTree = "<group>";
 		};
@@ -2503,7 +2447,6 @@
 				C874607E6AC4FA5FB2005F7D83C61BC5 /* MF_Base32Additions.m */,
 				A090783FB8AEC81C5317CAE0F5914F53 /* Support Files */,
 			);
-			name = Base32;
 			path = Base32;
 			sourceTree = "<group>";
 		};
@@ -2522,7 +2465,6 @@
 				AF38C634EBAB521ED1DAB720C9D81B0E /* UploadImageResponseEntity.swift */,
 				13EBCACD75A6B8126D6EE19C77BBABCF /* UserInfoEntity.swift */,
 			);
-			name = Users;
 			path = Users;
 			sourceTree = "<group>";
 		};
@@ -2531,7 +2473,6 @@
 			children = (
 				80252A1B64DDAAFF4AA1952724AE9C7A /* FaceVerificationService.swift */,
 			);
-			name = Face;
 			path = Face;
 			sourceTree = "<group>";
 		};
@@ -2554,7 +2495,6 @@
 			children = (
 				55BA62311ED6C809DEE2D90F45D64B67 /* ChangePasswordService.swift */,
 			);
-			name = Changepassword;
 			path = Changepassword;
 			sourceTree = "<group>";
 		};
@@ -2580,7 +2520,6 @@
 				4AF1E2C9B96332DB5734D228CE2C0686 /* SetupPatternEntity.swift */,
 				D4AAD97D13037498DD8BE94CA6D9726F /* SetupPatternResponseEntity.swift */,
 			);
-			name = Pattern;
 			path = Pattern;
 			sourceTree = "<group>";
 		};
@@ -2589,7 +2528,6 @@
 			children = (
 				B8A43F847380B61B2DA00DF396CC25C0 /* ConsentService.swift */,
 			);
-			name = Consent;
 			path = Consent;
 			sourceTree = "<group>";
 		};
@@ -2611,7 +2549,6 @@
 			children = (
 				130E2C261061B7B185F4F19E54AE8BC5 /* BackupcodeVerificationController.swift */,
 			);
-			name = Backupcode;
 			path = Backupcode;
 			sourceTree = "<group>";
 		};
@@ -2620,7 +2557,6 @@
 			children = (
 				300F447888C746758F4C78A6AFD1458D /* TenantInfoResponseEntity.swift */,
 			);
-			name = Tenant;
 			path = Tenant;
 			sourceTree = "<group>";
 		};
@@ -2629,7 +2565,6 @@
 			children = (
 				845BCD8F42A20667D0771BBB120D2098 /* PushVerificationService.swift */,
 			);
-			name = Push;
 			path = Push;
 			sourceTree = "<group>";
 		};
@@ -2638,7 +2573,6 @@
 			children = (
 				5F5B68ED15182440A4602A57863FBA76 /* TouchIdVerificationService.swift */,
 			);
-			name = Touch;
 			path = Touch;
 			sourceTree = "<group>";
 		};
@@ -2648,7 +2582,6 @@
 				9134D83F541165881C194B90ED3BE210 /* StringExtensions.swift */,
 				3ED066758270E77C173E8A58F597B081 /* WebAuthError.swift */,
 			);
-			name = Extensions;
 			path = Extensions;
 			sourceTree = "<group>";
 		};
@@ -2657,7 +2590,6 @@
 			children = (
 				1BDB7942432A92194F60E2D20C4DE4F9 /* BackupcodeVerificationService.swift */,
 			);
-			name = Backupcode;
 			path = Backupcode;
 			sourceTree = "<group>";
 		};
@@ -2680,7 +2612,6 @@
 			children = (
 				885E7C57D24A31E18FFA7D7CF90E75F5 /* ChangepasswordController.swift */,
 			);
-			name = Changepassword;
 			path = Changepassword;
 			sourceTree = "<group>";
 		};
@@ -2694,7 +2625,6 @@
 				D1B01573DF399DBB60C0A43AB990A3C2 /* ConsentEntity.swift */,
 				381D01D349C883517AAA5BD8B7A0607C /* ConsentResponseEntity.swift */,
 			);
-			name = Consent;
 			path = Consent;
 			sourceTree = "<group>";
 		};
@@ -2703,7 +2633,6 @@
 			children = (
 				49E4D4154FE28FA88ABCAC7DA456E8BC /* LinkUnlinkService.swift */,
 			);
-			name = LinkUnlink;
 			path = LinkUnlink;
 			sourceTree = "<group>";
 		};
@@ -2712,7 +2641,6 @@
 			children = (
 				56571323F260AC6948B7B06D782D771B /* TransactionStore.swift */,
 			);
-			name = Session;
 			path = Session;
 			sourceTree = "<group>";
 		};
@@ -2721,7 +2649,6 @@
 			children = (
 				37083C3F02A3213F9B254AFFBBC7259F /* ClientInfoResponseEntity.swift */,
 			);
-			name = Client;
 			path = Client;
 			sourceTree = "<group>";
 		};
@@ -2731,7 +2658,6 @@
 				27944994B69F763076B1FE7352558059 /* ChangePasswordEntity.swift */,
 				CEF2A72418A1D50B4760E90385051AB4 /* ChangePasswordResponseEntity.swift */,
 			);
-			name = Changepassword;
 			path = Changepassword;
 			sourceTree = "<group>";
 		};
@@ -2809,7 +2735,6 @@
 				B52F10E32D2733F50C5B6D632134E033 /* XCTestObservationCenter+Register.m */,
 				0D9AA488D47968A4E9BD1C3239A20E74 /* Support Files */,
 			);
-			name = Nimble;
 			path = Nimble;
 			sourceTree = "<group>";
 		};
@@ -2827,7 +2752,6 @@
 				F5B2C93958B922D4A7BE55D555AF2C10 /* SetupPushEntity.swift */,
 				1BFB61823689726287A9B9DE9359FB3B /* SetupPushResponseEntity.swift */,
 			);
-			name = Push;
 			path = Push;
 			sourceTree = "<group>";
 		};
@@ -2836,7 +2760,6 @@
 			children = (
 				1771A42600C0E6AE9DBA5937AA882570 /* DeduplicationController.swift */,
 			);
-			name = Deduplication;
 			path = Deduplication;
 			sourceTree = "<group>";
 		};
@@ -2845,7 +2768,6 @@
 			children = (
 				8D55065E232F2128782716E79A754A83 /* ClientService.swift */,
 			);
-			name = Client;
 			path = Client;
 			sourceTree = "<group>";
 		};
@@ -2854,7 +2776,6 @@
 			children = (
 				71D83B1E4BBD301C3FB80AD5377D12A0 /* VoiceVerificationService.swift */,
 			);
-			name = Voice;
 			path = Voice;
 			sourceTree = "<group>";
 		};
@@ -2934,7 +2855,6 @@
 				8DEC6D5B41D69A24A86FDB9FBC58EEDD /* ZeroPadding.swift */,
 				273AAD1DC1E50F80C35345BE5EFC5EE3 /* Support Files */,
 			);
-			name = CryptoSwift;
 			path = CryptoSwift;
 			sourceTree = "<group>";
 		};
@@ -2943,7 +2863,6 @@
 			children = (
 				A5DBA519E959108E563ADBE51FC48F96 /* AccessTokenController.swift */,
 			);
-			name = AccessToken;
 			path = AccessToken;
 			sourceTree = "<group>";
 		};
@@ -2961,7 +2880,6 @@
 			children = (
 				EE6339F783D8736FE92788B4BDFAA82D /* UsersService.swift */,
 			);
-			name = Users;
 			path = Users;
 			sourceTree = "<group>";
 		};
@@ -2971,7 +2889,6 @@
 				771BABB2D48BC3CD68915DF424F0CEC7 /* OauthExceptionDelegate.swift */,
 				CB0EEEAB773432901D8E3B9956DE3826 /* OAuthTransactionDelegate.swift */,
 			);
-			name = Delegates;
 			path = Delegates;
 			sourceTree = "<group>";
 		};
@@ -2981,7 +2898,6 @@
 				30DD1654240EEAD80CD0D4C6448FC660 /* UserActivityEntity.swift */,
 				47F8CCC4E1AAEFC9419328FBA820E1D8 /* UserActivityResponseEntity.swift */,
 			);
-			name = UserActivities;
 			path = UserActivities;
 			sourceTree = "<group>";
 		};
@@ -2992,7 +2908,6 @@
 				3AFDF2A61C6B05273C6DF504D87190AB /* SCLExtensions.swift */,
 				778DE9A62448F1D75717BDE5678E959B /* Support Files */,
 			);
-			name = SCLAlertView;
 			path = SCLAlertView;
 			sourceTree = "<group>";
 		};
@@ -3015,7 +2930,6 @@
 			children = (
 				72986BB1DAC5835E649BE158E9B94B98 /* StringsHelper.swift */,
 			);
-			name = Locale;
 			path = Locale;
 			sourceTree = "<group>";
 		};
@@ -3038,7 +2952,6 @@
 			children = (
 				598F758E11999E1FC9B853BBEF980E93 /* IVRVerificationService.swift */,
 			);
-			name = IVR;
 			path = IVR;
 			sourceTree = "<group>";
 		};
@@ -3047,7 +2960,6 @@
 			children = (
 				8294AA1A05DB4941D4614A9580010597 /* VerificationSettingsService.swift */,
 			);
-			name = Settings;
 			path = Settings;
 			sourceTree = "<group>";
 		};
@@ -3066,7 +2978,6 @@
 				33541C4067392A0FAE70EF40A2D724BD /* SetupTOTPResponseEntity.swift */,
 				4C614B53C0EBF9C205087FBD4F8F20ED /* TOTP.swift */,
 			);
-			name = TOTP;
 			path = TOTP;
 			sourceTree = "<group>";
 		};
@@ -3075,7 +2986,6 @@
 			children = (
 				B9CED0E960A717C66C26E2E8AE29DB1A /* PushVerificationController.swift */,
 			);
-			name = Push;
 			path = Push;
 			sourceTree = "<group>";
 		};
@@ -3084,7 +2994,6 @@
 			children = (
 				790BB092678E79D79EFCFCF21D8C21B7 /* IVRVerificationController.swift */,
 			);
-			name = IVR;
 			path = IVR;
 			sourceTree = "<group>";
 		};
@@ -3098,7 +3007,6 @@
 				1E0971A52F7D54846DF8587F7E01EB14 /* LoginResponseEntity.swift */,
 				7F7D697EFE1AFC7519ACB4A358E8090A /* PasswordlessEntity.swift */,
 			);
-			name = Login;
 			path = Login;
 			sourceTree = "<group>";
 		};
@@ -3107,7 +3015,6 @@
 			children = (
 				401BE174C7C54EE0E6D0C6E391AE9447 /* UsersController.swift */,
 			);
-			name = Users;
 			path = Users;
 			sourceTree = "<group>";
 		};
@@ -3116,7 +3023,6 @@
 			children = (
 				57D9E619AA4474E6A2DE341069BC3A39 /* ClientController.swift */,
 			);
-			name = Client;
 			path = Client;
 			sourceTree = "<group>";
 		};
@@ -3125,7 +3031,6 @@
 			children = (
 				5D87D1D3E0D27DAA31D3CD0C67D2B3E3 /* UserActivityService.swift */,
 			);
-			name = UserActivities;
 			path = UserActivities;
 			sourceTree = "<group>";
 		};
@@ -3134,7 +3039,6 @@
 			children = (
 				8EDB4C14736E0C1A5F0206344294EFF3 /* VoiceVerificationController.swift */,
 			);
-			name = Voice;
 			path = Voice;
 			sourceTree = "<group>";
 		};
@@ -3166,7 +3070,6 @@
 				2A45808643A65A324ACAC26456496832 /* SetupVoiceEntity.swift */,
 				01B1A38EF4C049B846D75F40C9539DB0 /* SetupVoiceResponseEntity.swift */,
 			);
-			name = Voice;
 			path = Voice;
 			sourceTree = "<group>";
 		};
@@ -3189,7 +3092,6 @@
 				E07D8BF79CC50325893F53AB1C7834DF /* Users */,
 				83B9E46BA96040C814D0E90881265BF1 /* Verification */,
 			);
-			name = Repository;
 			path = Repository;
 			sourceTree = "<group>";
 		};
@@ -3230,7 +3132,6 @@
 				8CC8B4245B08EAA0B197EE19B37E4140 /* XCTestSuite+QuickTestSuiteBuilder.m */,
 				CEB948D1A062AE082B7CD0F755D75CAB /* Support Files */,
 			);
-			name = Quick;
 			path = Quick;
 			sourceTree = "<group>";
 		};
@@ -3243,7 +3144,6 @@
 				0FCCBEEA8998FF5B1C843DD84C337786 /* InitiateBackupcodeResponseEntity.swift */,
 				1D598D1A9938D44E4F199E4E61A2FF66 /* SetupBackupcodeResponseEntity.swift */,
 			);
-			name = Backupcode;
 			path = Backupcode;
 			sourceTree = "<group>";
 		};
@@ -3252,7 +3152,6 @@
 			children = (
 				664BA256AD7716E7EB36591E510D32EE /* RegistrationService.swift */,
 			);
-			name = Registration;
 			path = Registration;
 			sourceTree = "<group>";
 		};
@@ -3272,7 +3171,6 @@
 				955B597E6AD2DD8845BEB5AA824A1CC5 /* Touch */,
 				BAB7DF4B89EF49563C154AA978B86334 /* Voice */,
 			);
-			name = Verification;
 			path = Verification;
 			sourceTree = "<group>";
 		};
@@ -3302,7 +3200,6 @@
 			children = (
 				B33C6CD3CF6091C72A15725E905CE5B9 /* VerificationSettingsController.swift */,
 			);
-			name = Settings;
 			path = Settings;
 			sourceTree = "<group>";
 		};
@@ -3312,7 +3209,6 @@
 				4BFBE3C6A8974889D5A47703D8AA145E /* Core */,
 				74D30DB88862CB2981551E4D0D44C91B /* Support Files */,
 			);
-			name = "Nimble-Snapshots";
 			path = "Nimble-Snapshots";
 			sourceTree = "<group>";
 		};
@@ -3329,7 +3225,6 @@
 				92657A056EDB17FD1505D6D1E5551EA2 /* VerificationTypes.swift */,
 				014989163DBEFD4F67E5A493B8594C59 /* WebAuthErrorCode.swift */,
 			);
-			name = Enums;
 			path = Enums;
 			sourceTree = "<group>";
 		};
@@ -5103,6 +4998,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Target Support Files/Base32/Base32-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/Base32/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -5301,6 +5197,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Target Support Files/Base32/Base32-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/Base32/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
