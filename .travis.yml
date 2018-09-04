@@ -11,5 +11,5 @@ language: objective-c
 # - pod install --project-directory=Example
 script:
 #- set -o pipefail && xcodebuild test -enableCodeCoverage YES -workspace Example/Cidaas.xcworkspace -scheme Cidaas-Example -sdk iphonesimulator9.3 ONLY_ACTIVE_ARCH=NO | xcpretty
-  - xcodebuild -scheme Cidaas -workspace Cidaas-Example.xcworkspace -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 6S,OS=9.1' build test
+  - xcodebuild -scheme Cidaas -workspace Cidaas.xcworkspace -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 6S,OS=9.1' build test
 #- pod lib lint
