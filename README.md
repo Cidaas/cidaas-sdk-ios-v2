@@ -1,5 +1,6 @@
 # cidaas-sdk-ios-v2
 [![Build Status](https://api.travis-ci.org/Cidaas/cidaas-sdk-ios-v2.svg?branch=development)](https://api.travis-ci.org/Cidaas/cidaas-sdk-ios-v2) 
+[![codecov.io](https://codecov.io/gh/Cidaas/cidaas-sdk-ios-v2/branch/development/graphs/badge.svg)](https://codecov.io/gh/Cidaas/cidaas-sdk-ios-v2/branch/development)
 
 The steps here will guide you through setting up and managing authentication and authorization in your apps using cidaas SDK.    
 
