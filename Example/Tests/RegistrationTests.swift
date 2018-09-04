@@ -29,6 +29,22 @@ class RegistrationTests: QuickSpec {
                     }
                 }
                 
+                it("call get Registration details failure from public") {
+                    
+                    DBHelper.shared.userDefaults.removeObject(forKey: "OAuthProperty")
+                    
+                    cidaas.getRegistrationFields(requestId: "34234234287628435") {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                        case .success(let response):
+                            print(response.data[0].fieldKey)
+                        }
+                    }
+                    
+                    cidaas.readPropertyFile()
+                }
+                
                 it("call register user from public") {
                     
                     let registrationEntity = RegistrationEntity()
@@ -49,6 +65,32 @@ class RegistrationTests: QuickSpec {
                             print(response.data.sub)
                         }
                     }
+                }
+                
+                it("call register user failure from public") {
+                    
+                    DBHelper.shared.userDefaults.removeObject(forKey: "OAuthProperty")
+                    
+                    let registrationEntity = RegistrationEntity()
+                    registrationEntity.email = "abc@gmail.com"
+                    registrationEntity.birthdate = "06/09/1993"
+                    registrationEntity.family_name = "test"
+                    registrationEntity.given_name = "demo"
+                    registrationEntity.mobile_number = "+919876543210"
+                    registrationEntity.password = "123456"
+                    registrationEntity.password_echo = "123456"
+                    registrationEntity.provider = "SELF"
+                    
+                    cidaas.registerUser(requestId: "87236472534242342342", registrationEntity: registrationEntity) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                        case .success(let response):
+                            print(response.data.sub)
+                        }
+                    }
+                    
+                    cidaas.readPropertyFile()
                 }
             }
         }

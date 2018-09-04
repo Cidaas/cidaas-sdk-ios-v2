@@ -30,6 +30,22 @@ class AccountVerificationTests: QuickSpec {
                     }
                 }
                 
+                it("call initiate email verification failure from public") {
+                    
+                    DBHelper.shared.userDefaults.removeObject(forKey: "OAuthProperty")
+                    
+                    cidaas.initiateEmailVerification(requestId: "83242846274283", sub: "76752635") {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                        case .success(let response):
+                            print(response.data.accvid)
+                        }
+                    }
+                    
+                    cidaas.readPropertyFile()
+                }
+                
                 it("call initiate sms verification from public") {
                     
                     cidaas.initiateSMSVerification(requestId: "83242846274283", sub: "76752635") {
@@ -40,6 +56,22 @@ class AccountVerificationTests: QuickSpec {
                             print(response.data.accvid)
                         }
                     }
+                }
+                
+                it("call initiate sms verification failure from public") {
+                    
+                    DBHelper.shared.userDefaults.removeObject(forKey: "OAuthProperty")
+                    
+                    cidaas.initiateSMSVerification(requestId: "83242846274283", sub: "76752635") {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                        case .success(let response):
+                            print(response.data.accvid)
+                        }
+                    }
+                    
+                    cidaas.readPropertyFile()
                 }
                 
                 it("call initiate ivr verification from public") {
@@ -54,6 +86,22 @@ class AccountVerificationTests: QuickSpec {
                     }
                 }
                 
+                it("call initiate ivr verification failure from public") {
+                    
+                    DBHelper.shared.userDefaults.removeObject(forKey: "OAuthProperty")
+                    
+                    cidaas.initiateIVRVerification(requestId: "83242846274283", sub: "76752635") {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                        case .success(let response):
+                            print(response.data.accvid)
+                        }
+                    }
+                    
+                    cidaas.readPropertyFile()
+                }
+                
                 it("call verify account from public") {
                     
                     cidaas.verifyAccount(accvid: "38746238747234", code: "123456") {
@@ -64,6 +112,22 @@ class AccountVerificationTests: QuickSpec {
                             print(response.success)
                         }
                     }
+                }
+                
+                it("call verify account failure from public") {
+                    
+                    DBHelper.shared.userDefaults.removeObject(forKey: "OAuthProperty")
+                    
+                    cidaas.verifyAccount(accvid: "38746238747234", code: "123456") {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                        case .success(let response):
+                            print(response.success)
+                        }
+                    }
+                    
+                    cidaas.readPropertyFile()
                 }
             }
         }
