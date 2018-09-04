@@ -19,7 +19,7 @@ public class UserActivityController {
     }
     
     // get user activities
-    public func getUserActivity(sub: String, userActivity: UserActivityEntity, properties: Dictionary<String, String>, callback: @escaping(Result<UserActivityResponseEntity>) -> Void) {
+    public func getUserActivity(userActivity: UserActivityEntity, properties: Dictionary<String, String>, callback: @escaping(Result<UserActivityResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -34,7 +34,7 @@ public class UserActivityController {
         }
         
         // get access token from sub
-        AccessTokenController.shared.getAccessToken(sub: sub) {
+        AccessTokenController.shared.getAccessToken(sub: userActivity.sub) {
             switch $0 {
             case .failure(let error):
                 // log error

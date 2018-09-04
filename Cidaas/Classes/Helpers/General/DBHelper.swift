@@ -13,8 +13,8 @@ public class DBHelper : NSObject {
     // shared instance
     public static var shared : DBHelper = DBHelper()
     
-    // static variables
-    private var userDefaults = UserDefaults.standard
+    // local variables
+    public var userDefaults = UserDefaults.standard
     
     // set enable log
     public func setEnableLog(enableLog : Bool, key : String = "OAuthEnableLog") {

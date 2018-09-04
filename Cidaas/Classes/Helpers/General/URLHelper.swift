@@ -135,7 +135,7 @@ public class URLHelper {
     }
     
     public func getMFAListURL(sub: String, userDeviceId: String) -> String {
-        return "\(mfaListURL)?sub=\(sub)&userDeviceId=\(userDeviceId)"
+        return "\(mfaListURL)?sub=\(sub)&userDeviceId=\(userDeviceId)&common_configs=true"
     }
     
     public func getSetupEmailURL() -> String {

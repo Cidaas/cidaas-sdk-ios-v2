@@ -171,6 +171,21 @@ class ViewController: UIViewController {
                     let vc = self.storyboard?.instantiateViewController(withIdentifier: "UnverifiedUserViewController") as! UnverifiedUserViewController
                     self.navigationController?.pushViewController(vc, animated: true)
                 }
+                else if (error.errorMessage == "email_not_verified") {
+                    let vc = self.storyboard?.instantiateViewController(withIdentifier: "AccountVerificationViewController") as! AccountVerificationViewController
+                    let emailError = error.error as! LoginErrorResponseDataEntity
+                    vc.sub = emailError.sub
+                    vc.requestId = self.requestId
+                    vc.logo_uri = self.logourl.image!
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
+                else if (error.errorMessage == "mfa_required") {
+                    let vc = self.storyboard?.instantiateViewController(withIdentifier: "MFAListViewController") as! MFAListViewController
+                    let emailError = error.error as! LoginErrorResponseDataEntity
+                    vc.sub = emailError.sub
+                    vc.requestId = self.requestId
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
                 else {
                     self.showAlert(message: error.errorMessage, style: .info)
                 }

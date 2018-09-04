@@ -46,8 +46,15 @@ public class VerificationSettingsService {
             return
         }
         
+        var user_device_id = userDeviceId
+        
+        // check userDeviceId
+        if (user_device_id == "") {
+            user_device_id = deviceInfoEntity.deviceId
+        }
+        
         // construct url
-        urlString = baseURL + URLHelper.shared.getMFAListURL(sub: sub, userDeviceId: userDeviceId)
+        urlString = baseURL + URLHelper.shared.getMFAListURL(sub: sub, userDeviceId: user_device_id)
         
         
         // call service

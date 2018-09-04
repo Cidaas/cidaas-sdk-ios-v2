@@ -1,19 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<!--
- Cidaas.plist
- SDKCheck
- 
- Created by ganesh on 16/08/18.
- Copyright (c) 2018 Cidaas. All rights reserved.
- -->
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-    <dict>
-        <key>DomainURL</key>
-        <string>https://nightlybuild.cidaas.de</string>
-        <key>ClientId</key>
-        <string>4d5e6e20-9347-4255-9790-5b7196843103</string>
-        <key>RedirectURL</key>
-        <string>https://nightlybuild.cidaas.de/user-profile/editprofile</string>
-    </dict>
+<dict>
+	<key>DomainURL</key>
+	<string>https://thisisganeshkumargk-free.cidaas.de</string>
+	<key>ClientId</key>
+	<string>64e10aec-6016-426e-b43e-f7a1c95d05f4</string>
+	<key>RedirectURL</key>
+	<string>https://thisisganeshkumargk-free.cidaas.de/user-profile/editprofile</string>
+</dict>
 </plist>

@@ -4,11 +4,10 @@ target 'Cidaas_Example' do
   pod 'Cidaas', :path => '../'
   pod 'SDWebImage', '~> 4.4'
   pod 'SCLAlertView'
-
+  pod 'IQKeyboardManagerSwift', '~> 5.0.3'
 
   target 'Cidaas_Tests' do
     inherit! :search_paths
-
     pod 'Quick', '~> 1.2.0'
     pod 'Nimble', '~> 7.0.2'
     pod 'FBSnapshotTestCase' , '~> 2.1.4'

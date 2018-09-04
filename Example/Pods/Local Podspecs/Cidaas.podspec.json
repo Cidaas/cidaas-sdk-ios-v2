@@ -1,9 +1,8 @@
 {
   "name": "Cidaas",
   "version": "0.0.1.3",
-  "summary": "A short description of Cidaas.",
-  "description": "TODO: Add long description of the pod here.",
-  "homepage": "https://github.com/Cidaas/Cidaas",
+  "summary": "Native SDK for iOS providing login, registration and verification functionalities",
+  "homepage": "https://github.com/Cidaas/cidaas-sdk-ios-v2",
   "license": {
     "type": "MIT",
     "file": "LICENSE"
@@ -12,7 +11,7 @@
     "Cidaas": "ganesh.kumar@widas.in"
   },
   "source": {
-    "git": "https://github.com/Cidaas/Cidaas.git",
+    "git": "https://github.com/Cidaas/cidaas-sdk-ios-v2.git",
     "tag": "0.0.1.3"
   },
   "platforms": {
