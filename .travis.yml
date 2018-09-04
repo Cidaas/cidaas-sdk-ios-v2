@@ -2,7 +2,7 @@
 # * https://www.objc.io/issues/6-build-tools/travis-ci/
 # * https://github.com/supermarin/xcpretty#usage
 
-osx_image: xcode7.3
+osx_image: xcode8
 language: objective-c
 # cache: cocoapods
 # podfile: Example/Podfile
@@ -10,6 +10,7 @@ language: objective-c
 # - gem install cocoapods # Since Travis is not always on latest version
 # - pod install --project-directory=Example
 script:
-#- set -o pipefail && xcodebuild test -enableCodeCoverage YES -workspace Example/Cidaas.xcworkspace -scheme Cidaas-Example -sdk iphonesimulator9.3 ONLY_ACTIVE_ARCH=NO | xcpretty
-  - xcodebuild -scheme Cidaas -workspace Example/Cidaas.xcworkspace -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 6S,OS=9.1' build test
-#- pod lib lint
+  - cd Examples
+  - xcodebuild -version
+  - xcodebuild -workspace Cidaas.xcworkspace -scheme Cidaas -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 6" -configuration Release ONLY_ACTIVE_ARCH=YES -enableCodeCoverage YES test
+  - bash <(curl -s https://codecov.io/bash) -cF ios
