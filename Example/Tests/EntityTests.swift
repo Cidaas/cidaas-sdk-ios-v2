@@ -1172,6 +1172,522 @@ class EntityTests: QuickSpec {
                     XCTAssertEqual(entity.success, true)
                 }
                 
+                it("call validate device response entity") {
+                    var entity = ValidateDeviceResponseEntity()
+                    
+                    let jsonString = "{\"success\":true,\"status\":200,\"data\":{\"usage_pass\":\"adfasdfasd\"}}"
+                    let decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        entity = try decoder.decode(ValidateDeviceResponseEntity.self, from: data)
+                        print(entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    XCTAssertEqual(entity.success, true)
+                }
+                
+                it("call verify email response entity") {
+                    var entity = VerifyEmailResponseEntity()
+                    
+                    let jsonString = "{\"success\":true,\"status\":200,\"data\":{\"sub\":\"adfasdfasd\"}}"
+                    let decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        entity = try decoder.decode(VerifyEmailResponseEntity.self, from: data)
+                        print(entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    XCTAssertEqual(entity.success, true)
+                }
+                
+                it("call verify sms response entity") {
+                    var entity = VerifySMSResponseEntity()
+                    
+                    let jsonString = "{\"success\":true,\"status\":200,\"data\":{\"sub\":\"adfasdfasd\"}}"
+                    let decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        entity = try decoder.decode(VerifySMSResponseEntity.self, from: data)
+                        print(entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    XCTAssertEqual(entity.success, true)
+                }
+                
+                it("call verify ivr response entity") {
+                    var entity = VerifyIVRResponseEntity()
+                    
+                    let jsonString = "{\"success\":true,\"status\":200,\"data\":{\"sub\":\"adfasdfasd\"}}"
+                    let decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        entity = try decoder.decode(VerifyIVRResponseEntity.self, from: data)
+                        print(entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    XCTAssertEqual(entity.success, true)
+                }
+                
+                it("call access token entity to access token model") {
+                    
+                    let converter = EntityToModelConverter.shared
+                    
+                    let accessTokenEntity = AccessTokenEntity()
+                    accessTokenEntity.access_token = "jahsgduasd"
+                    accessTokenEntity.expires_in = 86400
+                    accessTokenEntity.id_token = "kjsfdhjsdf"
+                    accessTokenEntity.id_token_expires_in = 86400
+                    accessTokenEntity.refresh_token = "nbhgafsdh"
+                    accessTokenEntity.sub = "kjgdsuywgeyrwertqwreytqwyeq"
+                    accessTokenEntity.token_type = "BEARER"
+                    
+                    converter.accessTokenEntityToAccessTokenModel(accessTokenEntity: accessTokenEntity, callback: { (model) in
+                        
+                    })
+                }
+                
+                it("call access token model to access token entity") {
+                    
+                    let converter = EntityToModelConverter.shared
+                    
+                    converter.accessTokenModelToAccessTokenEntity(callback: { (token) in
+                        
+                    })
+                }
+                
+                it("call user info model") {
+                    
+                    let userInfo = UserInfoModel()
+                    
+                    userInfo.active = true
+                    userInfo.displayName = "hjagsd"
+                    userInfo.email = "abc@gmail.com"
+                    userInfo.emailVerified = true
+                    userInfo.firstName = "Demo"
+                    userInfo.lastName = "Test"
+                }
+                
+                it("call consent continue entity") {
+                    
+                    let consent = ConsentContinueEntity()
+                    
+                    consent.client_id = "asdhgasduad"
+                    consent.name = "adskjhasd"
+                    consent.sub = "kjhasjhgd"
+                    consent.trackId = "kjhjhagsydtrasdtras6dras56drasd"
+                    consent.version = "asdasdas" 
+                }
+                
+                it("call requestId response entity") {
+                    var entity = RequestIdResponseEntity()
+                    
+                    let jsonString = "{\"success\":true,\"status\":200,\"data\":{\"requestId\":\"adfasdfasd\"}}"
+                    let decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        entity = try decoder.decode(RequestIdResponseEntity.self, from: data)
+                        print(entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    XCTAssertEqual(entity.success, true)
+                }
+                
+                it("call authenticate backupcode entity") {
+                    
+                    let entity = AuthenticateBackupcodeEntity()
+                    
+                    entity.code = "kjhsdgfjhasd"
+                    entity.statusId = "askdjhajsd"
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call validate device entity") {
+                    
+                    let entity = ValidateDeviceEntity()
+                    
+                    entity.access_verifier = "kjashgdjasd"
+                    entity.deviceInfo = DeviceInfoModel()
+                    entity.intermediate_verifiation_id = "uytasydtafsdas"
+                    entity.statusId = "asdgfasdfasdasd"
+                }
+                
+                it("call authenticate email entity") {
+                    
+                    let entity = AuthenticateEmailEntity()
+                    
+                    entity.code = "kjhsdgfjhasd"
+                    entity.statusId = "askdjhajsd"
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call authenticate sms entity") {
+                    
+                    let entity = AuthenticateSMSEntity()
+                    
+                    entity.code = "kjhsdgfjhasd"
+                    entity.statusId = "askdjhajsd"
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call authenticate ivr entity") {
+                    
+                    let entity = AuthenticateIVREntity()
+                    
+                    entity.code = "kjhsdgfjhasd"
+                    entity.statusId = "askdjhajsd"
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call authenticate totp entity") {
+                    
+                    let entity = AuthenticateTOTPEntity()
+                    
+                    entity.verifierPassword = "kjhsdgfjhasd"
+                    entity.statusId = "askdjhajsd"
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call authenticate pattern entity") {
+                    
+                    let entity = AuthenticatePatternEntity()
+                    
+                    entity.verifierPassword = "kjhsdgfjhasd"
+                    entity.statusId = "askdjhajsd"
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call authenticate touch entity") {
+                    
+                    let entity = AuthenticateTouchEntity()
+                    
+                    entity.verifierPassword = "kjhsdgfjhasd"
+                    entity.statusId = "askdjhajsd"
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call authenticate push entity") {
+                    
+                    let entity = AuthenticatePushEntity()
+                    
+                    entity.verifierPassword = "kjhsdgfjhasd"
+                    entity.statusId = "askdjhajsd"
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call authenticate face entity") {
+                    
+                    let entity = AuthenticateFaceEntity()
+                    
+                    entity.verifierPassword = "kjhsdgfjhasd"
+                    entity.statusId = "askdjhajsd"
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call authenticate voice entity") {
+                    
+                    let entity = AuthenticateVoiceEntity()
+                    
+                    entity.verifierPassword = "kjhsdgfjhasd"
+                    entity.statusId = "askdjhajsd"
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call setup totp entity") {
+                    
+                    let entity = SetupTOTPEntity()
+                    
+                    entity.client_id = "kjhsdgfjhasd"
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call setup pattern entity") {
+                    
+                    let entity = SetupPatternEntity()
+                    
+                    entity.client_id = "kjhsdgfjhasd"
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call setup touch entity") {
+                    
+                    let entity = SetupTouchEntity()
+                    
+                    entity.client_id = "kjhsdgfjhasd"
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call setup push entity") {
+                    
+                    let entity = SetupPushEntity()
+                    
+                    entity.client_id = "kjhsdgfjhasd"
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call setup face entity") {
+                    
+                    let entity = SetupFaceEntity()
+                    
+                    entity.client_id = "kjhsdgfjhasd"
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call setup voice entity") {
+                    
+                    let entity = SetupVoiceEntity()
+                    
+                    entity.client_id = "kjhsdgfjhasd"
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call scanned totp entity") {
+                    
+                    let entity = ScannedTOTPEntity()
+                    
+                    entity.usage_pass = "kjhsdgfjhasd"
+                    entity.statusId = "jahsgdhjasdgasd"
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call scanned pattern entity") {
+                    
+                    let entity = ScannedPatternEntity()
+                    
+                    entity.usage_pass = "kjhsdgfjhasd"
+                    entity.statusId = "jahsgdhjasdgasd"
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call scanned touch entity") {
+                    
+                    let entity = ScannedTouchEntity()
+                    
+                    entity.usage_pass = "kjhsdgfjhasd"
+                    entity.statusId = "jahsgdhjasdgasd"
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call scanned push entity") {
+                    
+                    let entity = ScannedPushEntity()
+                    
+                    entity.usage_pass = "kjhsdgfjhasd"
+                    entity.statusId = "jahsgdhjasdgasd"
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call scanned face entity") {
+                    
+                    let entity = ScannedFaceEntity()
+                    
+                    entity.usage_pass = "kjhsdgfjhasd"
+                    entity.statusId = "jahsgdhjasdgasd"
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call scanned voice entity") {
+                    
+                    let entity = ScannedVoiceEntity()
+                    
+                    entity.usage_pass = "kjhsdgfjhasd"
+                    entity.statusId = "jahsgdhjasdgasd"
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call enroll email entity") {
+                    
+                    let entity = EnrollEmailEntity()
+                    
+                    entity.code = "kjhsdgfjhasd"
+                    entity.statusId = "jahsgdhjasdgasd"
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call enroll sms entity") {
+                    
+                    let entity = EnrollSMSEntity()
+                    
+                    entity.code = "kjhsdgfjhasd"
+                    entity.statusId = "jahsgdhjasdgasd"
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call enroll ivr entity") {
+                    
+                    let entity = EnrollIVREntity()
+                    
+                    entity.code = "kjhsdgfjhasd"
+                    entity.statusId = "jahsgdhjasdgasd"
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call enroll totp entity") {
+                    
+                    let entity = EnrollTOTPEntity()
+                    
+                    entity.verifierPassword = "kjhsdgfjhasd"
+                    entity.statusId = "jahsgdhjasdgasd"
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call enroll pattern entity") {
+                    
+                    let entity = EnrollPatternEntity()
+                    
+                    entity.verifierPassword = "kjhsdgfjhasd"
+                    entity.statusId = "jahsgdhjasdgasd"
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call enroll touch entity") {
+                    
+                    let entity = EnrollTouchEntity()
+                    
+                    entity.verifierPassword = "kjhsdgfjhasd"
+                    entity.statusId = "jahsgdhjasdgasd"
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call enroll push entity") {
+                    
+                    let entity = EnrollPushEntity()
+                    
+                    entity.verifierPassword = "kjhsdgfjhasd"
+                    entity.statusId = "jahsgdhjasdgasd"
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call enroll face entity") {
+                    
+                    let entity = EnrollFaceEntity()
+                    
+                    entity.verifierPassword = "kjhsdgfjhasd"
+                    entity.statusId = "jahsgdhjasdgasd"
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call enroll voice entity") {
+                    
+                    let entity = EnrollVoiceEntity()
+                    
+                    entity.verifierPassword = "kjhsdgfjhasd"
+                    entity.statusId = "jahsgdhjasdgasd"
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call initiate email entity") {
+                    
+                    let entity = InitiateEmailEntity()
+                    
+                    entity.sub = "kjhsdgfjhasd"
+                    entity.email = "abc@gmail.com"
+                    entity.mobile = "+919876543210"
+                    entity.usageType = UsageTypes.MFA.rawValue
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call initiate sms entity") {
+                    
+                    let entity = InitiateSMSEntity()
+                    
+                    entity.sub = "kjhsdgfjhasd"
+                    entity.email = "abc@gmail.com"
+                    entity.mobile = "+919876543210"
+                    entity.usageType = UsageTypes.MFA.rawValue
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call initiate ivr entity") {
+                    
+                    let entity = InitiateIVREntity()
+                    
+                    entity.sub = "kjhsdgfjhasd"
+                    entity.email = "abc@gmail.com"
+                    entity.mobile = "+919876543210"
+                    entity.usageType = UsageTypes.MFA.rawValue
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call initiate totp entity") {
+                    
+                    let entity = InitiateTOTPEntity()
+                    
+                    entity.sub = "kjhsdgfjhasd"
+                    entity.email = "abc@gmail.com"
+                    entity.mobile = "+919876543210"
+                    entity.usageType = UsageTypes.MFA.rawValue
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call initiate pattern entity") {
+                    
+                    let entity = InitiatePatternEntity()
+                    
+                    entity.sub = "kjhsdgfjhasd"
+                    entity.email = "abc@gmail.com"
+                    entity.mobile = "+919876543210"
+                    entity.usageType = UsageTypes.MFA.rawValue
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call initiate touch entity") {
+                    
+                    let entity = InitiateTouchEntity()
+                    
+                    entity.sub = "kjhsdgfjhasd"
+                    entity.email = "abc@gmail.com"
+                    entity.mobile = "+919876543210"
+                    entity.usageType = UsageTypes.MFA.rawValue
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call initiate push entity") {
+                    
+                    let entity = InitiatePushEntity()
+                    
+                    entity.sub = "kjhsdgfjhasd"
+                    entity.email = "abc@gmail.com"
+                    entity.mobile = "+919876543210"
+                    entity.usageType = UsageTypes.MFA.rawValue
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call initiate face entity") {
+                    
+                    let entity = InitiateFaceEntity()
+                    
+                    entity.sub = "kjhsdgfjhasd"
+                    entity.email = "abc@gmail.com"
+                    entity.mobile = "+919876543210"
+                    entity.usageType = UsageTypes.MFA.rawValue
+                    entity.deviceInfo = DeviceInfoModel()
+                }
+                
+                it("call initiate voice entity") {
+                    
+                    let entity = InitiateVoiceEntity()
+                    
+                    entity.sub = "kjhsdgfjhasd"
+                    entity.email = "abc@gmail.com"
+                    entity.mobile = "+919876543210"
+                    entity.usageType = UsageTypes.MFA.rawValue
+                    entity.deviceInfo = DeviceInfoModel()
+                }
             }
         }
     }
