@@ -30,6 +30,7 @@
 		1F49FA50213D029E001A49BB /* RegistrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F49FA4F213D029E001A49BB /* RegistrationTests.swift */; };
 		1F49FA52213D1A54001A49BB /* LinkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F49FA51213D1A54001A49BB /* LinkTests.swift */; };
 		1F49FA67213D6393001A49BB /* Pods_Cidaas_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F49FA66213D6393001A49BB /* Pods_Cidaas_Example.framework */; };
+		1F49FA6F213FA087001A49BB /* EntityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F49FA6E213FA087001A49BB /* EntityTests.swift */; };
 		1F5600F7212ECF9B00F842A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5600F6212ECF9B00F842A4 /* AppDelegate.swift */; };
 		1F5600FA212ECFA800F842A4 /* Checkbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5600F8212ECFA800F842A4 /* Checkbox.swift */; };
 		1F5600FB212ECFA800F842A4 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5600F9212ECFA800F842A4 /* CustomTextField.swift */; };
@@ -103,6 +104,7 @@
 		1F49FA68213D6393001A49BB /* Quick.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Quick.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F49FA6A213D6393001A49BB /* SCLAlertView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SCLAlertView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F49FA6C213D6393001A49BB /* SDWebImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SDWebImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F49FA6E213FA087001A49BB /* EntityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityTests.swift; sourceTree = "<group>"; };
 		1F5600C6212ECE1900F842A4 /* Cidaas_Example-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Cidaas_Example-Bridging-Header.h"; sourceTree = "<group>"; };
 		1F5600F6212ECF9B00F842A4 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1F5600F8212ECFA800F842A4 /* Checkbox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Checkbox.swift; sourceTree = "<group>"; };
@@ -259,6 +261,7 @@
 				1F49FA4D213D007E001A49BB /* DeduplicationTests.swift */,
 				1F49FA4F213D029E001A49BB /* RegistrationTests.swift */,
 				1F49FA51213D1A54001A49BB /* LinkTests.swift */,
+				1F49FA6E213FA087001A49BB /* EntityTests.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 			);
 			path = Tests;
@@ -535,6 +538,7 @@
 			files = (
 				1F49FA44213CE5C9001A49BB /* FaceTests.swift in Sources */,
 				1F49FA2E213CD5D6001A49BB /* TenantInfoTests.swift in Sources */,
+				1F49FA6F213FA087001A49BB /* EntityTests.swift in Sources */,
 				1F4179D32135551000ADFFFA /* RequestIdTests.swift in Sources */,
 				1F49FA3C213CDDAA001A49BB /* BackupcodeTests.swift in Sources */,
 				1F49FA48213CE74E001A49BB /* TOTPTests.swift in Sources */,

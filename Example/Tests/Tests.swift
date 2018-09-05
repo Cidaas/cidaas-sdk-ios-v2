@@ -11,6 +11,7 @@ class GeneralTests: QuickSpec {
             context("Properties Enabling") {
 
                 let cidaas = Cidaas.shared
+                let accessTokenController = AccessTokenController.shared
 
                 it("enable logger") {
                     cidaas.ENABLE_LOG = true
@@ -341,6 +342,18 @@ class GeneralTests: QuickSpec {
 
                 it("call cancel listening TOTP from public") {
                     cidaas.cancelListenTOTP()
+                }
+                
+                it("call get access token by code from controller") {
+                    
+                    accessTokenController.getAccessToken(code: "234234234234") {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                        case .success(let response):
+                            print(response.data.access_token)
+                        }
+                    }
                 }
 
                 xit("will eventually pass") {
