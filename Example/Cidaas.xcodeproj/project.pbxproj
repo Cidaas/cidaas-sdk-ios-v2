@@ -31,6 +31,8 @@
 		1F49FA52213D1A54001A49BB /* LinkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F49FA51213D1A54001A49BB /* LinkTests.swift */; };
 		1F49FA67213D6393001A49BB /* Pods_Cidaas_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F49FA66213D6393001A49BB /* Pods_Cidaas_Example.framework */; };
 		1F49FA6F213FA087001A49BB /* EntityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F49FA6E213FA087001A49BB /* EntityTests.swift */; };
+		1F49FA712140B93C001A49BB /* HelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F49FA702140B93C001A49BB /* HelperTests.swift */; };
+		1F49FA732140C2F2001A49BB /* Test.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1F49FA722140C2F2001A49BB /* Test.plist */; };
 		1F5600F7212ECF9B00F842A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5600F6212ECF9B00F842A4 /* AppDelegate.swift */; };
 		1F5600FA212ECFA800F842A4 /* Checkbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5600F8212ECFA800F842A4 /* Checkbox.swift */; };
 		1F5600FB212ECFA800F842A4 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5600F9212ECFA800F842A4 /* CustomTextField.swift */; };
@@ -105,6 +107,8 @@
 		1F49FA6A213D6393001A49BB /* SCLAlertView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SCLAlertView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F49FA6C213D6393001A49BB /* SDWebImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SDWebImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F49FA6E213FA087001A49BB /* EntityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityTests.swift; sourceTree = "<group>"; };
+		1F49FA702140B93C001A49BB /* HelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperTests.swift; sourceTree = "<group>"; };
+		1F49FA722140C2F2001A49BB /* Test.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Test.plist; sourceTree = "<group>"; };
 		1F5600C6212ECE1900F842A4 /* Cidaas_Example-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Cidaas_Example-Bridging-Header.h"; sourceTree = "<group>"; };
 		1F5600F6212ECF9B00F842A4 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1F5600F8212ECFA800F842A4 /* Checkbox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Checkbox.swift; sourceTree = "<group>"; };
@@ -224,6 +228,7 @@
 				1FCD9ED12134305F00A54A09 /* VerifyCodeViewController.swift */,
 				1FCD9ED32134315900A54A09 /* VerifySuccessViewController.swift */,
 				1F4179D02135209000ADFFFA /* MFAListViewController.swift */,
+				1F49FA722140C2F2001A49BB /* Test.plist */,
 			);
 			name = "Example for Cidaas";
 			path = Cidaas;
@@ -262,6 +267,7 @@
 				1F49FA4F213D029E001A49BB /* RegistrationTests.swift */,
 				1F49FA51213D1A54001A49BB /* LinkTests.swift */,
 				1F49FA6E213FA087001A49BB /* EntityTests.swift */,
+				1F49FA702140B93C001A49BB /* HelperTests.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 			);
 			path = Tests;
@@ -407,6 +413,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F49FA732140C2F2001A49BB /* Test.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -549,6 +556,7 @@
 				1F49FA30213CD646001A49BB /* ClientInfoTests.swift in Sources */,
 				1F49FA32213CD744001A49BB /* LoginTests.swift in Sources */,
 				607FACEC1AFB9204008FA782 /* Tests.swift in Sources */,
+				1F49FA712140B93C001A49BB /* HelperTests.swift in Sources */,
 				1F49FA40213CDE9D001A49BB /* TouchIdTests.swift in Sources */,
 				1F49FA4E213D007E001A49BB /* DeduplicationTests.swift in Sources */,
 				1F49FA4C213CE86D001A49BB /* ResetPasswordTests.swift in Sources */,

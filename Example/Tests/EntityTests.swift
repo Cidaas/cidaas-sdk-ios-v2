@@ -495,7 +495,7 @@ class EntityTests: QuickSpec {
                 it("call user info entity") {
                     var entity = UserInfoEntity()
                     
-                    let jsonString = "{\"sub\":\"123234232\",\"given_name\":\"Test\", \"family_name\":\"Demo\", \"identities\":[{\"provider\":\"SELF\"}]}"
+                    let jsonString = "{\"sub\":\"123234232\",\"given_name\":\"Test\", \"family_name\":\"Demo\",\"groups\":[{\"sub\":\"adasdasd\"}],\"identities\":[{\"provider\":\"SELF\"}]}"
                     let decoder = JSONDecoder()
                     do {
                         let data = jsonString.data(using: .utf8)!
