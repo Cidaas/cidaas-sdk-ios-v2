@@ -49,6 +49,7 @@
 		1F560115212ED0B700F842A4 /* DeduplicationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F560113212ED0B600F842A4 /* DeduplicationTableViewCell.swift */; };
 		1F560116212ED0B700F842A4 /* DeduplicationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F560114212ED0B600F842A4 /* DeduplicationViewController.swift */; };
 		1F560119212ED12900F842A4 /* Cidaas.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1F560118212ED12900F842A4 /* Cidaas.plist */; };
+		1F5D0FD02146628600D63E9A /* ServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5D0FCF2146628600D63E9A /* ServiceTests.swift */; };
 		1FCD9EB12133C66800A54A09 /* AccountVerificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCD9EB02133C66800A54A09 /* AccountVerificationViewController.swift */; };
 		1FCD9ED22134305F00A54A09 /* VerifyCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCD9ED12134305F00A54A09 /* VerifyCodeViewController.swift */; };
 		1FCD9ED42134315900A54A09 /* VerifySuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCD9ED32134315900A54A09 /* VerifySuccessViewController.swift */; };
@@ -127,6 +128,7 @@
 		1F560113212ED0B600F842A4 /* DeduplicationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeduplicationTableViewCell.swift; sourceTree = "<group>"; };
 		1F560114212ED0B600F842A4 /* DeduplicationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeduplicationViewController.swift; sourceTree = "<group>"; };
 		1F560118212ED12900F842A4 /* Cidaas.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Cidaas.plist; sourceTree = "<group>"; };
+		1F5D0FCF2146628600D63E9A /* ServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTests.swift; sourceTree = "<group>"; };
 		1FCD9EB02133C66800A54A09 /* AccountVerificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountVerificationViewController.swift; sourceTree = "<group>"; };
 		1FCD9ED12134305F00A54A09 /* VerifyCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyCodeViewController.swift; sourceTree = "<group>"; };
 		1FCD9ED32134315900A54A09 /* VerifySuccessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifySuccessViewController.swift; sourceTree = "<group>"; };
@@ -268,6 +270,7 @@
 				1F49FA51213D1A54001A49BB /* LinkTests.swift */,
 				1F49FA6E213FA087001A49BB /* EntityTests.swift */,
 				1F49FA702140B93C001A49BB /* HelperTests.swift */,
+				1F5D0FCF2146628600D63E9A /* ServiceTests.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 			);
 			path = Tests;
@@ -496,16 +499,20 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Cidaas_Tests/Pods-Cidaas_Tests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/FBSnapshotTestCase/FBSnapshotTestCase.framework",
+				"${BUILT_PRODUCTS_DIR}/Mockingjay/Mockingjay.framework",
 				"${BUILT_PRODUCTS_DIR}/Nimble/Nimble.framework",
 				"${BUILT_PRODUCTS_DIR}/Nimble-Snapshots/Nimble_Snapshots.framework",
 				"${BUILT_PRODUCTS_DIR}/Quick/Quick.framework",
+				"${BUILT_PRODUCTS_DIR}/URITemplate/URITemplate.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSnapshotTestCase.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mockingjay.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble_Snapshots.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Quick.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/URITemplate.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -544,6 +551,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1F49FA44213CE5C9001A49BB /* FaceTests.swift in Sources */,
+				1F5D0FD02146628600D63E9A /* ServiceTests.swift in Sources */,
 				1F49FA2E213CD5D6001A49BB /* TenantInfoTests.swift in Sources */,
 				1F49FA6F213FA087001A49BB /* EntityTests.swift in Sources */,
 				1F4179D32135551000ADFFFA /* RequestIdTests.swift in Sources */,
