@@ -24,7 +24,7 @@ class ServiceTests: QuickSpec {
                     
                     var entity = UserActivityResponseEntity()
                     
-                    let jsonString = "{\"success\":true,\"status\":200,\"data\":[{\"osName\":\"Demo\", \"socialIdentity\":{\"firstname\":\"Test\"}}]}"
+                    let jsonString = "{\"success\":true,\"status\":200}"
                     let decoder = JSONDecoder()
                     do {
                         let data = jsonString.data(using: .utf8)!
@@ -39,21 +39,44 @@ class ServiceTests: QuickSpec {
                     let userActivityEntity = UserActivityEntity()
                     userActivityEntity.skip = 0
                     userActivityEntity.take = 1
+                    
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
                     let ac = "cCI6MTUzNjY1NTMxM30.PShW83FyX9XuuttOmBkF-zXuNRYPEONnwNuOXI6pzm017_Sv4"
+                    let expect = self.expectation(description: "Expectation")
                     
                     service.getUserActivities(accessToken: ac, userActivity: userActivityEntity, properties: properties!) {
                         switch $0 {
-                            case .failure(let error):
-                                print(error.errorMessage)
-                                break
-                            case .success(let response):
-                                print(response.success)
-                                break
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
                         }
                     }
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                    
                 }
                 
                 it("Getting access token from code service") {
@@ -76,18 +99,40 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     service.getAccessToken(code: "123123123", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.access_token)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("Getting access token from refresh token service") {
@@ -110,18 +155,40 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     service.getAccessToken(refreshToken: "123123123", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.access_token)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("Getting account verification list service") {
@@ -144,18 +211,40 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     service.getAccountVerificationList(sub: "123123123", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("change password service") {
@@ -178,7 +267,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let changePasswordEntity = ChangePasswordEntity()
                     changePasswordEntity.old_password = "123"
@@ -189,12 +292,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("getting client info service") {
@@ -217,18 +328,40 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     service.getClientInfo(requestId: "asdasdasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("getting consent url service") {
@@ -251,18 +384,40 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     service.getConsentURL(consent_name: "asdahsd", consent_version: 1, properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("getting consent details service") {
@@ -285,18 +440,40 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     service.getConsentDetails(consent_name: "asdaknsda", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("accept consent service") {
@@ -319,7 +496,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let acceptConsentEntity = AcceptConsentEntity()
                     acceptConsentEntity.accepted = true
@@ -328,12 +519,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("consent continue service") {
@@ -356,7 +555,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let consentContinueEntity = ConsentContinueEntity()
                     consentContinueEntity.sub = "asdjhasdj"
@@ -365,12 +578,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("get deduplication details service") {
@@ -393,18 +614,40 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     service.getDeduplicationDetails(track_id: "asdaksdjasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("register deduplication service") {
@@ -427,18 +670,40 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     service.registerDeduplication(track_id: "asdaksdjasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("login deduplication service") {
@@ -461,7 +726,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let loginEntity = LoginEntity()
                     loginEntity.username = "jahsgdhasfdhasd"
@@ -472,12 +751,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("link account service") {
@@ -500,18 +787,40 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     service.linkAccount(master_sub: "asdkashd", sub_to_link: "asdkjasjdasd", accessToken: "kjahsdhjad", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("getting linked users service") {
@@ -534,18 +843,40 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     service.getLinkedUsers(sub: "asdjbajsdasd", accessToken: "asdmnbjasdbajsdbausdgjyasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("unlink account service") {
@@ -568,18 +899,40 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     service.unlinkAccount(identityId: "asjdbajsdbajsd", accessToken: "asdmnbjasdbajsdbausdgjyasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("login with credentials service") {
@@ -602,7 +955,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let loginEntity = LoginEntity()
                     loginEntity.username = "abc@gmail.com"
@@ -613,12 +980,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("getting registration fields service") {
@@ -641,7 +1016,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let loginEntity = LoginEntity()
                     loginEntity.username = "abc@gmail.com"
@@ -652,12 +1041,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("register user service") {
@@ -680,7 +1077,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let registrationEntity = RegistrationEntity()
                     registrationEntity.email = "abc@gmail.com"
@@ -694,12 +1105,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("update user service") {
@@ -722,7 +1141,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let registrationEntity = RegistrationEntity()
                     registrationEntity.email = "abc@gmail.com"
@@ -736,12 +1169,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("getting request id service") {
@@ -764,18 +1205,40 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     service.getRequestId(properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("initiate reset password service") {
@@ -798,7 +1261,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let initiateResetPasswordEntity = InitiateResetPasswordEntity()
                     initiateResetPasswordEntity.email = "abc@gmail.com"
@@ -810,12 +1287,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("handle reset password service") {
@@ -838,7 +1323,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let handleResetPasswordEntity = HandleResetPasswordEntity()
                     handleResetPasswordEntity.code = "askdjasd"
@@ -848,12 +1347,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("reset password service") {
@@ -876,7 +1383,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let resetPasswordEntity = ResetPasswordEntity()
                     resetPasswordEntity.exchangeId = "ajshdgjasd"
@@ -888,12 +1409,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("getting tenant info service") {
@@ -916,18 +1445,40 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     service.getTenantInfo(properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("getting user info service") {
@@ -950,18 +1501,40 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     service.getUserInfo(accessToken: "asdkjbasdj", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.email)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("upload user image service") {
@@ -984,18 +1557,40 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     service.uploadImage(accessToken: "askjdasd", photo: UIImage(named: "tick")!, properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("setup backup code service") {
@@ -1018,18 +1613,40 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     service.setupBackupcode(access_token: "asdkjasjd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("initiate backup code service") {
@@ -1052,7 +1669,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let initiateBackupcodeEntity = InitiateBackupcodeEntity()
                     initiateBackupcodeEntity.email = "abc@gmail.com"
@@ -1062,12 +1693,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("authenticate backup code service") {
@@ -1090,7 +1729,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let authenticateBackupcodeEntity = AuthenticateBackupcodeEntity()
                     authenticateBackupcodeEntity.code = "asdjasd"
@@ -1099,12 +1752,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("setup email service") {
@@ -1127,18 +1788,40 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     service.setupEmail(access_token: "asdkjasjd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("enroll email service") {
@@ -1161,7 +1844,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let enrollEmailEntity = EnrollEmailEntity()
                     enrollEmailEntity.code = "asjdhhuasd"
@@ -1170,12 +1867,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("initiate email service") {
@@ -1198,7 +1903,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let initiateEmailEntity = InitiateEmailEntity()
                     initiateEmailEntity.email = "abc@gmail.com"
@@ -1208,12 +1927,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("authenticate email service") {
@@ -1236,7 +1963,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let authenticateEmailEntity = AuthenticateEmailEntity()
                     authenticateEmailEntity.code = "asdjasd"
@@ -1245,12 +1986,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("setup sms service") {
@@ -1273,18 +2022,40 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     service.setupSMS(access_token: "asdkjasjd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("enroll sms service") {
@@ -1307,7 +2078,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let enrollSMSEntity = EnrollSMSEntity()
                     enrollSMSEntity.code = "asjdhhuasd"
@@ -1316,12 +2101,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("initiate sms service") {
@@ -1344,7 +2137,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let initiateSMSEntity = InitiateSMSEntity()
                     initiateSMSEntity.email = "abc@gmail.com"
@@ -1354,12 +2161,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("authenticate sms service") {
@@ -1382,7 +2197,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let authenticateSMSEntity = AuthenticateSMSEntity()
                     authenticateSMSEntity.code = "asdjasd"
@@ -1391,12 +2220,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("setup ivr service") {
@@ -1419,18 +2256,40 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     service.setupIVR(access_token: "asdkjasjd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("enroll ivr service") {
@@ -1453,7 +2312,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let enrollIVREntity = EnrollIVREntity()
                     enrollIVREntity.code = "asjdhhuasd"
@@ -1462,12 +2335,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("initiate ivr service") {
@@ -1490,7 +2371,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let initiateIVREntity = InitiateIVREntity()
                     initiateIVREntity.email = "abc@gmail.com"
@@ -1500,12 +2395,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("authenticate ivr service") {
@@ -1528,7 +2431,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let authenticateIVREntity = AuthenticateIVREntity()
                     authenticateIVREntity.code = "asdjasd"
@@ -1537,12 +2454,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("setup totp service") {
@@ -1565,7 +2490,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let setupTOTPEntity = SetupTOTPEntity()
                     setupTOTPEntity.client_id = "asdjhasd"
@@ -1574,12 +2513,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("enroll totp service") {
@@ -1602,7 +2549,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let enrollTOTPEntity = EnrollTOTPEntity()
                     enrollTOTPEntity.verifierPassword = "u3y4tu2"
@@ -1611,12 +2572,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("initiate totp service") {
@@ -1639,7 +2608,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let initiateTOTPEntity = InitiateTOTPEntity()
                     initiateTOTPEntity.email = "abc@gmail.com"
@@ -1649,12 +2632,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("authenticate totp service") {
@@ -1677,7 +2668,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let authenticateTOTPEntity = AuthenticateTOTPEntity()
                     authenticateTOTPEntity.verifierPassword = "asdjasd"
@@ -1686,12 +2691,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("setup pattern service") {
@@ -1714,7 +2727,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let setupPatternEntity = SetupPatternEntity()
                     setupPatternEntity.client_id = "asdjhasd"
@@ -1723,12 +2750,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("enroll pattern service") {
@@ -1751,7 +2786,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let enrollPatternEntity = EnrollPatternEntity()
                     enrollPatternEntity.verifierPassword = "u3y4tu2"
@@ -1760,12 +2809,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("initiate pattern service") {
@@ -1788,7 +2845,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let initiatePatternEntity = InitiatePatternEntity()
                     initiatePatternEntity.email = "abc@gmail.com"
@@ -1798,12 +2869,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("authenticate pattern service") {
@@ -1826,7 +2905,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let authenticatePatternEntity = AuthenticatePatternEntity()
                     authenticatePatternEntity.verifierPassword = "asdjasd"
@@ -1835,12 +2928,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("setup touch service") {
@@ -1863,7 +2964,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let setupTouchIdEntity = SetupTouchEntity()
                     setupTouchIdEntity.client_id = "asdjhasd"
@@ -1872,12 +2987,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("enroll touch service") {
@@ -1900,7 +3023,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let enrollTouchIdEntity = EnrollTouchEntity()
                     enrollTouchIdEntity.verifierPassword = "u3y4tu2"
@@ -1909,12 +3046,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("initiate touch service") {
@@ -1937,7 +3082,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let initiateTouchEntity = InitiateTouchEntity()
                     initiateTouchEntity.email = "abc@gmail.com"
@@ -1947,12 +3106,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("authenticate touch service") {
@@ -1975,7 +3142,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let authenticateTouchIdEntity = AuthenticateTouchEntity()
                     authenticateTouchIdEntity.verifierPassword = "asdjasd"
@@ -1984,12 +3165,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("setup push service") {
@@ -2012,7 +3201,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let setupPushEntity = SetupPushEntity()
                     setupPushEntity.client_id = "asdjhasd"
@@ -2021,12 +3224,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("enroll push service") {
@@ -2049,7 +3260,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let enrollPushEntity = EnrollPushEntity()
                     enrollPushEntity.verifierPassword = "u3y4tu2"
@@ -2058,12 +3283,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("initiate push service") {
@@ -2086,7 +3319,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let initiatePushEntity = InitiatePushEntity()
                     initiatePushEntity.email = "abc@gmail.com"
@@ -2096,12 +3343,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("authenticate push service") {
@@ -2124,7 +3379,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let authenticatePushEntity = AuthenticatePushEntity()
                     authenticatePushEntity.verifierPassword = "asdjasd"
@@ -2133,12 +3402,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("setup face service") {
@@ -2161,7 +3438,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let setupFaceEntity = SetupFaceEntity()
                     setupFaceEntity.client_id = "asdjhasd"
@@ -2170,12 +3461,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("enroll face service") {
@@ -2198,7 +3497,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let enrollFaceEntity = EnrollFaceEntity()
                     enrollFaceEntity.verifierPassword = "u3y4tu2"
@@ -2207,12 +3520,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("initiate face service") {
@@ -2235,7 +3556,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let initiateFaceEntity = InitiateFaceEntity()
                     initiateFaceEntity.email = "abc@gmail.com"
@@ -2245,12 +3580,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("authenticate face service") {
@@ -2273,7 +3616,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let authenticateFaceEntity = AuthenticateFaceEntity()
                     authenticateFaceEntity.verifierPassword = "asdjasd"
@@ -2282,12 +3639,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("setup voice service") {
@@ -2310,7 +3675,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let setupVoiceEntity = SetupVoiceEntity()
                     setupVoiceEntity.client_id = "asdjhasd"
@@ -2319,12 +3698,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("enroll voice service") {
@@ -2347,7 +3734,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let enrollVoiceEntity = EnrollVoiceEntity()
                     enrollVoiceEntity.verifierPassword = "u3y4tu2"
@@ -2356,12 +3757,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("initiate voice service") {
@@ -2384,7 +3793,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let initiateVoiceEntity = InitiateVoiceEntity()
                     initiateVoiceEntity.email = "abc@gmail.com"
@@ -2394,12 +3817,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
                 it("authenticate voice service") {
@@ -2422,7 +3853,21 @@ class ServiceTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    self.stub(everything, json(entity))
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
                     
                     let authenticateVoiceEntity = AuthenticateVoiceEntity()
                     authenticateVoiceEntity.verifierPassword = "asdjasd"
@@ -2431,12 +3876,20 @@ class ServiceTests: QuickSpec {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
+                            expect.fulfill()
                             break
                         case .success(let response):
                             print(response.success)
+                            expect.fulfill()
                             break
                         }
                     }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
                 }
                 
             }

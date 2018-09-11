@@ -13,5 +13,6 @@ target 'Cidaas_Example' do
     pod 'FBSnapshotTestCase' , '~> 2.1.4'
     pod 'Nimble-Snapshots' , '~> 6.3.0'
     pod 'Mockingjay', '~> 2.0'
+     pod 'OHHTTPStubs/Swift'
   end
 end

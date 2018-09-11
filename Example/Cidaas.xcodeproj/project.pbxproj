@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1762EBBD9E7A2793DF21A793 /* Pods_Cidaas_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77825790066838DAF6F23B69 /* Pods_Cidaas_Tests.framework */; };
+		1F3458992147ECEB0090FE25 /* Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3458982147ECEB0090FE25 /* Converter.swift */; };
 		1F4179D12135209000ADFFFA /* MFAListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4179D02135209000ADFFFA /* MFAListViewController.swift */; };
 		1F4179D32135551000ADFFFA /* RequestIdTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4179D22135551000ADFFFA /* RequestIdTests.swift */; };
 		1F49FA2E213CD5D6001A49BB /* TenantInfoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F49FA2D213CD5D6001A49BB /* TenantInfoTests.swift */; };
@@ -73,6 +74,7 @@
 /* Begin PBXFileReference section */
 		0B711B9EE75AA6FCBEAD305C /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		124297B2E684D107CF975325 /* Cidaas.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Cidaas.podspec; path = ../Cidaas.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		1F3458982147ECEB0090FE25 /* Converter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Converter.swift; sourceTree = "<group>"; };
 		1F4179D02135209000ADFFFA /* MFAListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MFAListViewController.swift; sourceTree = "<group>"; };
 		1F4179D22135551000ADFFFA /* RequestIdTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestIdTests.swift; sourceTree = "<group>"; };
 		1F49FA2D213CD5D6001A49BB /* TenantInfoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TenantInfoTests.swift; sourceTree = "<group>"; };
@@ -272,6 +274,7 @@
 				1F49FA702140B93C001A49BB /* HelperTests.swift */,
 				1F5D0FCF2146628600D63E9A /* ServiceTests.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
+				1F3458982147ECEB0090FE25 /* Converter.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -502,6 +505,7 @@
 				"${BUILT_PRODUCTS_DIR}/Mockingjay/Mockingjay.framework",
 				"${BUILT_PRODUCTS_DIR}/Nimble/Nimble.framework",
 				"${BUILT_PRODUCTS_DIR}/Nimble-Snapshots/Nimble_Snapshots.framework",
+				"${BUILT_PRODUCTS_DIR}/OHHTTPStubs/OHHTTPStubs.framework",
 				"${BUILT_PRODUCTS_DIR}/Quick/Quick.framework",
 				"${BUILT_PRODUCTS_DIR}/URITemplate/URITemplate.framework",
 			);
@@ -511,6 +515,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mockingjay.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble_Snapshots.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OHHTTPStubs.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Quick.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/URITemplate.framework",
 			);
@@ -554,6 +559,7 @@
 				1F5D0FD02146628600D63E9A /* ServiceTests.swift in Sources */,
 				1F49FA2E213CD5D6001A49BB /* TenantInfoTests.swift in Sources */,
 				1F49FA6F213FA087001A49BB /* EntityTests.swift in Sources */,
+				1F3458992147ECEB0090FE25 /* Converter.swift in Sources */,
 				1F4179D32135551000ADFFFA /* RequestIdTests.swift in Sources */,
 				1F49FA3C213CDDAA001A49BB /* BackupcodeTests.swift in Sources */,
 				1F49FA48213CE74E001A49BB /* TOTPTests.swift in Sources */,
