@@ -50,7 +50,7 @@ public class DBHelper : NSObject {
     }
     
     // set property file
-    public func setPropertyFile(properties : Dictionary<String, String>, key : String = "OAuthProperty") {
+    public func setPropertyFile(properties : Dictionary<String, String>?, key : String = "OAuthProperty") {
         userDefaults.set(properties, forKey: key)
         userDefaults.synchronize()
     }

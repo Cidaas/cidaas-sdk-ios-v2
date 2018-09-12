@@ -33,6 +33,16 @@ public class UserActivityController {
             return
         }
         
+        // validating fields
+        if (userActivity.sub == "") {
+            let error = WebAuthError.shared.propertyMissingException()
+            error.error = "sub must not be empty"
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+        
         // get access token from sub
         AccessTokenController.shared.getAccessToken(sub: userActivity.sub) {
             switch $0 {

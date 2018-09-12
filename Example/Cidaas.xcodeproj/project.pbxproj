@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1762EBBD9E7A2793DF21A793 /* Pods_Cidaas_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77825790066838DAF6F23B69 /* Pods_Cidaas_Tests.framework */; };
 		1F3458992147ECEB0090FE25 /* Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3458982147ECEB0090FE25 /* Converter.swift */; };
+		1F34589B2148E0B40090FE25 /* ControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F34589A2148E0B40090FE25 /* ControllerTests.swift */; };
 		1F4179D12135209000ADFFFA /* MFAListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4179D02135209000ADFFFA /* MFAListViewController.swift */; };
 		1F4179D32135551000ADFFFA /* RequestIdTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4179D22135551000ADFFFA /* RequestIdTests.swift */; };
 		1F49FA2E213CD5D6001A49BB /* TenantInfoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F49FA2D213CD5D6001A49BB /* TenantInfoTests.swift */; };
@@ -75,6 +76,7 @@
 		0B711B9EE75AA6FCBEAD305C /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		124297B2E684D107CF975325 /* Cidaas.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Cidaas.podspec; path = ../Cidaas.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		1F3458982147ECEB0090FE25 /* Converter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Converter.swift; sourceTree = "<group>"; };
+		1F34589A2148E0B40090FE25 /* ControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerTests.swift; sourceTree = "<group>"; };
 		1F4179D02135209000ADFFFA /* MFAListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MFAListViewController.swift; sourceTree = "<group>"; };
 		1F4179D22135551000ADFFFA /* RequestIdTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestIdTests.swift; sourceTree = "<group>"; };
 		1F49FA2D213CD5D6001A49BB /* TenantInfoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TenantInfoTests.swift; sourceTree = "<group>"; };
@@ -273,8 +275,9 @@
 				1F49FA6E213FA087001A49BB /* EntityTests.swift */,
 				1F49FA702140B93C001A49BB /* HelperTests.swift */,
 				1F5D0FCF2146628600D63E9A /* ServiceTests.swift */,
-				607FACE91AFB9204008FA782 /* Supporting Files */,
 				1F3458982147ECEB0090FE25 /* Converter.swift */,
+				1F34589A2148E0B40090FE25 /* ControllerTests.swift */,
+				607FACE91AFB9204008FA782 /* Supporting Files */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -570,6 +573,7 @@
 				1F49FA30213CD646001A49BB /* ClientInfoTests.swift in Sources */,
 				1F49FA32213CD744001A49BB /* LoginTests.swift in Sources */,
 				607FACEC1AFB9204008FA782 /* Tests.swift in Sources */,
+				1F34589B2148E0B40090FE25 /* ControllerTests.swift in Sources */,
 				1F49FA712140B93C001A49BB /* HelperTests.swift in Sources */,
 				1F49FA40213CDE9D001A49BB /* TouchIdTests.swift in Sources */,
 				1F49FA4E213D007E001A49BB /* DeduplicationTests.swift in Sources */,
