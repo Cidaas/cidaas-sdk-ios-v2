@@ -14,7 +14,7 @@ public class RegistrationController {
     public static var shared : RegistrationController = RegistrationController()
     
     // local variables
-    private var registrationFields : [RegistrationFieldsResponseDataEntity] = []
+    public var registrationFields : [RegistrationFieldsResponseDataEntity] = []
     
     // constructor
     public init() {

@@ -19,7 +19,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get access token from code controller") {
                     
-                    let controller = AccessTokenController()
+                    let controller = AccessTokenController.shared
                     
                     var entity = AccessTokenEntity()
                     
@@ -73,7 +73,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get access token from code property nil failure controller") {
                     
-                    let controller = AccessTokenController()
+                    let controller = AccessTokenController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -106,7 +106,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get access token from code failure controller") {
                     
-                    let controller = AccessTokenController()
+                    let controller = AccessTokenController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -136,7 +136,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get access token from sub with refresh token controller") {
                     
-                    let controller = AccessTokenController()
+                    let controller = AccessTokenController.shared
                     
                     var entity = AccessTokenEntity()
                     
@@ -190,7 +190,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get access token from sub from local db controller") {
                     
-                    let controller = AccessTokenController()
+                    let controller = AccessTokenController.shared
                     
                     let milliseconds = Date().timeIntervalSince1970
                     let seconds = Int64(milliseconds)
@@ -255,7 +255,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get access token from sub failure controller") {
                     
-                    let controller = AccessTokenController()
+                    let controller = AccessTokenController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -285,7 +285,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get access token from refresh token controller") {
                     
-                    let controller = AccessTokenController()
+                    let controller = AccessTokenController.shared
                     
                     var entity = AccessTokenEntity()
                     
@@ -339,7 +339,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get access token from refresh token failure controller") {
                     
-                    let controller = AccessTokenController()
+                    let controller = AccessTokenController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -369,7 +369,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call initiate account verification controller") {
                     
-                    let controller = AccountVerificationController()
+                    let controller = AccountVerificationController.shared
                     
                     var entity = InitiateAccountVerificationResponseEntity()
                     
@@ -425,7 +425,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call initiate account verification with domain url nil failure controller") {
                     
-                    let controller = AccountVerificationController()
+                    let controller = AccountVerificationController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -459,7 +459,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call initiate account verification with requestId nil failure controller") {
                     
-                    let controller = AccountVerificationController()
+                    let controller = AccountVerificationController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -491,7 +491,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call verify account controller") {
                     
-                    let controller = AccountVerificationController()
+                    let controller = AccountVerificationController.shared
                     
                     var entity = VerifyAccountResponseEntity()
                     
@@ -547,7 +547,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call verify account with domain url nil failure controller") {
                     
-                    let controller = AccountVerificationController()
+                    let controller = AccountVerificationController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -581,7 +581,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call verify account with accvid nil failure controller") {
                     
-                    let controller = AccountVerificationController()
+                    let controller = AccountVerificationController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -613,7 +613,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get account verification list controller") {
                     
-                    let controller = AccountVerificationController()
+                    let controller = AccountVerificationController.shared
                     
                     var entity = AccountVerificationListResponseEntity()
                     
@@ -669,7 +669,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get account verification list with domain url nil failure controller") {
                     
-                    let controller = AccountVerificationController()
+                    let controller = AccountVerificationController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -703,7 +703,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get account verification list with accvid nil failure controller") {
                     
-                    let controller = AccountVerificationController()
+                    let controller = AccountVerificationController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -735,7 +735,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get account verification list failure controller") {
                     
-                    let controller = AccountVerificationController()
+                    let controller = AccountVerificationController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -767,7 +767,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call change password controller") {
                     
-                    let controller = ChangepasswordController()
+                    let controller = ChangepasswordController.shared
                     
                     var entity = ChangePasswordResponseEntity()
                     
@@ -828,7 +828,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call change password with access token failure controller") {
                     
-                    let controller = ChangepasswordController()
+                    let controller = ChangepasswordController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -867,7 +867,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call change password with user info failure controller") {
                     
-                    let controller = ChangepasswordController()
+                    let controller = ChangepasswordController.shared
                     
                     var entity = LoginResponseEntity()
                     
@@ -938,7 +938,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call change password with change password failure controller") {
                     
-                    let controller = ChangepasswordController()
+                    let controller = ChangepasswordController.shared
                     
                     var acc_entity = LoginResponseEntity()
                     
@@ -1039,7 +1039,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call change password with domain url nil failure controller") {
                     
-                    let controller = ChangepasswordController()
+                    let controller = ChangepasswordController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -1078,7 +1078,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call change password with sub nil failure controller") {
                     
-                    let controller = ChangepasswordController()
+                    let controller = ChangepasswordController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -1115,7 +1115,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call change password with password mismatch failure controller") {
                     
-                    let controller = ChangepasswordController()
+                    let controller = ChangepasswordController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -1152,7 +1152,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get client info controller") {
                     
-                    let controller = ClientController()
+                    let controller = ClientController.shared
                     
                     var entity = ClientInfoResponseEntity()
                     
@@ -1208,7 +1208,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get client info failure controller") {
                     
-                    let controller = ClientController()
+                    let controller = ClientController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -1240,7 +1240,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get client info with domain url nil failure controller") {
                     
-                    let controller = ClientController()
+                    let controller = ClientController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -1274,7 +1274,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get client info with requestId nil failure controller") {
                     
-                    let controller = ClientController()
+                    let controller = ClientController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -1306,7 +1306,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get consent details controller") {
                     
-                    let controller = ConsentController()
+                    let controller = ConsentController.shared
                     
                     var entity = ConsentDetailsResponseEntity()
                     
@@ -1362,7 +1362,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get consent details failure controller") {
                     
-                    let controller = ConsentController()
+                    let controller = ConsentController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -1394,7 +1394,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get consent details with domain url nil failure controller") {
                     
-                    let controller = ConsentController()
+                    let controller = ConsentController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -1428,7 +1428,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get consent details with consent name nil failure controller") {
                     
-                    let controller = ConsentController()
+                    let controller = ConsentController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -1460,7 +1460,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call login after consent controller") {
                     
-                    let controller = ConsentController()
+                    let controller = ConsentController.shared
                     
                     var acc_entity = AcceptConsentResponseEntity()
                     
@@ -1588,7 +1588,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call login after consent with accept consent failure controller") {
                     
-                    let controller = ConsentController()
+                    let controller = ConsentController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -1631,7 +1631,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call login after consent with access token failure controller") {
                     
-                    let controller = ConsentController()
+                    let controller = ConsentController.shared
                     
                     var acc_entity = AcceptConsentResponseEntity()
                     
@@ -1734,7 +1734,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call login after consent with domain url nil failure controller") {
                     
-                    let controller = ConsentController()
+                    let controller = ConsentController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -1775,7 +1775,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call login after consent with consent name nil failure controller") {
                     
-                    let controller = ConsentController()
+                    let controller = ConsentController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -1813,7 +1813,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get deduplication details controller") {
                     
-                    let controller = DeduplicationController()
+                    let controller = DeduplicationController.shared
                     
                     var entity = DeduplicationDetailsResponseEntity()
                     
@@ -1869,7 +1869,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get deduplication details failure controller") {
                     
-                    let controller = DeduplicationController()
+                    let controller = DeduplicationController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -1901,7 +1901,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get deduplication details with domain url nil failure controller") {
                     
-                    let controller = DeduplicationController()
+                    let controller = DeduplicationController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -1935,7 +1935,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get deduplication details with trackid nil failure controller") {
                     
-                    let controller = DeduplicationController()
+                    let controller = DeduplicationController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -1967,7 +1967,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call register deduplication controller") {
                     
-                    let controller = DeduplicationController()
+                    let controller = DeduplicationController.shared
                     
                     var entity = RegistrationResponseEntity()
                     
@@ -2023,7 +2023,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call register deduplication failure controller") {
                     
-                    let controller = DeduplicationController()
+                    let controller = DeduplicationController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -2055,7 +2055,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call register deduplication with domain url nil failure controller") {
                     
-                    let controller = DeduplicationController()
+                    let controller = DeduplicationController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -2089,7 +2089,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call register deduplication with trackid nil failure controller") {
                     
-                    let controller = DeduplicationController()
+                    let controller = DeduplicationController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -2121,7 +2121,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call deduplication login controller") {
                     
-                    let controller = DeduplicationController()
+                    let controller = DeduplicationController.shared
                     
                     var acc_entity = LoginResponseEntity()
                     
@@ -2177,7 +2177,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call deduplication login with login failure controller") {
                     
-                    let controller = DeduplicationController()
+                    let controller = DeduplicationController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -2209,7 +2209,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call deduplication login with access token failure controller") {
                     
-                    let controller = DeduplicationController()
+                    let controller = DeduplicationController.shared
                     
                     var code_entity = AuthzCodeEntity()
                     
@@ -2275,7 +2275,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call deduplication login with domain url nil failure controller") {
                     
-                    let controller = DeduplicationController()
+                    let controller = DeduplicationController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -2309,7 +2309,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call deduplication login with requestId nil failure controller") {
                     
-                    let controller = DeduplicationController()
+                    let controller = DeduplicationController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -2341,7 +2341,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call link account controller") {
                     
-                    let controller = LinkUnlinkController()
+                    let controller = LinkUnlinkController.shared
                     
                     var entity = LinkAccountResponseEntity()
                     
@@ -2397,7 +2397,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call link account with access token failure controller") {
                     
-                    let controller = LinkUnlinkController()
+                    let controller = LinkUnlinkController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -2429,7 +2429,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call link account with link failure controller") {
                     
-                    let controller = LinkUnlinkController()
+                    let controller = LinkUnlinkController.shared
                     
                     var entity = LoginResponseEntity()
                     
@@ -2495,7 +2495,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call link account with domain url nil failure controller") {
                     
-                    let controller = LinkUnlinkController()
+                    let controller = LinkUnlinkController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -2529,7 +2529,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call link account with master_sub nil failure controller") {
                     
-                    let controller = LinkUnlinkController()
+                    let controller = LinkUnlinkController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -2561,7 +2561,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get linked users controller") {
                     
-                    let controller = LinkUnlinkController()
+                    let controller = LinkUnlinkController.shared
                     
                     var entity = LinkedUserListResponseEntity()
                     
@@ -2617,7 +2617,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get linked users with access token failure controller") {
                     
-                    let controller = LinkUnlinkController()
+                    let controller = LinkUnlinkController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -2649,7 +2649,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get linked users with link failure controller") {
                     
-                    let controller = LinkUnlinkController()
+                    let controller = LinkUnlinkController.shared
                     
                     var entity = LoginResponseEntity()
                     
@@ -2715,7 +2715,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call  get linked users with domain url nil failure controller") {
                     
-                    let controller = LinkUnlinkController()
+                    let controller = LinkUnlinkController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -2749,7 +2749,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call  get linked users with sub nil failure controller") {
                     
-                    let controller = LinkUnlinkController()
+                    let controller = LinkUnlinkController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -2781,7 +2781,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call unlink account controller") {
                     
-                    let controller = LinkUnlinkController()
+                    let controller = LinkUnlinkController.shared
                     
                     var entity = LinkAccountResponseEntity()
                     
@@ -2837,7 +2837,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call unlink account with access token failure controller") {
                     
-                    let controller = LinkUnlinkController()
+                    let controller = LinkUnlinkController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -2869,7 +2869,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call unlink account with unlink failure controller") {
                     
-                    let controller = LinkUnlinkController()
+                    let controller = LinkUnlinkController.shared
                     
                     var entity = LoginResponseEntity()
                     
@@ -2935,7 +2935,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call unlink account with domain url nil failure controller") {
                     
-                    let controller = LinkUnlinkController()
+                    let controller = LinkUnlinkController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -2969,7 +2969,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call unlink account with sub nil failure controller") {
                     
-                    let controller = LinkUnlinkController()
+                    let controller = LinkUnlinkController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -3001,7 +3001,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call login with credentials controller") {
                     
-                    let controller = LoginController()
+                    let controller = LoginController.shared
                     
                     var entity = LoginResponseEntity()
                     
@@ -3061,7 +3061,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call login with credentials with code failure controller") {
                     
-                    let controller = LoginController()
+                    let controller = LoginController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -3097,7 +3097,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call login with credentials with access token failure controller") {
                     
-                    let controller = LoginController()
+                    let controller = LoginController.shared
                     
                     var code_entity = AuthzCodeEntity()
                     
@@ -3167,7 +3167,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call login with credentials with domain url nil failure controller") {
                     
-                    let controller = LoginController()
+                    let controller = LoginController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -3205,7 +3205,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call login with credentials with requestId nil failure controller") {
                     
-                    let controller = LoginController()
+                    let controller = LoginController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -3241,7 +3241,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get request id controller") {
                     
-                    let controller = RequestIdController()
+                    let controller = RequestIdController.shared
                     
                     var entity = RequestIdResponseEntity()
                     
@@ -3297,7 +3297,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get request id failure controller") {
                     
-                    let controller = RequestIdController()
+                    let controller = RequestIdController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -3329,7 +3329,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get request id with domain url nil failure controller") {
                     
-                    let controller = RequestIdController()
+                    let controller = RequestIdController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -3363,7 +3363,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get tenant info controller") {
                     
-                    let controller = TenantController()
+                    let controller = TenantController.shared
                     
                     var entity = TenantInfoResponseEntity()
                     
@@ -3419,7 +3419,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get tenant info failure controller") {
                     
-                    let controller = TenantController()
+                    let controller = TenantController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -3451,7 +3451,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get tenant info with domain url nil failure controller") {
                     
-                    let controller = TenantController()
+                    let controller = TenantController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -3485,7 +3485,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get user activity controller") {
                     
-                    let controller = UserActivityController()
+                    let controller = UserActivityController.shared
                     
                     var entity = UserActivityResponseEntity()
                     
@@ -3544,7 +3544,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get user activity with access token failure controller") {
                     
-                    let controller = UserActivityController()
+                    let controller = UserActivityController.shared
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
@@ -3581,7 +3581,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get user activity with user activities failure controller") {
                     
-                    let controller = UserActivityController()
+                    let controller = UserActivityController.shared
                     
                     var entity = LoginResponseEntity()
                     
@@ -3650,7 +3650,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get user activity with domain url nil failure controller") {
                     
-                    let controller = UserActivityController()
+                    let controller = UserActivityController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -3687,7 +3687,7 @@ class ControllerTests: QuickSpec {
                 
                 it("call get user activity with sub nil failure controller") {
                     
-                    let controller = UserActivityController()
+                    let controller = UserActivityController.shared
                     
                     let error: WebAuthError = WebAuthError.shared
                     
@@ -3720,6 +3720,478 @@ class ControllerTests: QuickSpec {
                     })
                 }
                 
+                it("call get registration fields controller") {
+                    
+                    let controller = RegistrationController.shared
+                    
+                    var entity = RegistrationFieldsResponseEntity()
+                    
+                    let jsonString = "{\"success\":true,\"status\":200,\"data\":[{\"dataType\":\"EMAIL\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"email\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Email\",\"verificationRequired\":\"Given Email is not verified.\",\"required\":\"Email is Required\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"given_name\",\"fieldType\":\"SYSTEM\",\"order\":2,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"maxLength\":\"Givenname cannot be more than 150 chars\",\"required\":\"Given Name is Required\",\"name\":\"Given Name\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"family_name\",\"fieldType\":\"SYSTEM\",\"order\":3,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Family Name\",\"required\":\"Family Name is Required\",\"maxLength\":\"Family Name cannot be more than 150 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password\",\"fieldType\":\"SYSTEM\",\"order\":4,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Password\",\"required\":\"Password is Required\",\"maxLength\":\"Password cannot be more than 20 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password_echo\",\"fieldType\":\"SYSTEM\",\"order\":69,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false,\"matchWith\":\"Confirm Password Must Match with Password.\"},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Confirm Password\",\"required\":\"Confirm Password is Required\",\"maxLength\":\"Confirm Password cannot be more than 20 chars\",\"matchWith\":\"Confirm Password Must Match with Password.\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"username\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":6,\"minLength\":5},\"localeText\":{\"minLength\":\"Username must be minimum of 5 characters\",\"required\":\"Username is Required\",\"verificationRequired\":\"Given Username is not verified.\",\"name\":\"Username\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"city1\",\"fieldType\":\"CUSTOM\",\"order\":66,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"language\":\"en\",\"locale\":\"en-US\",\"name\":\"city1\",\"maxlength\":17,\"minlength\":16},\"localeText\":{\"locale\":\"en-US\",\"name\":\"city1\",\"required\":\"city1\",\"language\":\"en\"}}]}"
+                    let decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        entity = try decoder.decode(RegistrationFieldsResponseEntity.self, from: data)
+                        print(entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    let properties = DBHelper.shared.getPropertyFile()
+                    
+                    let userActivity = UserActivityEntity()
+                    userActivity.sub = "jhagsdasd"
+                    
+                    controller.getRegistrationFields(locale: "", requestId: "jhasgdjhagsdjasd", properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call get registration fields failure controller") {
+                    
+                    let controller = RegistrationController.shared
+                    
+                    let error: WebAuthError = WebAuthError.shared
+                    
+                    self.stub(everything, failure(error as Error as NSError))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    let properties = DBHelper.shared.getPropertyFile()
+                    
+                    controller.getRegistrationFields(locale: "", requestId: "jhasgdjhagsdjasd", properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call get registration fields with domain url nil failure controller") {
+                    
+                    let controller = RegistrationController.shared
+                    
+                    let error: WebAuthError = WebAuthError.shared
+                    
+                    self.stub(everything, failure(error as Error as NSError))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    var properties = DBHelper.shared.getPropertyFile()
+                    
+                    properties!["DomainURL"] = ""
+                    
+                    controller.getRegistrationFields(locale: "", requestId: "jhasgdjhagsdjasd", properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call get registration fields with requestId nil failure controller") {
+                    
+                    let controller = RegistrationController.shared
+                    
+                    let error: WebAuthError = WebAuthError.shared
+                    
+                    self.stub(everything, failure(error as Error as NSError))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    let properties = DBHelper.shared.getPropertyFile()
+                    
+                    controller.getRegistrationFields(locale: "", requestId: "", properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call register user controller") {
+                    
+                    let controller = RegistrationController.shared
+                    
+                    var entity = RegistrationResponseEntity()
+                    
+                    let jsonString = "{\"success\":true,\"status\":200,\"data\":{\"sub\":\"12345\", \"userStatus\":\"verified\", \"email_verified\":true}}"
+                    let decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        entity = try decoder.decode(RegistrationResponseEntity.self, from: data)
+                        print(entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    let properties = DBHelper.shared.getPropertyFile()
+                    
+                    let registrationEntity = RegistrationEntity()
+                    registrationEntity.email = "abc@gmail.com"
+                    registrationEntity.birthdate = "06/09/1993"
+                    registrationEntity.family_name = "test"
+                    registrationEntity.given_name = "demo"
+                    registrationEntity.mobile_number = "+919876543210"
+                    registrationEntity.password = "123456"
+                    registrationEntity.password_echo = "123456"
+                    registrationEntity.provider = "SELF"
+                    registrationEntity.username = "abc"
+                    
+                    controller.registerUser(requestId: "jhagsdghasd", registrationEntity: registrationEntity, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call register user failure controller") {
+                    
+                    let controller = RegistrationController.shared
+                    
+                    let error: WebAuthError = WebAuthError.shared
+                    
+                    self.stub(everything, failure(error as Error as NSError))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    let properties = DBHelper.shared.getPropertyFile()
+                    
+                    let registrationEntity = RegistrationEntity()
+                    registrationEntity.email = "abc@gmail.com"
+                    registrationEntity.birthdate = "06/09/1993"
+                    registrationEntity.family_name = "test"
+                    registrationEntity.given_name = "demo"
+                    registrationEntity.mobile_number = "+919876543210"
+                    registrationEntity.password = "123456"
+                    registrationEntity.password_echo = "123456"
+                    registrationEntity.provider = "SELF"
+                    registrationEntity.username = "abc"
+                    
+                    controller.registerUser(requestId: "jhagsdghasd", registrationEntity: registrationEntity, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call register user with domain url nil failure controller") {
+                    
+                    let controller = RegistrationController.shared
+                    
+                    let error: WebAuthError = WebAuthError.shared
+                    
+                    self.stub(everything, failure(error as Error as NSError))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    var properties = DBHelper.shared.getPropertyFile()
+                    
+                    properties!["DomainURL"] = ""
+                    
+                    let registrationEntity = RegistrationEntity()
+                    registrationEntity.email = "abc@gmail.com"
+                    registrationEntity.birthdate = "06/09/1993"
+                    registrationEntity.family_name = "test"
+                    registrationEntity.given_name = "demo"
+                    registrationEntity.mobile_number = "+919876543210"
+                    registrationEntity.password = "123456"
+                    registrationEntity.password_echo = "123456"
+                    registrationEntity.provider = "SELF"
+                    registrationEntity.username = "abc"
+                    
+                    controller.registerUser(requestId: "jhagsdghasd", registrationEntity: registrationEntity, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call register user with requestId nil failure controller") {
+                    
+                    let controller = RegistrationController.shared
+                    
+                    let error: WebAuthError = WebAuthError.shared
+                    
+                    self.stub(everything, failure(error as Error as NSError))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    let properties = DBHelper.shared.getPropertyFile()
+                    
+                    let registrationEntity = RegistrationEntity()
+                    registrationEntity.email = "abc@gmail.com"
+                    registrationEntity.birthdate = "06/09/1993"
+                    registrationEntity.family_name = "test"
+                    registrationEntity.given_name = "demo"
+                    registrationEntity.mobile_number = "+919876543210"
+                    registrationEntity.password = "123456"
+                    registrationEntity.password_echo = "123456"
+                    registrationEntity.provider = "SELF"
+                    registrationEntity.username = "abc"
+                    
+                    controller.registerUser(requestId: "", registrationEntity: registrationEntity, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call register user with email validation failure controller") {
+                    
+                    let controller = RegistrationController.shared
+                    
+                    var entity = RegistrationFieldsResponseEntity()
+                    
+                    let jsonString = "{\"success\":true,\"status\":200,\"data\":[{\"dataType\":\"EMAIL\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"email\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Email\",\"verificationRequired\":\"Given Email is not verified.\",\"required\":\"Email is Required\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"given_name\",\"fieldType\":\"SYSTEM\",\"order\":2,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"maxLength\":\"Givenname cannot be more than 150 chars\",\"required\":\"Given Name is Required\",\"name\":\"Given Name\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"family_name\",\"fieldType\":\"SYSTEM\",\"order\":3,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Family Name\",\"required\":\"Family Name is Required\",\"maxLength\":\"Family Name cannot be more than 150 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password\",\"fieldType\":\"SYSTEM\",\"order\":4,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Password\",\"required\":\"Password is Required\",\"maxLength\":\"Password cannot be more than 20 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password_echo\",\"fieldType\":\"SYSTEM\",\"order\":69,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false,\"matchWith\":\"Confirm Password Must Match with Password.\"},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Confirm Password\",\"required\":\"Confirm Password is Required\",\"maxLength\":\"Confirm Password cannot be more than 20 chars\",\"matchWith\":\"Confirm Password Must Match with Password.\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"username\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":6,\"minLength\":5},\"localeText\":{\"minLength\":\"Username must be minimum of 5 characters\",\"required\":\"Username is Required\",\"verificationRequired\":\"Given Username is not verified.\",\"name\":\"Username\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"city1\",\"fieldType\":\"CUSTOM\",\"order\":66,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"language\":\"en\",\"locale\":\"en-US\",\"name\":\"city1\",\"maxlength\":17,\"minlength\":16},\"localeText\":{\"locale\":\"en-US\",\"name\":\"city1\",\"required\":\"city1\",\"language\":\"en\"}}]}"
+                    let decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        entity = try decoder.decode(RegistrationFieldsResponseEntity.self, from: data)
+                        print(entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    let error: WebAuthError = WebAuthError.shared
+                    
+                    self.stub(everything, failure(error as Error as NSError))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    let properties = DBHelper.shared.getPropertyFile()
+                    
+                    let registrationEntity = RegistrationEntity()
+                    registrationEntity.email = ""
+                    registrationEntity.birthdate = "06/09/1993"
+                    registrationEntity.family_name = "test"
+                    registrationEntity.given_name = "demo"
+                    registrationEntity.mobile_number = "+919876543210"
+                    registrationEntity.password = "123456"
+                    registrationEntity.password_echo = "123456"
+                    registrationEntity.provider = "SELF"
+                    registrationEntity.username = "abc"
+                    
+                    controller.registrationFields = entity.data
+                    
+                    controller.registerUser(requestId: "kbasjdbs", registrationEntity: registrationEntity, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call register user with given_name validation failure controller") {
+                    
+                    let controller = RegistrationController.shared
+                    
+                    var entity = RegistrationFieldsResponseEntity()
+                    
+                    let jsonString = "{\"success\":true,\"status\":200,\"data\":[{\"dataType\":\"EMAIL\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"email\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Email\",\"verificationRequired\":\"Given Email is not verified.\",\"required\":\"Email is Required\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"given_name\",\"fieldType\":\"SYSTEM\",\"order\":2,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"maxLength\":\"Givenname cannot be more than 150 chars\",\"required\":\"Given Name is Required\",\"name\":\"Given Name\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"family_name\",\"fieldType\":\"SYSTEM\",\"order\":3,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Family Name\",\"required\":\"Family Name is Required\",\"maxLength\":\"Family Name cannot be more than 150 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password\",\"fieldType\":\"SYSTEM\",\"order\":4,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Password\",\"required\":\"Password is Required\",\"maxLength\":\"Password cannot be more than 20 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password_echo\",\"fieldType\":\"SYSTEM\",\"order\":69,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false,\"matchWith\":\"Confirm Password Must Match with Password.\"},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Confirm Password\",\"required\":\"Confirm Password is Required\",\"maxLength\":\"Confirm Password cannot be more than 20 chars\",\"matchWith\":\"Confirm Password Must Match with Password.\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"username\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":6,\"minLength\":5},\"localeText\":{\"minLength\":\"Username must be minimum of 5 characters\",\"required\":\"Username is Required\",\"verificationRequired\":\"Given Username is not verified.\",\"name\":\"Username\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"city1\",\"fieldType\":\"CUSTOM\",\"order\":66,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"language\":\"en\",\"locale\":\"en-US\",\"name\":\"city1\",\"maxlength\":17,\"minlength\":16},\"localeText\":{\"locale\":\"en-US\",\"name\":\"city1\",\"required\":\"city1\",\"language\":\"en\"}}]}"
+                    let decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        entity = try decoder.decode(RegistrationFieldsResponseEntity.self, from: data)
+                        print(entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    let error: WebAuthError = WebAuthError.shared
+                    
+                    self.stub(everything, failure(error as Error as NSError))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    let properties = DBHelper.shared.getPropertyFile()
+                    
+                    let registrationEntity = RegistrationEntity()
+                    registrationEntity.email = "abc@gmail.com"
+                    registrationEntity.birthdate = "06/09/1993"
+                    registrationEntity.family_name = "test"
+                    registrationEntity.given_name = ""
+                    registrationEntity.mobile_number = "+919876543210"
+                    registrationEntity.password = "123456"
+                    registrationEntity.password_echo = "123456"
+                    registrationEntity.provider = "SELF"
+                    registrationEntity.username = "abc"
+                    
+                    controller.registrationFields = entity.data
+                    
+                    controller.registerUser(requestId: "kbasjdbs", registrationEntity: registrationEntity, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
                 
                 
             }
