@@ -1629,6 +1629,79 @@ class ControllerTests: QuickSpec {
                     })
                 }
                 
+                it("call login after consent with consent continue failure failure controller") {
+                    
+                    let controller = ConsentController.shared
+                    
+                    var acc_entity = AcceptConsentResponseEntity()
+                    
+                    let acc_jsonString = "{\"success\":true,\"status\":200,\"data\":true}"
+                    let acc_decoder = JSONDecoder()
+                    do {
+                        let data = acc_jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        acc_entity = try acc_decoder.decode(AcceptConsentResponseEntity.self, from: data)
+                        print(acc_entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    // construct body params
+                    var acc_bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(acc_entity)
+                        acc_bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    let error: WebAuthError = WebAuthError.shared
+                    
+                    let properties = DBHelper.shared.getPropertyFile()
+                    
+                    let baseURL = (properties!["DomainURL"]) ?? ""
+                    
+                    let acc_urlString = baseURL + URLHelper.shared.getAcceptConsentURL()
+                    
+                    self.stub(http(.post, uri: acc_urlString), json(acc_bodyParams))
+                    
+                    let user_info_urlString = baseURL + URLHelper.shared.getConsentContinueURL(trackId: "asdasdasd")
+                    
+                    self.stub(http(.post, uri: user_info_urlString), failure(error as Error as NSError))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    let consentEntity = ConsentEntity()
+                    consentEntity.consent_name = "jagsdhasd"
+                    consentEntity.accepted = true
+                    consentEntity.sub = "asdjhasdjasd"
+                    consentEntity.track_id = "asdasdasd"
+                    consentEntity.version = "hgjad"
+                    
+                    controller.loginAfterConsent(consentEntity: consentEntity, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
                 it("call login after consent with access token failure controller") {
                     
                     let controller = ConsentController.shared
@@ -4174,6 +4247,1253 @@ class ControllerTests: QuickSpec {
                     controller.registrationFields = entity.data
                     
                     controller.registerUser(requestId: "kbasjdbs", registrationEntity: registrationEntity, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call register user with family_name validation failure controller") {
+                    
+                    let controller = RegistrationController.shared
+                    
+                    var entity = RegistrationFieldsResponseEntity()
+                    
+                    let jsonString = "{\"success\":true,\"status\":200,\"data\":[{\"dataType\":\"EMAIL\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"email\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Email\",\"verificationRequired\":\"Given Email is not verified.\",\"required\":\"Email is Required\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"given_name\",\"fieldType\":\"SYSTEM\",\"order\":2,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"maxLength\":\"Givenname cannot be more than 150 chars\",\"required\":\"Given Name is Required\",\"name\":\"Given Name\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"family_name\",\"fieldType\":\"SYSTEM\",\"order\":3,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Family Name\",\"required\":\"Family Name is Required\",\"maxLength\":\"Family Name cannot be more than 150 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password\",\"fieldType\":\"SYSTEM\",\"order\":4,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Password\",\"required\":\"Password is Required\",\"maxLength\":\"Password cannot be more than 20 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password_echo\",\"fieldType\":\"SYSTEM\",\"order\":69,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false,\"matchWith\":\"Confirm Password Must Match with Password.\"},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Confirm Password\",\"required\":\"Confirm Password is Required\",\"maxLength\":\"Confirm Password cannot be more than 20 chars\",\"matchWith\":\"Confirm Password Must Match with Password.\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"username\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":6,\"minLength\":5},\"localeText\":{\"minLength\":\"Username must be minimum of 5 characters\",\"required\":\"Username is Required\",\"verificationRequired\":\"Given Username is not verified.\",\"name\":\"Username\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"city1\",\"fieldType\":\"CUSTOM\",\"order\":66,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"language\":\"en\",\"locale\":\"en-US\",\"name\":\"city1\",\"maxlength\":17,\"minlength\":16},\"localeText\":{\"locale\":\"en-US\",\"name\":\"city1\",\"required\":\"city1\",\"language\":\"en\"}}]}"
+                    let decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        entity = try decoder.decode(RegistrationFieldsResponseEntity.self, from: data)
+                        print(entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    let error: WebAuthError = WebAuthError.shared
+                    
+                    self.stub(everything, failure(error as Error as NSError))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    let properties = DBHelper.shared.getPropertyFile()
+                    
+                    let registrationEntity = RegistrationEntity()
+                    registrationEntity.email = "abc@gmail.com"
+                    registrationEntity.birthdate = "06/09/1993"
+                    registrationEntity.family_name = ""
+                    registrationEntity.given_name = "demo"
+                    registrationEntity.mobile_number = "+919876543210"
+                    registrationEntity.password = "123456"
+                    registrationEntity.password_echo = "123456"
+                    registrationEntity.provider = "SELF"
+                    registrationEntity.username = "abc"
+                    
+                    controller.registrationFields = entity.data
+                    
+                    controller.registerUser(requestId: "kbasjdbs", registrationEntity: registrationEntity, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call register user with mobile number validation failure controller") {
+                    
+                    let controller = RegistrationController.shared
+                    
+                    var entity = RegistrationFieldsResponseEntity()
+                    
+                    let jsonString = "{\"success\":true,\"status\":200,\"data\":[{\"dataType\":\"EMAIL\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"email\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Email\",\"verificationRequired\":\"Given Email is not verified.\",\"required\":\"Email is Required\"}}, {\"dataType\":\"MOBILE\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"mobile_number\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Mobile\",\"verificationRequired\":\"Given mobile is not verified.\",\"required\":\"Mobile is Required\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"given_name\",\"fieldType\":\"SYSTEM\",\"order\":2,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"maxLength\":\"Givenname cannot be more than 150 chars\",\"required\":\"Given Name is Required\",\"name\":\"Given Name\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"family_name\",\"fieldType\":\"SYSTEM\",\"order\":3,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Family Name\",\"required\":\"Family Name is Required\",\"maxLength\":\"Family Name cannot be more than 150 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password\",\"fieldType\":\"SYSTEM\",\"order\":4,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Password\",\"required\":\"Password is Required\",\"maxLength\":\"Password cannot be more than 20 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password_echo\",\"fieldType\":\"SYSTEM\",\"order\":69,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false,\"matchWith\":\"Confirm Password Must Match with Password.\"},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Confirm Password\",\"required\":\"Confirm Password is Required\",\"maxLength\":\"Confirm Password cannot be more than 20 chars\",\"matchWith\":\"Confirm Password Must Match with Password.\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"username\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":6,\"minLength\":5},\"localeText\":{\"minLength\":\"Username must be minimum of 5 characters\",\"required\":\"Username is Required\",\"verificationRequired\":\"Given Username is not verified.\",\"name\":\"Username\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"city1\",\"fieldType\":\"CUSTOM\",\"order\":66,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"language\":\"en\",\"locale\":\"en-US\",\"name\":\"city1\",\"maxlength\":17,\"minlength\":16},\"localeText\":{\"locale\":\"en-US\",\"name\":\"city1\",\"required\":\"city1\",\"language\":\"en\"}}]}"
+                    let decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        entity = try decoder.decode(RegistrationFieldsResponseEntity.self, from: data)
+                        print(entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    let error: WebAuthError = WebAuthError.shared
+                    
+                    self.stub(everything, failure(error as Error as NSError))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    let properties = DBHelper.shared.getPropertyFile()
+                    
+                    let registrationEntity = RegistrationEntity()
+                    registrationEntity.email = "abc@gmail.com"
+                    registrationEntity.birthdate = "06/09/1993"
+                    registrationEntity.family_name = "test"
+                    registrationEntity.given_name = "demo"
+                    registrationEntity.mobile_number = ""
+                    registrationEntity.password = "123456"
+                    registrationEntity.password_echo = "123456"
+                    registrationEntity.provider = "SELF"
+                    registrationEntity.username = "abc"
+                    
+                    controller.registrationFields = entity.data
+                    
+                    controller.registerUser(requestId: "kbasjdbs", registrationEntity: registrationEntity, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call register user with password validation failure controller") {
+                    
+                    let controller = RegistrationController.shared
+                    
+                    var entity = RegistrationFieldsResponseEntity()
+                    
+                    let jsonString = "{\"success\":true,\"status\":200,\"data\":[{\"dataType\":\"EMAIL\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"email\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Email\",\"verificationRequired\":\"Given Email is not verified.\",\"required\":\"Email is Required\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"given_name\",\"fieldType\":\"SYSTEM\",\"order\":2,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"maxLength\":\"Givenname cannot be more than 150 chars\",\"required\":\"Given Name is Required\",\"name\":\"Given Name\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"family_name\",\"fieldType\":\"SYSTEM\",\"order\":3,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Family Name\",\"required\":\"Family Name is Required\",\"maxLength\":\"Family Name cannot be more than 150 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password\",\"fieldType\":\"SYSTEM\",\"order\":4,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Password\",\"required\":\"Password is Required\",\"maxLength\":\"Password cannot be more than 20 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password_echo\",\"fieldType\":\"SYSTEM\",\"order\":69,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false,\"matchWith\":\"Confirm Password Must Match with Password.\"},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Confirm Password\",\"required\":\"Confirm Password is Required\",\"maxLength\":\"Confirm Password cannot be more than 20 chars\",\"matchWith\":\"Confirm Password Must Match with Password.\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"username\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":6,\"minLength\":5},\"localeText\":{\"minLength\":\"Username must be minimum of 5 characters\",\"required\":\"Username is Required\",\"verificationRequired\":\"Given Username is not verified.\",\"name\":\"Username\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"city1\",\"fieldType\":\"CUSTOM\",\"order\":66,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"language\":\"en\",\"locale\":\"en-US\",\"name\":\"city1\",\"maxlength\":17,\"minlength\":16},\"localeText\":{\"locale\":\"en-US\",\"name\":\"city1\",\"required\":\"city1\",\"language\":\"en\"}}]}"
+                    let decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        entity = try decoder.decode(RegistrationFieldsResponseEntity.self, from: data)
+                        print(entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    let error: WebAuthError = WebAuthError.shared
+                    
+                    self.stub(everything, failure(error as Error as NSError))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    let properties = DBHelper.shared.getPropertyFile()
+                    
+                    let registrationEntity = RegistrationEntity()
+                    registrationEntity.email = "abc@gmail.com"
+                    registrationEntity.birthdate = "06/09/1993"
+                    registrationEntity.family_name = "test"
+                    registrationEntity.given_name = "Demo"
+                    registrationEntity.mobile_number = "+919876543210"
+                    registrationEntity.password = ""
+                    registrationEntity.password_echo = "123456"
+                    registrationEntity.provider = "SELF"
+                    registrationEntity.username = "abc"
+                    
+                    controller.registrationFields = entity.data
+                    
+                    controller.registerUser(requestId: "kbasjdbs", registrationEntity: registrationEntity, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call register user with password_echo validation failure controller") {
+                    
+                    let controller = RegistrationController.shared
+                    
+                    var entity = RegistrationFieldsResponseEntity()
+                    
+                    let jsonString = "{\"success\":true,\"status\":200,\"data\":[{\"dataType\":\"EMAIL\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"email\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Email\",\"verificationRequired\":\"Given Email is not verified.\",\"required\":\"Email is Required\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"given_name\",\"fieldType\":\"SYSTEM\",\"order\":2,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"maxLength\":\"Givenname cannot be more than 150 chars\",\"required\":\"Given Name is Required\",\"name\":\"Given Name\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"family_name\",\"fieldType\":\"SYSTEM\",\"order\":3,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Family Name\",\"required\":\"Family Name is Required\",\"maxLength\":\"Family Name cannot be more than 150 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password\",\"fieldType\":\"SYSTEM\",\"order\":4,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Password\",\"required\":\"Password is Required\",\"maxLength\":\"Password cannot be more than 20 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password_echo\",\"fieldType\":\"SYSTEM\",\"order\":69,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false,\"matchWith\":\"Confirm Password Must Match with Password.\"},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Confirm Password\",\"required\":\"Confirm Password is Required\",\"maxLength\":\"Confirm Password cannot be more than 20 chars\",\"matchWith\":\"Confirm Password Must Match with Password.\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"username\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":6,\"minLength\":5},\"localeText\":{\"minLength\":\"Username must be minimum of 5 characters\",\"required\":\"Username is Required\",\"verificationRequired\":\"Given Username is not verified.\",\"name\":\"Username\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"city1\",\"fieldType\":\"CUSTOM\",\"order\":66,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"language\":\"en\",\"locale\":\"en-US\",\"name\":\"city1\",\"maxlength\":17,\"minlength\":16},\"localeText\":{\"locale\":\"en-US\",\"name\":\"city1\",\"required\":\"city1\",\"language\":\"en\"}}]}"
+                    let decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        entity = try decoder.decode(RegistrationFieldsResponseEntity.self, from: data)
+                        print(entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    let error: WebAuthError = WebAuthError.shared
+                    
+                    self.stub(everything, failure(error as Error as NSError))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    let properties = DBHelper.shared.getPropertyFile()
+                    
+                    let registrationEntity = RegistrationEntity()
+                    registrationEntity.email = "abc@gmail.com"
+                    registrationEntity.birthdate = "06/09/1993"
+                    registrationEntity.family_name = "test"
+                    registrationEntity.given_name = "demo"
+                    registrationEntity.mobile_number = "+919876543210"
+                    registrationEntity.password = "123456"
+                    registrationEntity.password_echo = ""
+                    registrationEntity.provider = "SELF"
+                    registrationEntity.username = "abc"
+                    
+                    controller.registrationFields = entity.data
+                    
+                    controller.registerUser(requestId: "kbasjdbs", registrationEntity: registrationEntity, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call register user with password mismatch validation failure controller") {
+                    
+                    let controller = RegistrationController.shared
+                    
+                    var entity = RegistrationFieldsResponseEntity()
+                    
+                    let jsonString = "{\"success\":true,\"status\":200,\"data\":[{\"dataType\":\"EMAIL\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"email\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Email\",\"verificationRequired\":\"Given Email is not verified.\",\"required\":\"Email is Required\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"given_name\",\"fieldType\":\"SYSTEM\",\"order\":2,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"maxLength\":\"Givenname cannot be more than 150 chars\",\"required\":\"Given Name is Required\",\"name\":\"Given Name\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"family_name\",\"fieldType\":\"SYSTEM\",\"order\":3,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Family Name\",\"required\":\"Family Name is Required\",\"maxLength\":\"Family Name cannot be more than 150 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password\",\"fieldType\":\"SYSTEM\",\"order\":4,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Password\",\"required\":\"Password is Required\",\"maxLength\":\"Password cannot be more than 20 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password_echo\",\"fieldType\":\"SYSTEM\",\"order\":69,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false,\"matchWith\":\"Confirm Password Must Match with Password.\"},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Confirm Password\",\"required\":\"Confirm Password is Required\",\"maxLength\":\"Confirm Password cannot be more than 20 chars\",\"matchWith\":\"Confirm Password Must Match with Password.\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"username\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":6,\"minLength\":5},\"localeText\":{\"minLength\":\"Username must be minimum of 5 characters\",\"required\":\"Username is Required\",\"verificationRequired\":\"Given Username is not verified.\",\"name\":\"Username\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"city1\",\"fieldType\":\"CUSTOM\",\"order\":66,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"language\":\"en\",\"locale\":\"en-US\",\"name\":\"city1\",\"maxlength\":17,\"minlength\":16},\"localeText\":{\"locale\":\"en-US\",\"name\":\"city1\",\"required\":\"city1\",\"language\":\"en\"}}]}"
+                    let decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        entity = try decoder.decode(RegistrationFieldsResponseEntity.self, from: data)
+                        print(entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    let error: WebAuthError = WebAuthError.shared
+                    
+                    self.stub(everything, failure(error as Error as NSError))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    let properties = DBHelper.shared.getPropertyFile()
+                    
+                    let registrationEntity = RegistrationEntity()
+                    registrationEntity.email = "abc@gmail.com"
+                    registrationEntity.birthdate = "06/09/1993"
+                    registrationEntity.family_name = "test"
+                    registrationEntity.given_name = "demo"
+                    registrationEntity.mobile_number = "+919876543210"
+                    registrationEntity.password = "123456"
+                    registrationEntity.password_echo = "12345"
+                    registrationEntity.provider = "SELF"
+                    registrationEntity.username = "abc"
+                    
+                    controller.registrationFields = entity.data
+                    
+                    controller.registerUser(requestId: "kbasjdbs", registrationEntity: registrationEntity, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call register user with birthdate validation failure controller") {
+                    
+                    let controller = RegistrationController.shared
+                    
+                    var entity = RegistrationFieldsResponseEntity()
+                    
+                    let jsonString = "{\"success\":true,\"status\":200,\"data\":[{\"dataType\":\"EMAIL\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"email\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Email\",\"verificationRequired\":\"Given Email is not verified.\",\"required\":\"Email is Required\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"birthdate\",\"fieldType\":\"SYSTEM\",\"order\":2,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Birthdate\",\"verificationRequired\":\"Given Birthdate is not verified.\",\"required\":\"Birthdate is Required\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"given_name\",\"fieldType\":\"SYSTEM\",\"order\":2,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"maxLength\":\"Givenname cannot be more than 150 chars\",\"required\":\"Given Name is Required\",\"name\":\"Given Name\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"family_name\",\"fieldType\":\"SYSTEM\",\"order\":3,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Family Name\",\"required\":\"Family Name is Required\",\"maxLength\":\"Family Name cannot be more than 150 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password\",\"fieldType\":\"SYSTEM\",\"order\":4,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Password\",\"required\":\"Password is Required\",\"maxLength\":\"Password cannot be more than 20 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password_echo\",\"fieldType\":\"SYSTEM\",\"order\":69,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false,\"matchWith\":\"Confirm Password Must Match with Password.\"},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Confirm Password\",\"required\":\"Confirm Password is Required\",\"maxLength\":\"Confirm Password cannot be more than 20 chars\",\"matchWith\":\"Confirm Password Must Match with Password.\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"username\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":6,\"minLength\":5},\"localeText\":{\"minLength\":\"Username must be minimum of 5 characters\",\"required\":\"Username is Required\",\"verificationRequired\":\"Given Username is not verified.\",\"name\":\"Username\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"city1\",\"fieldType\":\"CUSTOM\",\"order\":66,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"language\":\"en\",\"locale\":\"en-US\",\"name\":\"city1\",\"maxlength\":17,\"minlength\":16},\"localeText\":{\"locale\":\"en-US\",\"name\":\"city1\",\"required\":\"city1\",\"language\":\"en\"}}]}"
+                    let decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        entity = try decoder.decode(RegistrationFieldsResponseEntity.self, from: data)
+                        print(entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    let error: WebAuthError = WebAuthError.shared
+                    
+                    self.stub(everything, failure(error as Error as NSError))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    let properties = DBHelper.shared.getPropertyFile()
+                    
+                    let registrationEntity = RegistrationEntity()
+                    registrationEntity.email = "abc@gmail.com"
+                    registrationEntity.birthdate = ""
+                    registrationEntity.family_name = "test"
+                    registrationEntity.given_name = "demo"
+                    registrationEntity.mobile_number = "+919876543210"
+                    registrationEntity.password = "123456"
+                    registrationEntity.password_echo = "123456"
+                    registrationEntity.provider = "SELF"
+                    registrationEntity.username = "abc"
+                    
+                    controller.registrationFields = entity.data
+                    
+                    controller.registerUser(requestId: "kbasjdbs", registrationEntity: registrationEntity, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call register user with provider validation failure controller") {
+                    
+                    let controller = RegistrationController.shared
+                    
+                    var entity = RegistrationFieldsResponseEntity()
+                    
+                    let jsonString = "{\"success\":true,\"status\":200,\"data\":[{\"dataType\":\"EMAIL\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"email\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Email\",\"verificationRequired\":\"Given Email is not verified.\",\"required\":\"Email is Required\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"given_name\",\"fieldType\":\"SYSTEM\",\"order\":2,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"maxLength\":\"Givenname cannot be more than 150 chars\",\"required\":\"Given Name is Required\",\"name\":\"Given Name\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"family_name\",\"fieldType\":\"SYSTEM\",\"order\":3,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Family Name\",\"required\":\"Family Name is Required\",\"maxLength\":\"Family Name cannot be more than 150 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password\",\"fieldType\":\"SYSTEM\",\"order\":4,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Password\",\"required\":\"Password is Required\",\"maxLength\":\"Password cannot be more than 20 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password_echo\",\"fieldType\":\"SYSTEM\",\"order\":69,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false,\"matchWith\":\"Confirm Password Must Match with Password.\"},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Confirm Password\",\"required\":\"Confirm Password is Required\",\"maxLength\":\"Confirm Password cannot be more than 20 chars\",\"matchWith\":\"Confirm Password Must Match with Password.\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"username\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":6,\"minLength\":5},\"localeText\":{\"minLength\":\"Username must be minimum of 5 characters\",\"required\":\"Username is Required\",\"verificationRequired\":\"Given Username is not verified.\",\"name\":\"Username\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"city1\",\"fieldType\":\"CUSTOM\",\"order\":66,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"language\":\"en\",\"locale\":\"en-US\",\"name\":\"city1\",\"maxlength\":17,\"minlength\":16},\"localeText\":{\"locale\":\"en-US\",\"name\":\"city1\",\"required\":\"city1\",\"language\":\"en\"}}]}"
+                    let decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        entity = try decoder.decode(RegistrationFieldsResponseEntity.self, from: data)
+                        print(entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    let error: WebAuthError = WebAuthError.shared
+                    
+                    self.stub(everything, failure(error as Error as NSError))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    let properties = DBHelper.shared.getPropertyFile()
+                    
+                    let registrationEntity = RegistrationEntity()
+                    registrationEntity.email = "abc@gmail.com"
+                    registrationEntity.birthdate = "06/09/1993"
+                    registrationEntity.family_name = "test"
+                    registrationEntity.given_name = "demo"
+                    registrationEntity.mobile_number = "+919876543210"
+                    registrationEntity.password = "123456"
+                    registrationEntity.password_echo = "123456"
+                    registrationEntity.provider = ""
+                    registrationEntity.username = "abc"
+                    
+                    controller.registrationFields = entity.data
+                    
+                    controller.registerUser(requestId: "kbasjdbs", registrationEntity: registrationEntity, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call register user with custom field validation failure controller") {
+                    
+                    let controller = RegistrationController.shared
+                    
+                    var entity = RegistrationFieldsResponseEntity()
+                    
+                    let jsonString = "{\"success\":true,\"status\":200,\"data\":[{\"dataType\":\"EMAIL\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"email\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Email\",\"verificationRequired\":\"Given Email is not verified.\",\"required\":\"Email is Required\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"birthdate\",\"fieldType\":\"SYSTEM\",\"order\":2,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Birthdate\",\"verificationRequired\":\"Given Birthdate is not verified.\",\"required\":\"Birthdate is Required\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"given_name\",\"fieldType\":\"SYSTEM\",\"order\":2,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"maxLength\":\"Givenname cannot be more than 150 chars\",\"required\":\"Given Name is Required\",\"name\":\"Given Name\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"family_name\",\"fieldType\":\"SYSTEM\",\"order\":3,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Family Name\",\"required\":\"Family Name is Required\",\"maxLength\":\"Family Name cannot be more than 150 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password\",\"fieldType\":\"SYSTEM\",\"order\":4,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Password\",\"required\":\"Password is Required\",\"maxLength\":\"Password cannot be more than 20 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password_echo\",\"fieldType\":\"SYSTEM\",\"order\":69,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false,\"matchWith\":\"Confirm Password Must Match with Password.\"},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Confirm Password\",\"required\":\"Confirm Password is Required\",\"maxLength\":\"Confirm Password cannot be more than 20 chars\",\"matchWith\":\"Confirm Password Must Match with Password.\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"username\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":6,\"minLength\":5},\"localeText\":{\"minLength\":\"Username must be minimum of 5 characters\",\"required\":\"Username is Required\",\"verificationRequired\":\"Given Username is not verified.\",\"name\":\"Username\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"city1\",\"fieldType\":\"CUSTOM\",\"order\":66,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"language\":\"en\",\"locale\":\"en-US\",\"name\":\"city1\",\"maxlength\":17,\"minlength\":16},\"localeText\":{\"locale\":\"en-US\",\"name\":\"city1\",\"required\":\"city1\",\"language\":\"en\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"city2\",\"fieldType\":\"CUSTOM\",\"order\":66,\"readOnly\":false,\"required\":false,\"fieldDefinition\":{\"language\":\"en\",\"locale\":\"en-US\",\"name\":\"city2\",\"maxlength\":17,\"minlength\":16},\"localeText\":{\"locale\":\"en-US\",\"name\":\"city2\",\"required\":\"city2\",\"language\":\"en\"}}]}"
+                    let decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        entity = try decoder.decode(RegistrationFieldsResponseEntity.self, from: data)
+                        print(entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    let error: WebAuthError = WebAuthError.shared
+                    
+                    self.stub(everything, failure(error as Error as NSError))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    let properties = DBHelper.shared.getPropertyFile()
+                    
+                    let registrationEntity = RegistrationEntity()
+                    registrationEntity.email = "abc@gmail.com"
+                    registrationEntity.birthdate = "06/09/1993"
+                    registrationEntity.family_name = "test"
+                    registrationEntity.given_name = "demo"
+                    registrationEntity.mobile_number = "+919876543210"
+                    registrationEntity.password = "123456"
+                    registrationEntity.password_echo = "123456"
+                    registrationEntity.provider = "SELF"
+                    registrationEntity.username = "abc"
+                    registrationEntity.customFields = Dictionary<String, RegistrationCustomFieldsEntity>()
+                    let city1 = RegistrationCustomFieldsEntity()
+                    city1.dataType = "TEXT"
+                    city1.id = "city1"
+                    city1.key = "city1"
+                    city1.readOnly = false
+                    city1.value = ""
+                    
+                    let city3 = RegistrationCustomFieldsEntity()
+                    city3.dataType = "TEXT"
+                    city3.id = "city3"
+                    city3.key = "city3"
+                    city3.readOnly = false
+                    city3.value = "asds"
+                    
+                    registrationEntity.customFields["city1"] = city1
+                    registrationEntity.customFields["city3"] = city3
+                    registrationEntity.customFields["city2"] = city3
+                    
+                    controller.registrationFields = entity.data
+                    
+                    controller.registerUser(requestId: "kbasjdbs", registrationEntity: registrationEntity, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call update user controller") {
+                    
+                    let controller = RegistrationController.shared
+                    
+                    var entity = UpdateUserResponseEntity()
+                    
+                    let jsonString = "{\"success\":true,\"status\":200,\"data\":{\"updated\":true}}"
+                    let decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        entity = try decoder.decode(UpdateUserResponseEntity.self, from: data)
+                        print(entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    self.stub(everything, json(bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    let properties = DBHelper.shared.getPropertyFile()
+                    
+                    let registrationEntity = RegistrationEntity()
+                    registrationEntity.email = "abc@gmail.com"
+                    registrationEntity.birthdate = "06/09/1993"
+                    registrationEntity.family_name = "test"
+                    registrationEntity.given_name = "demo"
+                    registrationEntity.mobile_number = "+919876543210"
+                    registrationEntity.password = "123456"
+                    registrationEntity.password_echo = "123456"
+                    registrationEntity.provider = "SELF"
+                    registrationEntity.username = "abc"
+                    
+                    controller.updateUser(sub: "jhagsdghasd", registrationEntity: registrationEntity, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call update user access token failure controller") {
+                    
+                    let controller = RegistrationController.shared
+                    
+                    let error: WebAuthError = WebAuthError.shared
+                    
+                    let properties = DBHelper.shared.getPropertyFile()
+                    
+                    let token_urlString = (properties!["TokenURL"]) ?? ""
+                    
+                    self.stub(http(.post, uri: token_urlString), failure(error as Error as NSError))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    let registrationEntity = RegistrationEntity()
+                    registrationEntity.email = "abc@gmail.com"
+                    registrationEntity.birthdate = "06/09/1993"
+                    registrationEntity.family_name = "test"
+                    registrationEntity.given_name = "demo"
+                    registrationEntity.mobile_number = "+919876543210"
+                    registrationEntity.password = "123456"
+                    registrationEntity.password_echo = "123456"
+                    registrationEntity.provider = "SELF"
+                    registrationEntity.username = "abc"
+                    
+                    controller.updateUser(sub: "jhagsdghasd", registrationEntity: registrationEntity, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call update user with update failure controller") {
+                    
+                    let controller = RegistrationController.shared
+                    
+                    let error: WebAuthError = WebAuthError.shared
+                    
+                    let properties = DBHelper.shared.getPropertyFile()
+                    
+                    var entity = LoginResponseEntity()
+                    
+                    let jsonString = "{\"success\":true,\"status\":200,\"data\":{\"sub\":\"123234232\",\"token_type\":\"BEARER\", \"expires_in\":86400,\"id_token_expires_in\":86400,\"access_token\":\"jdgfuygfdywe\",\"id_token\":\"jhgfjwguwgeyrwgeyrfwer\",\"refresh_token\":\"7tguegf\"}}"
+                    let decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        entity = try decoder.decode(LoginResponseEntity.self, from: data)
+                        print(entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    // construct body params
+                    var bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(entity)
+                        bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    let acc_urlString = (properties!["TokenURL"]) ?? ""
+                    
+                    self.stub(http(.post, uri: acc_urlString), json(bodyParams))
+                    
+                    let baseURL = (properties!["DomainURL"]) ?? ""
+                    
+                    let update_user_urlString = baseURL + URLHelper.shared.getUpdateUserURL(sub: "jhagsdghasd")
+                    
+                    self.stub(http(.post, uri: update_user_urlString), failure(error as Error as NSError))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    let registrationEntity = RegistrationEntity()
+                    registrationEntity.email = "abc@gmail.com"
+                    registrationEntity.birthdate = "06/09/1993"
+                    registrationEntity.family_name = "test"
+                    registrationEntity.given_name = "demo"
+                    registrationEntity.mobile_number = "+919876543210"
+                    registrationEntity.password = "123456"
+                    registrationEntity.password_echo = "123456"
+                    registrationEntity.provider = "SELF"
+                    registrationEntity.username = "abc"
+                    
+                    controller.updateUser(sub: "jhagsdghasd", registrationEntity: registrationEntity, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call update user with domain url nil failure controller") {
+                    
+                    let controller = RegistrationController.shared
+                    
+                    let error: WebAuthError = WebAuthError.shared
+                    
+                    self.stub(everything, failure(error as Error as NSError))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    var properties = DBHelper.shared.getPropertyFile()
+                    
+                    properties!["DomainURL"] = ""
+                    
+                    let registrationEntity = RegistrationEntity()
+                    registrationEntity.email = "abc@gmail.com"
+                    registrationEntity.birthdate = "06/09/1993"
+                    registrationEntity.family_name = "test"
+                    registrationEntity.given_name = "demo"
+                    registrationEntity.mobile_number = "+919876543210"
+                    registrationEntity.password = "123456"
+                    registrationEntity.password_echo = "123456"
+                    registrationEntity.provider = "SELF"
+                    registrationEntity.username = "abc"
+                    
+                    controller.updateUser(sub: "jhagsdghasd", registrationEntity: registrationEntity, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call update user with sub nil failure controller") {
+                    
+                    let controller = RegistrationController.shared
+                    
+                    let error: WebAuthError = WebAuthError.shared
+                    
+                    self.stub(everything, failure(error as Error as NSError))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    let properties = DBHelper.shared.getPropertyFile()
+                    
+                    let registrationEntity = RegistrationEntity()
+                    registrationEntity.email = "abc@gmail.com"
+                    registrationEntity.birthdate = "06/09/1993"
+                    registrationEntity.family_name = "test"
+                    registrationEntity.given_name = "demo"
+                    registrationEntity.mobile_number = "+919876543210"
+                    registrationEntity.password = "123456"
+                    registrationEntity.password_echo = "123456"
+                    registrationEntity.provider = "SELF"
+                    registrationEntity.username = "abc"
+                    
+                    controller.updateUser(sub: "", registrationEntity: registrationEntity, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call update user with email validation failure controller") {
+                    
+                    let controller = RegistrationController.shared
+                    
+                    var entity = RegistrationFieldsResponseEntity()
+                    
+                    let jsonString = "{\"success\":true,\"status\":200,\"data\":[{\"dataType\":\"EMAIL\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"email\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Email\",\"verificationRequired\":\"Given Email is not verified.\",\"required\":\"Email is Required\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"given_name\",\"fieldType\":\"SYSTEM\",\"order\":2,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"maxLength\":\"Givenname cannot be more than 150 chars\",\"required\":\"Given Name is Required\",\"name\":\"Given Name\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"family_name\",\"fieldType\":\"SYSTEM\",\"order\":3,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Family Name\",\"required\":\"Family Name is Required\",\"maxLength\":\"Family Name cannot be more than 150 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password\",\"fieldType\":\"SYSTEM\",\"order\":4,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Password\",\"required\":\"Password is Required\",\"maxLength\":\"Password cannot be more than 20 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password_echo\",\"fieldType\":\"SYSTEM\",\"order\":69,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false,\"matchWith\":\"Confirm Password Must Match with Password.\"},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Confirm Password\",\"required\":\"Confirm Password is Required\",\"maxLength\":\"Confirm Password cannot be more than 20 chars\",\"matchWith\":\"Confirm Password Must Match with Password.\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"username\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":6,\"minLength\":5},\"localeText\":{\"minLength\":\"Username must be minimum of 5 characters\",\"required\":\"Username is Required\",\"verificationRequired\":\"Given Username is not verified.\",\"name\":\"Username\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"city1\",\"fieldType\":\"CUSTOM\",\"order\":66,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"language\":\"en\",\"locale\":\"en-US\",\"name\":\"city1\",\"maxlength\":17,\"minlength\":16},\"localeText\":{\"locale\":\"en-US\",\"name\":\"city1\",\"required\":\"city1\",\"language\":\"en\"}}]}"
+                    let decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        entity = try decoder.decode(RegistrationFieldsResponseEntity.self, from: data)
+                        print(entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    let error: WebAuthError = WebAuthError.shared
+                    
+                    self.stub(everything, failure(error as Error as NSError))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    let properties = DBHelper.shared.getPropertyFile()
+                    
+                    let registrationEntity = RegistrationEntity()
+                    registrationEntity.email = ""
+                    registrationEntity.birthdate = "06/09/1993"
+                    registrationEntity.family_name = "test"
+                    registrationEntity.given_name = "demo"
+                    registrationEntity.mobile_number = "+919876543210"
+                    registrationEntity.password = "123456"
+                    registrationEntity.password_echo = "123456"
+                    registrationEntity.provider = "SELF"
+                    registrationEntity.username = "abc"
+                    
+                    controller.registrationFields = entity.data
+                    
+                    controller.updateUser(sub: "jhagsdghasd", registrationEntity: registrationEntity, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call update user with given_name validation failure controller") {
+                    
+                    let controller = RegistrationController.shared
+                    
+                    var entity = RegistrationFieldsResponseEntity()
+                    
+                    let jsonString = "{\"success\":true,\"status\":200,\"data\":[{\"dataType\":\"EMAIL\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"email\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Email\",\"verificationRequired\":\"Given Email is not verified.\",\"required\":\"Email is Required\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"given_name\",\"fieldType\":\"SYSTEM\",\"order\":2,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"maxLength\":\"Givenname cannot be more than 150 chars\",\"required\":\"Given Name is Required\",\"name\":\"Given Name\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"family_name\",\"fieldType\":\"SYSTEM\",\"order\":3,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Family Name\",\"required\":\"Family Name is Required\",\"maxLength\":\"Family Name cannot be more than 150 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password\",\"fieldType\":\"SYSTEM\",\"order\":4,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Password\",\"required\":\"Password is Required\",\"maxLength\":\"Password cannot be more than 20 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password_echo\",\"fieldType\":\"SYSTEM\",\"order\":69,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false,\"matchWith\":\"Confirm Password Must Match with Password.\"},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Confirm Password\",\"required\":\"Confirm Password is Required\",\"maxLength\":\"Confirm Password cannot be more than 20 chars\",\"matchWith\":\"Confirm Password Must Match with Password.\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"username\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":6,\"minLength\":5},\"localeText\":{\"minLength\":\"Username must be minimum of 5 characters\",\"required\":\"Username is Required\",\"verificationRequired\":\"Given Username is not verified.\",\"name\":\"Username\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"city1\",\"fieldType\":\"CUSTOM\",\"order\":66,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"language\":\"en\",\"locale\":\"en-US\",\"name\":\"city1\",\"maxlength\":17,\"minlength\":16},\"localeText\":{\"locale\":\"en-US\",\"name\":\"city1\",\"required\":\"city1\",\"language\":\"en\"}}]}"
+                    let decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        entity = try decoder.decode(RegistrationFieldsResponseEntity.self, from: data)
+                        print(entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    let error: WebAuthError = WebAuthError.shared
+                    
+                    self.stub(everything, failure(error as Error as NSError))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    let properties = DBHelper.shared.getPropertyFile()
+                    
+                    let registrationEntity = RegistrationEntity()
+                    registrationEntity.email = "abc@gmail.com"
+                    registrationEntity.birthdate = "06/09/1993"
+                    registrationEntity.family_name = "test"
+                    registrationEntity.given_name = ""
+                    registrationEntity.mobile_number = "+919876543210"
+                    registrationEntity.password = "123456"
+                    registrationEntity.password_echo = "123456"
+                    registrationEntity.provider = "SELF"
+                    registrationEntity.username = "abc"
+                    
+                    controller.registrationFields = entity.data
+                    
+                    controller.updateUser(sub: "jhagsdghasd", registrationEntity: registrationEntity, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call update user with family_name validation failure controller") {
+                    
+                    let controller = RegistrationController.shared
+                    
+                    var entity = RegistrationFieldsResponseEntity()
+                    
+                    let jsonString = "{\"success\":true,\"status\":200,\"data\":[{\"dataType\":\"EMAIL\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"email\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Email\",\"verificationRequired\":\"Given Email is not verified.\",\"required\":\"Email is Required\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"given_name\",\"fieldType\":\"SYSTEM\",\"order\":2,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"maxLength\":\"Givenname cannot be more than 150 chars\",\"required\":\"Given Name is Required\",\"name\":\"Given Name\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"family_name\",\"fieldType\":\"SYSTEM\",\"order\":3,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Family Name\",\"required\":\"Family Name is Required\",\"maxLength\":\"Family Name cannot be more than 150 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password\",\"fieldType\":\"SYSTEM\",\"order\":4,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Password\",\"required\":\"Password is Required\",\"maxLength\":\"Password cannot be more than 20 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password_echo\",\"fieldType\":\"SYSTEM\",\"order\":69,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false,\"matchWith\":\"Confirm Password Must Match with Password.\"},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Confirm Password\",\"required\":\"Confirm Password is Required\",\"maxLength\":\"Confirm Password cannot be more than 20 chars\",\"matchWith\":\"Confirm Password Must Match with Password.\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"username\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":6,\"minLength\":5},\"localeText\":{\"minLength\":\"Username must be minimum of 5 characters\",\"required\":\"Username is Required\",\"verificationRequired\":\"Given Username is not verified.\",\"name\":\"Username\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"city1\",\"fieldType\":\"CUSTOM\",\"order\":66,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"language\":\"en\",\"locale\":\"en-US\",\"name\":\"city1\",\"maxlength\":17,\"minlength\":16},\"localeText\":{\"locale\":\"en-US\",\"name\":\"city1\",\"required\":\"city1\",\"language\":\"en\"}}]}"
+                    let decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        entity = try decoder.decode(RegistrationFieldsResponseEntity.self, from: data)
+                        print(entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    let error: WebAuthError = WebAuthError.shared
+                    
+                    self.stub(everything, failure(error as Error as NSError))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    let properties = DBHelper.shared.getPropertyFile()
+                    
+                    let registrationEntity = RegistrationEntity()
+                    registrationEntity.email = "abc@gmail.com"
+                    registrationEntity.birthdate = "06/09/1993"
+                    registrationEntity.family_name = ""
+                    registrationEntity.given_name = "demo"
+                    registrationEntity.mobile_number = "+919876543210"
+                    registrationEntity.password = "123456"
+                    registrationEntity.password_echo = "123456"
+                    registrationEntity.provider = "SELF"
+                    registrationEntity.username = "abc"
+                    
+                    controller.registrationFields = entity.data
+                    
+                    controller.updateUser(sub: "jhagsdghasd", registrationEntity: registrationEntity, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call update user with mobile number validation failure controller") {
+                    
+                    let controller = RegistrationController.shared
+                    
+                    var entity = RegistrationFieldsResponseEntity()
+                    
+                    let jsonString = "{\"success\":true,\"status\":200,\"data\":[{\"dataType\":\"EMAIL\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"email\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Email\",\"verificationRequired\":\"Given Email is not verified.\",\"required\":\"Email is Required\"}}, {\"dataType\":\"MOBILE\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"mobile_number\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Mobile\",\"verificationRequired\":\"Given mobile is not verified.\",\"required\":\"Mobile is Required\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"given_name\",\"fieldType\":\"SYSTEM\",\"order\":2,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"maxLength\":\"Givenname cannot be more than 150 chars\",\"required\":\"Given Name is Required\",\"name\":\"Given Name\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"family_name\",\"fieldType\":\"SYSTEM\",\"order\":3,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Family Name\",\"required\":\"Family Name is Required\",\"maxLength\":\"Family Name cannot be more than 150 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password\",\"fieldType\":\"SYSTEM\",\"order\":4,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Password\",\"required\":\"Password is Required\",\"maxLength\":\"Password cannot be more than 20 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password_echo\",\"fieldType\":\"SYSTEM\",\"order\":69,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false,\"matchWith\":\"Confirm Password Must Match with Password.\"},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Confirm Password\",\"required\":\"Confirm Password is Required\",\"maxLength\":\"Confirm Password cannot be more than 20 chars\",\"matchWith\":\"Confirm Password Must Match with Password.\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"username\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":6,\"minLength\":5},\"localeText\":{\"minLength\":\"Username must be minimum of 5 characters\",\"required\":\"Username is Required\",\"verificationRequired\":\"Given Username is not verified.\",\"name\":\"Username\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"city1\",\"fieldType\":\"CUSTOM\",\"order\":66,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"language\":\"en\",\"locale\":\"en-US\",\"name\":\"city1\",\"maxlength\":17,\"minlength\":16},\"localeText\":{\"locale\":\"en-US\",\"name\":\"city1\",\"required\":\"city1\",\"language\":\"en\"}}]}"
+                    let decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        entity = try decoder.decode(RegistrationFieldsResponseEntity.self, from: data)
+                        print(entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    let error: WebAuthError = WebAuthError.shared
+                    
+                    self.stub(everything, failure(error as Error as NSError))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    let properties = DBHelper.shared.getPropertyFile()
+                    
+                    let registrationEntity = RegistrationEntity()
+                    registrationEntity.email = "abc@gmail.com"
+                    registrationEntity.birthdate = "06/09/1993"
+                    registrationEntity.family_name = "test"
+                    registrationEntity.given_name = "demo"
+                    registrationEntity.mobile_number = ""
+                    registrationEntity.password = "123456"
+                    registrationEntity.password_echo = "123456"
+                    registrationEntity.provider = "SELF"
+                    registrationEntity.username = "abc"
+                    
+                    controller.registrationFields = entity.data
+                    
+                    controller.updateUser(sub: "jhagsdghasd", registrationEntity: registrationEntity, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call update user with birthdate validation failure controller") {
+                    
+                    let controller = RegistrationController.shared
+                    
+                    var entity = RegistrationFieldsResponseEntity()
+                    
+                    let jsonString = "{\"success\":true,\"status\":200,\"data\":[{\"dataType\":\"EMAIL\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"email\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Email\",\"verificationRequired\":\"Given Email is not verified.\",\"required\":\"Email is Required\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"birthdate\",\"fieldType\":\"SYSTEM\",\"order\":2,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Birthdate\",\"verificationRequired\":\"Given Birthdate is not verified.\",\"required\":\"Birthdate is Required\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"given_name\",\"fieldType\":\"SYSTEM\",\"order\":2,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"maxLength\":\"Givenname cannot be more than 150 chars\",\"required\":\"Given Name is Required\",\"name\":\"Given Name\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"family_name\",\"fieldType\":\"SYSTEM\",\"order\":3,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Family Name\",\"required\":\"Family Name is Required\",\"maxLength\":\"Family Name cannot be more than 150 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password\",\"fieldType\":\"SYSTEM\",\"order\":4,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Password\",\"required\":\"Password is Required\",\"maxLength\":\"Password cannot be more than 20 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password_echo\",\"fieldType\":\"SYSTEM\",\"order\":69,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false,\"matchWith\":\"Confirm Password Must Match with Password.\"},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Confirm Password\",\"required\":\"Confirm Password is Required\",\"maxLength\":\"Confirm Password cannot be more than 20 chars\",\"matchWith\":\"Confirm Password Must Match with Password.\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"username\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":6,\"minLength\":5},\"localeText\":{\"minLength\":\"Username must be minimum of 5 characters\",\"required\":\"Username is Required\",\"verificationRequired\":\"Given Username is not verified.\",\"name\":\"Username\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"city1\",\"fieldType\":\"CUSTOM\",\"order\":66,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"language\":\"en\",\"locale\":\"en-US\",\"name\":\"city1\",\"maxlength\":17,\"minlength\":16},\"localeText\":{\"locale\":\"en-US\",\"name\":\"city1\",\"required\":\"city1\",\"language\":\"en\"}}]}"
+                    let decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        entity = try decoder.decode(RegistrationFieldsResponseEntity.self, from: data)
+                        print(entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    let error: WebAuthError = WebAuthError.shared
+                    
+                    self.stub(everything, failure(error as Error as NSError))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    let properties = DBHelper.shared.getPropertyFile()
+                    
+                    let registrationEntity = RegistrationEntity()
+                    registrationEntity.email = "abc@gmail.com"
+                    registrationEntity.birthdate = ""
+                    registrationEntity.family_name = "test"
+                    registrationEntity.given_name = "demo"
+                    registrationEntity.mobile_number = "+919876543210"
+                    registrationEntity.password = "123456"
+                    registrationEntity.password_echo = "123456"
+                    registrationEntity.provider = "SELF"
+                    registrationEntity.username = "abc"
+                    
+                    controller.registrationFields = entity.data
+                    
+                    controller.updateUser(sub: "jhagsdghasd", registrationEntity: registrationEntity, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call update user with provider validation failure controller") {
+                    
+                    let controller = RegistrationController.shared
+                    
+                    var entity = RegistrationFieldsResponseEntity()
+                    
+                    let jsonString = "{\"success\":true,\"status\":200,\"data\":[{\"dataType\":\"EMAIL\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"email\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Email\",\"verificationRequired\":\"Given Email is not verified.\",\"required\":\"Email is Required\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"given_name\",\"fieldType\":\"SYSTEM\",\"order\":2,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"maxLength\":\"Givenname cannot be more than 150 chars\",\"required\":\"Given Name is Required\",\"name\":\"Given Name\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"family_name\",\"fieldType\":\"SYSTEM\",\"order\":3,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Family Name\",\"required\":\"Family Name is Required\",\"maxLength\":\"Family Name cannot be more than 150 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password\",\"fieldType\":\"SYSTEM\",\"order\":4,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Password\",\"required\":\"Password is Required\",\"maxLength\":\"Password cannot be more than 20 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password_echo\",\"fieldType\":\"SYSTEM\",\"order\":69,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false,\"matchWith\":\"Confirm Password Must Match with Password.\"},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Confirm Password\",\"required\":\"Confirm Password is Required\",\"maxLength\":\"Confirm Password cannot be more than 20 chars\",\"matchWith\":\"Confirm Password Must Match with Password.\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"username\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":6,\"minLength\":5},\"localeText\":{\"minLength\":\"Username must be minimum of 5 characters\",\"required\":\"Username is Required\",\"verificationRequired\":\"Given Username is not verified.\",\"name\":\"Username\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"city1\",\"fieldType\":\"CUSTOM\",\"order\":66,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"language\":\"en\",\"locale\":\"en-US\",\"name\":\"city1\",\"maxlength\":17,\"minlength\":16},\"localeText\":{\"locale\":\"en-US\",\"name\":\"city1\",\"required\":\"city1\",\"language\":\"en\"}}]}"
+                    let decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        entity = try decoder.decode(RegistrationFieldsResponseEntity.self, from: data)
+                        print(entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    let error: WebAuthError = WebAuthError.shared
+                    
+                    self.stub(everything, failure(error as Error as NSError))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    let properties = DBHelper.shared.getPropertyFile()
+                    
+                    let registrationEntity = RegistrationEntity()
+                    registrationEntity.email = "abc@gmail.com"
+                    registrationEntity.birthdate = "06/09/1993"
+                    registrationEntity.family_name = "test"
+                    registrationEntity.given_name = "demo"
+                    registrationEntity.mobile_number = "+919876543210"
+                    registrationEntity.password = "123456"
+                    registrationEntity.password_echo = "123456"
+                    registrationEntity.provider = ""
+                    registrationEntity.username = "abc"
+                    
+                    controller.registrationFields = entity.data
+                    
+                    controller.updateUser(sub: "jhagsdghasd", registrationEntity: registrationEntity, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call update user with username validation failure controller") {
+                    
+                    let controller = RegistrationController.shared
+                    
+                    var entity = RegistrationFieldsResponseEntity()
+                    
+                    let jsonString = "{\"success\":true,\"status\":200,\"data\":[{\"dataType\":\"EMAIL\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"email\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Email\",\"verificationRequired\":\"Given Email is not verified.\",\"required\":\"Email is Required\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"given_name\",\"fieldType\":\"SYSTEM\",\"order\":2,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"maxLength\":\"Givenname cannot be more than 150 chars\",\"required\":\"Given Name is Required\",\"name\":\"Given Name\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"family_name\",\"fieldType\":\"SYSTEM\",\"order\":3,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Family Name\",\"required\":\"Family Name is Required\",\"maxLength\":\"Family Name cannot be more than 150 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password\",\"fieldType\":\"SYSTEM\",\"order\":4,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Password\",\"required\":\"Password is Required\",\"maxLength\":\"Password cannot be more than 20 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password_echo\",\"fieldType\":\"SYSTEM\",\"order\":69,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false,\"matchWith\":\"Confirm Password Must Match with Password.\"},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Confirm Password\",\"required\":\"Confirm Password is Required\",\"maxLength\":\"Confirm Password cannot be more than 20 chars\",\"matchWith\":\"Confirm Password Must Match with Password.\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"username\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":6,\"minLength\":5},\"localeText\":{\"minLength\":\"Username must be minimum of 5 characters\",\"required\":\"Username is Required\",\"verificationRequired\":\"Given Username is not verified.\",\"name\":\"Username\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"city1\",\"fieldType\":\"CUSTOM\",\"order\":66,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"language\":\"en\",\"locale\":\"en-US\",\"name\":\"city1\",\"maxlength\":17,\"minlength\":16},\"localeText\":{\"locale\":\"en-US\",\"name\":\"city1\",\"required\":\"city1\",\"language\":\"en\"}}]}"
+                    let decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        entity = try decoder.decode(RegistrationFieldsResponseEntity.self, from: data)
+                        print(entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    let error: WebAuthError = WebAuthError.shared
+                    
+                    self.stub(everything, failure(error as Error as NSError))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    let properties = DBHelper.shared.getPropertyFile()
+                    
+                    let registrationEntity = RegistrationEntity()
+                    registrationEntity.email = "abc@gmail.com"
+                    registrationEntity.birthdate = "06/09/1993"
+                    registrationEntity.family_name = "test"
+                    registrationEntity.given_name = "demo"
+                    registrationEntity.mobile_number = "+919876543210"
+                    registrationEntity.password = "123456"
+                    registrationEntity.password_echo = "123456"
+                    registrationEntity.provider = "SELF"
+                    registrationEntity.username = ""
+                    
+                    controller.registrationFields = entity.data
+                    
+                    controller.updateUser(sub: "jhagsdghasd", registrationEntity: registrationEntity, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call update user with custom field validation failure controller") {
+                    
+                    let controller = RegistrationController.shared
+                    
+                    var entity = RegistrationFieldsResponseEntity()
+                    
+                    let jsonString = "{\"success\":true,\"status\":200,\"data\":[{\"dataType\":\"EMAIL\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"email\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Email\",\"verificationRequired\":\"Given Email is not verified.\",\"required\":\"Email is Required\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"birthdate\",\"fieldType\":\"SYSTEM\",\"order\":2,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Birthdate\",\"verificationRequired\":\"Given Birthdate is not verified.\",\"required\":\"Birthdate is Required\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"given_name\",\"fieldType\":\"SYSTEM\",\"order\":2,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"maxLength\":\"Givenname cannot be more than 150 chars\",\"required\":\"Given Name is Required\",\"name\":\"Given Name\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"family_name\",\"fieldType\":\"SYSTEM\",\"order\":3,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":150},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Family Name\",\"required\":\"Family Name is Required\",\"maxLength\":\"Family Name cannot be more than 150 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password\",\"fieldType\":\"SYSTEM\",\"order\":4,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Password\",\"required\":\"Password is Required\",\"maxLength\":\"Password cannot be more than 20 chars\"}},{\"dataType\":\"PASSWORD\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"password_echo\",\"fieldType\":\"SYSTEM\",\"order\":69,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":20,\"applyPasswordPoly\":false,\"matchWith\":\"Confirm Password Must Match with Password.\"},\"localeText\":{\"locale\":\"en-us\",\"language\":\"en\",\"name\":\"Confirm Password\",\"required\":\"Confirm Password is Required\",\"maxLength\":\"Confirm Password cannot be more than 20 chars\",\"matchWith\":\"Confirm Password Must Match with Password.\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"username\",\"fieldType\":\"SYSTEM\",\"order\":1,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"maxLength\":6,\"minLength\":5},\"localeText\":{\"minLength\":\"Username must be minimum of 5 characters\",\"required\":\"Username is Required\",\"verificationRequired\":\"Given Username is not verified.\",\"name\":\"Username\",\"language\":\"en\",\"locale\":\"en-us\"}},{\"dataType\":\"TEXT\",\"fieldGroup\":\"DEFAULT\",\"isGroupTitle\":false,\"fieldKey\":\"city1\",\"fieldType\":\"CUSTOM\",\"order\":66,\"readOnly\":false,\"required\":true,\"fieldDefinition\":{\"language\":\"en\",\"locale\":\"en-US\",\"name\":\"city1\",\"maxlength\":17,\"minlength\":16},\"localeText\":{\"locale\":\"en-US\",\"name\":\"city1\",\"required\":\"city1\",\"language\":\"en\"}}]}"
+                    let decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        entity = try decoder.decode(RegistrationFieldsResponseEntity.self, from: data)
+                        print(entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    let error: WebAuthError = WebAuthError.shared
+                    
+                    self.stub(everything, failure(error as Error as NSError))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    let properties = DBHelper.shared.getPropertyFile()
+                    
+                    let registrationEntity = RegistrationEntity()
+                    registrationEntity.email = "abc@gmail.com"
+                    registrationEntity.birthdate = "06/09/1993"
+                    registrationEntity.family_name = "test"
+                    registrationEntity.given_name = "demo"
+                    registrationEntity.mobile_number = "+919876543210"
+                    registrationEntity.password = "123456"
+                    registrationEntity.password_echo = "123456"
+                    registrationEntity.provider = "SELF"
+                    registrationEntity.username = "abc"
+                    registrationEntity.customFields = Dictionary<String, RegistrationCustomFieldsEntity>()
+                    let city1 = RegistrationCustomFieldsEntity()
+                    city1.dataType = "TEXT"
+                    city1.id = "city1"
+                    city1.key = "city1"
+                    city1.readOnly = false
+                    city1.value = ""
+                    registrationEntity.customFields["city1"] = city1
+                    
+                    controller.registrationFields = entity.data
+                    
+                    controller.updateUser(sub: "jhagsdghasd", registrationEntity: registrationEntity, properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)

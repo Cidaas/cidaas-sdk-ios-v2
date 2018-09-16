@@ -314,33 +314,6 @@ public class RegistrationController {
                     return
                 }
             }
-            // check password
-            if let passwordKey = self.registrationFields.first(where: {$0.fieldKey == "password"}) {
-                if (passwordKey.required == true && registrationEntity.password == "") {
-                    error.error = "password must not be empty"
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                }
-            }
-            // check password_echo
-            if let password_echoKey = self.registrationFields.first(where: {$0.fieldKey == "password_echo"}) {
-                if (password_echoKey.required == true && registrationEntity.password_echo == "") {
-                    error.error = "password_echo must not be empty"
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                }
-                if (registrationEntity.password != registrationEntity.password_echo) {
-                    error.error = "password and password_echo must be same"
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                }
-            }
             // check username
             if let usernameKey = self.registrationFields.first(where: {$0.fieldKey == "username"}) {
                 if (usernameKey.required == true && registrationEntity.username == "") {

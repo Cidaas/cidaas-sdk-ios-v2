@@ -3,10 +3,10 @@
 <plist version="1.0">
 <dict>
 	<key>DomainURL</key>
-	<string>https://thisisganeshkumargk-free.cidaas.de</string>
+	<string>https://test.cidaas.de</string>
 	<key>ClientId</key>
-	<string>64e10aec-6016-426e-b43e-f7a1c95d05f4</string>
+	<string>64e10aec-426e-b43e-f7a1c95d05f4</string>
 	<key>RedirectURL</key>
-	<string>https://thisisganeshkumargk-free.cidaas.de/user-profile/editprofile</string>
+	<string>https://test.cidaas.de/user-profile/editprofile</string>
 </dict>
 </plist>

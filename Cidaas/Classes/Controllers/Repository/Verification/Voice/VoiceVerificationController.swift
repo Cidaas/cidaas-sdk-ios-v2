@@ -29,7 +29,7 @@ public class VoiceVerificationController {
     }
     
     // configure Voice from properties
-    public func configureVoice(sub: String, voice: Data, properties: Dictionary<String, String>, callback: @escaping(Result<EnrollVoiceResponseEntity>) -> Void) {
+    public func configureVoice(sub: String, voice: Data, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<EnrollVoiceResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil || properties["ClientId"] == "" || properties["ClientId"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -44,7 +44,7 @@ public class VoiceVerificationController {
         }
         
         // default set intermediate id to empty
-        Cidaas.intermediate_verifiation_id = ""
+        Cidaas.intermediate_verifiation_id = intermediate_id
         self.verificationType = VerificationTypes.TOUCH.rawValue
         self.authenticationType = AuthenticationTypes.CONFIGURE.rawValue
         

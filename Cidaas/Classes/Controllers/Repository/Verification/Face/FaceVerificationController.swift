@@ -29,7 +29,7 @@ public class FaceVerificationController {
     }
     
     // configure Face from properties
-    public func configureFace(sub: String, photo: UIImage, properties: Dictionary<String, String>, callback: @escaping(Result<EnrollFaceResponseEntity>) -> Void) {
+    public func configureFace(sub: String, photo: UIImage, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<EnrollFaceResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil || properties["ClientId"] == "" || properties["ClientId"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -44,7 +44,7 @@ public class FaceVerificationController {
         }
         
         // default set intermediate id to empty
-        Cidaas.intermediate_verifiation_id = ""
+        Cidaas.intermediate_verifiation_id = intermediate_id
         self.verificationType = VerificationTypes.TOUCH.rawValue
         self.authenticationType = AuthenticationTypes.CONFIGURE.rawValue
         

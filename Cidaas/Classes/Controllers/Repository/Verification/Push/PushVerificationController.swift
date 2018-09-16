@@ -31,7 +31,7 @@ public class PushVerificationController {
     }
     
     // configure Push from properties
-    public func configurePush(sub: String, properties: Dictionary<String, String>, callback: @escaping(Result<EnrollPushResponseEntity>) -> Void) {
+    public func configurePush(sub: String, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<EnrollPushResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil || properties["ClientId"] == "" || properties["ClientId"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -46,7 +46,7 @@ public class PushVerificationController {
         }
         
         // default set intermediate id to empty
-        Cidaas.intermediate_verifiation_id = ""
+        Cidaas.intermediate_verifiation_id = intermediate_id
         self.randomNumber = ""
         self.verificationType = VerificationTypes.TOUCH.rawValue
         self.authenticationType = AuthenticationTypes.CONFIGURE.rawValue

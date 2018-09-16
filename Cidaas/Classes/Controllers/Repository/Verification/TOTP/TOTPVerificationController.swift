@@ -34,7 +34,7 @@ public class TOTPVerificationController {
     }
     
     // configure TOTP from properties
-    public func configureTOTP(sub: String, properties: Dictionary<String, String>, callback: @escaping(Result<EnrollTOTPResponseEntity>) -> Void) {
+    public func configureTOTP(sub: String, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<EnrollTOTPResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil || properties["ClientId"] == "" || properties["ClientId"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -49,7 +49,7 @@ public class TOTPVerificationController {
         }
         
         // default set intermediate id to empty
-        Cidaas.intermediate_verifiation_id = ""
+        Cidaas.intermediate_verifiation_id = intermediate_id
         self.verificationType = VerificationTypes.TOTP.rawValue
         self.authenticationType = AuthenticationTypes.CONFIGURE.rawValue
         self.sub = sub

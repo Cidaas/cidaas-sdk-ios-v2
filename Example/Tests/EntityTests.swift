@@ -1688,6 +1688,51 @@ class EntityTests: QuickSpec {
                     entity.usageType = UsageTypes.MFA.rawValue
                     entity.deviceInfo = DeviceInfoModel()
                 }
+                
+                it("call mfa continue entity") {
+                    
+                    let entity = MFAContinueEntity()
+                    
+                    entity.requestId = "ajsdhasd"
+                    entity.sub = "askdjhas"
+                    entity.trackId = "kjhasdjas"
+                    entity.trackingCode = "kjhasudasdasdasdasd"
+                    entity.verificationType = VerificationTypes.PATTERN.rawValue
+                }
+                
+                it("call mfa list response entity") {
+                    var entity = MFAListResponseEntity()
+                    
+                    let jsonString = "{\"success\":true,\"status\":200,\"data\":[{\"_id\":\"adfasdfasd\", \"verificationType\":\"PATTERN\"}, {\"_id\":\"adfasdfasd\", \"verificationType\":\"PATTERN\"}]}"
+                    let decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        entity = try decoder.decode(MFAListResponseEntity.self, from: data)
+                        print(entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    XCTAssertEqual(entity.success, true)
+                }
+                
+                it("call mfa list response ata entity") {
+                    var entity = MFAListResponseDataEntity()
+                    
+                    let jsonString = "{\"_id\":\"adfasdfasd\", \"verificationType\":\"PATTERN\"}"
+                    let decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        entity = try decoder.decode(MFAListResponseDataEntity.self, from: data)
+                        print(entity.verificationType)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    XCTAssertEqual(entity.verificationType, "PATTERN")
+                }
             }
         }
     }

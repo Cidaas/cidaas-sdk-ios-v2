@@ -29,7 +29,7 @@ public class PatternVerificationController {
     }
     
     // configure PatternRecognition from properties
-    public func configurePatternRecognition(pattern: String, sub: String, properties: Dictionary<String, String>, callback: @escaping(Result<EnrollPatternResponseEntity>) -> Void) {
+    public func configurePatternRecognition(pattern: String, sub: String, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<EnrollPatternResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil || properties["ClientId"] == "" || properties["ClientId"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -54,7 +54,7 @@ public class PatternVerificationController {
         }
         
         // default set intermediate id to empty
-        Cidaas.intermediate_verifiation_id = ""
+        Cidaas.intermediate_verifiation_id = intermediate_id
         self.verificationType = VerificationTypes.PATTERN.rawValue
         self.authenticationType = AuthenticationTypes.CONFIGURE.rawValue
         

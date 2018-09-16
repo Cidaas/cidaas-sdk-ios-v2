@@ -31,7 +31,7 @@ public class Cidaas {
     var timer = Timer()
     
     // static variables
-    static var intermediate_verifiation_id: String = ""
+    public static var intermediate_verifiation_id: String = ""
     
     // log flag
     public var ENABLE_LOG : Bool {
