@@ -1,5 +1,5 @@
 # cidaas-sdk-ios-v2
-[![Build Status](https://api.travis-ci.org/Cidaas/cidaas-sdk-ios-v2.svg?branch=development)](https://api.travis-ci.org/Cidaas/cidaas-sdk-ios-v2) 
+[![Build Status](https://travis-ci.org/Cidaas/cidaas-sdk-ios-v2.svg?branch=development)](https://travis-ci.org/Cidaas/cidaas-sdk-ios-v2) 
 [![codecov.io](https://codecov.io/gh/Cidaas/cidaas-sdk-ios-v2/branch/development/graphs/badge.svg)](https://codecov.io/gh/Cidaas/cidaas-sdk-ios-v2/branch/development)
 [![Swift support](https://img.shields.io/badge/Swift-3.3%20%7C%204.0%20%7C%204.1-lightgrey.svg?colorA=28a745&colorB=4E4E4E)](#swift-versions-support)
 [![XCode support](https://img.shields.io/badge/Xcode-9.4-lightgrey.svg?colorA=28a745&colorB=4E4E4E)](#swift-versions-support)

@@ -213,7 +213,7 @@ public class PatternVerificationController {
     
     
     // login with pattern recognition from properties
-    public func loginWithPatternRecognition(pattern: String, email : String, mobile: String, sub: String, trackId: String, requestId: String, usageType: String, properties: Dictionary<String, String>, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+    public func loginWithPatternRecognition(pattern: String, email : String, mobile: String, sub: String, trackId: String, requestId: String, usageType: String, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -227,7 +227,7 @@ public class PatternVerificationController {
             return
         }
         
-        if (DBHelper.shared.getUserDeviceId(key: properties["DomailURL"] ?? "OAuthUserDeviceId") == "") {
+        if (DBHelper.shared.getUserDeviceId(key: properties["DomainURL"] ?? "OAuthUserDeviceId") == "") {
             let error = WebAuthError.shared.propertyMissingException()
             error.error = "There is no physical verification configured in this mobile"
             DispatchQueue.main.async {
@@ -237,7 +237,7 @@ public class PatternVerificationController {
         }
         
         // default set intermediate id to empty
-        Cidaas.intermediate_verifiation_id = ""
+        Cidaas.intermediate_verifiation_id = intermediate_id
         self.verificationType = VerificationTypes.PATTERN.rawValue
         self.authenticationType = AuthenticationTypes.LOGIN.rawValue
         
