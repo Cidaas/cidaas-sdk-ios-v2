@@ -1025,7 +1025,7 @@ public class Cidaas {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            TOTPVerificationController.shared.loginWithTOTP(email: passwordlessEntity.email, sub: passwordlessEntity.sub, mobile: passwordlessEntity.mobile, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
+            TOTPVerificationController.shared.loginWithTOTP(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
         }
         else {
             // log error

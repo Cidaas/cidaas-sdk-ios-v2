@@ -204,7 +204,7 @@ public class TouchIdVerificationController {
     
     
     // login with TouchId from properties
-    public func loginWithTouchId(email : String, mobile: String, sub: String, trackId: String, requestId: String, usageType: String, properties: Dictionary<String, String>, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+    public func loginWithTouchId(email : String, mobile: String, sub: String, trackId: String, requestId: String, usageType: String, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -218,7 +218,7 @@ public class TouchIdVerificationController {
             return
         }
         
-        if (DBHelper.shared.getUserDeviceId(key: properties["DomailURL"] ?? "OAuthUserDeviceId") == "") {
+        if (DBHelper.shared.getUserDeviceId(key: properties["DomainURL"] ?? "OAuthUserDeviceId") == "") {
             let error = WebAuthError.shared.propertyMissingException()
             error.error = "There is no physical verification configured in this mobile"
             DispatchQueue.main.async {
@@ -228,7 +228,7 @@ public class TouchIdVerificationController {
         }
         
         // default set intermediate id to empty
-        Cidaas.intermediate_verifiation_id = ""
+        Cidaas.intermediate_verifiation_id = intermediate_id
         self.verificationType = VerificationTypes.TOUCH.rawValue
         self.authenticationType = AuthenticationTypes.LOGIN.rawValue
         
@@ -345,7 +345,7 @@ public class TouchIdVerificationController {
                                         let authenticateTouchIdEntity = AuthenticateTouchEntity()
                                         authenticateTouchIdEntity.statusId = self.statusId
                                         // getting user device id
-                                        authenticateTouchIdEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomailURL"] ?? "OAuthUserDeviceId")
+                                        authenticateTouchIdEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomainURL"] ?? "OAuthUserDeviceId")
                                         
                                         // call authenticateTouchId service
                                         TouchIdVerificationService.shared.authenticateTouchId(authenticateTouchIdEntity: authenticateTouchIdEntity, properties: properties) {
@@ -481,7 +481,7 @@ public class TouchIdVerificationController {
         authenticateTouchEntity.statusId = self.statusId
         
         // getting user device id
-        authenticateTouchEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomailURL"] ?? "OAuthUserDeviceId")
+        authenticateTouchEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomainURL"] ?? "OAuthUserDeviceId")
         
         // call authenticateTouch service
         TouchIdVerificationService.shared.authenticateTouchId(authenticateTouchIdEntity: authenticateTouchEntity, properties: properties) {

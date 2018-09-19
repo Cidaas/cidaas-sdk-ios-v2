@@ -216,7 +216,7 @@ public class TOTPVerificationController {
     
     
     // login with pattern recognition from properties
-    public func loginWithTOTP(email : String, sub: String, mobile: String, trackId: String, requestId: String, usageType: String, properties: Dictionary<String, String>, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+    public func loginWithTOTP(email : String, mobile: String, sub: String, trackId: String, requestId: String, usageType: String, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -231,7 +231,7 @@ public class TOTPVerificationController {
         }
         
         // default set intermediate id to empty
-        Cidaas.intermediate_verifiation_id = ""
+        Cidaas.intermediate_verifiation_id = intermediate_id
         self.verificationType = VerificationTypes.TOTP.rawValue
         self.authenticationType = AuthenticationTypes.LOGIN.rawValue
         self.sub = sub
@@ -344,16 +344,16 @@ public class TOTPVerificationController {
                                         
                                         self.statusId = initiateTOTPResponse.data.statusId
                                         
+                                        // getting secret
+                                        self.qrcode = DBHelper.shared.getTOTPSecret(key: self.sub)
+                                        
                                         // construct object
                                         let authenticateTOTPEntity = AuthenticateTOTPEntity()
                                         authenticateTOTPEntity.statusId = self.statusId
                                         authenticateTOTPEntity.verifierPassword = self.gettingTOTPCode(url: URL(string: self.qrcode)!).totp_string
                                         
                                         // getting user device id
-                                        authenticateTOTPEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomailURL"] ?? "OAuthUserDeviceId")
-                                        
-                                        // getting secret
-                                        self.qrcode = DBHelper.shared.getTOTPSecret(key: self.sub)
+                                        authenticateTOTPEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomainURL"] ?? "OAuthUserDeviceId")
                                         
                                         // generate token
                                         authenticateTOTPEntity.verifierPassword = self.gettingTOTPCode(url: URL(string: self.qrcode)!).totp_string

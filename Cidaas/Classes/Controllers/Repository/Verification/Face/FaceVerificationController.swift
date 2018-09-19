@@ -202,7 +202,7 @@ public class FaceVerificationController {
     
     
     // login with Face from properties
-    public func loginWithFace(email : String, mobile: String, sub: String, trackId: String, requestId: String, photo: UIImage, usageType: String, properties: Dictionary<String, String>, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+    public func loginWithFace(email : String, mobile: String, sub: String, trackId: String, requestId: String, photo: UIImage, usageType: String, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -216,7 +216,7 @@ public class FaceVerificationController {
             return
         }
         
-        if (DBHelper.shared.getUserDeviceId(key: properties["DomailURL"] ?? "OAuthUserDeviceId") == "") {
+        if (DBHelper.shared.getUserDeviceId(key: properties["DomainURL"] ?? "OAuthUserDeviceId") == "") {
             let error = WebAuthError.shared.propertyMissingException()
             error.error = "There is no physical verification configured in this mobile"
             DispatchQueue.main.async {
@@ -226,8 +226,8 @@ public class FaceVerificationController {
         }
         
         // default set intermediate id to empty
-        Cidaas.intermediate_verifiation_id = ""
-        self.verificationType = VerificationTypes.TOUCH.rawValue
+        Cidaas.intermediate_verifiation_id = intermediate_id
+        self.verificationType = VerificationTypes.FACE.rawValue
         self.authenticationType = AuthenticationTypes.LOGIN.rawValue
         
         // validating fields
@@ -343,7 +343,7 @@ public class FaceVerificationController {
                                         authenticateFaceEntity.statusId = self.statusId
                                         
                                         // getting user device id
-                                        authenticateFaceEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomailURL"] ?? "OAuthUserDeviceId")
+                                        authenticateFaceEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomainURL"] ?? "OAuthUserDeviceId")
                                         
                                         
                                         // call authenticateFace service
@@ -480,7 +480,7 @@ public class FaceVerificationController {
         authenticateFaceEntity.statusId = self.statusId
         
         // getting user device id
-        authenticateFaceEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomailURL"] ?? "OAuthUserDeviceId")
+        authenticateFaceEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomainURL"] ?? "OAuthUserDeviceId")
         
         // call authenticateFace service
         FaceVerificationService.shared.authenticateFace(photo: photo, authenticateFaceEntity: authenticateFaceEntity, properties: properties) {

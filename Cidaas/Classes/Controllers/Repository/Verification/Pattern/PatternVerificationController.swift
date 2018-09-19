@@ -355,7 +355,7 @@ public class PatternVerificationController {
                                         authenticatePatternEntity.verifierPassword = pattern
                                         
                                         // getting user device id
-                                        authenticatePatternEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomailURL"] ?? "OAuthUserDeviceId")
+                                        authenticatePatternEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomainURL"] ?? "OAuthUserDeviceId")
                                         
                                         // call authenticatePattern service
                                         PatternVerificationService.shared.authenticatePattern(authenticatePatternEntity: authenticatePatternEntity, properties: properties) {
@@ -492,7 +492,7 @@ public class PatternVerificationController {
         authenticatePatternEntity.verifierPassword = pattern
         
         // getting user device id
-        authenticatePatternEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomailURL"] ?? "OAuthUserDeviceId")
+        authenticatePatternEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomainURL"] ?? "OAuthUserDeviceId")
         
         // call authenticatePattern service
         PatternVerificationService.shared.authenticatePattern(authenticatePatternEntity: authenticatePatternEntity, properties: properties) {

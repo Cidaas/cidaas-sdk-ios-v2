@@ -202,7 +202,7 @@ public class VoiceVerificationController {
     
     
     // login with Voice from properties
-    public func loginWithVoice(email : String, mobile: String, sub: String, trackId: String, requestId: String, voice: Data, usageType: String, properties: Dictionary<String, String>, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+    public func loginWithVoice(email : String, mobile: String, sub: String, trackId: String, requestId: String, voice: Data, usageType: String, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -216,7 +216,7 @@ public class VoiceVerificationController {
             return
         }
         
-        if (DBHelper.shared.getUserDeviceId(key: properties["DomailURL"] ?? "OAuthUserDeviceId") == "") {
+        if (DBHelper.shared.getUserDeviceId(key: properties["DomainURL"] ?? "OAuthUserDeviceId") == "") {
             let error = WebAuthError.shared.propertyMissingException()
             error.error = "There is no physical verification configured in this mobile"
             DispatchQueue.main.async {
@@ -226,7 +226,7 @@ public class VoiceVerificationController {
         }
         
         // default set intermediate id to empty
-        Cidaas.intermediate_verifiation_id = ""
+        Cidaas.intermediate_verifiation_id = intermediate_id
         self.verificationType = VerificationTypes.TOUCH.rawValue
         self.authenticationType = AuthenticationTypes.LOGIN.rawValue
         
@@ -344,7 +344,7 @@ public class VoiceVerificationController {
                                         authenticateVoiceEntity.statusId = self.statusId
                                         
                                         // getting user device id
-                                        authenticateVoiceEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomailURL"] ?? "OAuthUserDeviceId")
+                                        authenticateVoiceEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomainURL"] ?? "OAuthUserDeviceId")
                                         
                                         
                                         // call authenticateVoice service
@@ -481,7 +481,7 @@ public class VoiceVerificationController {
         authenticateVoiceEntity.statusId = self.statusId
         
         // getting user device id
-        authenticateVoiceEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomailURL"] ?? "OAuthUserDeviceId")
+        authenticateVoiceEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomainURL"] ?? "OAuthUserDeviceId")
         
         // call authenticateVoice service
         VoiceVerificationService.shared.authenticateVoice(voice: voice, authenticateVoiceEntity: authenticateVoiceEntity, properties: properties) {

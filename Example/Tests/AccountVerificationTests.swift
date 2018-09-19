@@ -7,7 +7,6 @@
 //
 
 import Quick
-import Nimble
 import Cidaas
 
 class AccountVerificationTests: QuickSpec {

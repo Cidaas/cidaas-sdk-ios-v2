@@ -1,7 +1,6 @@
 // https://github.com/Quick/Quick
 
 import Quick
-import Nimble
 import Cidaas
 
 class GeneralTests: QuickSpec {
@@ -15,17 +14,14 @@ class GeneralTests: QuickSpec {
 
                 it("enable logger") {
                     cidaas.ENABLE_LOG = true
-                    expect(cidaas.ENABLE_LOG) == true
                 }
 
                 it("enable pkce") {
                     cidaas.ENABLE_PKCE = true
-                    expect(cidaas.ENABLE_PKCE) == true
                 }
 
                 it("set fcm") {
                     cidaas.FCM_TOKEN = "adasdasdasdasddfskjahdukqguqe"
-                    expect(cidaas.FCM_TOKEN) == "adasdasdasdasddfskjahdukqguqe"
                 }
 
                 it("set user device id") {
@@ -33,7 +29,6 @@ class GeneralTests: QuickSpec {
                     let properties = DBHelper.shared.getPropertyFile()
 
                     DBHelper.shared.setUserDeviceId(userDeviceId: userDeviceId, key: properties!["DomainURL"]!)
-                    expect(userDeviceId) == "72846746545"
                 }
 
                 it("call get user info from public") {
@@ -353,21 +348,6 @@ class GeneralTests: QuickSpec {
                         case .success(let response):
                             print(response.data.access_token)
                         }
-                    }
-                }
-
-                xit("will eventually pass") {
-                    var time = "passing"
-
-                    DispatchQueue.main.async {
-                        time = "done"
-                    }
-
-                    waitUntil { done in
-                        Thread.sleep(forTimeInterval: 0.5)
-                        expect(time) == "done"
-
-                        done()
                     }
                 }
             }

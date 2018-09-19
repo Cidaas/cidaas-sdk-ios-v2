@@ -18,5 +18,5 @@ Pod::Spec.new do |s|
   s.source_files = 'Cidaas/Classes/**/*'
   s.dependency 'Alamofire', '~> 4.7'
   s.dependency 'OneTimePassword', '~> 3.1'
-  s.dependency 'CryptoSwift', '~> 0.10'
+  s.dependency 'CryptoSwift', '~> 0.12'
 end
