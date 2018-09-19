@@ -335,7 +335,48 @@ class HelperTests: QuickSpec {
                     let url = URLHelper.shared
                     _ = url.getConsentURL(consent_name: "adasd", version: 2)
                 }
+                
+                it("resume transaction store") {
+                    let tr = TransactionStore.shared
+                    tr.resume(URL(string: "https://cidaas.de")!, options: [UIApplicationOpenURLOptionsKey : Any]())
+                }
+                
+                it("store transaction store") {
+                    let tr = TransactionStore.shared
+                    tr.store(OAuthTestDelegate())
+                }
+                
+                it("cancel transaction store") {
+                    let tr = TransactionStore.shared
+                    tr.cancel(OAuthTestDelegate())
+                }
+                
+                it("clear transaction store") {
+                    let tr = TransactionStore.shared
+                    tr.clear()
+                }
+                
+                it("platform device helper") {
+                    _ = DeviceHelper().platform()
+                    _ = DeviceHelper().hardwareDescription()
+                    _ = DeviceHelper().hardwareNumber()
+                    let hardware = DeviceHelper().hardware()
+                    DeviceHelper().backCameraStillImageResolutionInPixels(hardware)
+                }
             }
         }
     }
+}
+
+public class OAuthTestDelegate : OAuthTransactionDelegate {
+    public var state: String?
+    
+    public func resume(_ url: URL, options: [UIApplicationOpenURLOptionsKey : Any]) -> Bool {
+        return true
+    }
+    
+    public func cancel() {
+        
+    }
+    
 }

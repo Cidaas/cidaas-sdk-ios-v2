@@ -8,12 +8,12 @@
 
 import Foundation
 
-class TransactionStore {
-    static let shared = TransactionStore()
+public class TransactionStore {
+    public static let shared = TransactionStore()
     
-    private var current: OAuthTransactionDelegate?
+    public var current: OAuthTransactionDelegate?
     
-    func resume(_ url: URL, options: [UIApplicationOpenURLOptionsKey: Any]) -> Bool {
+    public func resume(_ url: URL, options: [UIApplicationOpenURLOptionsKey: Any]) -> Bool {
         let resumed = self.current?.resume(url, options: options) ?? false
         if resumed {
             self.current = nil
@@ -21,19 +21,19 @@ class TransactionStore {
         return resumed
     }
     
-    func store(_ transaction: OAuthTransactionDelegate) {
+    public func store(_ transaction: OAuthTransactionDelegate) {
         self.current?.cancel()
         self.current = transaction
     }
     
-    func cancel(_ transaction: OAuthTransactionDelegate) {
+    public func cancel(_ transaction: OAuthTransactionDelegate) {
         transaction.cancel()
         if self.current?.state == transaction.state {
             self.current = nil
         }
     }
     
-    func clear() {
+    public func clear() {
         self.current = nil
     }
 }

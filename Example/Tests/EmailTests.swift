@@ -394,6 +394,1259 @@ class EmailTests: QuickSpec {
                 }
                 
                 
+                it("call login with Email with MFA controller") {
+                    
+                    let controller = EmailVerificationController.shared
+                    
+                    var initiate_entity = InitiateEmailResponseEntity()
+                    
+                    var jsonString = "{\"success\":true,\"status\":200,\"data\":{\"statusId\":\"adfasdfasd\"}}"
+                    var decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        initiate_entity = try decoder.decode(InitiateEmailResponseEntity.self, from: data)
+                        print(initiate_entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    
+                    
+                    var code_entity = AuthzCodeEntity()
+                    
+                    jsonString = "{\"success\":true,\"status\":200,\"data\":{\"code\":\"83475837\"}}"
+                    decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        code_entity = try decoder.decode(AuthzCodeEntity.self, from: data)
+                        print(code_entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    var login_entity = LoginResponseEntity()
+                    
+                    jsonString = "{\"success\":true,\"status\":200,\"data\":{\"sub\":\"123234232\",\"token_type\":\"BEARER\", \"expires_in\":86400,\"id_token_expires_in\":86400,\"access_token\":\"jdgfuygfdywe\",\"id_token\":\"jhgfjwguwgeyrwgeyrfwer\",\"refresh_token\":\"7tguegf\"}}"
+                    decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        login_entity = try decoder.decode(LoginResponseEntity.self, from: data)
+                        print(login_entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    // construct body params
+                    var initiate_bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(initiate_entity)
+                        initiate_bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    
+                    
+                    var code_bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(code_entity)
+                        code_bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    var login_bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(login_entity)
+                        login_bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    let properties = DBHelper.shared.getPropertyFile()
+                    
+                    let baseURL = (properties!["DomainURL"]) ?? ""
+                    
+                    let initiate_urlString = baseURL + URLHelper.shared.getInitiateEmailURL()
+                    
+                    self.stub(http(.post, uri: initiate_urlString), json(initiate_bodyParams))
+                    
+                    
+                    
+                    let code_urlString = baseURL + URLHelper.shared.getMFAContinueURL(trackId: "kjahgdjhasdg")
+                    
+                    self.stub(http(.post, uri: code_urlString), json(code_bodyParams))
+                    
+                    let login_urlString = (properties!["TokenURL"]) ?? ""
+                    
+                    self.stub(http(.post, uri: login_urlString), json(login_bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    controller.loginWithEmail(email: "abc@gmail.com", mobile: "", sub: "",  trackId: "kjahgdjhasdg", requestId: "jhfhgfyfhtf", usageType: UsageTypes.MFA.rawValue, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call login with Email with Passwordless controller") {
+                    
+                    let controller = EmailVerificationController.shared
+                    
+                    var initiate_entity = InitiateEmailResponseEntity()
+                    
+                    var jsonString = "{\"success\":true,\"status\":200,\"data\":{\"statusId\":\"adfasdfasd\"}}"
+                    var decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        initiate_entity = try decoder.decode(InitiateEmailResponseEntity.self, from: data)
+                        print(initiate_entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    
+                    
+                    var code_entity = AuthzCodeEntity()
+                    
+                    jsonString = "{\"success\":true,\"status\":200,\"data\":{\"code\":\"83475837\"}}"
+                    decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        code_entity = try decoder.decode(AuthzCodeEntity.self, from: data)
+                        print(code_entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    var login_entity = LoginResponseEntity()
+                    
+                    jsonString = "{\"success\":true,\"status\":200,\"data\":{\"sub\":\"123234232\",\"token_type\":\"BEARER\", \"expires_in\":86400,\"id_token_expires_in\":86400,\"access_token\":\"jdgfuygfdywe\",\"id_token\":\"jhgfjwguwgeyrwgeyrfwer\",\"refresh_token\":\"7tguegf\"}}"
+                    decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        login_entity = try decoder.decode(LoginResponseEntity.self, from: data)
+                        print(login_entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    // construct body params
+                    var initiate_bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(initiate_entity)
+                        initiate_bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    
+                    
+                    var code_bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(code_entity)
+                        code_bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    var login_bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(login_entity)
+                        login_bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    let properties = DBHelper.shared.getPropertyFile()
+                    
+                    let baseURL = (properties!["DomainURL"]) ?? ""
+                    
+                    let initiate_urlString = baseURL + URLHelper.shared.getInitiateEmailURL()
+                    
+                    self.stub(http(.post, uri: initiate_urlString), json(initiate_bodyParams))
+                    
+                    
+                    
+                    let code_urlString = baseURL + URLHelper.shared.getPasswordlessContinueURL()
+                    
+                    self.stub(http(.post, uri: code_urlString), json(code_bodyParams))
+                    
+                    let login_urlString = (properties!["TokenURL"]) ?? ""
+                    
+                    self.stub(http(.post, uri: login_urlString), json(login_bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    controller.loginWithEmail(email: "abc@gmail.com", mobile: "", sub: "",  trackId: "kjahgdjhasdg", requestId: "jhfhgfyfhtf", usageType: UsageTypes.PASSWORDLESS.rawValue, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call login with Email with initiate failure controller") {
+                    
+                    let controller = EmailVerificationController.shared
+                    
+                    var initiate_entity = InitiateEmailResponseEntity()
+                    
+                    var jsonString = "{\"success\":true,\"status\":200,\"data\":{\"statusId\":\"adfasdfasd\"}}"
+                    var decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        initiate_entity = try decoder.decode(InitiateEmailResponseEntity.self, from: data)
+                        print(initiate_entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    
+                    
+                    var code_entity = AuthzCodeEntity()
+                    
+                    jsonString = "{\"success\":true,\"status\":200,\"data\":{\"code\":\"83475837\"}}"
+                    decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        code_entity = try decoder.decode(AuthzCodeEntity.self, from: data)
+                        print(code_entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    var login_entity = LoginResponseEntity()
+                    
+                    jsonString = "{\"success\":true,\"status\":200,\"data\":{\"sub\":\"123234232\",\"token_type\":\"BEARER\", \"expires_in\":86400,\"id_token_expires_in\":86400,\"access_token\":\"jdgfuygfdywe\",\"id_token\":\"jhgfjwguwgeyrwgeyrfwer\",\"refresh_token\":\"7tguegf\"}}"
+                    decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        login_entity = try decoder.decode(LoginResponseEntity.self, from: data)
+                        print(login_entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    // construct body params
+                    var initiate_bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(initiate_entity)
+                        initiate_bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    
+                    
+                    var code_bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(code_entity)
+                        code_bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    var login_bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(login_entity)
+                        login_bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    let properties = DBHelper.shared.getPropertyFile()
+                    
+                    let error: WebAuthError = WebAuthError.shared
+                    
+                    let baseURL = (properties!["DomainURL"]) ?? ""
+                    
+                    let initiate_urlString = baseURL + URLHelper.shared.getInitiateEmailURL()
+                    
+                    self.stub(http(.post, uri: initiate_urlString), failure(error as Error as NSError))
+                    
+                    
+                    
+                    let code_urlString = baseURL + URLHelper.shared.getPasswordlessContinueURL()
+                    
+                    self.stub(http(.post, uri: code_urlString), json(code_bodyParams))
+                    
+                    let login_urlString = (properties!["TokenURL"]) ?? ""
+                    
+                    self.stub(http(.post, uri: login_urlString), json(login_bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    controller.loginWithEmail(email: "abc@gmail.com", mobile: "", sub: "",  trackId: "kjahgdjhasdg", requestId: "jhfhgfyfhtf", usageType: UsageTypes.PASSWORDLESS.rawValue, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call login with Email with authenticate failure controller") {
+                    
+                    let controller = EmailVerificationController.shared
+                    
+                    var initiate_entity = InitiateEmailResponseEntity()
+                    
+                    var jsonString = "{\"success\":true,\"status\":200,\"data\":{\"statusId\":\"adfasdfasd\"}}"
+                    var decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        initiate_entity = try decoder.decode(InitiateEmailResponseEntity.self, from: data)
+                        print(initiate_entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    
+                    
+                    var code_entity = AuthzCodeEntity()
+                    
+                    jsonString = "{\"success\":true,\"status\":200,\"data\":{\"code\":\"83475837\"}}"
+                    decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        code_entity = try decoder.decode(AuthzCodeEntity.self, from: data)
+                        print(code_entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    var login_entity = LoginResponseEntity()
+                    
+                    jsonString = "{\"success\":true,\"status\":200,\"data\":{\"sub\":\"123234232\",\"token_type\":\"BEARER\", \"expires_in\":86400,\"id_token_expires_in\":86400,\"access_token\":\"jdgfuygfdywe\",\"id_token\":\"jhgfjwguwgeyrwgeyrfwer\",\"refresh_token\":\"7tguegf\"}}"
+                    decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        login_entity = try decoder.decode(LoginResponseEntity.self, from: data)
+                        print(login_entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    // construct body params
+                    var initiate_bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(initiate_entity)
+                        initiate_bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    
+                    
+                    var code_bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(code_entity)
+                        code_bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    var login_bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(login_entity)
+                        login_bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    let properties = DBHelper.shared.getPropertyFile()
+                    
+                    let error: WebAuthError = WebAuthError.shared
+                    
+                    let baseURL = (properties!["DomainURL"]) ?? ""
+                    
+                    let initiate_urlString = baseURL + URLHelper.shared.getInitiateEmailURL()
+                    
+                    self.stub(http(.post, uri: initiate_urlString), json(initiate_bodyParams))
+                    
+                    let authenticate_urlString = baseURL + URLHelper.shared.getAuthenticateEmailURL()
+                    
+                    self.stub(http(.post, uri: authenticate_urlString), failure(error as Error as NSError))
+                    
+                    let code_urlString = baseURL + URLHelper.shared.getPasswordlessContinueURL()
+                    
+                    self.stub(http(.post, uri: code_urlString), json(code_bodyParams))
+                    
+                    let login_urlString = (properties!["TokenURL"]) ?? ""
+                    
+                    self.stub(http(.post, uri: login_urlString), json(login_bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    controller.loginWithEmail(email: "abc@gmail.com", mobile: "", sub: "",  trackId: "kjahgdjhasdg", requestId: "jhfhgfyfhtf", usageType: UsageTypes.PASSWORDLESS.rawValue, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call login with Email with mfa continue failure controller") {
+                    
+                    let controller = EmailVerificationController.shared
+                    
+                    var initiate_entity = InitiateEmailResponseEntity()
+                    
+                    var jsonString = "{\"success\":true,\"status\":200,\"data\":{\"statusId\":\"adfasdfasd\"}}"
+                    var decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        initiate_entity = try decoder.decode(InitiateEmailResponseEntity.self, from: data)
+                        print(initiate_entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    
+                    
+                    var code_entity = AuthzCodeEntity()
+                    
+                    jsonString = "{\"success\":true,\"status\":200,\"data\":{\"code\":\"83475837\"}}"
+                    decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        code_entity = try decoder.decode(AuthzCodeEntity.self, from: data)
+                        print(code_entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    var login_entity = LoginResponseEntity()
+                    
+                    jsonString = "{\"success\":true,\"status\":200,\"data\":{\"sub\":\"123234232\",\"token_type\":\"BEARER\", \"expires_in\":86400,\"id_token_expires_in\":86400,\"access_token\":\"jdgfuygfdywe\",\"id_token\":\"jhgfjwguwgeyrwgeyrfwer\",\"refresh_token\":\"7tguegf\"}}"
+                    decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        login_entity = try decoder.decode(LoginResponseEntity.self, from: data)
+                        print(login_entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    // construct body params
+                    var initiate_bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(initiate_entity)
+                        initiate_bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    
+                    
+                    var code_bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(code_entity)
+                        code_bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    var login_bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(login_entity)
+                        login_bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    let properties = DBHelper.shared.getPropertyFile()
+                    
+                    let error: WebAuthError = WebAuthError.shared
+                    
+                    let baseURL = (properties!["DomainURL"]) ?? ""
+                    
+                    let initiate_urlString = baseURL + URLHelper.shared.getInitiateEmailURL()
+                    
+                    self.stub(http(.post, uri: initiate_urlString), json(initiate_bodyParams))
+                    
+                    
+                    
+                    let code_urlString = baseURL + URLHelper.shared.getMFAContinueURL(trackId: "kjahgdjhasdg")
+                    
+                    self.stub(http(.post, uri: code_urlString), failure(error as Error as NSError))
+                    
+                    let login_urlString = (properties!["TokenURL"]) ?? ""
+                    
+                    self.stub(http(.post, uri: login_urlString), json(login_bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    controller.loginWithEmail(email: "abc@gmail.com", mobile: "", sub: "",  trackId: "kjahgdjhasdg", requestId: "jhfhgfyfhtf", usageType: UsageTypes.MFA.rawValue, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call login with Email with passwordless continue failure controller") {
+                    
+                    let controller = EmailVerificationController.shared
+                    
+                    var initiate_entity = InitiateEmailResponseEntity()
+                    
+                    var jsonString = "{\"success\":true,\"status\":200,\"data\":{\"statusId\":\"adfasdfasd\"}}"
+                    var decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        initiate_entity = try decoder.decode(InitiateEmailResponseEntity.self, from: data)
+                        print(initiate_entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    
+                    
+                    var code_entity = AuthzCodeEntity()
+                    
+                    jsonString = "{\"success\":true,\"status\":200,\"data\":{\"code\":\"83475837\"}}"
+                    decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        code_entity = try decoder.decode(AuthzCodeEntity.self, from: data)
+                        print(code_entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    var login_entity = LoginResponseEntity()
+                    
+                    jsonString = "{\"success\":true,\"status\":200,\"data\":{\"sub\":\"123234232\",\"token_type\":\"BEARER\", \"expires_in\":86400,\"id_token_expires_in\":86400,\"access_token\":\"jdgfuygfdywe\",\"id_token\":\"jhgfjwguwgeyrwgeyrfwer\",\"refresh_token\":\"7tguegf\"}}"
+                    decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        login_entity = try decoder.decode(LoginResponseEntity.self, from: data)
+                        print(login_entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    // construct body params
+                    var initiate_bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(initiate_entity)
+                        initiate_bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    
+                    
+                    var code_bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(code_entity)
+                        code_bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    var login_bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(login_entity)
+                        login_bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    let properties = DBHelper.shared.getPropertyFile()
+                    
+                    let error: WebAuthError = WebAuthError.shared
+                    
+                    let baseURL = (properties!["DomainURL"]) ?? ""
+                    
+                    let initiate_urlString = baseURL + URLHelper.shared.getInitiateEmailURL()
+                    
+                    self.stub(http(.post, uri: initiate_urlString), json(initiate_bodyParams))
+                    
+                    
+                    
+                    let code_urlString = baseURL + URLHelper.shared.getPasswordlessContinueURL()
+                    
+                    self.stub(http(.post, uri: code_urlString), failure(error as Error as NSError))
+                    
+                    let login_urlString = (properties!["TokenURL"]) ?? ""
+                    
+                    self.stub(http(.post, uri: login_urlString), json(login_bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    controller.loginWithEmail(email: "abc@gmail.com", mobile: "", sub: "",  trackId: "kjahgdjhasdg", requestId: "jhfhgfyfhtf", usageType: UsageTypes.PASSWORDLESS.rawValue, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call login with Email with domain url nil failure controller") {
+                    
+                    let controller = EmailVerificationController.shared
+                    
+                    var initiate_entity = InitiateEmailResponseEntity()
+                    
+                    var jsonString = "{\"success\":true,\"status\":200,\"data\":{\"statusId\":\"adfasdfasd\"}}"
+                    var decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        initiate_entity = try decoder.decode(InitiateEmailResponseEntity.self, from: data)
+                        print(initiate_entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    
+                    
+                    var code_entity = AuthzCodeEntity()
+                    
+                    jsonString = "{\"success\":true,\"status\":200,\"data\":{\"code\":\"83475837\"}}"
+                    decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        code_entity = try decoder.decode(AuthzCodeEntity.self, from: data)
+                        print(code_entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    var login_entity = LoginResponseEntity()
+                    
+                    jsonString = "{\"success\":true,\"status\":200,\"data\":{\"sub\":\"123234232\",\"token_type\":\"BEARER\", \"expires_in\":86400,\"id_token_expires_in\":86400,\"access_token\":\"jdgfuygfdywe\",\"id_token\":\"jhgfjwguwgeyrwgeyrfwer\",\"refresh_token\":\"7tguegf\"}}"
+                    decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        login_entity = try decoder.decode(LoginResponseEntity.self, from: data)
+                        print(login_entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    // construct body params
+                    var initiate_bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(initiate_entity)
+                        initiate_bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    
+                    
+                    var code_bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(code_entity)
+                        code_bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    var login_bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(login_entity)
+                        login_bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    var properties = DBHelper.shared.getPropertyFile()
+                    
+                    properties!["DomainURL"] = ""
+                    
+                    let baseURL = (properties!["DomainURL"]) ?? ""
+                    
+                    let initiate_urlString = baseURL + URLHelper.shared.getInitiateEmailURL()
+                    
+                    self.stub(http(.post, uri: initiate_urlString), json(initiate_bodyParams))
+                    
+                    
+                    
+                    let code_urlString = baseURL + URLHelper.shared.getPasswordlessContinueURL()
+                    
+                    self.stub(http(.post, uri: code_urlString), json(code_bodyParams))
+                    
+                    let login_urlString = (properties!["TokenURL"]) ?? ""
+                    
+                    self.stub(http(.post, uri: login_urlString), json(login_bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    controller.loginWithEmail(email: "abc@gmail.com", mobile: "", sub: "",  trackId: "kjahgdjhasdg", requestId: "jhfhgfyfhtf", usageType: UsageTypes.PASSWORDLESS.rawValue, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call login with Email with email nil failure controller") {
+                    
+                    let controller = EmailVerificationController.shared
+                    
+                    var initiate_entity = InitiateEmailResponseEntity()
+                    
+                    var jsonString = "{\"success\":true,\"status\":200,\"data\":{\"statusId\":\"adfasdfasd\"}}"
+                    var decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        initiate_entity = try decoder.decode(InitiateEmailResponseEntity.self, from: data)
+                        print(initiate_entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    
+                    
+                    var code_entity = AuthzCodeEntity()
+                    
+                    jsonString = "{\"success\":true,\"status\":200,\"data\":{\"code\":\"83475837\"}}"
+                    decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        code_entity = try decoder.decode(AuthzCodeEntity.self, from: data)
+                        print(code_entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    var login_entity = LoginResponseEntity()
+                    
+                    jsonString = "{\"success\":true,\"status\":200,\"data\":{\"sub\":\"123234232\",\"token_type\":\"BEARER\", \"expires_in\":86400,\"id_token_expires_in\":86400,\"access_token\":\"jdgfuygfdywe\",\"id_token\":\"jhgfjwguwgeyrwgeyrfwer\",\"refresh_token\":\"7tguegf\"}}"
+                    decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        login_entity = try decoder.decode(LoginResponseEntity.self, from: data)
+                        print(login_entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    // construct body params
+                    var initiate_bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(initiate_entity)
+                        initiate_bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    
+                    
+                    var code_bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(code_entity)
+                        code_bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    var login_bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(login_entity)
+                        login_bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    var properties = DBHelper.shared.getPropertyFile()
+                    
+                    let baseURL = (properties!["DomainURL"]) ?? ""
+                    
+                    let initiate_urlString = baseURL + URLHelper.shared.getInitiateEmailURL()
+                    
+                    self.stub(http(.post, uri: initiate_urlString), json(initiate_bodyParams))
+                    
+                    
+                    
+                    let code_urlString = baseURL + URLHelper.shared.getPasswordlessContinueURL()
+                    
+                    self.stub(http(.post, uri: code_urlString), json(code_bodyParams))
+                    
+                    let login_urlString = (properties!["TokenURL"]) ?? ""
+                    
+                    self.stub(http(.post, uri: login_urlString), json(login_bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    controller.loginWithEmail(email: "", mobile: "", sub: "",  trackId: "kjahgdjhasdg", requestId: "jhfhgfyfhtf", usageType: UsageTypes.PASSWORDLESS.rawValue, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call login with Email with usage type nil failure controller") {
+                    
+                    let controller = EmailVerificationController.shared
+                    
+                    var initiate_entity = InitiateEmailResponseEntity()
+                    
+                    var jsonString = "{\"success\":true,\"status\":200,\"data\":{\"statusId\":\"adfasdfasd\"}}"
+                    var decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        initiate_entity = try decoder.decode(InitiateEmailResponseEntity.self, from: data)
+                        print(initiate_entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    
+                    
+                    var code_entity = AuthzCodeEntity()
+                    
+                    jsonString = "{\"success\":true,\"status\":200,\"data\":{\"code\":\"83475837\"}}"
+                    decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        code_entity = try decoder.decode(AuthzCodeEntity.self, from: data)
+                        print(code_entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    var login_entity = LoginResponseEntity()
+                    
+                    jsonString = "{\"success\":true,\"status\":200,\"data\":{\"sub\":\"123234232\",\"token_type\":\"BEARER\", \"expires_in\":86400,\"id_token_expires_in\":86400,\"access_token\":\"jdgfuygfdywe\",\"id_token\":\"jhgfjwguwgeyrwgeyrfwer\",\"refresh_token\":\"7tguegf\"}}"
+                    decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        login_entity = try decoder.decode(LoginResponseEntity.self, from: data)
+                        print(login_entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    // construct body params
+                    var initiate_bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(initiate_entity)
+                        initiate_bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    
+                    
+                    var code_bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(code_entity)
+                        code_bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    var login_bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(login_entity)
+                        login_bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    var properties = DBHelper.shared.getPropertyFile()
+                    
+                    let baseURL = (properties!["DomainURL"]) ?? ""
+                    
+                    let initiate_urlString = baseURL + URLHelper.shared.getInitiateEmailURL()
+                    
+                    self.stub(http(.post, uri: initiate_urlString), json(initiate_bodyParams))
+                    
+                    
+                    
+                    let code_urlString = baseURL + URLHelper.shared.getPasswordlessContinueURL()
+                    
+                    self.stub(http(.post, uri: code_urlString), json(code_bodyParams))
+                    
+                    let login_urlString = (properties!["TokenURL"]) ?? ""
+                    
+                    self.stub(http(.post, uri: login_urlString), json(login_bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    controller.loginWithEmail(email: "abc@gmail.com", mobile: "", sub: "",  trackId: "", requestId: "jhfhgfyfhtf", usageType: UsageTypes.MFA.rawValue, properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                it("call login with Email with domain url nil failure controller") {
+                    
+                    let controller = EmailVerificationController.shared
+                    
+                    var initiate_entity = InitiateEmailResponseEntity()
+                    
+                    var jsonString = "{\"success\":true,\"status\":200,\"data\":{\"statusId\":\"adfasdfasd\"}}"
+                    var decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        initiate_entity = try decoder.decode(InitiateEmailResponseEntity.self, from: data)
+                        print(initiate_entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    
+                    
+                    var code_entity = AuthzCodeEntity()
+                    
+                    jsonString = "{\"success\":true,\"status\":200,\"data\":{\"code\":\"83475837\"}}"
+                    decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        code_entity = try decoder.decode(AuthzCodeEntity.self, from: data)
+                        print(code_entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    var login_entity = LoginResponseEntity()
+                    
+                    jsonString = "{\"success\":true,\"status\":200,\"data\":{\"sub\":\"123234232\",\"token_type\":\"BEARER\", \"expires_in\":86400,\"id_token_expires_in\":86400,\"access_token\":\"jdgfuygfdywe\",\"id_token\":\"jhgfjwguwgeyrwgeyrfwer\",\"refresh_token\":\"7tguegf\"}}"
+                    decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        login_entity = try decoder.decode(LoginResponseEntity.self, from: data)
+                        print(login_entity.success)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    // construct body params
+                    var initiate_bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(initiate_entity)
+                        initiate_bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    
+                    
+                    var code_bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(code_entity)
+                        code_bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    var login_bodyParams = Dictionary<String, Any>()
+                    
+                    do {
+                        let encoder = JSONEncoder()
+                        let data = try encoder.encode(login_entity)
+                        login_bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                    
+                    var properties = DBHelper.shared.getPropertyFile()
+                    
+                    let baseURL = (properties!["DomainURL"]) ?? ""
+                    
+                    let initiate_urlString = baseURL + URLHelper.shared.getInitiateEmailURL()
+                    
+                    self.stub(http(.post, uri: initiate_urlString), json(initiate_bodyParams))
+                    
+                    
+                    
+                    let code_urlString = baseURL + URLHelper.shared.getPasswordlessContinueURL()
+                    
+                    self.stub(http(.post, uri: code_urlString), json(code_bodyParams))
+                    
+                    let login_urlString = (properties!["TokenURL"]) ?? ""
+                    
+                    self.stub(http(.post, uri: login_urlString), json(login_bodyParams))
+                    
+                    let expect = self.expectation(description: "Expectation")
+                    
+                    controller.loginWithEmail(email: "abc@gmail.com", mobile: "", sub: "",  trackId: "kjahgdjhasdg", requestId: "jhfhgfyfhtf", usageType: "jahsasd", properties: properties!) {
+                        switch $0 {
+                        case .failure(let error):
+                            print(error.errorMessage)
+                            expect.fulfill()
+                            break
+                        case .success(let response):
+                            print(response.success)
+                            expect.fulfill()
+                            break
+                        }
+                    }
+                    
+                    self.waitForExpectations(timeout: 120, handler: { (error) in
+                        if error != nil{
+                            print("Unexpected failure with getting the data ",error!)
+                        }
+                    })
+                }
+                
+                
                 
             }
         }
