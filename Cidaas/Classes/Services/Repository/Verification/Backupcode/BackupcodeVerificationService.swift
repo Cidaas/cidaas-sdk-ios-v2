@@ -31,7 +31,7 @@ public class BackupcodeVerificationService {
         
         // construct headers
         headers = [
-            "user-agent": "cidaas-ios",
+            "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
             "access_token": access_token
         ]
         
@@ -130,7 +130,7 @@ public class BackupcodeVerificationService {
         initiateBackupcodeEntity.deviceInfo = deviceInfoEntity
         // construct headers
         headers = [
-            "user-agent": "cidaas-ios"
+            "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
         ]
         
         // construct body params
@@ -229,7 +229,7 @@ public class BackupcodeVerificationService {
         
         // construct headers
         headers = [
-            "user-agent": "cidaas-ios"
+            "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
         ]
         
         // construct body params

@@ -131,7 +131,7 @@ class EmailTests: QuickSpec {
                         case .failure(let error):
                             print(error.errorMessage)
                         case .success(let response):
-                            print(response.data.trackingCode)
+                            print(response.data.access_token)
                         }
                     }
                 }
@@ -147,7 +147,7 @@ class EmailTests: QuickSpec {
                         case .failure(let error):
                             print(error.errorMessage)
                         case .success(let response):
-                            print(response.data.trackingCode)
+                            print(response.data.access_token)
                         }
                     }
                     

@@ -67,6 +67,10 @@ class DeduplicationViewController: UIViewController, UITableViewDelegate, UITabl
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
     // show alert
     func showAlert(title: String = "Warning", message: String, style: SCLAlertViewStyle) {
         

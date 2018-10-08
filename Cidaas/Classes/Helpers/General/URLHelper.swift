@@ -106,8 +106,30 @@ public class URLHelper {
     public var linkedUsersURL = "/users-srv/userinfo/social"
     public var unlinkUserURL = "/users-srv/user/unlinkaccount"
     
+    public var locationListURL = "/access-control-srv/location/list"
+    public var locationEmissionURL = "/access-control-srv/notification/locationchange"
+    
+    public var beaconListURL = "/access-control-srv/devices/beacons/configs"
+    public var beaconEmissionURL = "/access-control-srv/notification/beaconemit"
+    
     public func getRequestIdURL() -> String {
         return requestIdURL
+    }
+    
+    public func getLocationListURL() -> String {
+        return locationListURL
+    }
+    
+    public func getBeaconListURL() -> String {
+        return beaconListURL
+    }
+    
+    public func getLocationEmissionURL() -> String {
+        return locationEmissionURL
+    }
+    
+    public func getBeaconEmissionURL() -> String {
+        return beaconEmissionURL
     }
     
     public func getTenantInfoURL() -> String {

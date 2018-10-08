@@ -66,15 +66,15 @@ public class AccessTokenController {
         
         // getting current seconds
         let milliseconds = Date().timeIntervalSince1970
-        let seconds = Int64(milliseconds)
+        let seconds = Int64(milliseconds / 1000)
         
         let accessTokenModel = DBHelper.shared.getAccessToken(key: sub)
         let expires = accessTokenModel.expiresIn
-        let secs = accessTokenModel.seconds
+        let secs: Int64 = Int64(accessTokenModel.seconds)
         let expires_in = expires + secs - 10
         
         if expires_in > seconds {
-            EntityToModelConverter.shared.accessTokenModelToAccessTokenEntity { (accessTokenEntity) in
+            EntityToModelConverter.shared.accessTokenModelToAccessTokenEntity(accessTokenModel: accessTokenModel) { (accessTokenEntity) in
                 // return success callback
                 let response = LoginResponseEntity()
                 response.success = true
@@ -104,7 +104,7 @@ public class AccessTokenController {
                 case .failure(let error):
                     
                     // log error
-                    let loggerMessage = "Access token from refresh token service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                    let loggerMessage = "Access token from refresh token service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + String(describing: error.error) + ", Status Code - " + String(describing: error.statusCode)
                     logw(loggerMessage, cname: "cidaas-sdk-error-log")
                     
                     // return failure callback

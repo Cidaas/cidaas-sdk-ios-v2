@@ -56,9 +56,16 @@ class AccountVerificationViewController: UIViewController {
                 self.hideLoader()
                 
                 if (response.data.EMAIL == false) {
+                    self.emailButton.isEnabled = true
+                }
+                else {
                     self.emailButton.isEnabled = false
                 }
                 if (response.data.MOBILE == false) {
+                    self.smsButton.isEnabled = true
+                    self.ivrButton.isEnabled = true
+                }
+                else {
                     self.smsButton.isEnabled = false
                     self.ivrButton.isEnabled = false
                 }

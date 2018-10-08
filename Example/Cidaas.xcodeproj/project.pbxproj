@@ -52,6 +52,12 @@
 		1F560116212ED0B700F842A4 /* DeduplicationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F560114212ED0B600F842A4 /* DeduplicationViewController.swift */; };
 		1F560119212ED12900F842A4 /* Cidaas.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1F560118212ED12900F842A4 /* Cidaas.plist */; };
 		1F5D0FD02146628600D63E9A /* ServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5D0FCF2146628600D63E9A /* ServiceTests.swift */; };
+		1F6B6A1A216A5DC10089433A /* CartItemsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6B6A19216A5DC10089433A /* CartItemsTableViewCell.swift */; };
+		1F6B6A1C216A80280089433A /* LoginWithEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6B6A1B216A80280089433A /* LoginWithEmailViewController.swift */; };
+		1F6B6A1E216A89860089433A /* Cart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6B6A1D216A89860089433A /* Cart.swift */; };
+		1F6B6A20216A8A260089433A /* cartjson.json in Resources */ = {isa = PBXBuildFile; fileRef = 1F6B6A1F216A8A260089433A /* cartjson.json */; };
+		1F6BA4F0216741B8009F7949 /* LoginSuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6BA4EF216741B8009F7949 /* LoginSuccessViewController.swift */; };
+		1F6BA4F221676406009F7949 /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6BA4F121676406009F7949 /* UserProfileViewController.swift */; };
 		1FB3D561214E884B00E6474E /* UsersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FB3D560214E884B00E6474E /* UsersTests.swift */; };
 		1FCD9EB12133C66800A54A09 /* AccountVerificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCD9EB02133C66800A54A09 /* AccountVerificationViewController.swift */; };
 		1FCD9ED22134305F00A54A09 /* VerifyCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCD9ED12134305F00A54A09 /* VerifyCodeViewController.swift */; };
@@ -134,6 +140,12 @@
 		1F560114212ED0B600F842A4 /* DeduplicationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeduplicationViewController.swift; sourceTree = "<group>"; };
 		1F560118212ED12900F842A4 /* Cidaas.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Cidaas.plist; sourceTree = "<group>"; };
 		1F5D0FCF2146628600D63E9A /* ServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTests.swift; sourceTree = "<group>"; };
+		1F6B6A19216A5DC10089433A /* CartItemsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartItemsTableViewCell.swift; sourceTree = "<group>"; };
+		1F6B6A1B216A80280089433A /* LoginWithEmailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginWithEmailViewController.swift; sourceTree = "<group>"; };
+		1F6B6A1D216A89860089433A /* Cart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cart.swift; sourceTree = "<group>"; };
+		1F6B6A1F216A8A260089433A /* cartjson.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = cartjson.json; sourceTree = "<group>"; };
+		1F6BA4EF216741B8009F7949 /* LoginSuccessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginSuccessViewController.swift; sourceTree = "<group>"; };
+		1F6BA4F121676406009F7949 /* UserProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
 		1FB3D560214E884B00E6474E /* UsersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersTests.swift; sourceTree = "<group>"; };
 		1FCD9EB02133C66800A54A09 /* AccountVerificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountVerificationViewController.swift; sourceTree = "<group>"; };
 		1FCD9ED12134305F00A54A09 /* VerifyCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyCodeViewController.swift; sourceTree = "<group>"; };
@@ -237,6 +249,12 @@
 				1FCD9ED32134315900A54A09 /* VerifySuccessViewController.swift */,
 				1F4179D02135209000ADFFFA /* MFAListViewController.swift */,
 				1F49FA722140C2F2001A49BB /* Test.plist */,
+				1F6BA4EF216741B8009F7949 /* LoginSuccessViewController.swift */,
+				1F6BA4F121676406009F7949 /* UserProfileViewController.swift */,
+				1F6B6A19216A5DC10089433A /* CartItemsTableViewCell.swift */,
+				1F6B6A1B216A80280089433A /* LoginWithEmailViewController.swift */,
+				1F6B6A1D216A89860089433A /* Cart.swift */,
+				1F6B6A1F216A8A260089433A /* cartjson.json */,
 			);
 			name = "Example for Cidaas";
 			path = Cidaas;
@@ -381,6 +399,11 @@
 						CreatedOnToolsVersion = 6.3.1;
 						DevelopmentTeam = BWMM72Q5M6;
 						LastSwiftMigration = 0940;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					607FACE41AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
@@ -416,6 +439,7 @@
 				1F5600FF212ECFF800F842A4 /* LaunchScreen.storyboard in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
+				1F6B6A20216A8A260089433A /* cartjson.json in Resources */,
 				1F560119212ED12900F842A4 /* Cidaas.plist in Resources */,
 				1F560103212ED01D00F842A4 /* Main.storyboard in Resources */,
 			);
@@ -460,6 +484,7 @@
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/Base32/Base32.framework",
 				"${BUILT_PRODUCTS_DIR}/Cidaas/Cidaas.framework",
+				"${BUILT_PRODUCTS_DIR}/Cosmos/Cosmos.framework",
 				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/IQKeyboardManagerSwift/IQKeyboardManagerSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/OneTimePassword/OneTimePassword.framework",
@@ -471,6 +496,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Base32.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Cidaas.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Cosmos.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptoSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManagerSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OneTimePassword.framework",
@@ -531,6 +557,9 @@
 			files = (
 				1F5600FA212ECFA800F842A4 /* Checkbox.swift in Sources */,
 				1FCD9ED22134305F00A54A09 /* VerifyCodeViewController.swift in Sources */,
+				1F6B6A1A216A5DC10089433A /* CartItemsTableViewCell.swift in Sources */,
+				1F6BA4F221676406009F7949 /* UserProfileViewController.swift in Sources */,
+				1F6BA4F0216741B8009F7949 /* LoginSuccessViewController.swift in Sources */,
 				1F5600F7212ECF9B00F842A4 /* AppDelegate.swift in Sources */,
 				1F56010E212ED08F00F842A4 /* CustomLoader.swift in Sources */,
 				1FCD9EB12133C66800A54A09 /* AccountVerificationViewController.swift in Sources */,
@@ -541,9 +570,11 @@
 				1F560109212ED07700F842A4 /* RegisterViewController.swift in Sources */,
 				1F560110212ED09800F842A4 /* UnverifiedUserViewController.swift in Sources */,
 				1FCD9ED42134315900A54A09 /* VerifySuccessViewController.swift in Sources */,
+				1F6B6A1E216A89860089433A /* Cart.swift in Sources */,
 				1F5600FD212ECFC000F842A4 /* TextFieldEffects.swift in Sources */,
 				1F4179D12135209000ADFFFA /* MFAListViewController.swift in Sources */,
 				1F56010C212ED08000F842A4 /* ViewController.swift in Sources */,
+				1F6B6A1C216A80280089433A /* LoginWithEmailViewController.swift in Sources */,
 				1F5600FB212ECFA800F842A4 /* CustomTextField.swift in Sources */,
 				1F560116212ED0B700F842A4 /* DeduplicationViewController.swift in Sources */,
 			);
@@ -724,7 +755,7 @@
 					"@executable_path/Frameworks",
 				);
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cidaas.sdk.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Cidaas/Cidaas_Example-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -748,7 +779,7 @@
 					"@executable_path/Frameworks",
 				);
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cidaas.sdk.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Cidaas/Cidaas_Example-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;

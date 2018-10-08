@@ -375,11 +375,11 @@ public class Cidaas {
     // 2. Call configureEmail method
     // 3. Maintain logs based on flags
     
-    public func verifyEmail(statusId: String, code: String, callback: @escaping(Result<VerifyEmailResponseEntity>) -> Void) {
+    public func verifyEmail(statusId: String, code: String, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            EmailVerificationController.shared.configureEmail(statusId: statusId, code: code, properties: savedProp!, callback: callback)
+            EmailVerificationController.shared.verifyEmail(statusId: statusId, code: code, properties: savedProp!, callback: callback)
         }
         else {
             // log error
@@ -1829,6 +1829,118 @@ public class Cidaas {
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
             AccountVerificationController.shared.getAccountVerificationList(sub: sub, properties: savedProp!, callback: callback)
+        }
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // get location list from plist
+    // 1. Read properties from file
+    // 2. Call getLocationList method
+    // 3. Maintain logs based on flags
+    
+    public func getLocationList(sub: String, callback: @escaping(Result<LocationListResponse>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            LocationController.shared.getLocationList(sub: sub, properties: savedProp!, callback: callback)
+        }
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // get beacon list from plist
+    // 1. Read properties from file
+    // 2. Call getBeaconList method
+    // 3. Maintain logs based on flags
+    
+    public func getBeaconList(callback: @escaping(Result<BeaconListResponse>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            LocationController.shared.getBeaconList(properties: savedProp!, callback: callback)
+        }
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // emit location from plist
+    // 1. Read properties from file
+    // 2. Call emitLocation method
+    // 3. Maintain logs based on flags
+    
+    public func emitLocation(locationEmission: LocationEmission, callback: @escaping(Result<EmissionResponse>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            LocationController.shared.emitLocation(locationEmission: locationEmission, properties: savedProp!, callback: callback)
+        }
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // emit beacon from plist
+    // 1. Read properties from file
+    // 2. Call emitLocation method
+    // 3. Maintain logs based on flags
+    
+    public func emitBeacon(beaconEmission: BeaconEmission, callback: @escaping(Result<EmissionResponse>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            LocationController.shared.emitBeacon(beaconEmission: beaconEmission, properties: savedProp!, callback: callback)
         }
         else {
             // log error
