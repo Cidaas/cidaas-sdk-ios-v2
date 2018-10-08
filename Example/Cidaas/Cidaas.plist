@@ -3,10 +3,10 @@
 <plist version="1.0">
 <dict>
 	<key>DomainURL</key>
-	<string>https://cidaas-in-action.cidaas.de</string>
+	<string>your base url</string>
 	<key>ClientId</key>
-	<string>e5f3601eff064e9ebb1b5bcd1ade0027</string>
+	<string>your client id</string>
 	<key>RedirectURL</key>
-	<string>https://cidaas-in-action.cidaas.de/demo-site/welcome</string>
+	<string>your redirect url</string>
 </dict>
 </plist>
