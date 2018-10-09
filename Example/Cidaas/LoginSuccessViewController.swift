@@ -28,6 +28,7 @@ class LoginSuccessViewController: UIViewController, CLLocationManagerDelegate, U
     var beaconSkipLevel = 0
     var locationSkipLevel = 0
     var beaconNotifyFlag = false
+    var timer: Timer!
     
     var itemList : [Cart] = []
     
@@ -189,6 +190,9 @@ class LoginSuccessViewController: UIViewController, CLLocationManagerDelegate, U
     
     @IBAction func rightBarButtonItemClick(_ sender: Any) {
         if self.navigationItem.rightBarButtonItem?.title == "Logout" {
+            if timer != nil {
+            self.timer.invalidate()
+            }
             let monitoredRegions = self.manager.monitoredRegions
             self.manager.stopUpdatingLocation()
             for region in monitoredRegions {
@@ -285,7 +289,7 @@ class LoginSuccessViewController: UIViewController, CLLocationManagerDelegate, U
             manager.allowsBackgroundLocationUpdates = true
             manager.stopMonitoring(for: currRegion)
             manager.startMonitoring(for: currRegion)
-            Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { (timer) in
+            timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { (timer) in
                 self.manager.requestState(for: currRegion)
             }
         }
@@ -657,7 +661,7 @@ class LoginSuccessViewController: UIViewController, CLLocationManagerDelegate, U
             case .success(let result):
                 // log
                 logw("Location Emission response success  \(result.data.result)", cname: "cidaaslocationtracking")
-                
+
             case .failure(let error):
                 // log
                 logw("Location Emission response failure \(error.error)", cname: "cidaaslocationtracking")
@@ -694,7 +698,7 @@ class LoginSuccessViewController: UIViewController, CLLocationManagerDelegate, U
             case .success(let result):
                 // log
                 logw("Beacon Emission response success  \(result.data.result)", cname: "cidaasbeacontracking")
-                
+
             case .failure(let error):
                 // log
                 logw("Beacon Emission response failure \(error.error)", cname: "cidaasbeacontracking")

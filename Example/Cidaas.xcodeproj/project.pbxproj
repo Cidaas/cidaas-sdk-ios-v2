@@ -62,6 +62,7 @@
 		1FCD9EB12133C66800A54A09 /* AccountVerificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCD9EB02133C66800A54A09 /* AccountVerificationViewController.swift */; };
 		1FCD9ED22134305F00A54A09 /* VerifyCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCD9ED12134305F00A54A09 /* VerifyCodeViewController.swift */; };
 		1FCD9ED42134315900A54A09 /* VerifySuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCD9ED32134315900A54A09 /* VerifySuccessViewController.swift */; };
+		1FEBDC2A216CFA4300EE6046 /* WidasIndiaLocation.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 1FEBDC29216CFA4300EE6046 /* WidasIndiaLocation.gpx */; };
 		23F03CC1BA1783D5193AD673 /* Pods_Cidaas_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED7403D168AB4E369E5C9FA /* Pods_Cidaas_Example.framework */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
@@ -150,6 +151,7 @@
 		1FCD9EB02133C66800A54A09 /* AccountVerificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountVerificationViewController.swift; sourceTree = "<group>"; };
 		1FCD9ED12134305F00A54A09 /* VerifyCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyCodeViewController.swift; sourceTree = "<group>"; };
 		1FCD9ED32134315900A54A09 /* VerifySuccessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifySuccessViewController.swift; sourceTree = "<group>"; };
+		1FEBDC29216CFA4300EE6046 /* WidasIndiaLocation.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = WidasIndiaLocation.gpx; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* Cidaas_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cidaas_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACDC1AFB9204008FA782 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -255,6 +257,7 @@
 				1F6B6A1B216A80280089433A /* LoginWithEmailViewController.swift */,
 				1F6B6A1D216A89860089433A /* Cart.swift */,
 				1F6B6A1F216A8A260089433A /* cartjson.json */,
+				1FEBDC29216CFA4300EE6046 /* WidasIndiaLocation.gpx */,
 			);
 			name = "Example for Cidaas";
 			path = Cidaas;
@@ -442,6 +445,7 @@
 				1F6B6A20216A8A260089433A /* cartjson.json in Resources */,
 				1F560119212ED12900F842A4 /* Cidaas.plist in Resources */,
 				1F560103212ED01D00F842A4 /* Main.storyboard in Resources */,
+				1FEBDC2A216CFA4300EE6046 /* WidasIndiaLocation.gpx in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
