@@ -26,6 +26,7 @@ class LoginSuccessViewController: UIViewController, CLLocationManagerDelegate, U
     var enteredLocationLatitude: CLLocationDegrees = 0.0
     var enteredLocationLongitude: CLLocationDegrees = 0.0
     var beaconSkipLevel = 0
+    var locationSkipLevel = 0
     var beaconNotifyFlag = false
     
     var itemList : [Cart] = []
@@ -145,7 +146,7 @@ class LoginSuccessViewController: UIViewController, CLLocationManagerDelegate, U
         content.body = body
         
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 2, repeats: false)
-        let id = "demo"
+        let id = UUID().uuidString
         let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
         UNUserNotificationCenter.current().add(request) { (error) in
             print(error ?? "")
@@ -189,13 +190,14 @@ class LoginSuccessViewController: UIViewController, CLLocationManagerDelegate, U
     @IBAction func rightBarButtonItemClick(_ sender: Any) {
         if self.navigationItem.rightBarButtonItem?.title == "Logout" {
             let monitoredRegions = self.manager.monitoredRegions
+            self.manager.stopUpdatingLocation()
             for region in monitoredRegions {
                 self.manager.stopMonitoring(for: region)
                 if region is CLBeaconRegion {
                     self.manager.stopRangingBeacons(in: region as! CLBeaconRegion)
                 }
+                locationManager(self.manager, didExitRegion: region)
             }
-            self.manager.stopUpdatingLocation()
             self.navigationItem.rightBarButtonItem?.title = "Login"
             userDefaults.set("", forKey: "sub")
             userDefaults.set("", forKey: "sessionId")
@@ -230,7 +232,7 @@ class LoginSuccessViewController: UIViewController, CLLocationManagerDelegate, U
                 let uuid  = UUID(uuidString:uniqueId) ?? UUID.init(uuidString: "")
                 let currRegion = CLBeaconRegion(proximityUUID: uuid!, identifier: "\(beacon.vendor)_\(uniqueId )")
                 manager.distanceFilter = kCLDistanceFilterNone
-                manager.desiredAccuracy = kCLLocationAccuracyBest
+                manager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
                 currRegion.notifyOnEntry = true
                 currRegion.notifyOnExit = true
                 manager.requestAlwaysAuthorization()
@@ -243,9 +245,12 @@ class LoginSuccessViewController: UIViewController, CLLocationManagerDelegate, U
                 // log
                 logw("Monitored Beacon Region \(currRegion)", cname: "cidaasbeacontracking")
                 
-                Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { (timer) in
-                    self.manager.requestState(for: currRegion)
-                }
+//                Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { (timer) in
+//                    self.manager.requestState(for: currRegion)
+//                }
+
+                self.manager.requestState(for: currRegion)
+                
             }
         }
     }
@@ -271,7 +276,7 @@ class LoginSuccessViewController: UIViewController, CLLocationManagerDelegate, U
             logw("Monitored Region \(currRegion)", cname: "cidaaslocationtracking")
             
             manager.distanceFilter = kCLDistanceFilterNone
-            manager.desiredAccuracy = kCLLocationAccuracyBest
+            manager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
             currRegion.notifyOnEntry = true
             currRegion.notifyOnExit = true
             manager.requestAlwaysAuthorization()
@@ -372,9 +377,16 @@ class LoginSuccessViewController: UIViewController, CLLocationManagerDelegate, U
         // log
         logw("Current Distance \(distanceInMeters)", cname: "cidaaslocationtracking")
         
-        if (distanceInMeters < 5) {
+//        if (distanceInMeters < 5) {
+//            return
+//        }
+        
+        if locationSkipLevel < 5 {
+            locationSkipLevel = locationSkipLevel + 1
             return
         }
+        
+        locationSkipLevel = 0
         
         
         // check if sessionid present
@@ -484,6 +496,7 @@ class LoginSuccessViewController: UIViewController, CLLocationManagerDelegate, U
                     
                     emitLocation(locationEmission: locationEmission)
                     userDefaults.set(sessionId, forKey: "sessionId")
+                    userDefaults.set(region.identifier, forKey: region.identifier)
                 }
                 
                 manager.startUpdatingLocation()
@@ -567,7 +580,9 @@ class LoginSuccessViewController: UIViewController, CLLocationManagerDelegate, U
                 
                 let location = manager.location!
                 
-                if sessionId != "" {
+                let regionStarted = ((userDefaults.object(forKey: region.identifier) ?? "") as? String) ?? ""
+                
+                if sessionId != "" && regionStarted != "" {
                     
                     generateNotification(title: "CID-KART", subTitle: "Thank you for visiting CID-KART.", body: "")
                     
@@ -601,6 +616,7 @@ class LoginSuccessViewController: UIViewController, CLLocationManagerDelegate, U
                     
                     emitLocation(locationEmission: locationEmission)
                     userDefaults.set("", forKey: "sessionId")
+                    userDefaults.set("", forKey: region.identifier)
                 }
                 
                 manager.stopUpdatingLocation()
