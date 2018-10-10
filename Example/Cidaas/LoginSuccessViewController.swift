@@ -697,35 +697,35 @@ class LoginSuccessViewController: UIViewController, CLLocationManagerDelegate, U
         // log
         logw("Getting Beacon list", cname: "cidaasbeacontracking")
         
-        //        cidaas.getBeaconList() {
-        //            switch $0 {
-        //            case .success(let result):
-        //                // log
-        //                logw("Getting Beacon list response success  \(result.data)", cname: "cidaasbeacontracking")
-        //
-        //                self.configureBeacon(data: result.data)
-        //
-        //            case .failure(let error):
-        //                // log
-        //                logw("Getting Beacon list response failure \(error.error)", cname: "cidaasbeacontracking")
-        //            }
-        //        }
+                cidaas.getBeaconList() {
+                    switch $0 {
+                    case .success(let result):
+                        // log
+                        logw("Getting Beacon list response success  \(result.data)", cname: "cidaasbeacontracking")
+        
+                        self.configureBeacon(data: result.data)
+        
+                    case .failure(let error):
+                        // log
+                        logw("Getting Beacon list response failure \(error.error)", cname: "cidaasbeacontracking")
+                    }
+                }
     }
     
     func emitBeacon(beaconEmission: BeaconEmission) {
         // log
         logw("Emiting Beacon - Passes Sub \(sub)", cname: "cidaasbeacontracking")
         
-        //        cidaas.emitBeacon(beaconEmission: beaconEmission) {
-        //            switch $0 {
-        //            case .success(let result):
-        //                // log
-        //                logw("Beacon Emission response success  \(result.data.result)", cname: "cidaasbeacontracking")
-        //
-        //            case .failure(let error):
-        //                // log
-        //                logw("Beacon Emission response failure \(error.error)", cname: "cidaasbeacontracking")
-        //            }
-        //        }
+                cidaas.emitBeacon(beaconEmission: beaconEmission) {
+                    switch $0 {
+                    case .success(let result):
+                        // log
+                        logw("Beacon Emission response success  \(result.data.result)", cname: "cidaasbeacontracking")
+        
+                    case .failure(let error):
+                        // log
+                        logw("Beacon Emission response failure \(error.error)", cname: "cidaasbeacontracking")
+                    }
+                }
     }
 }
