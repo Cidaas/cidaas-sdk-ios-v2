@@ -21,6 +21,10 @@ public class AccessTokenController {
     // get access token by code
     public func getAccessToken(code: String, callback: @escaping (Result<LoginResponseEntity>) -> Void) {
         
+        // log info
+        let loggerMessage = "Get Access token from code controller : " + "Incoming Data - " + code
+        logw(loggerMessage, cname: "cidaas-sdk-info-log")
+        
         let properties = DBHelper.shared.getPropertyFile()
         if (properties == nil) {
             // return failure callback
