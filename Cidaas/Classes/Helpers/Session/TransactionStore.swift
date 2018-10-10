@@ -13,7 +13,7 @@ public class TransactionStore {
     
     public var current: OAuthTransactionDelegate?
     
-    public func resume(_ url: URL, options: [UIApplicationOpenURLOptionsKey: Any]) -> Bool {
+    public func resume(_ url: URL, options: [UIApplication.OpenURLOptionsKey: Any]) -> Bool {
         let resumed = self.current?.resume(url, options: options) ?? false
         if resumed {
             self.current = nil

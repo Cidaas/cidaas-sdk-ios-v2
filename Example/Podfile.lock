@@ -2,9 +2,9 @@ PODS:
   - Alamofire (4.7.3)
   - Base32 (1.1.2)
   - Cidaas (0.0.1.3):
-    - Alamofire (~> 4.7)
+    - Alamofire (~> 4.7.3)
     - CryptoSwift (~> 0.12)
-    - OneTimePassword (~> 3.1)
+    - OneTimePassword (~> 3.1.4)
   - Cosmos (17.0.0)
   - CryptoSwift (0.12.0)
   - IQKeyboardManagerSwift (5.0.8)
@@ -54,7 +54,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
   Base32: 163c298644d184e89ca4e00a996bad6bf5166390
-  Cidaas: 2e85fd9978dc9446af84b395c26043b381abe643
+  Cidaas: 148394f1674a6baa8b1f5705fc0082e10fd1dcab
   Cosmos: 309e489f21ffc91a1eeecfebef7f817cd2fcfba6
   CryptoSwift: 1c07ca50843dd48bc54e6ea53d7a4dba3b645716
   IQKeyboardManagerSwift: 2e7dc7f98c111458c1ea2b373f893e8cf95e2b97

@@ -338,7 +338,7 @@ class HelperTests: QuickSpec {
                 
                 it("resume transaction store") {
                     let tr = TransactionStore.shared
-                    tr.resume(URL(string: "https://cidaas.de")!, options: [UIApplicationOpenURLOptionsKey : Any]())
+                    tr.resume(URL(string: "https://cidaas.de")!, options: [UIApplication.OpenURLOptionsKey : Any]())
                 }
                 
                 it("store transaction store") {
@@ -371,7 +371,7 @@ class HelperTests: QuickSpec {
 public class OAuthTestDelegate : OAuthTransactionDelegate {
     public var state: String?
     
-    public func resume(_ url: URL, options: [UIApplicationOpenURLOptionsKey : Any]) -> Bool {
+    public func resume(_ url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
         return true
     }
     

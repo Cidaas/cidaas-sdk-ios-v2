@@ -136,7 +136,7 @@ public class UsersService {
         Alamofire.upload(
             multipartFormData: { multipartFormData in
 
-                let uploadImage = UIImageJPEGRepresentation(photo, 0.01)
+                let uploadImage = photo.jpegData(compressionQuality: 0.01)
                 
                 multipartFormData.append(uploadImage!, withName: "photo", fileName: "photo.jpg", mimeType: "image/jpeg")
                 enrolledURL.addValue(multipartFormData.contentType, forHTTPHeaderField: "Content-Type")
