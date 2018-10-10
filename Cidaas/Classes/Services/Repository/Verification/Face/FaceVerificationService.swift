@@ -284,7 +284,7 @@ public class FaceVerificationService {
                     multipartFormData.append(value.data(using: .utf8)!, withName: key)
                 }
                 
-                let uploadImage = UIImageJPEGRepresentation(photo, 0.01)
+                let uploadImage = photo.jpegData(compressionQuality: 0.01)
                 
                 multipartFormData.append(uploadImage!, withName: "photo", fileName: "photo.jpg", mimeType: "image/jpeg")
                 enrolledURL.addValue(multipartFormData.contentType, forHTTPHeaderField: "Content-Type")
@@ -503,7 +503,7 @@ public class FaceVerificationService {
                     multipartFormData.append(value.data(using: .utf8)!, withName: key)
                 }
                 
-                let uploadImage = UIImageJPEGRepresentation(photo, 0.01)
+                let uploadImage = photo.jpegData(compressionQuality: 0.01)
                 
                 multipartFormData.append(uploadImage!, withName: "photo", fileName: "photo.jpg", mimeType: "image/jpeg")
                 enrolledURL.addValue(multipartFormData.contentType, forHTTPHeaderField: "Content-Type")
