@@ -34,7 +34,7 @@ class LoginSuccessViewController: UIViewController, CLLocationManagerDelegate, U
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         self.myTable.rowHeight = 132
         
         // get device information
@@ -172,7 +172,22 @@ class LoginSuccessViewController: UIViewController, CLLocationManagerDelegate, U
         else {
             cell.favourites.image = UIImage(named: "blackheart")
         }
+        cell.favourites.tag = indexPath.row
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(changeFavourites(tapGestureRecognizer:)))
+        tapGestureRecognizer.numberOfTapsRequired = 1
+        cell.favourites.isUserInteractionEnabled = true
+        cell.favourites.addGestureRecognizer(tapGestureRecognizer)
         return cell
+    }
+    
+    @objc func changeFavourites(tapGestureRecognizer: UITapGestureRecognizer) {
+        let imgView = tapGestureRecognizer.view as! UIImageView
+        if imgView.image == UIImage(named: "orangeheart") {
+//            cell.favourites.image = UIImage(named: "blackheart")
+        }
+        else {
+//            cell.favourites.image = UIImage(named: "orangeheart")
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -182,7 +197,7 @@ class LoginSuccessViewController: UIViewController, CLLocationManagerDelegate, U
         }
         else {
             self.navigationItem.rightBarButtonItem?.title = "Logout"
-         
+            
             getLocationList()
             getBeaconList()
         }
@@ -191,7 +206,7 @@ class LoginSuccessViewController: UIViewController, CLLocationManagerDelegate, U
     @IBAction func rightBarButtonItemClick(_ sender: Any) {
         if self.navigationItem.rightBarButtonItem?.title == "Logout" {
             if timer != nil {
-            self.timer.invalidate()
+                self.timer.invalidate()
             }
             let monitoredRegions = self.manager.monitoredRegions
             self.manager.stopUpdatingLocation()
@@ -249,10 +264,10 @@ class LoginSuccessViewController: UIViewController, CLLocationManagerDelegate, U
                 // log
                 logw("Monitored Beacon Region \(currRegion)", cname: "cidaasbeacontracking")
                 
-//                Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { (timer) in
-//                    self.manager.requestState(for: currRegion)
-//                }
-
+                //                Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { (timer) in
+                //                    self.manager.requestState(for: currRegion)
+                //                }
+                
                 self.manager.requestState(for: currRegion)
                 
             }
@@ -381,9 +396,9 @@ class LoginSuccessViewController: UIViewController, CLLocationManagerDelegate, U
         // log
         logw("Current Distance \(distanceInMeters)", cname: "cidaaslocationtracking")
         
-//        if (distanceInMeters < 5) {
-//            return
-//        }
+        //        if (distanceInMeters < 5) {
+        //            return
+        //        }
         
         if locationSkipLevel < 5 {
             locationSkipLevel = locationSkipLevel + 1
@@ -445,7 +460,11 @@ class LoginSuccessViewController: UIViewController, CLLocationManagerDelegate, U
                 // log
                 logw("Entered Geo Region \(region)", cname: "cidaaslocationtracking")
                 
-                let location = manager.location!
+                var location: CLLocation = CLLocation()
+                
+                if manager.location != nil {
+                    location = manager.location!
+                }
                 
                 self.enteredLocationLatitude = location.coordinate.latitude
                 self.enteredLocationLongitude = location.coordinate.longitude
@@ -582,7 +601,11 @@ class LoginSuccessViewController: UIViewController, CLLocationManagerDelegate, U
                 logw("Exited Geo Region Session Id - \(String(describing: sessionId))", cname: "cidaaslocationtracking")
                 logw("Exited Geo Region Location Ids - \(String(describing: locationIds))", cname: "cidaaslocationtracking")
                 
-                let location = manager.location!
+                var location: CLLocation = CLLocation()
+                
+                if (manager.location != nil) {
+                    location = manager.location!
+                }
                 
                 let regionStarted = ((userDefaults.object(forKey: region.identifier) ?? "") as? String) ?? ""
                 
@@ -639,15 +662,15 @@ class LoginSuccessViewController: UIViewController, CLLocationManagerDelegate, U
         
         cidaas.getLocationList(sub: sub) {
             switch $0 {
-                case .success(let result):
-                    // log
-                    logw("Getting location list response success  \(result.data.data)", cname: "cidaaslocationtracking")
+            case .success(let result):
+                // log
+                logw("Getting location list response success  \(result.data.data)", cname: "cidaaslocationtracking")
                 
-                    self.configureLocation(data: result.data)
+                self.configureLocation(data: result.data)
                 
-                case .failure(let error):
-                    // log
-                    logw("Getting location list response failure \(error.error)", cname: "cidaaslocationtracking")
+            case .failure(let error):
+                // log
+                logw("Getting location list response failure \(error.error)", cname: "cidaaslocationtracking")
             }
         }
     }
@@ -661,7 +684,7 @@ class LoginSuccessViewController: UIViewController, CLLocationManagerDelegate, U
             case .success(let result):
                 // log
                 logw("Location Emission response success  \(result.data.result)", cname: "cidaaslocationtracking")
-
+                
             case .failure(let error):
                 // log
                 logw("Location Emission response failure \(error.error)", cname: "cidaaslocationtracking")
@@ -674,35 +697,35 @@ class LoginSuccessViewController: UIViewController, CLLocationManagerDelegate, U
         // log
         logw("Getting Beacon list", cname: "cidaasbeacontracking")
         
-        cidaas.getBeaconList() {
-            switch $0 {
-            case .success(let result):
-                // log
-                logw("Getting Beacon list response success  \(result.data)", cname: "cidaasbeacontracking")
-                
-                self.configureBeacon(data: result.data)
-                
-            case .failure(let error):
-                // log
-                logw("Getting Beacon list response failure \(error.error)", cname: "cidaasbeacontracking")
-            }
-        }
+        //        cidaas.getBeaconList() {
+        //            switch $0 {
+        //            case .success(let result):
+        //                // log
+        //                logw("Getting Beacon list response success  \(result.data)", cname: "cidaasbeacontracking")
+        //
+        //                self.configureBeacon(data: result.data)
+        //
+        //            case .failure(let error):
+        //                // log
+        //                logw("Getting Beacon list response failure \(error.error)", cname: "cidaasbeacontracking")
+        //            }
+        //        }
     }
     
     func emitBeacon(beaconEmission: BeaconEmission) {
         // log
         logw("Emiting Beacon - Passes Sub \(sub)", cname: "cidaasbeacontracking")
         
-        cidaas.emitBeacon(beaconEmission: beaconEmission) {
-            switch $0 {
-            case .success(let result):
-                // log
-                logw("Beacon Emission response success  \(result.data.result)", cname: "cidaasbeacontracking")
-
-            case .failure(let error):
-                // log
-                logw("Beacon Emission response failure \(error.error)", cname: "cidaasbeacontracking")
-            }
-        }
+        //        cidaas.emitBeacon(beaconEmission: beaconEmission) {
+        //            switch $0 {
+        //            case .success(let result):
+        //                // log
+        //                logw("Beacon Emission response success  \(result.data.result)", cname: "cidaasbeacontracking")
+        //
+        //            case .failure(let error):
+        //                // log
+        //                logw("Beacon Emission response failure \(error.error)", cname: "cidaasbeacontracking")
+        //            }
+        //        }
     }
 }

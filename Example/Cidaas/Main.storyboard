@@ -1186,6 +1186,9 @@
                                                                 <userDefinedRuntimeAttribute type="color" keyPath="filledColor">
                                                                     <color key="value" red="1" green="0.57637232540000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                 </userDefinedRuntimeAttribute>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="fillMode">
+                                                                    <integer key="value" value="1"/>
+                                                                </userDefinedRuntimeAttribute>
                                                             </userDefinedRuntimeAttributes>
                                                         </view>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="EMI starts from 7000/month" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TtV-Hm-M9K">
@@ -1205,10 +1208,10 @@
                                                             </constraints>
                                                         </view>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="orangeheart" translatesAutoresizingMaskIntoConstraints="NO" id="jWf-0E-f3B">
-                                                            <rect key="frame" x="325" y="53" width="30" height="30"/>
+                                                            <rect key="frame" x="325" y="58" width="20" height="20"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="width" constant="30" id="luz-zF-fX0"/>
-                                                                <constraint firstAttribute="height" constant="30" id="pDI-Kq-ldP"/>
+                                                                <constraint firstAttribute="width" constant="20" id="luz-zF-fX0"/>
+                                                                <constraint firstAttribute="height" constant="20" id="pDI-Kq-ldP"/>
                                                             </constraints>
                                                         </imageView>
                                                     </subviews>
@@ -1222,7 +1225,7 @@
                                                         <constraint firstItem="Twa-Kl-m6h" firstAttribute="leading" secondItem="ZfH-aP-ddQ" secondAttribute="trailing" constant="24" id="Qeq-xl-Apb"/>
                                                         <constraint firstAttribute="trailing" secondItem="TtV-Hm-M9K" secondAttribute="trailing" constant="40" id="ShV-k1-lOh"/>
                                                         <constraint firstItem="ZfH-aP-ddQ" firstAttribute="top" secondItem="XWE-uf-Iz9" secondAttribute="top" constant="16" id="Ufj-u4-EBL"/>
-                                                        <constraint firstAttribute="trailing" secondItem="jWf-0E-f3B" secondAttribute="trailing" constant="20" id="Vsf-vu-dEg"/>
+                                                        <constraint firstAttribute="trailing" secondItem="jWf-0E-f3B" secondAttribute="trailing" constant="30" id="Vsf-vu-dEg"/>
                                                         <constraint firstAttribute="bottom" secondItem="ZfH-aP-ddQ" secondAttribute="bottom" constant="16" id="XnO-aK-H7S"/>
                                                         <constraint firstAttribute="trailing" secondItem="JUc-w9-Tvi" secondAttribute="trailing" constant="60" id="ZHg-bf-ANU"/>
                                                         <constraint firstItem="VXt-2K-sMY" firstAttribute="top" secondItem="TtV-Hm-M9K" secondAttribute="bottom" constant="8" id="aRO-c5-wNw"/>
