@@ -338,7 +338,7 @@ class HelperTests: QuickSpec {
                 
                 it("resume transaction store") {
                     let tr = TransactionStore.shared
-                    tr.resume(URL(string: "https://cidaas.de")!, options: [UIApplication.OpenURLOptionsKey : Any]())
+                    _ = tr.resume(URL(string: "https://cidaas.de")!, options: [UIApplication.OpenURLOptionsKey : Any]())
                 }
                 
                 it("store transaction store") {
@@ -361,7 +361,7 @@ class HelperTests: QuickSpec {
                     _ = DeviceHelper().hardwareDescription()
                     _ = DeviceHelper().hardwareNumber()
                     let hardware = DeviceHelper().hardware()
-                    DeviceHelper().backCameraStillImageResolutionInPixels(hardware)
+                    _ = DeviceHelper().backCameraStillImageResolutionInPixels(hardware)
                 }
             }
         }
