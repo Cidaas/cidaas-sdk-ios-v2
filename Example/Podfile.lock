@@ -5,7 +5,7 @@ PODS:
     - Alamofire (~> 4.7.3)
     - CryptoSwift (~> 0.12)
     - OneTimePassword (~> 3.1.4)
-  - Cosmos (17.0.0)
+  - Cosmos (16.0.0)
   - CryptoSwift (0.12.0)
   - IQKeyboardManagerSwift (5.0.8)
   - Mockingjay (2.0.1):
@@ -26,7 +26,7 @@ PODS:
 
 DEPENDENCIES:
   - Cidaas (from `../`)
-  - Cosmos (~> 17.0)
+  - Cosmos (~> 16.0)
   - IQKeyboardManagerSwift (~> 5.0.3)
   - Mockingjay (~> 2.0)
   - Quick (~> 1.2.0)
@@ -55,7 +55,7 @@ SPEC CHECKSUMS:
   Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
   Base32: 163c298644d184e89ca4e00a996bad6bf5166390
   Cidaas: 148394f1674a6baa8b1f5705fc0082e10fd1dcab
-  Cosmos: 309e489f21ffc91a1eeecfebef7f817cd2fcfba6
+  Cosmos: 7bcee0fa858a9355a214f2a181be5dffcee42c81
   CryptoSwift: 1c07ca50843dd48bc54e6ea53d7a4dba3b645716
   IQKeyboardManagerSwift: 2e7dc7f98c111458c1ea2b373f893e8cf95e2b97
   Mockingjay: 11a621880d2887f1775bdcf824341eb68f218450
@@ -65,6 +65,6 @@ SPEC CHECKSUMS:
   SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
   URITemplate: ace0c4c46dcf8afe6e89b4060621852886b15c3b
 
-PODFILE CHECKSUM: a127dadf61f6736a55434616ef738a929d560945
+PODFILE CHECKSUM: d1ec5f3ab358229c144a7eaa7205e6074e8489d4
 
 COCOAPODS: 1.5.3
