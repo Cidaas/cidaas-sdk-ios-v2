@@ -23,12 +23,9 @@ public class Cidaas {
     var deviceInfo : DeviceInfoModel
     var storage: TransactionStore
     var loginCallback : ((Result<LoginResponseEntity>) -> Void)?
-    var customLoaderDelegate : CustomLoaderDelegate? = nil
-    var loginDelegate : UIViewController? = nil
-    var dbFileContent : String = ""
-    var verificationType: String = ""
-    var authenticationType: String = ""
     var timer = Timer()
+    var trackingManager: TrackingManager!
+    public var delegate: UIViewController!
     
     // static variables
     public static var intermediate_verifiation_id: String = ""
@@ -98,6 +95,9 @@ public class Cidaas {
         // read property from file
         self.readPropertyFile()
         
+        // initiate tracking manager
+        self.trackingManager = TrackingManager.shared
+        
     }
     
 // -------------------------------------------------------------------------------------------------- //
@@ -134,6 +134,68 @@ public class Cidaas {
                 }
             }
         }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // set url manually
+    public func setURL(domainURL: String, clientId: String, redirectURL: String) {
+        FileHelper.shared.paramsToDictionaryConverter(domainURL: domainURL, clientId: clientId, redirectURL: redirectURL) {
+            switch $0 {
+            case .failure(let error):
+                // log error
+                let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                
+                return
+            case .success(let properties):
+                // log success
+                let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
+                logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                
+                
+                self.saveProperties(properties: properties) {
+                    switch $0 {
+                    case .failure (let error):
+                        // log error
+                        let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                        logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                        return
+                    case .success(let response):
+                        // log success
+                        let loggerMessage = "Saved Property status : \(response)"
+                        logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                        break
+                    }
+                }
+            }
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // stop session tracking
+    public func stopTracking() {
+        self.trackingManager.stopTracking()
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // start tracking
+    public func startTracking(sub: String) {
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            self.trackingManager.delegate = delegate
+            self.trackingManager.startTracking(sub: sub, properties: savedProp!)
+        }
+            
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            return
+        }
+        
     }
     
 // -------------------------------------------------------------------------------------------------- //
