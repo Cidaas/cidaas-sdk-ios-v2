@@ -34,7 +34,7 @@ public class TouchIdVerificationService {
         
         // construct headers
         headers = [
-            "user-agent": "cidaas-ios",
+            "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
             "verification_api_version" : "2",
             "access_token" : accessToken,
             "access_challenge" : properties["Challenge"] ?? "",
@@ -138,7 +138,7 @@ public class TouchIdVerificationService {
         
         // construct headers
         headers = [
-            "user-agent": "cidaas-ios",
+            "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
             "verification_api_version" : "2",
             "access_token" : accessToken
         ]
@@ -241,7 +241,7 @@ public class TouchIdVerificationService {
         
         // construct headers
         headers = [
-            "user-agent": "cidaas-ios",
+            "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
             "verification_api_version" : "2",
             "access_token" : accessToken
         ]
@@ -345,7 +345,7 @@ public class TouchIdVerificationService {
         
         // construct headers
         headers = [
-            "user-agent": "cidaas-ios",
+            "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
             "verification_api_version" : "2",
             "access_challenge" : properties["Challenge"] ?? "",
             "access_challenge_method" : properties["Method"] ?? ""
@@ -446,7 +446,7 @@ public class TouchIdVerificationService {
         
         // construct headers
         headers = [
-            "user-agent": "cidaas-ios",
+            "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
             "verification_api_version": "2"
         ]
         

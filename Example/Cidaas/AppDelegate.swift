@@ -7,15 +7,24 @@
 //
 
 import UIKit
+import IQKeyboardManagerSwift
+import Cidaas
+import UserNotifications
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        IQKeyboardManager.sharedManager().enable = true
+        Cidaas.shared.ENABLE_LOG = true
+        
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { (permissionGranted, error) in
+            print (error ?? "")
+        }
+        
         return true
     }
 
@@ -41,6 +50,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
-
+    func application(_ application: UIApplication, didReceive notification: UILocalNotification) {
+        
+        // log
+        logw("Receiving Notification \(notification)", cname: "cidaaslocationtracking")
+    }
+    
 }
 

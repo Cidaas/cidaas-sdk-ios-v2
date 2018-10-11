@@ -31,7 +31,7 @@ public class LoginService {
         
         // construct headers
         headers = [
-            "user-agent": "cidaas-ios",
+            "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
             "deviceId" : deviceInfoEntity.deviceId,
             "deviceMake" : deviceInfoEntity.deviceMake,
             "deviceModel" : deviceInfoEntity.deviceModel,
@@ -39,12 +39,12 @@ public class LoginService {
         ]
         
         // construct body params
-        var bodyParams = Dictionary<String, String>()
+        var bodyParams = Dictionary<String, Any>()
         
         do {
             let encoder = JSONEncoder()
             let data = try encoder.encode(loginEntity)
-            bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, String> ?? Dictionary<String, String>()
+            bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
             
             bodyParams["requestId"] = requestId
         }

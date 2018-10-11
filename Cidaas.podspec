@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #
 # Be sure to run `pod lib lint Cidaas.podspec' to ensure this is a
 # valid spec before submitting.
@@ -17,7 +16,7 @@ Pod::Spec.new do |s|
   s.source       = { :git => 'https://github.com/Cidaas/cidaas-sdk-ios-v2.git', :tag => s.version }
   s.ios.deployment_target = '10.0'
   s.source_files = 'Cidaas/Classes/**/*'
-  s.dependency 'Alamofire', '~> 4.7'
-  s.dependency 'OneTimePassword', '~> 3.1'
-  s.dependency 'CryptoSwift', '~> 0.10'
+  s.dependency 'Alamofire', '~> 4.7.3'
+  s.dependency 'OneTimePassword', '~> 3.1.4'
+  s.dependency 'CryptoSwift', '~> 0.12'
 end

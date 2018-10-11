@@ -12,10 +12,11 @@ public class FileHelper: NSObject {
     
     // shared instance
     public static var shared : FileHelper = FileHelper()
+    public var filename: String = "Cidaas"
     
     // read properties
     public func readProperties(callback: @escaping (Result<Dictionary<String, String>>)-> Void) {
-        if let path = Bundle.main.path(forResource: "Cidaas", ofType: "plist") {
+        if let path = Bundle.main.path(forResource: self.filename, ofType: "plist") {
             
             var properties = Dictionary<String, String>()
             

@@ -3,11 +3,38 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		1762EBBD9E7A2793DF21A793 /* Pods_Cidaas_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77825790066838DAF6F23B69 /* Pods_Cidaas_Tests.framework */; };
+		1F3458992147ECEB0090FE25 /* Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3458982147ECEB0090FE25 /* Converter.swift */; };
+		1F34589B2148E0B40090FE25 /* ControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F34589A2148E0B40090FE25 /* ControllerTests.swift */; };
+		1F4179D12135209000ADFFFA /* MFAListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4179D02135209000ADFFFA /* MFAListViewController.swift */; };
+		1F4179D32135551000ADFFFA /* RequestIdTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4179D22135551000ADFFFA /* RequestIdTests.swift */; };
+		1F49FA2E213CD5D6001A49BB /* TenantInfoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F49FA2D213CD5D6001A49BB /* TenantInfoTests.swift */; };
+		1F49FA30213CD646001A49BB /* ClientInfoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F49FA2F213CD646001A49BB /* ClientInfoTests.swift */; };
+		1F49FA32213CD744001A49BB /* LoginTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F49FA31213CD744001A49BB /* LoginTests.swift */; };
+		1F49FA34213CD8A9001A49BB /* ConsentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F49FA33213CD8A9001A49BB /* ConsentTests.swift */; };
+		1F49FA36213CDA1F001A49BB /* EmailTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F49FA35213CDA1F001A49BB /* EmailTests.swift */; };
+		1F49FA38213CDC04001A49BB /* SMSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F49FA37213CDC04001A49BB /* SMSTests.swift */; };
+		1F49FA3A213CDC82001A49BB /* IVRTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F49FA39213CDC82001A49BB /* IVRTests.swift */; };
+		1F49FA3C213CDDAA001A49BB /* BackupcodeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F49FA3B213CDDAA001A49BB /* BackupcodeTests.swift */; };
+		1F49FA3E213CDE0F001A49BB /* PatternTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F49FA3D213CDE0F001A49BB /* PatternTests.swift */; };
+		1F49FA40213CDE9D001A49BB /* TouchIdTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F49FA3F213CDE9D001A49BB /* TouchIdTests.swift */; };
+		1F49FA42213CDF09001A49BB /* SmartPushTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F49FA41213CDF09001A49BB /* SmartPushTests.swift */; };
+		1F49FA44213CE5C9001A49BB /* FaceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F49FA43213CE5C9001A49BB /* FaceTests.swift */; };
+		1F49FA46213CE642001A49BB /* VoiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F49FA45213CE642001A49BB /* VoiceTests.swift */; };
+		1F49FA48213CE74E001A49BB /* TOTPTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F49FA47213CE74E001A49BB /* TOTPTests.swift */; };
+		1F49FA4A213CE795001A49BB /* AccountVerificationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F49FA49213CE795001A49BB /* AccountVerificationTests.swift */; };
+		1F49FA4C213CE86D001A49BB /* ResetPasswordTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F49FA4B213CE86D001A49BB /* ResetPasswordTests.swift */; };
+		1F49FA4E213D007E001A49BB /* DeduplicationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F49FA4D213D007E001A49BB /* DeduplicationTests.swift */; };
+		1F49FA50213D029E001A49BB /* RegistrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F49FA4F213D029E001A49BB /* RegistrationTests.swift */; };
+		1F49FA52213D1A54001A49BB /* LinkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F49FA51213D1A54001A49BB /* LinkTests.swift */; };
+		1F49FA67213D6393001A49BB /* Pods_Cidaas_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F49FA66213D6393001A49BB /* Pods_Cidaas_Example.framework */; };
+		1F49FA6F213FA087001A49BB /* EntityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F49FA6E213FA087001A49BB /* EntityTests.swift */; };
+		1F49FA712140B93C001A49BB /* HelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F49FA702140B93C001A49BB /* HelperTests.swift */; };
+		1F49FA732140C2F2001A49BB /* Test.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1F49FA722140C2F2001A49BB /* Test.plist */; };
 		1F5600F7212ECF9B00F842A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5600F6212ECF9B00F842A4 /* AppDelegate.swift */; };
 		1F5600FA212ECFA800F842A4 /* Checkbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5600F8212ECFA800F842A4 /* Checkbox.swift */; };
 		1F5600FB212ECFA800F842A4 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5600F9212ECFA800F842A4 /* CustomTextField.swift */; };
@@ -24,10 +51,23 @@
 		1F560115212ED0B700F842A4 /* DeduplicationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F560113212ED0B600F842A4 /* DeduplicationTableViewCell.swift */; };
 		1F560116212ED0B700F842A4 /* DeduplicationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F560114212ED0B600F842A4 /* DeduplicationViewController.swift */; };
 		1F560119212ED12900F842A4 /* Cidaas.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1F560118212ED12900F842A4 /* Cidaas.plist */; };
+		1F5D0FD02146628600D63E9A /* ServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5D0FCF2146628600D63E9A /* ServiceTests.swift */; };
+		1F6B6A1A216A5DC10089433A /* CartItemsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6B6A19216A5DC10089433A /* CartItemsTableViewCell.swift */; };
+		1F6B6A1C216A80280089433A /* LoginWithEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6B6A1B216A80280089433A /* LoginWithEmailViewController.swift */; };
+		1F6B6A1E216A89860089433A /* Cart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6B6A1D216A89860089433A /* Cart.swift */; };
+		1F6B6A20216A8A260089433A /* cartjson.json in Resources */ = {isa = PBXBuildFile; fileRef = 1F6B6A1F216A8A260089433A /* cartjson.json */; };
+		1F6BA4F0216741B8009F7949 /* LoginSuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6BA4EF216741B8009F7949 /* LoginSuccessViewController.swift */; };
+		1F6BA4F221676406009F7949 /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6BA4F121676406009F7949 /* UserProfileViewController.swift */; };
+		1FB3D561214E884B00E6474E /* UsersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FB3D560214E884B00E6474E /* UsersTests.swift */; };
+		1FCD9EB12133C66800A54A09 /* AccountVerificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCD9EB02133C66800A54A09 /* AccountVerificationViewController.swift */; };
+		1FCD9ED22134305F00A54A09 /* VerifyCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCD9ED12134305F00A54A09 /* VerifyCodeViewController.swift */; };
+		1FCD9ED42134315900A54A09 /* VerifySuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCD9ED32134315900A54A09 /* VerifySuccessViewController.swift */; };
+		1FEBDC2A216CFA4300EE6046 /* WidasIndiaLocation.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 1FEBDC29216CFA4300EE6046 /* WidasIndiaLocation.gpx */; };
 		23F03CC1BA1783D5193AD673 /* Pods_Cidaas_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED7403D168AB4E369E5C9FA /* Pods_Cidaas_Example.framework */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
+		681E6794A3F7D18C00F8AE57 /* Pods_Cidaas_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F49FA66213D6393001A49BB /* Pods_Cidaas_Example.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +83,45 @@
 /* Begin PBXFileReference section */
 		0B711B9EE75AA6FCBEAD305C /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		124297B2E684D107CF975325 /* Cidaas.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Cidaas.podspec; path = ../Cidaas.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		1F3458982147ECEB0090FE25 /* Converter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Converter.swift; sourceTree = "<group>"; };
+		1F34589A2148E0B40090FE25 /* ControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerTests.swift; sourceTree = "<group>"; };
+		1F4179D02135209000ADFFFA /* MFAListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MFAListViewController.swift; sourceTree = "<group>"; };
+		1F4179D22135551000ADFFFA /* RequestIdTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestIdTests.swift; sourceTree = "<group>"; };
+		1F49FA2D213CD5D6001A49BB /* TenantInfoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TenantInfoTests.swift; sourceTree = "<group>"; };
+		1F49FA2F213CD646001A49BB /* ClientInfoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientInfoTests.swift; sourceTree = "<group>"; };
+		1F49FA31213CD744001A49BB /* LoginTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginTests.swift; sourceTree = "<group>"; };
+		1F49FA33213CD8A9001A49BB /* ConsentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsentTests.swift; sourceTree = "<group>"; };
+		1F49FA35213CDA1F001A49BB /* EmailTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailTests.swift; sourceTree = "<group>"; };
+		1F49FA37213CDC04001A49BB /* SMSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMSTests.swift; sourceTree = "<group>"; };
+		1F49FA39213CDC82001A49BB /* IVRTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IVRTests.swift; sourceTree = "<group>"; };
+		1F49FA3B213CDDAA001A49BB /* BackupcodeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupcodeTests.swift; sourceTree = "<group>"; };
+		1F49FA3D213CDE0F001A49BB /* PatternTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatternTests.swift; sourceTree = "<group>"; };
+		1F49FA3F213CDE9D001A49BB /* TouchIdTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchIdTests.swift; sourceTree = "<group>"; };
+		1F49FA41213CDF09001A49BB /* SmartPushTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartPushTests.swift; sourceTree = "<group>"; };
+		1F49FA43213CE5C9001A49BB /* FaceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceTests.swift; sourceTree = "<group>"; };
+		1F49FA45213CE642001A49BB /* VoiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceTests.swift; sourceTree = "<group>"; };
+		1F49FA47213CE74E001A49BB /* TOTPTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TOTPTests.swift; sourceTree = "<group>"; };
+		1F49FA49213CE795001A49BB /* AccountVerificationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountVerificationTests.swift; sourceTree = "<group>"; };
+		1F49FA4B213CE86D001A49BB /* ResetPasswordTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordTests.swift; sourceTree = "<group>"; };
+		1F49FA4D213D007E001A49BB /* DeduplicationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeduplicationTests.swift; sourceTree = "<group>"; };
+		1F49FA4F213D029E001A49BB /* RegistrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationTests.swift; sourceTree = "<group>"; };
+		1F49FA51213D1A54001A49BB /* LinkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkTests.swift; sourceTree = "<group>"; };
+		1F49FA54213D6393001A49BB /* Alamofire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F49FA56213D6393001A49BB /* Base32.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Base32.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F49FA58213D6393001A49BB /* Cidaas.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Cidaas.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F49FA5A213D6393001A49BB /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F49FA5C213D6393001A49BB /* FBSnapshotTestCase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FBSnapshotTestCase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F49FA5E213D6393001A49BB /* IQKeyboardManagerSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = IQKeyboardManagerSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F49FA60213D6393001A49BB /* Nimble_Snapshots.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Nimble_Snapshots.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F49FA62213D6393001A49BB /* Nimble.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Nimble.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F49FA64213D6393001A49BB /* OneTimePassword.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = OneTimePassword.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F49FA66213D6393001A49BB /* Pods_Cidaas_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_Cidaas_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F49FA68213D6393001A49BB /* Quick.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Quick.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F49FA6A213D6393001A49BB /* SCLAlertView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SCLAlertView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F49FA6C213D6393001A49BB /* SDWebImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SDWebImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F49FA6E213FA087001A49BB /* EntityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityTests.swift; sourceTree = "<group>"; };
+		1F49FA702140B93C001A49BB /* HelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperTests.swift; sourceTree = "<group>"; };
+		1F49FA722140C2F2001A49BB /* Test.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Test.plist; sourceTree = "<group>"; };
 		1F5600C6212ECE1900F842A4 /* Cidaas_Example-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Cidaas_Example-Bridging-Header.h"; sourceTree = "<group>"; };
 		1F5600F6212ECF9B00F842A4 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1F5600F8212ECFA800F842A4 /* Checkbox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Checkbox.swift; sourceTree = "<group>"; };
@@ -61,6 +140,18 @@
 		1F560113212ED0B600F842A4 /* DeduplicationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeduplicationTableViewCell.swift; sourceTree = "<group>"; };
 		1F560114212ED0B600F842A4 /* DeduplicationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeduplicationViewController.swift; sourceTree = "<group>"; };
 		1F560118212ED12900F842A4 /* Cidaas.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Cidaas.plist; sourceTree = "<group>"; };
+		1F5D0FCF2146628600D63E9A /* ServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTests.swift; sourceTree = "<group>"; };
+		1F6B6A19216A5DC10089433A /* CartItemsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartItemsTableViewCell.swift; sourceTree = "<group>"; };
+		1F6B6A1B216A80280089433A /* LoginWithEmailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginWithEmailViewController.swift; sourceTree = "<group>"; };
+		1F6B6A1D216A89860089433A /* Cart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cart.swift; sourceTree = "<group>"; };
+		1F6B6A1F216A8A260089433A /* cartjson.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = cartjson.json; sourceTree = "<group>"; };
+		1F6BA4EF216741B8009F7949 /* LoginSuccessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginSuccessViewController.swift; sourceTree = "<group>"; };
+		1F6BA4F121676406009F7949 /* UserProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
+		1FB3D560214E884B00E6474E /* UsersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersTests.swift; sourceTree = "<group>"; };
+		1FCD9EB02133C66800A54A09 /* AccountVerificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountVerificationViewController.swift; sourceTree = "<group>"; };
+		1FCD9ED12134305F00A54A09 /* VerifyCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyCodeViewController.swift; sourceTree = "<group>"; };
+		1FCD9ED32134315900A54A09 /* VerifySuccessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifySuccessViewController.swift; sourceTree = "<group>"; };
+		1FEBDC29216CFA4300EE6046 /* WidasIndiaLocation.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = WidasIndiaLocation.gpx; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* Cidaas_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cidaas_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACDC1AFB9204008FA782 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -83,6 +174,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				23F03CC1BA1783D5193AD673 /* Pods_Cidaas_Example.framework in Frameworks */,
+				681E6794A3F7D18C00F8AE57 /* Pods_Cidaas_Example.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -90,6 +182,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F49FA67213D6393001A49BB /* Pods_Cidaas_Example.framework in Frameworks */,
 				1762EBBD9E7A2793DF21A793 /* Pods_Cidaas_Tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -153,6 +246,18 @@
 				607FACD31AFB9204008FA782 /* Supporting Files */,
 				1F5600C6212ECE1900F842A4 /* Cidaas_Example-Bridging-Header.h */,
 				1F560118212ED12900F842A4 /* Cidaas.plist */,
+				1FCD9EB02133C66800A54A09 /* AccountVerificationViewController.swift */,
+				1FCD9ED12134305F00A54A09 /* VerifyCodeViewController.swift */,
+				1FCD9ED32134315900A54A09 /* VerifySuccessViewController.swift */,
+				1F4179D02135209000ADFFFA /* MFAListViewController.swift */,
+				1F49FA722140C2F2001A49BB /* Test.plist */,
+				1F6BA4EF216741B8009F7949 /* LoginSuccessViewController.swift */,
+				1F6BA4F121676406009F7949 /* UserProfileViewController.swift */,
+				1F6B6A19216A5DC10089433A /* CartItemsTableViewCell.swift */,
+				1F6B6A1B216A80280089433A /* LoginWithEmailViewController.swift */,
+				1F6B6A1D216A89860089433A /* Cart.swift */,
+				1F6B6A1F216A8A260089433A /* cartjson.json */,
+				1FEBDC29216CFA4300EE6046 /* WidasIndiaLocation.gpx */,
 			);
 			name = "Example for Cidaas";
 			path = Cidaas;
@@ -170,6 +275,32 @@
 			isa = PBXGroup;
 			children = (
 				607FACEB1AFB9204008FA782 /* Tests.swift */,
+				1F4179D22135551000ADFFFA /* RequestIdTests.swift */,
+				1F49FA2D213CD5D6001A49BB /* TenantInfoTests.swift */,
+				1F49FA2F213CD646001A49BB /* ClientInfoTests.swift */,
+				1F49FA31213CD744001A49BB /* LoginTests.swift */,
+				1F49FA33213CD8A9001A49BB /* ConsentTests.swift */,
+				1F49FA35213CDA1F001A49BB /* EmailTests.swift */,
+				1F49FA37213CDC04001A49BB /* SMSTests.swift */,
+				1F49FA39213CDC82001A49BB /* IVRTests.swift */,
+				1F49FA3B213CDDAA001A49BB /* BackupcodeTests.swift */,
+				1F49FA3D213CDE0F001A49BB /* PatternTests.swift */,
+				1F49FA3F213CDE9D001A49BB /* TouchIdTests.swift */,
+				1F49FA41213CDF09001A49BB /* SmartPushTests.swift */,
+				1F49FA43213CE5C9001A49BB /* FaceTests.swift */,
+				1F49FA45213CE642001A49BB /* VoiceTests.swift */,
+				1F49FA47213CE74E001A49BB /* TOTPTests.swift */,
+				1F49FA49213CE795001A49BB /* AccountVerificationTests.swift */,
+				1F49FA4B213CE86D001A49BB /* ResetPasswordTests.swift */,
+				1F49FA4D213D007E001A49BB /* DeduplicationTests.swift */,
+				1F49FA4F213D029E001A49BB /* RegistrationTests.swift */,
+				1F49FA51213D1A54001A49BB /* LinkTests.swift */,
+				1F49FA6E213FA087001A49BB /* EntityTests.swift */,
+				1F49FA702140B93C001A49BB /* HelperTests.swift */,
+				1F5D0FCF2146628600D63E9A /* ServiceTests.swift */,
+				1F3458982147ECEB0090FE25 /* Converter.swift */,
+				1F34589A2148E0B40090FE25 /* ControllerTests.swift */,
+				1FB3D560214E884B00E6474E /* UsersTests.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 			);
 			path = Tests;
@@ -196,6 +327,19 @@
 		C2DF66784F3C78B8EC3A5CD0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1F49FA54213D6393001A49BB /* Alamofire.framework */,
+				1F49FA56213D6393001A49BB /* Base32.framework */,
+				1F49FA58213D6393001A49BB /* Cidaas.framework */,
+				1F49FA5A213D6393001A49BB /* CryptoSwift.framework */,
+				1F49FA5C213D6393001A49BB /* FBSnapshotTestCase.framework */,
+				1F49FA5E213D6393001A49BB /* IQKeyboardManagerSwift.framework */,
+				1F49FA60213D6393001A49BB /* Nimble_Snapshots.framework */,
+				1F49FA62213D6393001A49BB /* Nimble.framework */,
+				1F49FA64213D6393001A49BB /* OneTimePassword.framework */,
+				1F49FA66213D6393001A49BB /* Pods_Cidaas_Example.framework */,
+				1F49FA68213D6393001A49BB /* Quick.framework */,
+				1F49FA6A213D6393001A49BB /* SCLAlertView.framework */,
+				1F49FA6C213D6393001A49BB /* SDWebImage.framework */,
 				BED7403D168AB4E369E5C9FA /* Pods_Cidaas_Example.framework */,
 				77825790066838DAF6F23B69 /* Pods_Cidaas_Tests.framework */,
 			);
@@ -257,17 +401,22 @@
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
 						DevelopmentTeam = BWMM72Q5M6;
-						LastSwiftMigration = 0940;
+						LastSwiftMigration = 1000;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					607FACE41AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1000;
 						TestTargetID = 607FACCF1AFB9204008FA782;
 					};
 				};
 			};
 			buildConfigurationList = 607FACCB1AFB9204008FA782 /* Build configuration list for PBXProject "Cidaas" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -293,8 +442,10 @@
 				1F5600FF212ECFF800F842A4 /* LaunchScreen.storyboard in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
+				1F6B6A20216A8A260089433A /* cartjson.json in Resources */,
 				1F560119212ED12900F842A4 /* Cidaas.plist in Resources */,
 				1F560103212ED01D00F842A4 /* Main.storyboard in Resources */,
+				1FEBDC2A216CFA4300EE6046 /* WidasIndiaLocation.gpx in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -302,6 +453,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F49FA732140C2F2001A49BB /* Test.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -336,7 +488,9 @@
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/Base32/Base32.framework",
 				"${BUILT_PRODUCTS_DIR}/Cidaas/Cidaas.framework",
+				"${BUILT_PRODUCTS_DIR}/Cosmos/Cosmos.framework",
 				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/IQKeyboardManagerSwift/IQKeyboardManagerSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/OneTimePassword/OneTimePassword.framework",
 				"${BUILT_PRODUCTS_DIR}/SCLAlertView/SCLAlertView.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
@@ -346,7 +500,9 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Base32.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Cidaas.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Cosmos.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptoSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManagerSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OneTimePassword.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SCLAlertView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
@@ -376,22 +532,20 @@
 		};
 		DC1E4EA3C71DD420EBA3FB65 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			files = (
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Cidaas_Tests/Pods-Cidaas_Tests-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/FBSnapshotTestCase/FBSnapshotTestCase.framework",
-				"${BUILT_PRODUCTS_DIR}/Nimble/Nimble.framework",
-				"${BUILT_PRODUCTS_DIR}/Nimble-Snapshots/Nimble_Snapshots.framework",
+				"${BUILT_PRODUCTS_DIR}/Mockingjay/Mockingjay.framework",
 				"${BUILT_PRODUCTS_DIR}/Quick/Quick.framework",
+				"${BUILT_PRODUCTS_DIR}/URITemplate/URITemplate.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSnapshotTestCase.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble_Snapshots.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mockingjay.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Quick.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/URITemplate.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -406,16 +560,25 @@
 			buildActionMask = 2147483647;
 			files = (
 				1F5600FA212ECFA800F842A4 /* Checkbox.swift in Sources */,
+				1FCD9ED22134305F00A54A09 /* VerifyCodeViewController.swift in Sources */,
+				1F6B6A1A216A5DC10089433A /* CartItemsTableViewCell.swift in Sources */,
+				1F6BA4F221676406009F7949 /* UserProfileViewController.swift in Sources */,
+				1F6BA4F0216741B8009F7949 /* LoginSuccessViewController.swift in Sources */,
 				1F5600F7212ECF9B00F842A4 /* AppDelegate.swift in Sources */,
 				1F56010E212ED08F00F842A4 /* CustomLoader.swift in Sources */,
+				1FCD9EB12133C66800A54A09 /* AccountVerificationViewController.swift in Sources */,
 				1F560112212ED0AC00F842A4 /* ConsentManagementViewController.swift in Sources */,
 				1F56010A212ED07700F842A4 /* RegisterSuccessViewController.swift in Sources */,
 				1F560106212ED06700F842A4 /* MBProgressHUD.m in Sources */,
 				1F560115212ED0B700F842A4 /* DeduplicationTableViewCell.swift in Sources */,
 				1F560109212ED07700F842A4 /* RegisterViewController.swift in Sources */,
 				1F560110212ED09800F842A4 /* UnverifiedUserViewController.swift in Sources */,
+				1FCD9ED42134315900A54A09 /* VerifySuccessViewController.swift in Sources */,
+				1F6B6A1E216A89860089433A /* Cart.swift in Sources */,
 				1F5600FD212ECFC000F842A4 /* TextFieldEffects.swift in Sources */,
+				1F4179D12135209000ADFFFA /* MFAListViewController.swift in Sources */,
 				1F56010C212ED08000F842A4 /* ViewController.swift in Sources */,
+				1F6B6A1C216A80280089433A /* LoginWithEmailViewController.swift in Sources */,
 				1F5600FB212ECFA800F842A4 /* CustomTextField.swift in Sources */,
 				1F560116212ED0B700F842A4 /* DeduplicationViewController.swift in Sources */,
 			);
@@ -425,7 +588,33 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F49FA44213CE5C9001A49BB /* FaceTests.swift in Sources */,
+				1F5D0FD02146628600D63E9A /* ServiceTests.swift in Sources */,
+				1F49FA2E213CD5D6001A49BB /* TenantInfoTests.swift in Sources */,
+				1F49FA6F213FA087001A49BB /* EntityTests.swift in Sources */,
+				1F3458992147ECEB0090FE25 /* Converter.swift in Sources */,
+				1FB3D561214E884B00E6474E /* UsersTests.swift in Sources */,
+				1F4179D32135551000ADFFFA /* RequestIdTests.swift in Sources */,
+				1F49FA3C213CDDAA001A49BB /* BackupcodeTests.swift in Sources */,
+				1F49FA48213CE74E001A49BB /* TOTPTests.swift in Sources */,
+				1F49FA34213CD8A9001A49BB /* ConsentTests.swift in Sources */,
+				1F49FA36213CDA1F001A49BB /* EmailTests.swift in Sources */,
+				1F49FA52213D1A54001A49BB /* LinkTests.swift in Sources */,
+				1F49FA4A213CE795001A49BB /* AccountVerificationTests.swift in Sources */,
+				1F49FA30213CD646001A49BB /* ClientInfoTests.swift in Sources */,
+				1F49FA32213CD744001A49BB /* LoginTests.swift in Sources */,
 				607FACEC1AFB9204008FA782 /* Tests.swift in Sources */,
+				1F34589B2148E0B40090FE25 /* ControllerTests.swift in Sources */,
+				1F49FA712140B93C001A49BB /* HelperTests.swift in Sources */,
+				1F49FA40213CDE9D001A49BB /* TouchIdTests.swift in Sources */,
+				1F49FA4E213D007E001A49BB /* DeduplicationTests.swift in Sources */,
+				1F49FA4C213CE86D001A49BB /* ResetPasswordTests.swift in Sources */,
+				1F49FA42213CDF09001A49BB /* SmartPushTests.swift in Sources */,
+				1F49FA3A213CDC82001A49BB /* IVRTests.swift in Sources */,
+				1F49FA50213D029E001A49BB /* RegistrationTests.swift in Sources */,
+				1F49FA38213CDC04001A49BB /* SMSTests.swift in Sources */,
+				1F49FA3E213CDE0F001A49BB /* PatternTests.swift in Sources */,
+				1F49FA46213CE642001A49BB /* VoiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -549,7 +738,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -561,14 +751,18 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = BWMM72Q5M6;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "";
 				INFOPLIST_FILE = Cidaas/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cidaas.sdk.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Cidaas/Cidaas_Example-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
@@ -580,13 +774,17 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = BWMM72Q5M6;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "";
 				INFOPLIST_FILE = Cidaas/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cidaas.sdk.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Cidaas/Cidaas_Example-Bridging-Header.h";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
@@ -605,11 +803,14 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = Tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Cidaas_Example.app/Cidaas_Example";
 			};
 			name = Debug;
@@ -624,11 +825,14 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = Tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Cidaas_Example.app/Cidaas_Example";
 			};
 			name = Release;

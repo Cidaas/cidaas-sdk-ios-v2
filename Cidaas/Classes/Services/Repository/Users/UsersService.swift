@@ -32,7 +32,7 @@ public class UsersService {
         
         // construct headers
         headers = [
-            "user-agent": "cidaas-ios",
+            "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
             "access_token": accessToken,
             "deviceId" : deviceInfoEntity.deviceId,
             "deviceMake" : deviceInfoEntity.deviceMake,
@@ -114,7 +114,7 @@ public class UsersService {
         
         // construct headers
         headers = [
-            "user-agent": "cidaas-ios",
+            "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
             "access_token" : accessToken
         ]
         
@@ -135,7 +135,6 @@ public class UsersService {
         // call service
         Alamofire.upload(
             multipartFormData: { multipartFormData in
-
                 let uploadImage = UIImageJPEGRepresentation(photo, 0.01)
                 
                 multipartFormData.append(uploadImage!, withName: "photo", fileName: "photo.jpg", mimeType: "image/jpeg")

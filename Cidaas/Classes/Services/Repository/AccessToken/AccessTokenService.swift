@@ -30,7 +30,7 @@ public class AccessTokenService {
         
         // construct headers
         headers = [
-            "user-agent": "cidaas-ios",
+            "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
             "deviceId" : deviceInfoEntity.deviceId,
             "deviceMake" : deviceInfoEntity.deviceMake,
             "deviceModel" : deviceInfoEntity.deviceModel,
@@ -107,7 +107,7 @@ public class AccessTokenService {
         
         // construct headers
         headers = [
-            "user-agent": "cidaas-ios",
+            "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
             "deviceId" : deviceInfoEntity.deviceId,
             "deviceMake" : deviceInfoEntity.deviceMake,
             "deviceModel" : deviceInfoEntity.deviceModel,
@@ -121,6 +121,7 @@ public class AccessTokenService {
         bodyParams["refresh_token"] = refreshToken
         bodyParams["redirect_uri"] = properties["RedirectURL"]
         bodyParams["client_id"] = properties["ClientId"]
+        bodyParams["client_secret"] = properties["ClientSecret"]
         
         // assign token url
         urlString = (properties["TokenURL"]) ?? ""

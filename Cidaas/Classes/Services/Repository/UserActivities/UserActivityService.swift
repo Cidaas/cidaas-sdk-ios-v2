@@ -32,7 +32,7 @@ public class UserActivityService {
         
         // construct headers
         headers = [
-            "user-agent": "cidaas-ios",
+            "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
             "access_token": accessToken,
             "deviceId" : deviceInfoEntity.deviceId,
             "deviceMake" : deviceInfoEntity.deviceMake,
@@ -41,12 +41,12 @@ public class UserActivityService {
         ]
         
         // construct body params
-        var bodyParams = Dictionary<String, String>()
+        var bodyParams = Dictionary<String, Any>()
         
         do {
             let encoder = JSONEncoder()
             let data = try encoder.encode(userActivity)
-            bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, String> ?? Dictionary<String, String>()
+            bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
         }
         catch(_) {
             callback(Result.failure(error: WebAuthError.shared.conversionException()))

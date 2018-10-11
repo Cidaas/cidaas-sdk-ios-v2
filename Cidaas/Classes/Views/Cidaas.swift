@@ -23,15 +23,12 @@ public class Cidaas {
     var deviceInfo : DeviceInfoModel
     var storage: TransactionStore
     var loginCallback : ((Result<LoginResponseEntity>) -> Void)?
-    var customLoaderDelegate : CustomLoaderDelegate? = nil
-    var loginDelegate : UIViewController? = nil
-    var dbFileContent : String = ""
-    var verificationType: String = ""
-    var authenticationType: String = ""
     var timer = Timer()
+    var trackingManager: TrackingManager!
+    public var delegate: UIViewController!
     
     // static variables
-    static var intermediate_verifiation_id: String = ""
+    public static var intermediate_verifiation_id: String = ""
     
     // log flag
     public var ENABLE_LOG : Bool {
@@ -94,6 +91,111 @@ public class Cidaas {
         
         // set enable log in local
         self.ENABLE_LOG = false
+        
+        // read property from file
+        self.readPropertyFile()
+        
+        // initiate tracking manager
+        self.trackingManager = TrackingManager.shared
+        
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // read property file
+    public func readPropertyFile() {
+        FileHelper.shared.readProperties {
+            switch $0 {
+            case .failure(let error):
+                // log error
+                let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                
+                return
+            case .success(let properties):
+                // log success
+                let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
+                logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                
+                
+                self.saveProperties(properties: properties) {
+                    switch $0 {
+                    case .failure (let error):
+                        // log error
+                        let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                        logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                        return
+                    case .success(let response):
+                        // log success
+                        let loggerMessage = "Saved Property status : \(response)"
+                        logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                        break
+                    }
+                }
+            }
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // set url manually
+    public func setURL(domainURL: String, clientId: String, redirectURL: String) {
+        FileHelper.shared.paramsToDictionaryConverter(domainURL: domainURL, clientId: clientId, redirectURL: redirectURL) {
+            switch $0 {
+            case .failure(let error):
+                // log error
+                let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                
+                return
+            case .success(let properties):
+                // log success
+                let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
+                logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                
+                
+                self.saveProperties(properties: properties) {
+                    switch $0 {
+                    case .failure (let error):
+                        // log error
+                        let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                        logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                        return
+                    case .success(let response):
+                        // log success
+                        let loggerMessage = "Saved Property status : \(response)"
+                        logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                        break
+                    }
+                }
+            }
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // stop session tracking
+    public func stopTracking() {
+        self.trackingManager.stopTracking()
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // start tracking
+    public func startTracking(sub: String) {
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            self.trackingManager.delegate = delegate
+            self.trackingManager.startTracking(sub: sub, properties: savedProp!)
+        }
+            
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            return
+        }
+        
     }
     
 // -------------------------------------------------------------------------------------------------- //
@@ -119,44 +221,17 @@ public class Cidaas {
         }
             
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call get request id from dictionary
-                            RequestIdController.shared.getRequestId(properties: properties, callback : callback)
-                            break
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -173,44 +248,17 @@ public class Cidaas {
             TenantController.shared.getTenantInfo(properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call get tenant info with properties
-                            TenantController.shared.getTenantInfo(properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -228,44 +276,17 @@ public class Cidaas {
             ClientController.shared.getClientInfo(requestId: requestId, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call get client info with properties
-                            ClientController.shared.getClientInfo(requestId: requestId, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -283,44 +304,17 @@ public class Cidaas {
             LoginController.shared.loginWithCredentials(requestId: requestId, loginEntity: loginEntity, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call loginWithCredentials with properties
-                            LoginController.shared.loginWithCredentials(requestId: requestId, loginEntity: loginEntity, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -338,44 +332,17 @@ public class Cidaas {
             ConsentController.shared.getConsentDetails(consent_name: consent_name, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call getConsentDetails with properties
-                            ConsentController.shared.getConsentDetails(consent_name: consent_name, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -393,44 +360,17 @@ public class Cidaas {
             ConsentController.shared.loginAfterConsent(consentEntity: consentEntity, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call loginAfterConsent with properties
-                            ConsentController.shared.loginAfterConsent(consentEntity: consentEntity, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -448,44 +388,17 @@ public class Cidaas {
             EmailVerificationController.shared.configureEmail(sub: sub, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call configureEmail with properties
-                            EmailVerificationController.shared.configureEmail(sub: sub, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -503,44 +416,17 @@ public class Cidaas {
             EmailVerificationController.shared.configureEmail(statusId: statusId, code: code, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call configureEmail with properties
-                            EmailVerificationController.shared.configureEmail(statusId: statusId, code: code, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -551,51 +437,24 @@ public class Cidaas {
     // 2. Call configureEmail method
     // 3. Maintain logs based on flags
     
-    public func verifyEmail(statusId: String, code: String, callback: @escaping(Result<VerifyEmailResponseEntity>) -> Void) {
+    public func verifyEmail(statusId: String, code: String, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            EmailVerificationController.shared.configureEmail(statusId: statusId, code: code, properties: savedProp!, callback: callback)
+            EmailVerificationController.shared.verifyEmail(statusId: statusId, code: code, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call configureEmail with properties
-                            EmailVerificationController.shared.configureEmail(statusId: statusId, code: code, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -613,44 +472,17 @@ public class Cidaas {
             EmailVerificationController.shared.loginWithEmail(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call loginWithEmail with properties
-                            EmailVerificationController.shared.loginWithEmail(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -669,44 +501,17 @@ public class Cidaas {
             SMSVerificationController.shared.configureSMS(sub: sub, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call configureSMS with properties
-                            SMSVerificationController.shared.configureSMS(sub: sub, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -724,44 +529,17 @@ public class Cidaas {
             SMSVerificationController.shared.configureSMS(statusId: statusId, code: code, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call configureSMS with properties
-                            SMSVerificationController.shared.configureSMS(statusId: statusId, code: code, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -779,44 +557,17 @@ public class Cidaas {
             SMSVerificationController.shared.verifySMS(statusId: statusId, code: code, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call verifySMS with properties
-                            SMSVerificationController.shared.verifySMS(statusId: statusId, code: code, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -834,44 +585,17 @@ public class Cidaas {
             SMSVerificationController.shared.loginWithSMS(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call loginWithSMS with properties
-                            SMSVerificationController.shared.loginWithSMS(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -889,44 +613,17 @@ public class Cidaas {
             IVRVerificationController.shared.configureIVR(sub: sub, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call configureIVR with properties
-                            IVRVerificationController.shared.configureIVR(sub: sub, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -944,44 +641,17 @@ public class Cidaas {
             IVRVerificationController.shared.configureIVR(statusId: statusId, code: code, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call configureIVR with properties
-                            IVRVerificationController.shared.configureIVR(statusId: statusId, code: code, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -999,44 +669,17 @@ public class Cidaas {
             IVRVerificationController.shared.verifyIVR(statusId: statusId, code: code, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call verifyIVR with properties
-                            IVRVerificationController.shared.verifyIVR(statusId: statusId, code: code, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -1054,44 +697,17 @@ public class Cidaas {
             IVRVerificationController.shared.loginWithIVR(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call loginWithIVR with properties
-                            IVRVerificationController.shared.loginWithIVR(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -1109,44 +725,17 @@ public class Cidaas {
             BackupcodeVerificationController.shared.configureBackupcode(sub: sub, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call configureBackupcode with properties
-                            BackupcodeVerificationController.shared.configureBackupcode(sub: sub, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -1164,44 +753,17 @@ public class Cidaas {
             BackupcodeVerificationController.shared.loginWithBackupcode(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, code: code, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call loginWithBackupcode with properties
-                            BackupcodeVerificationController.shared.loginWithBackupcode(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, code: code, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -1219,44 +781,17 @@ public class Cidaas {
             PatternVerificationController.shared.configurePatternRecognition(pattern: pattern, sub: sub, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call configurePatternRecognition with properties
-                            PatternVerificationController.shared.configurePatternRecognition(pattern: pattern, sub: sub, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -1274,44 +809,17 @@ public class Cidaas {
             PatternVerificationController.shared.loginWithPatternRecognition(pattern: pattern, email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call loginWithPatternRecognition with properties
-                            PatternVerificationController.shared.loginWithPatternRecognition(pattern: pattern, email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -1329,44 +837,17 @@ public class Cidaas {
             TouchIdVerificationController.shared.configureTouchId(sub: sub, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call configureTouchIdRecognition with properties
-                            TouchIdVerificationController.shared.configureTouchId(sub: sub, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -1384,44 +865,17 @@ public class Cidaas {
             TouchIdVerificationController.shared.loginWithTouchId(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call loginWithTouchId with properties
-                            TouchIdVerificationController.shared.loginWithTouchId(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -1439,44 +893,17 @@ public class Cidaas {
             FaceVerificationController.shared.configureFace(sub: sub, photo:photo, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call configureFaceRecognition with properties
-                            FaceVerificationController.shared.configureFace(sub: sub, photo: photo, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -1494,44 +921,17 @@ public class Cidaas {
             FaceVerificationController.shared.loginWithFace(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, photo: photo, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call loginWithFace with properties
-                            FaceVerificationController.shared.loginWithFace(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, photo: photo, usageType: passwordlessEntity.usageType, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -1549,44 +949,17 @@ public class Cidaas {
             VoiceVerificationController.shared.configureVoice(sub: sub, voice: voice, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call configureVoice with properties
-                            VoiceVerificationController.shared.configureVoice(sub: sub, voice: voice, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -1604,44 +977,17 @@ public class Cidaas {
             VoiceVerificationController.shared.loginWithVoice(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, voice: voice, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call loginWithVoice with properties
-                            VoiceVerificationController.shared.loginWithVoice(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, voice: voice, usageType: passwordlessEntity.usageType, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -1659,44 +1005,17 @@ public class Cidaas {
             PushVerificationController.shared.configurePush(sub: sub, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call configurePush with properties
-                            PushVerificationController.shared.configurePush(sub: sub, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -1714,44 +1033,17 @@ public class Cidaas {
             PushVerificationController.shared.loginWithPush(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call loginWithPush with properties
-                            PushVerificationController.shared.loginWithPush(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -1770,44 +1062,17 @@ public class Cidaas {
             TOTPVerificationController.shared.configureTOTP(sub: sub, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call configureTOTP with properties
-                            TOTPVerificationController.shared.configureTOTP(sub: sub, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -1822,47 +1087,20 @@ public class Cidaas {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            TOTPVerificationController.shared.loginWithTOTP(email: passwordlessEntity.email, sub: passwordlessEntity.sub, mobile: passwordlessEntity.mobile, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
+            TOTPVerificationController.shared.loginWithTOTP(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call loginWithTOTP with properties
-                            TOTPVerificationController.shared.loginWithTOTP(email: passwordlessEntity.email, sub: passwordlessEntity.sub, mobile: passwordlessEntity.mobile, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -1880,44 +1118,17 @@ public class Cidaas {
             AccountVerificationController.shared.initiateAccountVerification(requestId: requestId, sub: sub, verificationMedium: VerificationMedium.EMAIL.rawValue, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call initiateAccountVerification with properties
-                            AccountVerificationController.shared.initiateAccountVerification(requestId: requestId, sub: sub, verificationMedium: VerificationMedium.EMAIL.rawValue, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -1935,44 +1146,17 @@ public class Cidaas {
             AccountVerificationController.shared.initiateAccountVerification(requestId: requestId, sub: sub, verificationMedium: VerificationMedium.SMS.rawValue, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call initiateAccountVerification with properties
-                            AccountVerificationController.shared.initiateAccountVerification(requestId: requestId, sub: sub, verificationMedium: VerificationMedium.SMS.rawValue, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -1990,44 +1174,17 @@ public class Cidaas {
             AccountVerificationController.shared.initiateAccountVerification(requestId: requestId, sub: sub, verificationMedium: VerificationMedium.IVR.rawValue, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call initiateAccountVerification with properties
-                            AccountVerificationController.shared.initiateAccountVerification(requestId: requestId, sub: sub, verificationMedium: VerificationMedium.IVR.rawValue, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -2045,44 +1202,17 @@ public class Cidaas {
             AccountVerificationController.shared.verifyAccount(accvid: accvid, code: code, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call verifyAccount with properties
-                            AccountVerificationController.shared.verifyAccount(accvid: accvid, code: code, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -2100,44 +1230,17 @@ public class Cidaas {
             ResetPasswordController.shared.initiateResetPassword(requestId: requestId, email: email, mobile: "", resetMedium: ResetMedium.EMAIL.rawValue, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call initiateResetPassword with properties
-                            ResetPasswordController.shared.initiateResetPassword(requestId: requestId, email: email, mobile: "", resetMedium: ResetMedium.EMAIL.rawValue, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -2155,44 +1258,17 @@ public class Cidaas {
             ResetPasswordController.shared.initiateResetPassword(requestId: requestId, email: "", mobile: mobile, resetMedium: ResetMedium.SMS.rawValue, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call initiateResetPassword with properties
-                            ResetPasswordController.shared.initiateResetPassword(requestId: requestId, email: "", mobile: mobile, resetMedium: ResetMedium.SMS.rawValue, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -2210,44 +1286,17 @@ public class Cidaas {
             ResetPasswordController.shared.handleResetPassword(rprq: rprq, code: code, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call handleResetPassword with properties
-                            ResetPasswordController.shared.handleResetPassword(rprq: rprq, code: code, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -2265,44 +1314,17 @@ public class Cidaas {
             ResetPasswordController.shared.resetPassword(rprq: rprq, exchangeId: exchangeId, password: password, confirmPassword: confirmPassword, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call resetPassword with properties
-                            ResetPasswordController.shared.resetPassword(rprq: rprq, exchangeId: exchangeId, password: password, confirmPassword: confirmPassword, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -2320,44 +1342,17 @@ public class Cidaas {
             PatternVerificationController.shared.verifyPattern(pattern: pattern, statusId: statusId, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call verifyPattern with properties
-                            PatternVerificationController.shared.verifyPattern(pattern: pattern, statusId: statusId, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -2375,44 +1370,17 @@ public class Cidaas {
             TouchIdVerificationController.shared.verifyTouchId(statusId: statusId, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call verifyTouchId with properties
-                            TouchIdVerificationController.shared.verifyTouchId(statusId: statusId, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -2431,44 +1399,17 @@ public class Cidaas {
             PushVerificationController.shared.verifySmartPush(randomNumber: randomNumber, statusId: statusId, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call verifySmartPush with properties
-                            PushVerificationController.shared.verifySmartPush(randomNumber: randomNumber, statusId: statusId, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -2486,44 +1427,17 @@ public class Cidaas {
             FaceVerificationController.shared.verifyFace(photo: photo, statusId: statusId, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call verifyFace with properties
-                            FaceVerificationController.shared.verifyFace(photo: photo, statusId: statusId, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -2541,44 +1455,17 @@ public class Cidaas {
             VoiceVerificationController.shared.verifyVoice(voice: voice, statusId: statusId, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call verifyVoice with properties
-                            VoiceVerificationController.shared.verifyVoice(voice: voice, statusId: statusId, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -2596,44 +1483,17 @@ public class Cidaas {
             UsersController.shared.getUserInfo(sub: sub, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call getUserInfo with properties
-                            UsersController.shared.getUserInfo(sub: sub, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -2669,44 +1529,17 @@ public class Cidaas {
             DeduplicationController.shared.getDeduplicationDetails(track_id: track_id, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call getDeduplicationDetails with properties
-                            DeduplicationController.shared.getDeduplicationDetails(track_id: track_id, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
 
@@ -2724,44 +1557,17 @@ public class Cidaas {
             DeduplicationController.shared.registerDeduplication(track_id: track_id, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call registerDeduplication with properties
-                            DeduplicationController.shared.registerDeduplication(track_id: track_id, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -2779,44 +1585,17 @@ public class Cidaas {
             DeduplicationController.shared.deduplicationLogin(requestId: requestId, sub: sub, password: password, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call deduplicationLogin with properties
-                            DeduplicationController.shared.deduplicationLogin(requestId: requestId, sub: sub, password: password, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -2834,44 +1613,17 @@ public class Cidaas {
             ChangepasswordController.shared.changePassword(sub: sub, changePasswordEntity: changePasswordEntity, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call changePassword with properties
-                            ChangepasswordController.shared.changePassword(sub: sub, changePasswordEntity: changePasswordEntity, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -2889,44 +1641,17 @@ public class Cidaas {
             RegistrationController.shared.getRegistrationFields(locale: locale, requestId: requestId, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call getRegistrationFields with properties
-                            RegistrationController.shared.getRegistrationFields(locale: locale, requestId: requestId, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -2944,44 +1669,17 @@ public class Cidaas {
             RegistrationController.shared.registerUser(requestId: requestId, registrationEntity: registrationEntity, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call registerUser with properties
-                            RegistrationController.shared.registerUser(requestId: requestId, registrationEntity: registrationEntity, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -2992,51 +1690,24 @@ public class Cidaas {
     // 2. Call getUserActivity method
     // 3. Maintain logs based on flags
     
-    public func getUserActivity(sub: String, userActivity: UserActivityEntity, callback: @escaping(Result<UserActivityResponseEntity>) -> Void) {
+    public func getUserActivity(userActivity: UserActivityEntity, callback: @escaping(Result<UserActivityResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            UserActivityController.shared.getUserActivity(sub: sub, userActivity: userActivity, properties: savedProp!, callback: callback)
+            UserActivityController.shared.getUserActivity(userActivity: userActivity, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call getUserActivity with properties
-                            UserActivityController.shared.getUserActivity(sub: sub, userActivity: userActivity, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -3054,44 +1725,17 @@ public class Cidaas {
             RegistrationController.shared.updateUser(sub: sub, registrationEntity: registrationEntity, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call updateUser with properties
-                            RegistrationController.shared.updateUser(sub: sub, registrationEntity: registrationEntity, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -3109,44 +1753,17 @@ public class Cidaas {
             UsersController.shared.uploadImage(sub: sub, photo: photo, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call uploadImage with properties
-                            UsersController.shared.uploadImage(sub: sub, photo: photo, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -3164,44 +1781,17 @@ public class Cidaas {
             LinkUnlinkController.shared.linkAccount(master_sub: master_sub, sub_to_link: sub_to_link, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call linkAccount with properties
-                            LinkUnlinkController.shared.linkAccount(master_sub: master_sub, sub_to_link: sub_to_link, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -3219,44 +1809,17 @@ public class Cidaas {
             LinkUnlinkController.shared.getLinkedUsers(sub: sub, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call getLinkedUsers with properties
-                            LinkUnlinkController.shared.getLinkedUsers(sub: sub, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -3274,44 +1837,17 @@ public class Cidaas {
             LinkUnlinkController.shared.unlinkAccount(identityId: identityId, sub: sub, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call unlinkAccount with properties
-                            LinkUnlinkController.shared.unlinkAccount(identityId: identityId, sub: sub, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -3329,44 +1865,17 @@ public class Cidaas {
             VerificationSettingsController.shared.getMFAList(sub: sub, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call getMFAList with properties
-                            VerificationSettingsController.shared.getMFAList(sub: sub, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
     }
     
@@ -3384,44 +1893,129 @@ public class Cidaas {
             AccountVerificationController.shared.getAccountVerificationList(sub: sub, properties: savedProp!, callback: callback)
         }
         else {
-            // read file properties
-            FileHelper.shared.readProperties {
-                switch $0 {
-                case .failure(let error):
-                    // log error
-                    let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                    
-                    // return failure callback
-                    DispatchQueue.main.async {
-                        callback(Result.failure(error: error))
-                    }
-                    return
-                case .success(let properties):
-                    // log success
-                    let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
-                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                    
-                    
-                    self.saveProperties(properties: properties) {
-                        switch $0 {
-                        case .failure (let error):
-                            // log error
-                            let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                            
-                            // return failure callback
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: error))
-                            }
-                            return
-                        case .success( _):
-                            // call getAccountVerificationList with properties
-                            AccountVerificationController.shared.getAccountVerificationList(sub: sub, properties: properties, callback: callback)
-                        }
-                    }
-                }
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // get location list from plist
+    // 1. Read properties from file
+    // 2. Call getLocationList method
+    // 3. Maintain logs based on flags
+    
+    public func getLocationList(sub: String, callback: @escaping(Result<LocationListResponse>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            LocationController.shared.getLocationList(sub: sub, properties: savedProp!, callback: callback)
+        }
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // get beacon list from plist
+    // 1. Read properties from file
+    // 2. Call getBeaconList method
+    // 3. Maintain logs based on flags
+    
+    public func getBeaconList(callback: @escaping(Result<BeaconListResponse>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            LocationController.shared.getBeaconList(properties: savedProp!, callback: callback)
+        }
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // emit location from plist
+    // 1. Read properties from file
+    // 2. Call emitLocation method
+    // 3. Maintain logs based on flags
+    
+    public func emitLocation(locationEmission: LocationEmission, callback: @escaping(Result<EmissionResponse>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            LocationController.shared.emitLocation(locationEmission: locationEmission, properties: savedProp!, callback: callback)
+        }
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // emit beacon from plist
+    // 1. Read properties from file
+    // 2. Call emitLocation method
+    // 3. Maintain logs based on flags
+    
+    public func emitBeacon(beaconEmission: BeaconEmission, callback: @escaping(Result<EmissionResponse>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            LocationController.shared.emitBeacon(beaconEmission: beaconEmission, properties: savedProp!, callback: callback)
+        }
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
         }
     }
     
