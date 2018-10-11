@@ -46,17 +46,17 @@ public class TrackingManager: NSObject, CLLocationManagerDelegate, UNUserNotific
     }
     
     func generateNotification(title: String, subTitle: String, body: String) {
-        let content = UNMutableNotificationContent()
-        content.title = title
-        content.subtitle = subTitle
-        content.body = body
-        
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 2, repeats: false)
-        let id = UUID().uuidString
-        let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
-        UNUserNotificationCenter.current().add(request) { (error) in
-            print(error ?? "")
-        }
+//        let content = UNMutableNotificationContent()
+//        content.title = title
+//        content.subtitle = subTitle
+//        content.body = body
+//        
+//        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 2, repeats: false)
+//        let id = UUID().uuidString
+//        let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
+//        UNUserNotificationCenter.current().add(request) { (error) in
+//            print(error ?? "")
+//        }
     }
     
     public func startTracking(sub: String, properties: Dictionary<String, String>) {
@@ -522,17 +522,17 @@ public class TrackingManager: NSObject, CLLocationManagerDelegate, UNUserNotific
         // log
         logw("Emitting location - Passes Sub \(sub)", cname: "cidaaslocationtracking")
         
-//        LocationController.shared.emitLocation(locationEmission: locationEmission, properties: self.properties) {
-//            switch $0 {
-//            case .success(let result):
-//                // log
-//                logw("Location Emission response success  \(result.data.result)", cname: "cidaaslocationtracking")
-//
-//            case .failure(let error):
-//                // log
-//                logw("Location Emission response failure \(error.error)", cname: "cidaaslocationtracking")
-//            }
-//        }
+        LocationController.shared.emitLocation(locationEmission: locationEmission, properties: self.properties) {
+            switch $0 {
+            case .success(let result):
+                // log
+                logw("Location Emission response success  \(result.data.result)", cname: "cidaaslocationtracking")
+
+            case .failure(let error):
+                // log
+                logw("Location Emission response failure \(error.error)", cname: "cidaaslocationtracking")
+            }
+        }
     }
     
     func getBeaconList() {
@@ -540,36 +540,36 @@ public class TrackingManager: NSObject, CLLocationManagerDelegate, UNUserNotific
         // log
         logw("Getting Beacon list", cname: "cidaasbeacontracking")
         
-//                        cidaas.getBeaconList() {
-//                            switch $0 {
-//                            case .success(let result):
-//                                // log
-//                                logw("Getting Beacon list response success  \(result.data)", cname: "cidaasbeacontracking")
-//
-//                                self.configureBeacon(data: result.data)
-//
-//                            case .failure(let error):
-//                                // log
-//                                logw("Getting Beacon list response failure \(error.error)", cname: "cidaasbeacontracking")
-//                            }
-//                        }
+        LocationController.shared.getBeaconList(properties: self.properties) {
+            switch $0 {
+            case .success(let result):
+                // log
+                logw("Getting Beacon list response success  \(result.data)", cname: "cidaasbeacontracking")
+                
+                self.configureBeacon(data: result.data)
+                
+            case .failure(let error):
+                // log
+                logw("Getting Beacon list response failure \(error.error)", cname: "cidaasbeacontracking")
+            }
+        }
     }
     
     func emitBeacon(beaconEmission: BeaconEmission) {
         // log
         logw("Emiting Beacon - Passes Sub \(sub)", cname: "cidaasbeacontracking")
         
-        //                cidaas.emitBeacon(beaconEmission: beaconEmission) {
-        //                    switch $0 {
-        //                    case .success(let result):
-        //                        // log
-        //                        logw("Beacon Emission response success  \(result.data.result)", cname: "cidaasbeacontracking")
-        //
-        //                    case .failure(let error):
-        //                        // log
-        //                        logw("Beacon Emission response failure \(error.error)", cname: "cidaasbeacontracking")
-        //                    }
-        //                }
+        LocationController.shared.emitBeacon(beaconEmission: beaconEmission, properties: self.properties) {
+            switch $0 {
+            case .success(let result):
+                // log
+                logw("Beacon Emission response success  \(result.data.result)", cname: "cidaasbeacontracking")
+                
+            case .failure(let error):
+                // log
+                logw("Beacon Emission response failure \(error.error)", cname: "cidaasbeacontracking")
+            }
+        }
     }
     
 }

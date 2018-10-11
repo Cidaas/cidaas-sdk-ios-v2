@@ -1092,7 +1092,7 @@ If you want to offer a passwordless login after securing it with the secure patt
 To configure Pattern Recognition, call **configurePatternRecognition()**.
 
 ```swift
-cidaas.configurePatternRecognition(pattern: "RED[1,2,3], sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
+cidaas.configurePatternRecognition(pattern: "RED[1,2,3]", sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
     switch $0 {
         case .success(let configureSuccess):
             // your success code here
