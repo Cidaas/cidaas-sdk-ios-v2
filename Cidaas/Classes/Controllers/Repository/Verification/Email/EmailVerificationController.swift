@@ -12,7 +12,7 @@ public class EmailVerificationController {
     
     // local variables
     private var authenticationType: String
-    private var sub: String
+    public var sub: String
     private var trackId: String
     private var requestId: String
     private var usageType: String = UsageTypes.MFA.rawValue

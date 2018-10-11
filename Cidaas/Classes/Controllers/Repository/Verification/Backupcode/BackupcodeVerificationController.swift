@@ -41,6 +41,16 @@ public class BackupcodeVerificationController {
             return
         }
         
+        // validating fields
+        if (sub == "") {
+            let error = WebAuthError.shared.propertyMissingException()
+            error.error = "sub must not be empty"
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+        
         // get access token from sub
         AccessTokenController.shared.getAccessToken(sub: sub) {
             switch $0 {

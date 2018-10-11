@@ -13,6 +13,7 @@ public class LoginEntity : Codable {
     public var username: String = ""
     public var password: String = ""
     public var username_type: String = ""
+    public var rememberMe: Bool = false
     
     // Constructors
     public init() {

@@ -2,34 +2,33 @@ PODS:
   - Alamofire (4.7.3)
   - Base32 (1.1.2)
   - Cidaas (0.0.1.3):
-    - Alamofire (~> 4.7)
-    - CryptoSwift (~> 0.10)
-    - OneTimePassword (~> 3.1)
-  - CryptoSwift (0.11.0)
-  - FBSnapshotTestCase (2.1.4):
-    - FBSnapshotTestCase/SwiftSupport (= 2.1.4)
-  - FBSnapshotTestCase/Core (2.1.4)
-  - FBSnapshotTestCase/SwiftSupport (2.1.4):
-    - FBSnapshotTestCase/Core
-  - Nimble (7.0.3)
-  - Nimble-Snapshots (6.3.0):
-    - Nimble-Snapshots/Core (= 6.3.0)
-  - Nimble-Snapshots/Core (6.3.0):
-    - FBSnapshotTestCase (~> 2.0)
-    - Nimble (~> 7.0)
-  - OneTimePassword (3.1.3):
+    - Alamofire (~> 4.7.3)
+    - CryptoSwift (~> 0.12)
+    - OneTimePassword (~> 3.1.4)
+  - Cosmos (16.0.0)
+  - CryptoSwift (0.12.0)
+  - IQKeyboardManagerSwift (5.0.8)
+  - Mockingjay (2.0.1):
+    - Mockingjay/Core (= 2.0.1)
+    - Mockingjay/XCTest (= 2.0.1)
+  - Mockingjay/Core (2.0.1):
+    - URITemplate (~> 2.0)
+  - Mockingjay/XCTest (2.0.1):
+    - Mockingjay/Core
+  - OneTimePassword (3.1.4):
     - Base32 (~> 1.1.2)
   - Quick (1.2.0)
   - SCLAlertView (0.8)
   - SDWebImage (4.4.2):
     - SDWebImage/Core (= 4.4.2)
   - SDWebImage/Core (4.4.2)
+  - URITemplate (2.0.3)
 
 DEPENDENCIES:
   - Cidaas (from `../`)
-  - FBSnapshotTestCase (~> 2.1.4)
-  - Nimble (~> 7.0.2)
-  - Nimble-Snapshots (~> 6.3.0)
+  - Cosmos (~> 16.0)
+  - IQKeyboardManagerSwift (~> 5.0.3)
+  - Mockingjay (~> 2.0)
   - Quick (~> 1.2.0)
   - SCLAlertView
   - SDWebImage (~> 4.4)
@@ -38,14 +37,15 @@ SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Alamofire
     - Base32
+    - Cosmos
     - CryptoSwift
-    - FBSnapshotTestCase
-    - Nimble
-    - Nimble-Snapshots
+    - IQKeyboardManagerSwift
+    - Mockingjay
     - OneTimePassword
     - Quick
     - SCLAlertView
     - SDWebImage
+    - URITemplate
 
 EXTERNAL SOURCES:
   Cidaas:
@@ -54,16 +54,17 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
   Base32: 163c298644d184e89ca4e00a996bad6bf5166390
-  Cidaas: dd8e300f8424126ee6cee4e5350240645f413012
-  CryptoSwift: ad5208dd2aae0a764ea4ce2c2d34bd067cae67f0
-  FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
-  Nimble: 7f5a9c447a33002645a071bddafbfb24ea70e0ac
-  Nimble-Snapshots: f5459b5b091678dc942d03ec4741cacb58ba4a52
-  OneTimePassword: 155d3c0cffbf22b39fb0def99d9e0facf6a37a7c
+  Cidaas: 148394f1674a6baa8b1f5705fc0082e10fd1dcab
+  Cosmos: 7bcee0fa858a9355a214f2a181be5dffcee42c81
+  CryptoSwift: 1c07ca50843dd48bc54e6ea53d7a4dba3b645716
+  IQKeyboardManagerSwift: 2e7dc7f98c111458c1ea2b373f893e8cf95e2b97
+  Mockingjay: 11a621880d2887f1775bdcf824341eb68f218450
+  OneTimePassword: 2fcf5d0e393a8e630a6bfeed1b250fb008aad487
   Quick: 58d203b1c5e27fff7229c4c1ae445ad7069a7a08
   SCLAlertView: 6a77bb2edfc65e04dbe57725546cb4107a506b85
   SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
+  URITemplate: ace0c4c46dcf8afe6e89b4060621852886b15c3b
 
-PODFILE CHECKSUM: e278312995ca0ccd07478759d661e0de6d02b103
+PODFILE CHECKSUM: d1ec5f3ab358229c144a7eaa7205e6074e8489d4
 
 COCOAPODS: 1.5.3

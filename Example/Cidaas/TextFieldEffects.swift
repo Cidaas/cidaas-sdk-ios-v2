@@ -23,7 +23,7 @@ open class TextFieldEffects : UITextField {
     
     
     // local objects
-    open let placeholderLabel = UILabel()
+    public let placeholderLabel = UILabel()
     open var animationCompletionHandler: AnimationCompletionHandler?
     
     
@@ -122,7 +122,7 @@ public extension String {
     func heightWithConstrainedWidth(width: CGFloat, font: UIFont) -> CGFloat {
         let constraintRect = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
         
-        let boundingBox = self.boundingRect(with: constraintRect, options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: [NSAttributedStringKey.font: font], context: nil)
+        let boundingBox = self.boundingRect(with: constraintRect, options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: font], context: nil)
         
         return boundingBox.height
     }

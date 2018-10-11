@@ -31,7 +31,7 @@ public class IVRVerificationService {
         
         // construct headers
         headers = [
-            "user-agent": "cidaas-ios",
+            "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
             "access_token": access_token
         ]
         
@@ -133,7 +133,7 @@ public class IVRVerificationService {
         
         // construct headers
         headers = [
-            "user-agent": "cidaas-ios"
+            "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
         ]
         
         // construct body params
@@ -232,7 +232,7 @@ public class IVRVerificationService {
         
         // construct headers
         headers = [
-            "user-agent": "cidaas-ios"
+            "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
         ]
         
         // construct body params
@@ -330,7 +330,7 @@ public class IVRVerificationService {
         authenticateIVREntity.deviceInfo = deviceInfoEntity
         // construct headers
         headers = [
-            "user-agent": "cidaas-ios"
+            "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
         ]
         
         // construct body params

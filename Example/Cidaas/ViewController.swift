@@ -23,10 +23,15 @@ class ViewController: UIViewController {
     var cidaas = Cidaas.shared
     var requestId: String = ""
     var tenant_name: String = ""
+    var userDefaults = UserDefaults.standard
     
     // did load
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.navigationController?.navigationBar.barTintColor = UIColor.orange
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        
         self.getRequestId()
     }
     
@@ -147,6 +152,7 @@ class ViewController: UIViewController {
         let loginEntity = LoginEntity()
         loginEntity.username = email.text ?? ""
         loginEntity.password = password.text ?? ""
+        loginEntity.rememberMe = true
         
         // show loader
         self.showLoader()
@@ -171,10 +177,30 @@ class ViewController: UIViewController {
                     let vc = self.storyboard?.instantiateViewController(withIdentifier: "UnverifiedUserViewController") as! UnverifiedUserViewController
                     self.navigationController?.pushViewController(vc, animated: true)
                 }
+                else if (error.errorMessage == "email_not_verified") {
+                    let vc = self.storyboard?.instantiateViewController(withIdentifier: "AccountVerificationViewController") as! AccountVerificationViewController
+                    let emailError = error.error as! LoginErrorResponseDataEntity
+                    vc.sub = emailError.sub
+                    vc.requestId = self.requestId
+                    vc.logo_uri = self.logourl.image!
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
+                else if (error.errorMessage == "mfa_required") {
+                    let vc = self.storyboard?.instantiateViewController(withIdentifier: "LoginWithEmailViewController") as! LoginWithEmailViewController
+                    let emailError = error.error as! LoginErrorResponseDataEntity
+                    vc.sub = emailError.sub
+                    vc.requestId = self.requestId
+                    vc.trackId = emailError.track_id
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
                 else {
                     self.showAlert(message: error.errorMessage, style: .info)
                 }
             case .success(let response):
+                
+                // hide loader
+                self.hideLoader()
+                
                 print("ACCESS TOKEN : \(response.data.access_token)")
                 print("EXPIRES IN : \(response.data.expires_in)")
                 print("ID TOKEN : \(response.data.id_token)")
@@ -183,8 +209,16 @@ class ViewController: UIViewController {
                 print("TOKEN TYPE : \(response.data.token_type)")
                 print("SUB : \(response.data.sub)")
                 
-                // hide loader
-                self.hideLoader()
+                self.userDefaults.set(response.data.sub, forKey: "sub")
+                self.userDefaults.synchronize()
+
+                self.navigationController?.popToRootViewController(animated: true)
+                
+//                let vc = self.storyboard?.instantiateViewController(withIdentifier: "LoginSuccessViewController") as! LoginSuccessViewController
+//                vc.sub = response.data.sub
+//                vc.accessToken = response.data.access_token
+//                vc.requestId = self.requestId
+//                self.navigationController?.pushViewController(vc, animated: true)
             }
         }
     }

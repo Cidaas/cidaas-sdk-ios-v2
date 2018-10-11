@@ -13,8 +13,8 @@ public class DBHelper : NSObject {
     // shared instance
     public static var shared : DBHelper = DBHelper()
     
-    // static variables
-    private var userDefaults = UserDefaults.standard
+    // local variables
+    public var userDefaults = UserDefaults.standard
     
     // set enable log
     public func setEnableLog(enableLog : Bool, key : String = "OAuthEnableLog") {
@@ -50,7 +50,7 @@ public class DBHelper : NSObject {
     }
     
     // set property file
-    public func setPropertyFile(properties : Dictionary<String, String>, key : String = "OAuthProperty") {
+    public func setPropertyFile(properties : Dictionary<String, String>?, key : String = "OAuthProperty") {
         userDefaults.set(properties, forKey: key)
         userDefaults.synchronize()
     }

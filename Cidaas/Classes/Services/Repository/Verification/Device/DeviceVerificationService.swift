@@ -34,7 +34,7 @@ public class DeviceVerificationService {
         
         // construct headers
         headers = [
-            "user-agent": "cidaas-ios"
+            "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
         ]
         
         validateDeviceEntity.deviceInfo = deviceInfoEntity
