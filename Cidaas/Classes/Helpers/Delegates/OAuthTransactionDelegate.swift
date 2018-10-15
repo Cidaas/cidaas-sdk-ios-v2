@@ -10,6 +10,6 @@ import Foundation
 
 public protocol OAuthTransactionDelegate {
     var state: String? { get }
-    func resume(_ url: URL, options: [UIApplicationOpenURLOptionsKey: Any]) -> Bool
+    func resume(_ url: URL, options: [UIApplication.OpenURLOptionsKey: Any]) -> Bool
     func cancel()
 }

@@ -33,6 +33,16 @@ public class LinkUnlinkController {
             return
         }
         
+        // validating fields
+        if (master_sub == "" || sub_to_link == "") {
+            let error = WebAuthError.shared.propertyMissingException()
+            error.error = "master_sub or sub_to_link must not be empty"
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+        
         // get access token from sub
         AccessTokenController.shared.getAccessToken(sub: master_sub) {
             switch $0 {
@@ -95,6 +105,16 @@ public class LinkUnlinkController {
             return
         }
         
+        // validating fields
+        if (sub == "") {
+            let error = WebAuthError.shared.propertyMissingException()
+            error.error = "sub must not be empty"
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+        
         // get access token from sub
         AccessTokenController.shared.getAccessToken(sub: sub) {
             switch $0 {
@@ -151,6 +171,16 @@ public class LinkUnlinkController {
             let loggerMessage = "Read properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
             logw(loggerMessage, cname: "cidaas-sdk-error-log")
             
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+        
+        // validating fields
+        if (identityId == "" || sub == "") {
+            let error = WebAuthError.shared.propertyMissingException()
+            error.error = "identityId or sub must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }

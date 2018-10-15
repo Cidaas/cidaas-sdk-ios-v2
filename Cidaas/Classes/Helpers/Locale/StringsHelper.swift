@@ -207,4 +207,9 @@ public class StringsHelper {
     
     public var EMPTY_VERIFY_ACCOUNT_LIST_SERVICE : String = "Verify account list is empty"
     public var VERIFY_ACCOUNT_LIST_SERVICE_FAILURE : String = "Verify account list service failure"
+    
+    public var LOCATION_LIST_SERVICE_FAILURE: String = "Location list service failure"
+    public var LOCATION_EMISSION_SERVICE_FAILURE: String = "Location Emission service failure"
+    
+    public var BEACON_LIST_SERVICE_FAILURE: String = "Beacon list service failure"
 }

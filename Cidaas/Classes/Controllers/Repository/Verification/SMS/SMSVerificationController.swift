@@ -12,7 +12,7 @@ public class SMSVerificationController {
     
     // local variables
     private var authenticationType: String
-    private var sub: String
+    public var sub: String
     private var trackId: String
     private var requestId: String
     private var usageType: String = UsageTypes.MFA.rawValue
@@ -347,6 +347,7 @@ public class SMSVerificationController {
         }
         
         self.usageType = usageType
+        self.requestId = requestId
         
         // construct object
         let initiateSMSEntity = InitiateSMSEntity()
@@ -375,7 +376,6 @@ public class SMSVerificationController {
                 
                 self.authenticationType = AuthenticationTypes.LOGIN.rawValue
                 self.sub = sub
-                self.requestId = requestId
                 self.trackId = trackId
                 
                 // return callback

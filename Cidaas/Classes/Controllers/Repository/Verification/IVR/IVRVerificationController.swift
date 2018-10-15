@@ -12,7 +12,7 @@ public class IVRVerificationController {
     
     // local variables
     private var authenticationType: String
-    private var sub: String
+    public var sub: String
     private var trackId: String
     private var requestId: String
     private var usageType: String = UsageTypes.MFA.rawValue
@@ -237,6 +237,7 @@ public class IVRVerificationController {
         }
         
         self.usageType = usageType
+        self.requestId = requestId
         
         // construct object
         let initiateIVREntity = InitiateIVREntity()
@@ -266,7 +267,7 @@ public class IVRVerificationController {
                 self.authenticationType = AuthenticationTypes.LOGIN.rawValue
                 self.sub = sub
                 self.trackId = trackId
-                self.requestId = requestId
+                
                 
                 // return callback
                 DispatchQueue.main.async {

@@ -31,7 +31,7 @@ public class ConsentService {
         
         // construct headers
         headers = [
-            "user-agent": "cidaas-ios",
+            "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
             "deviceId" : deviceInfoEntity.deviceId,
             "deviceMake" : deviceInfoEntity.deviceMake,
             "deviceModel" : deviceInfoEntity.deviceModel,
@@ -122,7 +122,7 @@ public class ConsentService {
         
         // construct headers
         headers = [
-            "user-agent": "cidaas-ios",
+            "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
             "deviceId" : deviceInfoEntity.deviceId,
             "deviceMake" : deviceInfoEntity.deviceMake,
             "deviceModel" : deviceInfoEntity.deviceModel,
@@ -212,7 +212,7 @@ public class ConsentService {
         
         // construct headers
         headers = [
-            "user-agent": "cidaas-ios",
+            "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
             "deviceId" : deviceInfoEntity.deviceId,
             "deviceMake" : deviceInfoEntity.deviceMake,
             "deviceModel" : deviceInfoEntity.deviceModel,
@@ -315,7 +315,7 @@ public class ConsentService {
         
         // construct headers
         headers = [
-            "user-agent": "cidaas-ios",
+            "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
             "deviceId" : deviceInfoEntity.deviceId,
             "deviceMake" : deviceInfoEntity.deviceMake,
             "deviceModel" : deviceInfoEntity.deviceModel,
