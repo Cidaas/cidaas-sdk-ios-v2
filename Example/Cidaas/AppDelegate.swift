@@ -10,9 +10,6 @@ import UIKit
 import IQKeyboardManagerSwift
 import Cidaas
 import UserNotifications
-import FacebookCore
-import FacebookLogin
-import FBSDKCoreKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -24,8 +21,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         IQKeyboardManager.sharedManager().enable = true
         Cidaas.shared.ENABLE_LOG = true
         
-        SDKApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
-        
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { (permissionGranted, error) in
             print (error ?? "")
         }
@@ -33,9 +28,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
-    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
-        return SDKApplicationDelegate.shared.application(app, open: url, options: options)
-    }
 
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -53,8 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-        
-        FBSDKAppEvents.activateApp()
+    
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
