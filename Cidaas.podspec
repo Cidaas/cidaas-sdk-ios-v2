@@ -27,8 +27,8 @@ Pod::Spec.new do |s|
   s.subspec 'Facebook' do |facebook|
       facebook.name             = 'Facebook'
       facebook.source_files = 'Cidaas/Classes/Facebook/**/*'
-      facebook.dependency 'FacebookCore', '~> 0.3.1'
-      facebook.dependency 'FacebookLogin', '~> 0.3.1'
+      # facebook.dependency 'FacebookCore', '~> 0.3.1'
+      # facebook.dependency 'FacebookLogin', '~> 0.3.1'
   end
   
 end
