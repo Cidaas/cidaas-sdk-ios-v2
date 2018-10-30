@@ -177,6 +177,49 @@ public class AccessTokenController {
         
     }
     
+    // get access token by social token
+    public func getAccessToken(socialToken: String, callback: @escaping (Result<LoginResponseEntity>) -> Void) {
+        
+        let properties = DBHelper.shared.getPropertyFile()
+        if (properties == nil) {
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: WebAuthError.shared.propertyMissingException()))
+            }
+            return
+        }
+        
+        // call access token from refresh token service
+        AccessTokenService.shared.getAccessToken(refreshToken: socialToken, properties: properties!) {
+            switch $0 {
+            case .failure(let error):
+                
+                // log error
+                let loggerMessage = "Access token from refresh token service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                
+                // return failure callback
+                DispatchQueue.main.async {
+                    callback(Result.failure(error: error))
+                }
+                return
+            case .success(let accessTokenEntity):
+                
+                // log success
+                let loggerMessage = "Access token from refresh token service success : " + "Access Token - " + accessTokenEntity.access_token + ", Refresh Token - " + accessTokenEntity.refresh_token + ", Expires In Time - " + String(describing: accessTokenEntity.expires_in)
+                logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                
+                // assign to access token model
+                EntityToModelConverter.shared.accessTokenEntityToAccessTokenModel(accessTokenEntity: accessTokenEntity, callback: { _ in
+                    
+                    self.saveAccessToken(accessTokenEntity: accessTokenEntity, callback: callback)
+                    
+                })
+            }
+        }
+        
+    }
+    
     
     // save access token in local db
     public func saveAccessToken(accessTokenModel : AccessTokenModel = AccessTokenModel.shared, accessTokenEntity : AccessTokenEntity, callback: @escaping (Result<LoginResponseEntity>) -> Void) {

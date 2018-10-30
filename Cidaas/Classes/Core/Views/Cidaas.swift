@@ -2020,6 +2020,34 @@ public class Cidaas {
     }
     
 // -------------------------------------------------------------------------------------------------- //
+    
+    // enroll document from plist
+    // 1. Read properties from file
+    // 2. Call emitLocation method
+    // 3. Maintain logs based on flags
+    
+    public func enrollDocument(photo: UIImage, sub: String, callback: @escaping(Result<EnrollDocumentResponseEntity>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            DocumentScanController.shared.scanDocument(sub: sub, photo: photo, properties: savedProp!, callback: callback)
+        }
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
 
     // get TOTP frequently
     public func listenTOTP(sub: String) {

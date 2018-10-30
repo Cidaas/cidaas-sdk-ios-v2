@@ -161,4 +161,63 @@ public class AccessTokenService {
             }
         }
     }
+    
+    // get access token by social token
+    public func getAccessToken(requestId: String, socialToken : String, provider: String, viewType: String, properties : Dictionary<String, String>, callback: @escaping (Result<AccessTokenEntity>) -> Void) {
+        
+        // local variables
+        var headers : HTTPHeaders
+        var urlString : String
+        
+        // get device information
+        let deviceInfoEntity = DBHelper.shared.getDeviceInfo()
+        
+        // construct headers
+        headers = [
+            "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "deviceId" : deviceInfoEntity.deviceId,
+            "deviceMake" : deviceInfoEntity.deviceMake,
+            "deviceModel" : deviceInfoEntity.deviceModel,
+            "deviceVersion" : deviceInfoEntity.deviceVersion,
+            "Content-Type" : "application/x-www-form-urlencoded"
+        ]
+        
+        // assign token url
+        urlString = URLHelper.shared.getSocialURL(requestId: requestId, socialToken: socialToken, provider: provider, clientId: (properties["ClientId"]) ?? "", redirectURL: (properties["RedirectURL"]) ?? "", viewType: viewType)
+        
+        // call service
+        Alamofire.request(urlString, method: .get, headers: headers).validate(statusCode: 200..<308).responseString { response in
+            switch response.result {
+            case .failure:
+                // return failure
+                callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.REFRESH_TOKEN_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.REFRESH_TOKEN_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
+                return
+            case .success:
+                if response.response?.statusCode == 200 {
+                    if let jsonString = response.result.value {
+                        let decoder = JSONDecoder()
+                        do {
+                            let data = jsonString.data(using: .utf8)!
+                            let accessTokenEntity = try decoder.decode(AccessTokenEntity.self, from: data)
+                            // return success
+                            callback(Result.success(result: accessTokenEntity))
+                        }
+                        catch {
+                            // return failure
+                            callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.ERROR_JSON_PARSING.rawValue, errorMessage: StringsHelper.shared.ERROR_JSON_PARSING, statusCode: HttpStatusCode.DEFAULT.rawValue)))
+                            return
+                        }
+                    }
+                    else {
+                        // return failure
+                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.REFRESH_TOKEN_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.REFRESH_TOKEN_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
+                    }
+                }
+                else {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.REFRESH_TOKEN_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.REFRESH_TOKEN_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
+                }
+            }
+        }
+    }
 }

@@ -212,4 +212,5 @@ public class StringsHelper {
     public var LOCATION_EMISSION_SERVICE_FAILURE: String = "Location Emission service failure"
     
     public var BEACON_LIST_SERVICE_FAILURE: String = "Beacon list service failure"
+    public var DOCUMENT_ENROLLED_SERVICE_FAILURE: String = "Document Scan service failure"
 }

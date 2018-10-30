@@ -153,18 +153,18 @@ class ViewController: UIViewController {
         loginEntity.username = email.text ?? ""
         loginEntity.password = password.text ?? ""
         loginEntity.rememberMe = true
-        
+
         // show loader
         self.showLoader()
-        
+
         // call login with credentials API
         cidaas.loginWithCredentials(requestId: self.requestId, loginEntity: loginEntity) {
             switch($0) {
             case .failure(let error):
-                
+
                 // hide loader
                 self.hideLoader()
-                
+
                 if (error.errorMessage == "ConsentRequired") {
                     let vc = self.storyboard?.instantiateViewController(withIdentifier: "ConsentManagementViewController") as! ConsentManagementViewController
                     let consentError = error.error as! LoginErrorResponseDataEntity
@@ -197,10 +197,10 @@ class ViewController: UIViewController {
                     self.showAlert(message: error.errorMessage, style: .info)
                 }
             case .success(let response):
-                
+
                 // hide loader
                 self.hideLoader()
-                
+
                 print("ACCESS TOKEN : \(response.data.access_token)")
                 print("EXPIRES IN : \(response.data.expires_in)")
                 print("ID TOKEN : \(response.data.id_token)")
@@ -208,12 +208,12 @@ class ViewController: UIViewController {
                 print("REFRESH TOKEN : \(response.data.refresh_token)")
                 print("TOKEN TYPE : \(response.data.token_type)")
                 print("SUB : \(response.data.sub)")
-                
+
                 self.userDefaults.set(response.data.sub, forKey: "sub")
                 self.userDefaults.synchronize()
 
                 self.navigationController?.popToRootViewController(animated: true)
-                
+
 //                let vc = self.storyboard?.instantiateViewController(withIdentifier: "LoginSuccessViewController") as! LoginSuccessViewController
 //                vc.sub = response.data.sub
 //                vc.accessToken = response.data.access_token
@@ -221,6 +221,19 @@ class ViewController: UIViewController {
 //                self.navigationController?.pushViewController(vc, animated: true)
             }
         }
+        
+        
+//        let facebook = Facebook()
+//        facebook.login() {
+//            switch $0 {
+//                case .success(let response):
+//                    break
+//                case .failure(let error):
+//                    break
+//            }
+//        }
+        
+        
     }
     
     // register

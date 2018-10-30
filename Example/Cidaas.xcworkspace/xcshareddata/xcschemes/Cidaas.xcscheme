@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "19439BD880262D722FBDB6343FE0AC60"
+               BlueprintIdentifier = "4CD5899888E96AB609C4F17B4FA574A1"
                BuildableName = "Cidaas.framework"
                BlueprintName = "Cidaas"
                ReferencedContainer = "container:Pods/Pods.xcodeproj">
@@ -43,7 +43,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "19439BD880262D722FBDB6343FE0AC60"
+            BlueprintIdentifier = "4CD5899888E96AB609C4F17B4FA574A1"
             BuildableName = "Cidaas.framework"
             BlueprintName = "Cidaas"
             ReferencedContainer = "container:Pods/Pods.xcodeproj">
@@ -65,7 +65,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "19439BD880262D722FBDB6343FE0AC60"
+            BlueprintIdentifier = "4CD5899888E96AB609C4F17B4FA574A1"
             BuildableName = "Cidaas.framework"
             BlueprintName = "Cidaas"
             ReferencedContainer = "container:Pods/Pods.xcodeproj">
@@ -83,7 +83,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "19439BD880262D722FBDB6343FE0AC60"
+            BlueprintIdentifier = "4CD5899888E96AB609C4F17B4FA574A1"
             BuildableName = "Cidaas.framework"
             BlueprintName = "Cidaas"
             ReferencedContainer = "container:Pods/Pods.xcodeproj">
