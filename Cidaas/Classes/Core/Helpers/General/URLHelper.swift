@@ -98,6 +98,7 @@ public class URLHelper {
     public var loginDeduplicationURL = "/login-srv/login/sdk"
     
     public var changePasswordURL = "/users-srv/changepassword"
+    public var documentScanURL = "/access-control-srv/ocr/validate"
     
     public var userActivityURL = "/useractivity-srv/latestactivity"
     public var updateUserURL = "/users-srv/user/profile"
@@ -111,6 +112,8 @@ public class URLHelper {
     
     public var beaconListURL = "/access-control-srv/devices/beacons/configs"
     public var beaconEmissionURL = "/access-control-srv/notification/beaconemit"
+    
+    public var socialURL = "/login-srv/social/token"
     
     public func getRequestIdURL() -> String {
         return requestIdURL
@@ -412,6 +415,10 @@ public class URLHelper {
         return changePasswordURL
     }
     
+    public func getDocumentScanURL() -> String {
+        return documentScanURL
+    }
+    
     public func getImageUploadURL() -> String {
         return imageUploadURL
     }
@@ -426,5 +433,9 @@ public class URLHelper {
     
     public func getLinkedUsersListURL(sub: String) -> String {
         return linkedUsersURL + "/" + sub
+    }
+    
+    public func getSocialURL(requestId: String, socialToken: String, provider: String, clientId: String, redirectURL: String, viewType: String) -> String {
+        return "\(socialURL)?codeOrToken=\(socialToken)&provider=\(provider)&clientId=\(clientId)&givenType=token&responseType=code&redirectUrl=\(redirectURL)&viewtype=\(viewType)&preAuthCode=\(requestId)"
     }
 }
