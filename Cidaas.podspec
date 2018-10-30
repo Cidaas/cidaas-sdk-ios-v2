@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'Cidaas'
-  s.version          = '0.0.1.5'
+  s.version          = '0.0.1.6'
   s.summary          = 'Native SDK for iOS providing login, registration and verification functionalities'
   s.homepage         = 'https://github.com/Cidaas/cidaas-sdk-ios-v2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
@@ -25,6 +25,6 @@ Pod::Spec.new do |s|
       # facebook.source_files = 'Cidaas/Classes/Facebook/**/*'
       # facebook.dependency 'FacebookCore', '~> 0.3.1'
       # facebook.dependency 'FacebookLogin', '~> 0.3.1'
-  end
+      # end
   
 end
