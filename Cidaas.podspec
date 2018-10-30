@@ -15,14 +15,10 @@ Pod::Spec.new do |s|
   s.author           = { 'Cidaas' => 'ganesh.kumar@widas.in' }
   s.source       = { :git => 'https://github.com/Cidaas/cidaas-sdk-ios-v2.git', :tag => s.version }
   s.ios.deployment_target = '10.0'
-  
-  s.subspec 'Core' do |core|
-      core.name             = 'Core'
-      core.source_files = 'Cidaas/Classes/Core/**/*'
-      core.dependency 'Alamofire', '~> 4.7.3'
-      core.dependency 'OneTimePassword', '~> 3.1.4'
-      core.dependency 'CryptoSwift', '~> 0.12'
-  end
+  s.source_files = 'Cidaas/Classes/Core/**/*'
+  s.dependency 'Alamofire', '~> 4.7.3'
+  s.dependency 'OneTimePassword', '~> 3.1.4'
+  s.dependency 'CryptoSwift', '~> 0.12'
   
   # s.subspec 'Facebook' do |facebook|
       # facebook.name             = 'Facebook'
