@@ -20,7 +20,7 @@ class TouchIdTests: QuickSpec {
                 
                 it("call configure TouchIdRecognition from public") {
                     
-                    cidaas.configureTouchId(sub: "87267324") {
+                    cidaas.configureTouchId(sub: "87267324", logoUrl: "askdjhas") {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -34,7 +34,7 @@ class TouchIdTests: QuickSpec {
                     
                     DBHelper.shared.userDefaults.removeObject(forKey: "OAuthProperty")
                     
-                    cidaas.configureTouchId(sub: "87267324") {
+                    cidaas.configureTouchId(sub: "87267324", logoUrl: "askdjhas") {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -158,7 +158,7 @@ class TouchIdTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configureTouchId(sub: "kajshjasd", intermediate_id: "asdasd", properties: properties!) {
+                    controller.configureTouchId(sub: "kajshjasd", logoUrl: "askdjhas", intermediate_id: "asdasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -226,7 +226,7 @@ class TouchIdTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configureTouchId(sub: "kajshjasd", properties: properties!) {
+                    controller.configureTouchId(sub: "kajshjasd", logoUrl: "askdjhas", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -323,7 +323,7 @@ class TouchIdTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configureTouchId(sub: "kajshjasd", properties: properties!) {
+                    controller.configureTouchId(sub: "kajshjasd", logoUrl: "askdjhas", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -420,7 +420,7 @@ class TouchIdTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configureTouchId(sub: "kajshjasd", intermediate_id: "asdasd", properties: properties!) {
+                    controller.configureTouchId(sub: "kajshjasd", logoUrl: "askdjhas", intermediate_id: "asdasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -546,7 +546,7 @@ class TouchIdTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configureTouchId(sub: "kajshjasd", intermediate_id: "asdasd", properties: properties!) {
+                    controller.configureTouchId(sub: "kajshjasd", logoUrl: "askdjhas", intermediate_id: "asdasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -702,7 +702,7 @@ class TouchIdTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configureTouchId(sub: "kajshjasd", intermediate_id: "asdasd", properties: properties!) {
+                    controller.configureTouchId(sub: "kajshjasd", logoUrl: "askdjhas", intermediate_id: "asdasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -762,7 +762,7 @@ class TouchIdTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configureTouchId(sub: "kajshjasd", properties: properties!) {
+                    controller.configureTouchId(sub: "kajshjasd", logoUrl: "askdjhas", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -820,7 +820,7 @@ class TouchIdTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configureTouchId(sub: "", properties: properties!) {
+                    controller.configureTouchId(sub: "", logoUrl: "askdjhas", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)

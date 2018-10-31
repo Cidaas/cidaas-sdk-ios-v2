@@ -11,6 +11,7 @@ import Foundation
 public class SetupPatternEntity : Codable {
     // properties
     public var client_id: String = ""
+    public var logoUrl: String = ""
     public var deviceInfo: DeviceInfoModel = DeviceInfoModel()
     
     // Constructors

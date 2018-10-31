@@ -30,7 +30,7 @@ public class TouchIdVerificationController {
     }
     
     // configure TouchId from properties
-    public func configureTouchId(sub: String, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<EnrollTouchResponseEntity>) -> Void) {
+    public func configureTouchId(sub: String, logoUrl: String, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<EnrollTouchResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil || properties["ClientId"] == "" || properties["ClientId"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -70,6 +70,7 @@ public class TouchIdVerificationController {
                 
                 // construct object
                 let setupTouchIdEntity = SetupTouchEntity()
+                setupTouchIdEntity.logoUrl = logoUrl
                 
                 // call setupTouchId service
                 TouchIdVerificationService.shared.setupTouchId(accessToken: tokenResponse.data.access_token, setupTouchIdEntity: setupTouchIdEntity, properties: properties) {
