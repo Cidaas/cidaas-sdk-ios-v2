@@ -29,7 +29,7 @@ public class PatternVerificationController {
     }
     
     // configure PatternRecognition from properties
-    public func configurePatternRecognition(pattern: String, sub: String, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<EnrollPatternResponseEntity>) -> Void) {
+    public func configurePatternRecognition(pattern: String, sub: String, logoUrl: String, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<EnrollPatternResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil || properties["ClientId"] == "" || properties["ClientId"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -78,6 +78,7 @@ public class PatternVerificationController {
                 
                 // construct object
                 let setupPatternEntity = SetupPatternEntity()
+                setupPatternEntity.logoUrl = logoUrl
                 
                 // call setupPattern service
                 PatternVerificationService.shared.setupPattern(accessToken: tokenResponse.data.access_token, setupPatternEntity: setupPatternEntity, properties: properties) {

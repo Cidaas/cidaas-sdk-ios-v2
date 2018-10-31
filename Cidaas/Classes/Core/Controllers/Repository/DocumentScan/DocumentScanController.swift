@@ -68,6 +68,10 @@ public class DocumentScanController {
                         let loggerMessage = "Enroll document service success : " + "Name  - " + String(describing: serviceResponse.data.Name)
                         logw(loggerMessage, cname: "cidaas-sdk-success-log")
                         
+                        // return callback
+                        DispatchQueue.main.async {
+                            callback(Result.success(result: serviceResponse))
+                        }
                     }
                 }
             }

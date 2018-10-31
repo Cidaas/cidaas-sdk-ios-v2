@@ -7,9 +7,8 @@
 
 import UIKit
 import CoreLocation
-import UserNotifications
 
-public class TrackingManager: NSObject, CLLocationManagerDelegate, UNUserNotificationCenterDelegate {
+public class TrackingManager: NSObject, CLLocationManagerDelegate {
     
     public static var shared : TrackingManager = TrackingManager()
     
@@ -34,15 +33,6 @@ public class TrackingManager: NSObject, CLLocationManagerDelegate, UNUserNotific
         deviceInfoEntity = DBHelper.shared.getDeviceInfo()
         manager = CLLocationManager()
         super.init()
-        UNUserNotificationCenter.current().delegate = self
-    }
-    
-    public func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        completionHandler([.alert, .sound])
-    }
-    
-    public func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        print(response)
     }
     
     func generateNotification(title: String, subTitle: String, body: String) {

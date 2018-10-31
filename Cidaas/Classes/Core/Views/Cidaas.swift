@@ -774,11 +774,11 @@ public class Cidaas {
     // 2. Call configurePatternRecognition method
     // 3. Maintain logs based on flags
     
-    public func configurePatternRecognition(pattern: String, sub: String, callback: @escaping(Result<EnrollPatternResponseEntity>) -> Void) {
+    public func configurePatternRecognition(pattern: String, sub: String, logoUrl: String, callback: @escaping(Result<EnrollPatternResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            PatternVerificationController.shared.configurePatternRecognition(pattern: pattern, sub: sub, properties: savedProp!, callback: callback)
+            PatternVerificationController.shared.configurePatternRecognition(pattern: pattern, sub: sub, logoUrl: logoUrl, properties: savedProp!, callback: callback)
         }
         else {
             // log error
@@ -830,11 +830,11 @@ public class Cidaas {
     // 2. Call configureTouchId method
     // 3. Maintain logs based on flags
     
-    public func configureTouchId(sub: String, callback: @escaping(Result<EnrollTouchResponseEntity>) -> Void) {
+    public func configureTouchId(sub: String, logoUrl: String, callback: @escaping(Result<EnrollTouchResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            TouchIdVerificationController.shared.configureTouchId(sub: sub, properties: savedProp!, callback: callback)
+            TouchIdVerificationController.shared.configureTouchId(sub: sub, logoUrl: logoUrl, properties: savedProp!, callback: callback)
         }
         else {
             // log error
