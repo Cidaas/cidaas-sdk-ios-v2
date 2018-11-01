@@ -3,10 +3,10 @@
 <plist version="1.0">
 <dict>
 	<key>DomainURL</key>
-	<string>https://nightlybuild.cidaas.de</string>
+	<string>your base url</string>
 	<key>ClientId</key>
-	<string>4d5e6e20-9347-4255-9790-5b7196843103</string>
+	<string>your client id</string>
 	<key>RedirectURL</key>
-	<string>https://nightlybuild.cidaas.de/user-profile/editprofile</string>
+	<string>your redirect url</string>
 </dict>
 </plist>
