@@ -270,6 +270,7 @@ public class VoiceVerificationController {
         initiateVoiceEntity.email = email
         initiateVoiceEntity.sub = sub
         initiateVoiceEntity.usageType = usageType
+        initiateVoiceEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomainURL"] ?? "OAuthUserDeviceId")
         
         // call initiateVoice service
         VoiceVerificationService.shared.initiateVoice(initiateVoiceEntity: initiateVoiceEntity, properties: properties) {

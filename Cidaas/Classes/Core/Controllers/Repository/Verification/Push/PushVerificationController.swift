@@ -276,6 +276,7 @@ public class PushVerificationController {
         initiatePushEntity.email = email
         initiatePushEntity.sub = sub
         initiatePushEntity.usageType = usageType
+        initiatePushEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomainURL"] ?? "OAuthUserDeviceId")
         
         // call initiatePush service
         PushVerificationService.shared.initiatePush(initiatePushEntity: initiatePushEntity, properties: properties) {
@@ -346,6 +347,7 @@ public class PushVerificationController {
                                         logw(loggerMessage, cname: "cidaas-sdk-success-log")
                                         
                                         self.statusId = initiatePushResponse.data.statusId
+                                        self.randomNumber = initiatePushResponse.data.randomNumber
                                         
                                         // construct object
                                         let authenticatePushEntity = AuthenticatePushEntity()

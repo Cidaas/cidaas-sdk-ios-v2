@@ -269,6 +269,7 @@ public class FaceVerificationController {
         initiateFaceEntity.email = email
         initiateFaceEntity.sub = sub
         initiateFaceEntity.usageType = usageType
+        initiateFaceEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomainURL"] ?? "OAuthUserDeviceId")
         
         // call initiateFace service
         FaceVerificationService.shared.initiateFace(initiateFaceEntity: initiateFaceEntity, properties: properties) {
