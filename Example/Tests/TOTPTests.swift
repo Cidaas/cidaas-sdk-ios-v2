@@ -20,7 +20,7 @@ class TOTPTests: QuickSpec {
                 
                 it("call configure TOTP from public") {
                     
-                    cidaas.configureTOTP(sub: "87267324") {
+                    cidaas.configureTOTP(sub: "87267324", logoUrl: "asdkashdjasd") {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -34,7 +34,7 @@ class TOTPTests: QuickSpec {
                     
                     DBHelper.shared.userDefaults.removeObject(forKey: "OAuthProperty")
                     
-                    cidaas.configureTOTP(sub: "87267324") {
+                    cidaas.configureTOTP(sub: "87267324", logoUrl: "asdkashdjasd") {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -253,7 +253,7 @@ class TOTPTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configureTOTP(sub: "kajshjasd", intermediate_id: "asdasd", properties: properties!) {
+                    controller.configureTOTP(sub: "kajshjasd", logoUrl: "asdkashdjasd", intermediate_id: "asdasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -321,7 +321,7 @@ class TOTPTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configureTOTP(sub: "kajshjasd", properties: properties!) {
+                    controller.configureTOTP(sub: "kajshjasd", logoUrl: "asdkashdjasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -418,7 +418,7 @@ class TOTPTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configureTOTP(sub: "kajshjasd", properties: properties!) {
+                    controller.configureTOTP(sub: "kajshjasd", logoUrl: "asdkashdjasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -515,7 +515,7 @@ class TOTPTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configureTOTP(sub: "kajshjasd", intermediate_id: "asdasd", properties: properties!) {
+                    controller.configureTOTP(sub: "kajshjasd", logoUrl: "asdkashdjasd", intermediate_id: "asdasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -641,7 +641,7 @@ class TOTPTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configureTOTP(sub: "kajshjasd", intermediate_id: "asdasd", properties: properties!) {
+                    controller.configureTOTP(sub: "kajshjasd", logoUrl: "asdkashdjasd", intermediate_id: "asdasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -797,7 +797,7 @@ class TOTPTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configureTOTP(sub: "kajshjasd", intermediate_id: "asdasd", properties: properties!) {
+                    controller.configureTOTP(sub: "kajshjasd", logoUrl: "asdkashdjasd", intermediate_id: "asdasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -857,7 +857,7 @@ class TOTPTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configureTOTP(sub: "kajshjasd", properties: properties!) {
+                    controller.configureTOTP(sub: "kajshjasd", logoUrl: "asdkashdjasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -915,7 +915,7 @@ class TOTPTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configureTOTP(sub: "", properties: properties!) {
+                    controller.configureTOTP(sub: "", logoUrl: "asdkashdjasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)

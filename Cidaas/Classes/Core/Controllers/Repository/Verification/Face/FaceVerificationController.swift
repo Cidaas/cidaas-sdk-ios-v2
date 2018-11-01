@@ -29,7 +29,7 @@ public class FaceVerificationController {
     }
     
     // configure Face from properties
-    public func configureFace(sub: String, photo: UIImage, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<EnrollFaceResponseEntity>) -> Void) {
+    public func configureFace(sub: String, photo: UIImage, logoUrl: String, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<EnrollFaceResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil || properties["ClientId"] == "" || properties["ClientId"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -68,6 +68,7 @@ public class FaceVerificationController {
                 
                 // construct object
                 let setupFaceEntity = SetupFaceEntity()
+                setupFaceEntity.logoUrl = logoUrl
                 
                 // call setupFace service
                 FaceVerificationService.shared.setupFace(accessToken: tokenResponse.data.access_token, setupFaceEntity: setupFaceEntity, properties: properties) {

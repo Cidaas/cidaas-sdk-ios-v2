@@ -20,7 +20,7 @@ class VoiceTests: QuickSpec {
                 
                 it("call configure VoiceRecognition from public") {
                     
-                    cidaas.configureVoiceRecognition(voice: Data(), sub: "87267324") {
+                    cidaas.configureVoiceRecognition(voice: Data(), sub: "87267324", logoUrl: "asdkashdjasd") {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -34,7 +34,7 @@ class VoiceTests: QuickSpec {
                     
                     DBHelper.shared.userDefaults.removeObject(forKey: "OAuthProperty")
                     
-                    cidaas.configureVoiceRecognition(voice: Data(), sub: "87267324") {
+                    cidaas.configureVoiceRecognition(voice: Data(), sub: "87267324", logoUrl: "asdkashdjasd") {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -158,7 +158,7 @@ class VoiceTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configureVoice(sub: "kajshjasd", voice: Data(), intermediate_id: "asdasd", properties: properties!) {
+                    controller.configureVoice(sub: "kajshjasd", voice: Data(), logoUrl: "asdkashdjasd", intermediate_id: "asdasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -226,7 +226,7 @@ class VoiceTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configureVoice(sub: "kajshjasd", voice: Data(), properties: properties!) {
+                    controller.configureVoice(sub: "kajshjasd", voice: Data(), logoUrl: "asdkashdjasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -323,7 +323,7 @@ class VoiceTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configureVoice(sub: "kajshjasd", voice: Data(), intermediate_id: "asdasd", properties: properties!) {
+                    controller.configureVoice(sub: "kajshjasd", voice: Data(), logoUrl: "asdkashdjasd", intermediate_id: "asdasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -449,7 +449,7 @@ class VoiceTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configureVoice(sub: "kajshjasd", voice: Data(), intermediate_id: "asdasd", properties: properties!) {
+                    controller.configureVoice(sub: "kajshjasd", voice: Data(), logoUrl: "asdkashdjasd", intermediate_id: "asdasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -605,7 +605,7 @@ class VoiceTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configureVoice(sub: "kajshjasd", voice: Data(), intermediate_id: "asdasd", properties: properties!) {
+                    controller.configureVoice(sub: "kajshjasd", voice: Data(), logoUrl: "asdkashdjasd", intermediate_id: "asdasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -665,7 +665,7 @@ class VoiceTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configureVoice(sub: "kajshjasd", voice: Data(), properties: properties!) {
+                    controller.configureVoice(sub: "kajshjasd", voice: Data(), logoUrl: "asdkashdjasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -723,7 +723,7 @@ class VoiceTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configureVoice(sub: "kajshjasd", voice: Data(), properties: properties!) {
+                    controller.configureVoice(sub: "kajshjasd", voice: Data(), logoUrl: "asdkashdjasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)

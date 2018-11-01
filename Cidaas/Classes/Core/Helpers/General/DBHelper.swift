@@ -176,13 +176,13 @@ public class DBHelper : NSObject {
     
     // set TOTP secret qrcode
     public func setTOTPSecret(qrcode : String, key : String = "OAuthTOTPSecret") {
-        userDefaults.set(qrcode, forKey: key)
+        userDefaults.set(qrcode, forKey: key + "-totp")
         userDefaults.synchronize()
     }
     
     // get TOTP secret qrcode
     public func getTOTPSecret(key : String = "OAuthTOTPSecret") -> String {
-        guard let value = userDefaults.object(forKey: key) else {
+        guard let value = userDefaults.object(forKey: key + "-totp") else {
             return ""
         }
         return value as? String ?? ""

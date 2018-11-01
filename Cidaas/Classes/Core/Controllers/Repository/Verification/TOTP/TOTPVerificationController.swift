@@ -34,7 +34,7 @@ public class TOTPVerificationController {
     }
     
     // configure TOTP from properties
-    public func configureTOTP(sub: String, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<EnrollTOTPResponseEntity>) -> Void) {
+    public func configureTOTP(sub: String, logoUrl: String, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<EnrollTOTPResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil || properties["ClientId"] == "" || properties["ClientId"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -74,6 +74,7 @@ public class TOTPVerificationController {
                 
                 // construct object
                 let setupTOTPEntity = SetupTOTPEntity()
+                setupTOTPEntity.logoUrl = logoUrl
                 
                 // call setupTOTP service
                 TOTPVerificationService.shared.setupTOTP(accessToken: tokenResponse.data.access_token, setupTOTPEntity: setupTOTPEntity, properties: properties) {

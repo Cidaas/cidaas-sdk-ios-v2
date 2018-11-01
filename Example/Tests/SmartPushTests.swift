@@ -20,7 +20,7 @@ class SmartPushTests: QuickSpec {
                 
                 it("call configure SmartPush from public") {
                     
-                    cidaas.configureSmartPush(sub: "87267324") {
+                    cidaas.configureSmartPush(sub: "87267324", logoUrl: "asdkashdjasd") {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -34,7 +34,7 @@ class SmartPushTests: QuickSpec {
                     
                     DBHelper.shared.userDefaults.removeObject(forKey: "OAuthProperty")
                     
-                    cidaas.configureSmartPush(sub: "87267324") {
+                    cidaas.configureSmartPush(sub: "87267324", logoUrl: "asdkashdjasd") {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -158,7 +158,7 @@ class SmartPushTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configurePush(sub: "kajshjasd", intermediate_id: "asdasd", properties: properties!) {
+                    controller.configurePush(sub: "kajshjasd", logoUrl: "asdkashdjasd", intermediate_id: "asdasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -226,7 +226,7 @@ class SmartPushTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configurePush(sub: "kajshjasd", properties: properties!) {
+                    controller.configurePush(sub: "kajshjasd", logoUrl: "asdkashdjasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -323,7 +323,7 @@ class SmartPushTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configurePush(sub: "kajshjasd", properties: properties!) {
+                    controller.configurePush(sub: "kajshjasd", logoUrl: "asdkashdjasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -420,7 +420,7 @@ class SmartPushTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configurePush(sub: "kajshjasd", intermediate_id: "asdasd", properties: properties!) {
+                    controller.configurePush(sub: "kajshjasd", logoUrl: "asdkashdjasd", intermediate_id: "asdasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -546,7 +546,7 @@ class SmartPushTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configurePush(sub: "kajshjasd", intermediate_id: "asdasd", properties: properties!) {
+                    controller.configurePush(sub: "kajshjasd", logoUrl: "asdkashdjasd", intermediate_id: "asdasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -702,7 +702,7 @@ class SmartPushTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configurePush(sub: "kajshjasd", intermediate_id: "asdasd", properties: properties!) {
+                    controller.configurePush(sub: "kajshjasd", logoUrl: "asdkashdjasd", intermediate_id: "asdasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -762,7 +762,7 @@ class SmartPushTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configurePush(sub: "kajshjasd", properties: properties!) {
+                    controller.configurePush(sub: "kajshjasd", logoUrl: "asdkashdjasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -820,7 +820,7 @@ class SmartPushTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configurePush(sub: "", properties: properties!) {
+                    controller.configurePush(sub: "", logoUrl: "asdkashdjasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)

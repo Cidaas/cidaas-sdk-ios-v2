@@ -28,7 +28,6 @@ public class BackupcodeVerificationService {
         
         // get device information
         let deviceInfoEntity = DBHelper.shared.getDeviceInfo()
-        
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
@@ -36,16 +35,18 @@ public class BackupcodeVerificationService {
         ]
         
         // construct body params
-        var bodyParams = Dictionary<String, Any>()
+        var dict = Dictionary<String, Any>()
         do {
             let encoder = JSONEncoder()
             let data = try encoder.encode(deviceInfoEntity)
-            bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+            dict = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
         }
         catch(_) {
             callback(Result.failure(error: WebAuthError.shared.conversionException()))
             return
         }
+        var bodyParams = Dictionary<String, Any>()
+        bodyParams["deviceInfo"] = dict
         
         // assign base url
         baseURL = (properties["DomainURL"]) ?? ""

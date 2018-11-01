@@ -22,7 +22,7 @@ class PatternTests: QuickSpec {
                 
                 it("call configure PatternRecognition from public") {
                     
-                    cidaas.configurePatternRecognition(pattern: "ORANGE{000-001-002-004-002-005-002", sub: "87267324") {
+                    cidaas.configurePatternRecognition(pattern: "ORANGE{000-001-002-004-002-005-002", sub: "87267324", logoUrl: "jhgasdjhas") {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -36,7 +36,7 @@ class PatternTests: QuickSpec {
                     
                     DBHelper.shared.userDefaults.removeObject(forKey: "OAuthProperty")
                     
-                    cidaas.configurePatternRecognition(pattern: "ORANGE{000-001-002-004-002-005-002", sub: "87267324") {
+                    cidaas.configurePatternRecognition(pattern: "ORANGE{000-001-002-004-002-005-002", sub: "87267324", logoUrl: "jhgasdjhas") {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -159,7 +159,7 @@ class PatternTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configurePatternRecognition(pattern: "ORANGE{000-001-002-004-002-005-002", sub: "kajshjasd", intermediate_id: "asdasd", properties: properties!) {
+                    controller.configurePatternRecognition(pattern: "ORANGE{000-001-002-004-002-005-002", sub: "kajshjasd", logoUrl: "jhgasdjhas", intermediate_id: "asdasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -227,7 +227,7 @@ class PatternTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configurePatternRecognition(pattern: "ORANGE{000-001-002-004-002-005-002", sub: "kajshjasd", properties: properties!) {
+                    controller.configurePatternRecognition(pattern: "ORANGE{000-001-002-004-002-005-002", sub: "kajshjasd", logoUrl: "jhgasdjhas", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -324,7 +324,7 @@ class PatternTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configurePatternRecognition(pattern: "ORANGE{000-001-002-004-002-005-002", sub: "kajshjasd", properties: properties!) {
+                    controller.configurePatternRecognition(pattern: "ORANGE{000-001-002-004-002-005-002", sub: "kajshjasd", logoUrl: "jhgasdjhas", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -421,7 +421,7 @@ class PatternTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configurePatternRecognition(pattern: "ORANGE{000-001-002-004-002-005-002", sub: "kajshjasd", intermediate_id: "asdasd", properties: properties!) {
+                    controller.configurePatternRecognition(pattern: "ORANGE{000-001-002-004-002-005-002", sub: "kajshjasd", logoUrl: "jhgasdjhas", intermediate_id: "asdasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -547,7 +547,7 @@ class PatternTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configurePatternRecognition(pattern: "ORANGE{000-001-002-004-002-005-002", sub: "kajshjasd", intermediate_id: "asdasd", properties: properties!) {
+                    controller.configurePatternRecognition(pattern: "ORANGE{000-001-002-004-002-005-002", sub: "kajshjasd", logoUrl: "jhgasdjhas", intermediate_id: "asdasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -703,7 +703,7 @@ class PatternTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configurePatternRecognition(pattern: "ORANGE{000-001-002-004-002-005-002", sub: "kajshjasd", intermediate_id: "asdasd", properties: properties!) {
+                    controller.configurePatternRecognition(pattern: "ORANGE{000-001-002-004-002-005-002", sub: "kajshjasd", logoUrl: "jhgasdjhas", intermediate_id: "asdasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -763,7 +763,7 @@ class PatternTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configurePatternRecognition(pattern: "ORANGE{000-001-002-004-002-005-002", sub: "kajshjasd", properties: properties!) {
+                    controller.configurePatternRecognition(pattern: "ORANGE{000-001-002-004-002-005-002", sub: "kajshjasd", logoUrl: "jhgasdjhas", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -821,7 +821,7 @@ class PatternTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configurePatternRecognition(pattern: "ORANGE{000-001-002-004-002-005-002", sub: "", properties: properties!) {
+                    controller.configurePatternRecognition(pattern: "ORANGE{000-001-002-004-002-005-002", sub: "", logoUrl: "jhgasdjhas", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
