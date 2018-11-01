@@ -29,7 +29,7 @@ public class VoiceVerificationController {
     }
     
     // configure Voice from properties
-    public func configureVoice(sub: String, voice: Data, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<EnrollVoiceResponseEntity>) -> Void) {
+    public func configureVoice(sub: String, voice: Data, logoUrl: String, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<EnrollVoiceResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil || properties["ClientId"] == "" || properties["ClientId"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -68,6 +68,7 @@ public class VoiceVerificationController {
                 
                 // construct object
                 let setupVoiceEntity = SetupVoiceEntity()
+                setupVoiceEntity.logoUrl = logoUrl
                 
                 // call setupVoice service
                 VoiceVerificationService.shared.setupVoice(accessToken: tokenResponse.data.access_token, setupVoiceEntity: setupVoiceEntity, properties: properties) {

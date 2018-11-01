@@ -886,11 +886,11 @@ public class Cidaas {
     // 2. Call configureFace method
     // 3. Maintain logs based on flags
     
-    public func configureFaceRecognition(photo: UIImage, sub: String, callback: @escaping(Result<EnrollFaceResponseEntity>) -> Void) {
+    public func configureFaceRecognition(photo: UIImage, sub: String, logoUrl: String, callback: @escaping(Result<EnrollFaceResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            FaceVerificationController.shared.configureFace(sub: sub, photo:photo, properties: savedProp!, callback: callback)
+            FaceVerificationController.shared.configureFace(sub: sub, photo:photo, logoUrl: logoUrl, properties: savedProp!, callback: callback)
         }
         else {
             // log error
@@ -942,11 +942,11 @@ public class Cidaas {
     // 2. Call configureVoiceRecognition method
     // 3. Maintain logs based on flags
     
-    public func configureVoiceRecognition(voice: Data, sub: String, callback: @escaping(Result<EnrollVoiceResponseEntity>) -> Void) {
+    public func configureVoiceRecognition(voice: Data, sub: String, logoUrl: String, callback: @escaping(Result<EnrollVoiceResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            VoiceVerificationController.shared.configureVoice(sub: sub, voice: voice, properties: savedProp!, callback: callback)
+            VoiceVerificationController.shared.configureVoice(sub: sub, voice: voice, logoUrl: logoUrl, properties: savedProp!, callback: callback)
         }
         else {
             // log error
@@ -998,11 +998,11 @@ public class Cidaas {
     // 2. Call configureSmartPush method
     // 3. Maintain logs based on flags
     
-    public func configureSmartPush(sub: String, callback: @escaping(Result<EnrollPushResponseEntity>) -> Void) {
+    public func configureSmartPush(sub: String, logoUrl: String, callback: @escaping(Result<EnrollPushResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            PushVerificationController.shared.configurePush(sub: sub, properties: savedProp!, callback: callback)
+            PushVerificationController.shared.configurePush(sub: sub, logoUrl: logoUrl, properties: savedProp!, callback: callback)
         }
         else {
             // log error
@@ -1055,11 +1055,11 @@ public class Cidaas {
     // 2. Call configureTOTP method
     // 3. Maintain logs based on flags
     
-    public func configureTOTP(sub: String, callback: @escaping(Result<EnrollTOTPResponseEntity>) -> Void) {
+    public func configureTOTP(sub: String, logoUrl: String, callback: @escaping(Result<EnrollTOTPResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            TOTPVerificationController.shared.configureTOTP(sub: sub, properties: savedProp!, callback: callback)
+            TOTPVerificationController.shared.configureTOTP(sub: sub, logoUrl: logoUrl, properties: savedProp!, callback: callback)
         }
         else {
             // log error
