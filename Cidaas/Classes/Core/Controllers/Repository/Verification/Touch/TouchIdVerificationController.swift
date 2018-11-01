@@ -272,6 +272,7 @@ public class TouchIdVerificationController {
         initiateTouchIdEntity.email = email
         initiateTouchIdEntity.sub = sub
         initiateTouchIdEntity.usageType = usageType
+        initiateTouchIdEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomainURL"] ?? "OAuthUserDeviceId")
         
         // call initiateTouchId service
         TouchIdVerificationService.shared.initiateTouchId(initiateTouchIdEntity: initiateTouchIdEntity, properties: properties) {

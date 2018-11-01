@@ -280,6 +280,7 @@ public class PatternVerificationController {
         initiatePatternEntity.email = email
         initiatePatternEntity.sub = sub
         initiatePatternEntity.usageType = usageType
+        initiatePatternEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomainURL"] ?? "OAuthUserDeviceId")
         
         // call initiatePattern service
         PatternVerificationService.shared.initiatePattern(initiatePatternEntity: initiatePatternEntity, properties: properties) {
