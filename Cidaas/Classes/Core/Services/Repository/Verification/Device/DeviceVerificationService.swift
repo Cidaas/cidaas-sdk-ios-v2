@@ -31,6 +31,7 @@ public class DeviceVerificationService {
         
         // get device information
         let deviceInfoEntity = DBHelper.shared.getDeviceInfo()
+        deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
         
         // construct headers
         headers = [
