@@ -46,10 +46,8 @@ public class SetupBackupcodeResponseDataEntity : Codable {
 
 public class SetupBackupcodeResponseDataBackupcodeEntity : Codable {
     // properties
-    public var statusId: String = ""
     public var code: String = ""
     public var used: Bool = false
-    public var usedDeviceInfo: SetupBackupcodeResponseDataBackupcodeDeviceInfoEntity = SetupBackupcodeResponseDataBackupcodeDeviceInfoEntity()
     
     // Constructors
     public init() {
@@ -58,10 +56,8 @@ public class SetupBackupcodeResponseDataBackupcodeEntity : Codable {
     
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.statusId = try container.decodeIfPresent(String.self, forKey: .statusId) ?? ""
         self.code = try container.decodeIfPresent(String.self, forKey: .code) ?? ""
         self.used = try container.decodeIfPresent(Bool.self, forKey: .used) ?? false
-        self.usedDeviceInfo = try container.decodeIfPresent(SetupBackupcodeResponseDataBackupcodeDeviceInfoEntity.self, forKey: .used) ?? SetupBackupcodeResponseDataBackupcodeDeviceInfoEntity()
     }
 }
 

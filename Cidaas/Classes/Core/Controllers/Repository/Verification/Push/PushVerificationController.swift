@@ -31,7 +31,7 @@ public class PushVerificationController {
     }
     
     // configure Push from properties
-    public func configurePush(sub: String, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<EnrollPushResponseEntity>) -> Void) {
+    public func configurePush(sub: String, logoUrl: String, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<EnrollPushResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil || properties["ClientId"] == "" || properties["ClientId"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -71,6 +71,7 @@ public class PushVerificationController {
                 
                 // construct object
                 let setupPushEntity = SetupPushEntity()
+                setupPushEntity.logoUrl = logoUrl
                 
                 // call setupPush service
                 PushVerificationService.shared.setupPush(accessToken: tokenResponse.data.access_token, setupPushEntity: setupPushEntity, properties: properties) {

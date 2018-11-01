@@ -12,6 +12,7 @@ public class SetupTOTPEntity : Codable {
     // properties
     public var client_id: String = ""
     public var deviceInfo: DeviceInfoModel = DeviceInfoModel()
+    public var logoUrl: String = ""
     
     // Constructors
     public init() {
