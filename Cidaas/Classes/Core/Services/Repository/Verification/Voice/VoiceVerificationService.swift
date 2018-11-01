@@ -467,15 +467,11 @@ public class VoiceVerificationService {
         
         // construct body params
         var bodyParams = Dictionary<String, String>()
-        do {
-            let encoder = JSONEncoder()
-            let data = try encoder.encode(authenticateVoiceEntity)
-            bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, String> ?? Dictionary<String, String>()
-        }
-        catch(_) {
-            callback(Result.failure(error: WebAuthError.shared.conversionException()))
-            return
-        }
+        bodyParams["statusId"] = authenticateVoiceEntity.statusId
+        bodyParams["pushNotificationId"] = deviceInfoEntity.pushNotificationId
+        bodyParams["deviceMake"] = deviceInfoEntity.deviceMake
+        bodyParams["deviceModel"] = deviceInfoEntity.deviceModel
+        bodyParams["deviceId"] = deviceInfoEntity.deviceId
         
         // assign base url
         baseURL = (properties["DomainURL"]) ?? ""

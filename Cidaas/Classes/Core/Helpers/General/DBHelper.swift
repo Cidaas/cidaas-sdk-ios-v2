@@ -162,13 +162,13 @@ public class DBHelper : NSObject {
     
     // set user deviceId
     public func setUserDeviceId(userDeviceId : String, key : String = "OAuthUserDeviceId") {
-        userDefaults.set(userDeviceId, forKey: key)
+        userDefaults.set(userDeviceId, forKey: key + "-user-device-id")
         userDefaults.synchronize()
     }
     
     // get user deviceId
     public func getUserDeviceId(key : String = "OAuthUserDeviceId") -> String {
-        guard let value = userDefaults.object(forKey: key) else {
+        guard let value = userDefaults.object(forKey: key + "-user-device-id") else {
             return ""
         }
         return value as? String ?? ""

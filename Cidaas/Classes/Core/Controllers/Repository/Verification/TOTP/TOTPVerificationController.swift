@@ -276,6 +276,7 @@ public class TOTPVerificationController {
         initiateTOTPEntity.email = email
         initiateTOTPEntity.sub = sub
         initiateTOTPEntity.usageType = usageType
+        initiateTOTPEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomainURL"] ?? "OAuthUserDeviceId")
         
         // call initiateTOTP service
         TOTPVerificationService.shared.initiateTOTP(initiateTOTPEntity: initiateTOTPEntity, properties: properties) {

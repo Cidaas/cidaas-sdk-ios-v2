@@ -352,6 +352,7 @@ public class TOTPVerificationService {
         
         deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
         initiateTOTPEntity.deviceInfo = deviceInfoEntity
+        initiateTOTPEntity.client_id = properties["ClientId"] ?? ""
         
         // construct body params
         var bodyParams = Dictionary<String, Any>()
