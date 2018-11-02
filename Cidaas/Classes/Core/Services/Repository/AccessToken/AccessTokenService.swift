@@ -163,7 +163,7 @@ public class AccessTokenService {
     }
     
     // get access token by social token
-    public func getAccessToken(requestId: String, socialToken : String, provider: String, viewType: String, properties : Dictionary<String, String>, callback: @escaping (Result<AccessTokenEntity>) -> Void) {
+    public func getAccessToken(requestId: String, socialToken : String, provider: String, viewType: String, properties : Dictionary<String, String>, callback: @escaping (Result<SocialProviderEntity>) -> Void) {
         
         // local variables
         var headers : HTTPHeaders
@@ -185,6 +185,8 @@ public class AccessTokenService {
         // assign token url
         urlString = URLHelper.shared.getSocialURL(requestId: requestId, socialToken: socialToken, provider: provider, clientId: (properties["ClientId"]) ?? "", redirectURL: (properties["RedirectURL"]) ?? "", viewType: viewType)
         
+        urlString = "\(urlString)&code_challenge=\(String(describing: properties["Challenge"]))&code_challenge_method=\(String(describing: properties["Method"]))"
+        
         // call service
         Alamofire.request(urlString, method: .get, headers: headers).validate(statusCode: 200..<308).responseString { response in
             switch response.result {
@@ -198,9 +200,9 @@ public class AccessTokenService {
                         let decoder = JSONDecoder()
                         do {
                             let data = jsonString.data(using: .utf8)!
-                            let accessTokenEntity = try decoder.decode(AccessTokenEntity.self, from: data)
+                            let socialEntity = try decoder.decode(SocialProviderEntity.self, from: data)
                             // return success
-                            callback(Result.success(result: accessTokenEntity))
+                            callback(Result.success(result: socialEntity))
                         }
                         catch {
                             // return failure

@@ -178,7 +178,7 @@ public class AccessTokenController {
     }
     
     // get access token by social token
-    public func getAccessToken(socialToken: String, callback: @escaping (Result<LoginResponseEntity>) -> Void) {
+    public func getAccessToken(requestId: String, socialToken: String, provider: String, viewType: String, callback: @escaping (Result<LoginResponseEntity>) -> Void) {
         
         let properties = DBHelper.shared.getPropertyFile()
         if (properties == nil) {
@@ -189,13 +189,13 @@ public class AccessTokenController {
             return
         }
         
-        // call access token from refresh token service
-        AccessTokenService.shared.getAccessToken(refreshToken: socialToken, properties: properties!) {
+        // call code from social token service
+        AccessTokenService.shared.getAccessToken(requestId: requestId, socialToken: socialToken, provider: provider, viewType: viewType, properties: properties!) {
             switch $0 {
             case .failure(let error):
                 
                 // log error
-                let loggerMessage = "Access token from refresh token service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                let loggerMessage = "Access token from social service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
                 logw(loggerMessage, cname: "cidaas-sdk-error-log")
                 
                 // return failure callback
@@ -203,18 +203,14 @@ public class AccessTokenController {
                     callback(Result.failure(error: error))
                 }
                 return
-            case .success(let accessTokenEntity):
+            case .success(let socialEntity):
                 
                 // log success
-                let loggerMessage = "Access token from refresh token service success : " + "Access Token - " + accessTokenEntity.access_token + ", Refresh Token - " + accessTokenEntity.refresh_token + ", Expires In Time - " + String(describing: accessTokenEntity.expires_in)
+                let loggerMessage = "Access token from social service success : " + "Code - " + socialEntity.code
                 logw(loggerMessage, cname: "cidaas-sdk-success-log")
                 
-                // assign to access token model
-                EntityToModelConverter.shared.accessTokenEntityToAccessTokenModel(accessTokenEntity: accessTokenEntity, callback: { _ in
-                    
-                    self.saveAccessToken(accessTokenEntity: accessTokenEntity, callback: callback)
-                    
-                })
+                self.getAccessToken(code: socialEntity.code, callback: callback)
+                
             }
         }
         
