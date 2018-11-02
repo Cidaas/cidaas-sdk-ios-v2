@@ -1508,6 +1508,15 @@ public class Cidaas {
     
 // -------------------------------------------------------------------------------------------------- //
     
+    // get access token from social token
+    // 1. Call getAccessToken method
+    
+    public func getAccessToken(requestId: String, socialToken: String, provider: String, viewType: String, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+        AccessTokenController.shared.getAccessToken(requestId: requestId, socialToken: socialToken, provider: provider, viewType: viewType, callback: callback)
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
     // get access token from refresh token
     // 1. Call getAccessToken method
     
