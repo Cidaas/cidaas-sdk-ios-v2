@@ -11,7 +11,7 @@ import Foundation
 public class AuthenticateBackupcodeEntity : Codable {
     // properties
     public var statusId: String = ""
-    public var code: String = ""
+    public var verifierPassword: String = ""
     public var deviceInfo: DeviceInfoModel = DeviceInfoModel()
     
     // Constructors
