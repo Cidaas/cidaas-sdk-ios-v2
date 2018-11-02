@@ -1310,7 +1310,7 @@ class EntityTests: QuickSpec {
                     
                     let entity = AuthenticateBackupcodeEntity()
                     
-                    entity.code = "kjhsdgfjhasd"
+                    entity.verifierPassword = "kjhsdgfjhasd"
                     entity.statusId = "askdjhajsd"
                     entity.deviceInfo = DeviceInfoModel()
                 }

@@ -182,17 +182,25 @@ public class AccessTokenService {
             "Content-Type" : "application/x-www-form-urlencoded"
         ]
         
-        // assign token url
-        urlString = URLHelper.shared.getSocialURL(requestId: requestId, socialToken: socialToken, provider: provider, clientId: (properties["ClientId"]) ?? "", redirectURL: (properties["RedirectURL"]) ?? "", viewType: viewType)
+        // assign base url
+        let baseURL = (properties["DomainURL"]) ?? ""
         
-        urlString = "\(urlString)&code_challenge=\(String(describing: properties["Challenge"]))&code_challenge_method=\(String(describing: properties["Method"]))"
+        if (baseURL == "") {
+            callback(Result.failure(error: WebAuthError.shared.propertyMissingException()))
+            return
+        }
+        
+        // assign token url
+        urlString = baseURL + URLHelper.shared.getSocialURL(requestId: requestId, socialToken: socialToken, provider: provider, clientId: (properties["ClientId"]) ?? "", redirectURL: (properties["RedirectURL"]) ?? "", viewType: viewType)
+        
+        urlString = "\(urlString)&code_challenge=\(properties["Challenge"] ?? "")&code_challenge_method=\(properties["Method"] ?? "")"
         
         // call service
         Alamofire.request(urlString, method: .get, headers: headers).validate(statusCode: 200..<308).responseString { response in
             switch response.result {
             case .failure:
                 // return failure
-                callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.REFRESH_TOKEN_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.REFRESH_TOKEN_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
+                callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.SOCIAL_TOKEN_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.SOCIAL_TOKEN_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
                 return
             case .success:
                 if response.response?.statusCode == 200 {
@@ -212,12 +220,12 @@ public class AccessTokenService {
                     }
                     else {
                         // return failure
-                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.REFRESH_TOKEN_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.REFRESH_TOKEN_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
+                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.SOCIAL_TOKEN_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.SOCIAL_TOKEN_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
                     }
                 }
                 else {
                     // return failure
-                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.REFRESH_TOKEN_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.REFRESH_TOKEN_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.SOCIAL_TOKEN_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.SOCIAL_TOKEN_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
                 }
             }
         }

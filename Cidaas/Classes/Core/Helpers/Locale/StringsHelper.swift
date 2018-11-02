@@ -213,4 +213,6 @@ public class StringsHelper {
     
     public var BEACON_LIST_SERVICE_FAILURE: String = "Beacon list service failure"
     public var DOCUMENT_ENROLLED_SERVICE_FAILURE: String = "Document Scan service failure"
+    
+    public var SOCIAL_TOKEN_SERVICE_FAILURE: String = "Social token service failure"
 }
