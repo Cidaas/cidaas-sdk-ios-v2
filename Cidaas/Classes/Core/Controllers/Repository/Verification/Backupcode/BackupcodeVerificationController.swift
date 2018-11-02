@@ -175,7 +175,7 @@ public class BackupcodeVerificationController {
                 
                 // construct object
                 let authenticateBackupcodeEntity = AuthenticateBackupcodeEntity()
-                authenticateBackupcodeEntity.code = code
+                authenticateBackupcodeEntity.verifierPassword = code
                 authenticateBackupcodeEntity.statusId = self.statusId
                 
                 // call authenticateBackupcode service

@@ -202,4 +202,6 @@ public enum WebAuthErrorCode : Int32 {
     
     case BEACON_LIST_SERVICE_FAILURE = 10169
     case DOCUMENT_ENROLLED_SERVICE_FAILURE = 10170
+    
+    case SOCIAL_TOKEN_SERVICE_FAILURE = 10171
 }

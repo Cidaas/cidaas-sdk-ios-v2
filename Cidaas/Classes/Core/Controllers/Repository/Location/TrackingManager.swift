@@ -7,6 +7,7 @@
 
 import UIKit
 import CoreLocation
+import UserNotifications
 
 public class TrackingManager: NSObject, CLLocationManagerDelegate {
     
@@ -36,17 +37,17 @@ public class TrackingManager: NSObject, CLLocationManagerDelegate {
     }
     
     func generateNotification(title: String, subTitle: String, body: String) {
-//        let content = UNMutableNotificationContent()
-//        content.title = title
-//        content.subtitle = subTitle
-//        content.body = body
-//        
-//        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 2, repeats: false)
-//        let id = UUID().uuidString
-//        let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
-//        UNUserNotificationCenter.current().add(request) { (error) in
-//            print(error ?? "")
-//        }
+        let content = UNMutableNotificationContent()
+        content.title = title
+        content.subtitle = subTitle
+        content.body = body
+        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 2, repeats: false)
+        let id = UUID().uuidString
+        let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
+        UNUserNotificationCenter.current().add(request) { (error) in
+            print(error ?? "")
+        }
     }
     
     public func startTracking(sub: String, properties: Dictionary<String, String>) {
@@ -69,7 +70,7 @@ public class TrackingManager: NSObject, CLLocationManagerDelegate {
             }
             locationManager(self.manager, didExitRegion: region)
         }
-        self.delegate.navigationItem.rightBarButtonItem?.title = "Login"
+//        self.delegate.navigationItem.rightBarButtonItem?.title = "Login"
         userDefaults.removeObject(forKey: "locationIds")
         userDefaults.synchronize()
     }
@@ -314,7 +315,7 @@ public class TrackingManager: NSObject, CLLocationManagerDelegate {
                 
                 if sessionId == "" {
                     
-                    generateNotification(title: "CID-KART", subTitle: "You are nearby CID-KART.", body: "Mobile phones offer maximum discount of 50%. Summer Sale!. Offer completed soon")
+                    generateNotification(title: "Demo App", subTitle: "You are nearby the store.", body: "Summer Sale!. Offer completed soon")
                     
                     sessionId = UUID().uuidString
                     
@@ -407,7 +408,7 @@ public class TrackingManager: NSObject, CLLocationManagerDelegate {
                 
                 if beaconNotifyFlag == false {
                     self.beaconNotifyFlag = true
-                    generateNotification(title: "CID-KART", subTitle: "iPhone XS MAX 50% Offer", body: "iPhone XS MAX with 50% offer on your Credit Card payment, No Cost EMI available. One day delivery! Hurry up!!!")
+                    generateNotification(title: "Demo App", subTitle: "", body: "Few available")
                 }
                 
                 emitBeacon(beaconEmission: beaconEmission)
@@ -443,7 +444,7 @@ public class TrackingManager: NSObject, CLLocationManagerDelegate {
                     
                     manager.stopUpdatingLocation()
                     
-                    generateNotification(title: "CID-KART", subTitle: "Thank you for visiting CID-KART.", body: "")
+                    generateNotification(title: "Demo App", subTitle: "Thank you for visiting us.", body: "")
                     
                     // call enter region started call
                     let locationEmission = LocationEmission()

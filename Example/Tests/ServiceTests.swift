@@ -1745,7 +1745,7 @@ class ServiceTests: QuickSpec {
                     let expect = self.expectation(description: "Expectation")
                     
                     let authenticateBackupcodeEntity = AuthenticateBackupcodeEntity()
-                    authenticateBackupcodeEntity.code = "asdjasd"
+                    authenticateBackupcodeEntity.verifierPassword = "asdjasd"
                     
                     service.authenticateBackupcode(authenticateBackupcodeEntity: authenticateBackupcodeEntity, properties: properties!) {
                         switch $0 {
