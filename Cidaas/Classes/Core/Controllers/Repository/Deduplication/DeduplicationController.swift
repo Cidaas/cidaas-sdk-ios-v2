@@ -37,7 +37,7 @@ public class DeduplicationController {
         // validating fields
         if (track_id == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "track_id must not be empty"
+            error.errorMessage = "track_id must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -88,7 +88,7 @@ public class DeduplicationController {
         // validating fields
         if (track_id == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "track_id must not be empty"
+            error.errorMessage = "track_id must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -140,7 +140,7 @@ public class DeduplicationController {
         // validating fields
         if (requestId == "" || sub == "" || password == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "requestId or sub or password must not be empty"
+            error.errorMessage = "requestId or sub or password must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }

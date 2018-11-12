@@ -36,7 +36,7 @@ public class LoginController {
         // validating fields
         if (requestId == "" || loginEntity.username == "" || loginEntity.password == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "requestId or loginEntity.username or loginEntity.password must not be empty"
+            error.errorMessage = "requestId or loginEntity.username or loginEntity.password must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }

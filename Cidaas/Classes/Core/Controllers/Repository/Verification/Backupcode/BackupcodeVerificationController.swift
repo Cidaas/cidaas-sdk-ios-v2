@@ -44,7 +44,7 @@ public class BackupcodeVerificationController {
         // validating fields
         if (sub == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "sub must not be empty"
+            error.errorMessage = "sub must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -115,7 +115,7 @@ public class BackupcodeVerificationController {
         // validating fields
         if ((email == "" && sub == "" && mobile == "") || requestId == "" || code == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "email or sub or mobile or requestId or code must not be empty"
+            error.errorMessage = "email or sub or mobile or requestId or code must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -125,7 +125,7 @@ public class BackupcodeVerificationController {
         if (usageType == UsageTypes.MFA.rawValue) {
             if (trackId == "") {
                 let error = WebAuthError.shared.propertyMissingException()
-                error.error = "trackId must not be empty"
+                error.errorMessage = "trackId must not be empty"
                 DispatchQueue.main.async {
                     callback(Result.failure(error: error))
                 }
@@ -135,7 +135,7 @@ public class BackupcodeVerificationController {
         else {
             if (usageType != UsageTypes.PASSWORDLESS.rawValue) {
                 let error = WebAuthError.shared.propertyMissingException()
-                error.error = "Invalid usageType. usageType should be either PASSWORDLESS_AUTHENTICATION or MULTIFACTOR_AUTHENTICATION"
+                error.errorMessage = "Invalid usageType. usageType should be either PASSWORDLESS_AUTHENTICATION or MULTIFACTOR_AUTHENTICATION"
                 DispatchQueue.main.async {
                     callback(Result.failure(error: error))
                 }

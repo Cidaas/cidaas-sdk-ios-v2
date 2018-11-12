@@ -37,7 +37,7 @@ public class ChangepasswordController {
         // validating fields
         if (sub == "" || changePasswordEntity.old_password == "" || changePasswordEntity.new_password == "" || changePasswordEntity.confirm_password == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "sub or old_password or new_password or confirm_password must not be empty"
+            error.errorMessage = "sub or old_password or new_password or confirm_password must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -46,7 +46,7 @@ public class ChangepasswordController {
         
         if (changePasswordEntity.new_password != changePasswordEntity.confirm_password) {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "new_password and confirm_password must be same"
+            error.errorMessage = "new_password and confirm_password must be same"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }

@@ -28,6 +28,7 @@ public class UserInfoEntity: Codable {
     public var nickname: String = ""
     public var user_status: String = ""
     public var identities: [UserInfoIdentity] = []
+    public var picture: String = ""
     
     public init() {
         
@@ -53,6 +54,7 @@ public class UserInfoEntity: Codable {
         self.nickname = try container.decodeIfPresent(String.self, forKey: .nickname) ?? ""
         self.user_status = try container.decodeIfPresent(String.self, forKey: .user_status) ?? ""
         self.identities = try container.decodeIfPresent([UserInfoIdentity].self, forKey: .identities) ?? []
+        self.picture = try container.decodeIfPresent(String.self, forKey: .picture) ?? ""
     }
     
 }

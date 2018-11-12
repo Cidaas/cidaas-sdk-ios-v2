@@ -224,7 +224,7 @@ public class PushVerificationController {
         
         if (DBHelper.shared.getUserDeviceId(key: properties["DomainURL"] ?? "OAuthUserDeviceId") == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "There is no physical verification configured in this mobile"
+            error.errorMessage = "There is no physical verification configured in this mobile"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -240,7 +240,7 @@ public class PushVerificationController {
         // validating fields
         if ((email == "" && sub == "" && mobile == "") || requestId == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "email or sub or mobile or requestId must not be empty"
+            error.errorMessage = "email or sub or mobile or requestId must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -250,7 +250,7 @@ public class PushVerificationController {
         if (usageType == UsageTypes.MFA.rawValue) {
             if (trackId == "") {
                 let error = WebAuthError.shared.propertyMissingException()
-                error.error = "trackId must not be empty"
+                error.errorMessage = "trackId must not be empty"
                 DispatchQueue.main.async {
                     callback(Result.failure(error: error))
                 }
@@ -260,7 +260,7 @@ public class PushVerificationController {
         else {
             if (usageType != UsageTypes.PASSWORDLESS.rawValue) {
                 let error = WebAuthError.shared.propertyMissingException()
-                error.error = "Invalid usageType. usageType should be either PASSWORDLESS_AUTHENTICATION or MULTIFACTOR_AUTHENTICATION"
+                error.errorMessage = "Invalid usageType. usageType should be either PASSWORDLESS_AUTHENTICATION or MULTIFACTOR_AUTHENTICATION"
                 DispatchQueue.main.async {
                     callback(Result.failure(error: error))
                 }
@@ -479,7 +479,7 @@ public class PushVerificationController {
         // validating fields
         if (statusId == "" || randomNumber == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "statusId or randomNumber must not be empty"
+            error.errorMessage = "statusId or randomNumber must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -488,7 +488,7 @@ public class PushVerificationController {
         
         // construct object
         let authenticatePushEntity = AuthenticatePushEntity()
-        authenticatePushEntity.statusId = self.statusId
+        authenticatePushEntity.statusId = statusId
         authenticatePushEntity.verifierPassword = randomNumber
         
         // getting user device id

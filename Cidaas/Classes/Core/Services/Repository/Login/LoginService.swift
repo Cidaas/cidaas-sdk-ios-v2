@@ -101,10 +101,10 @@ public class LoginService {
                     do {
                         let data = jsonString.data(using: .utf8)!
                         // decode the json data to object
-                        let errorResponseEntity = try decoder.decode(LoginErrorResponseEntity.self, from: data)
+                        let errorResponseEntity = try decoder.decode(ErrorResponseEntity.self, from: data)
                         
                         // return failure
-                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.LOGIN_WITH_CREDENTIAL_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error: errorResponseEntity.error)))
+                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.LOGIN_WITH_CREDENTIAL_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error: errorResponseEntity)))
                     }
                     catch(let error) {
                         // return failure
@@ -113,7 +113,7 @@ public class LoginService {
                 }
                 else {
                     // return failure
-                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.LOGIN_WITH_CREDENTIAL_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.LOGIN_WITH_CREDENTIAL_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error: response.value ?? response.error?.localizedDescription ?? "")))
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.LOGIN_WITH_CREDENTIAL_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.LOGIN_WITH_CREDENTIAL_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error: ErrorResponseEntity())))
                 }
                 break
             }

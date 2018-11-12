@@ -45,7 +45,7 @@ public class RequestIdService {
         bodyParams["client_id"] = properties["ClientId"]
         bodyParams["client_secret"] = properties["ClientSecret"]
         bodyParams["response_type"] = "code"
-        bodyParams["scope"] = "openid email roles profile offline_access"
+        bodyParams["scope"] = "openid email roles profile offline_access phone"
         bodyParams["code_challenge"] = properties["Challenge"]
         bodyParams["code_challenge_method"] = properties["Method"]
         
@@ -109,7 +109,7 @@ public class RequestIdService {
                 }
                 else {
                     // return failure
-                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.REQUEST_ID_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.REQUEST_ID_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  response.value ?? response.error?.localizedDescription ?? "")))
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.REQUEST_ID_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.REQUEST_ID_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  ErrorResponseEntity())))
                 }
                 break
             }

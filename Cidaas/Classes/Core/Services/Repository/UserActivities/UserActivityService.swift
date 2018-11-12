@@ -76,7 +76,7 @@ public class UserActivityService {
                         let errorResponseEntity = try decoder.decode(ErrorResponseEntity.self, from: data)
                         
                         // return failure
-                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.USER_ACTIVITY_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error: response.value ?? response.error?.localizedDescription ?? "")))
+                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.USER_ACTIVITY_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error: errorResponseEntity)))
                     }
                     catch(let error) {
                         // return failure

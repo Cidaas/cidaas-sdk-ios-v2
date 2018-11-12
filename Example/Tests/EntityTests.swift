@@ -169,14 +169,14 @@ class EntityTests: QuickSpec {
                 }
                 
                 it("call client info response entity") {
-                    var entity = ClientInfoErrorResponseEntity()
+                    var entity = ErrorResponseEntity()
                     
                     let jsonString = "{\"success\":false,\"status\":400,\"error\":{\"code\":2001, \"error\":\"not found\"}}"
                     let decoder = JSONDecoder()
                     do {
                         let data = jsonString.data(using: .utf8)!
                         // decode the json data to object
-                        entity = try decoder.decode(ClientInfoErrorResponseEntity.self, from: data)
+                        entity = try decoder.decode(ErrorResponseEntity.self, from: data)
                         print(entity.success)
                     }
                     catch(let error) {
@@ -186,14 +186,14 @@ class EntityTests: QuickSpec {
                 }
                 
                 it("call consent error response entity") {
-                    var entity = ConsentErrorResponseEntity()
+                    var entity = ErrorResponseEntity()
                     
                     let jsonString = "{\"success\":false,\"status\":400,\"error\":{\"code\":2001, \"error\":\"not found\"}}"
                     let decoder = JSONDecoder()
                     do {
                         let data = jsonString.data(using: .utf8)!
                         // decode the json data to object
-                        entity = try decoder.decode(ConsentErrorResponseEntity.self, from: data)
+                        entity = try decoder.decode(ErrorResponseEntity.self, from: data)
                         print(entity.success)
                     }
                     catch(let error) {
@@ -220,14 +220,14 @@ class EntityTests: QuickSpec {
                 }
                 
                 it("call verification error response entity") {
-                    var entity = VerificationErrorResponseEntity()
+                    var entity = ErrorResponseEntity()
                     
                     let jsonString = "{\"success\":false,\"status\":400,\"error\":{\"code\":2001, \"error\":\"not found\"}}"
                     let decoder = JSONDecoder()
                     do {
                         let data = jsonString.data(using: .utf8)!
                         // decode the json data to object
-                        entity = try decoder.decode(VerificationErrorResponseEntity.self, from: data)
+                        entity = try decoder.decode(ErrorResponseEntity.self, from: data)
                         print(entity.success)
                     }
                     catch(let error) {
@@ -237,14 +237,14 @@ class EntityTests: QuickSpec {
                 }
                 
                 it("call login error response entity") {
-                    var entity = LoginErrorResponseEntity()
+                    var entity = ErrorResponseEntity()
                     
                     let jsonString = "{\"success\":false,\"status\":400,\"error\":{\"code\":2001, \"error\":\"not found\"}}"
                     let decoder = JSONDecoder()
                     do {
                         let data = jsonString.data(using: .utf8)!
                         // decode the json data to object
-                        entity = try decoder.decode(LoginErrorResponseEntity.self, from: data)
+                        entity = try decoder.decode(ErrorResponseEntity.self, from: data)
                         print(entity.success)
                     }
                     catch(let error) {

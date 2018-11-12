@@ -116,7 +116,7 @@ public class PatternVerificationService {
                 }
                 else {
                     // return failure
-                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.PATTERN_SETUP_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.PATTERN_SETUP_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  response.value ?? response.error?.localizedDescription ?? "")))
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.PATTERN_SETUP_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.PATTERN_SETUP_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  ErrorResponseEntity())))
                 }
                 break
             }
@@ -219,7 +219,7 @@ public class PatternVerificationService {
                 }
                 else {
                     // return failure
-                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.PATTERN_SCANNED_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.PATTERN_SCANNED_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  response.value ?? response.error?.localizedDescription ?? "")))
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.PATTERN_SCANNED_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.PATTERN_SCANNED_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  ErrorResponseEntity())))
                 }
                 break
             }
@@ -322,7 +322,7 @@ public class PatternVerificationService {
                 }
                 else {
                     // return failure
-                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.PATTERN_ENROLLED_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.PATTERN_ENROLLED_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  response.value ?? response.error?.localizedDescription ?? "")))
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.PATTERN_ENROLLED_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.PATTERN_ENROLLED_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  ErrorResponseEntity())))
                 }
                 break
             }
@@ -426,7 +426,7 @@ public class PatternVerificationService {
                 }
                 else {
                     // return failure
-                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.PATTERN_INITIATE_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.PATTERN_INITIATE_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  response.value ?? response.error?.localizedDescription ?? "")))
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.PATTERN_INITIATE_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.PATTERN_INITIATE_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  ErrorResponseEntity())))
                 }
                 break
             }
@@ -524,7 +524,7 @@ public class PatternVerificationService {
                 }
                 else {
                     // return failure
-                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.PATTERN_AUTHENTICATE_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.PATTERN_AUTHENTICATE_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  response.value ?? response.error?.localizedDescription ?? "")))
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.PATTERN_AUTHENTICATE_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.PATTERN_AUTHENTICATE_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  ErrorResponseEntity())))
                 }
                 break
             }

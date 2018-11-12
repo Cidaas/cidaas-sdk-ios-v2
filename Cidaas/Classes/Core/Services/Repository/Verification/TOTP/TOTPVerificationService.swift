@@ -116,7 +116,7 @@ public class TOTPVerificationService {
                 }
                 else {
                     // return failure
-                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.TOTP_SETUP_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.TOTP_SETUP_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  response.value ?? response.error?.localizedDescription ?? "")))
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.TOTP_SETUP_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.TOTP_SETUP_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  ErrorResponseEntity())))
                 }
                 break
             }
@@ -219,7 +219,7 @@ public class TOTPVerificationService {
                 }
                 else {
                     // return failure
-                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.TOTP_SCANNED_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.TOTP_SCANNED_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  response.value ?? response.error?.localizedDescription ?? "")))
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.TOTP_SCANNED_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.TOTP_SCANNED_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  ErrorResponseEntity())))
                 }
                 break
             }
@@ -322,7 +322,7 @@ public class TOTPVerificationService {
                 }
                 else {
                     // return failure
-                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.TOTP_ENROLLED_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.TOTP_ENROLLED_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  response.value ?? response.error?.localizedDescription ?? "")))
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.TOTP_ENROLLED_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.TOTP_ENROLLED_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  ErrorResponseEntity())))
                 }
                 break
             }
@@ -426,7 +426,7 @@ public class TOTPVerificationService {
                 }
                 else {
                     // return failure
-                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.TOTP_INITIATE_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.TOTP_INITIATE_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  response.value ?? response.error?.localizedDescription ?? "")))
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.TOTP_INITIATE_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.TOTP_INITIATE_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  ErrorResponseEntity())))
                 }
                 break
             }
@@ -524,7 +524,7 @@ public class TOTPVerificationService {
                 }
                 else {
                     // return failure
-                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.TOTP_AUTHENTICATE_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.TOTP_AUTHENTICATE_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  response.value ?? response.error?.localizedDescription ?? "")))
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.TOTP_AUTHENTICATE_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.TOTP_AUTHENTICATE_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  ErrorResponseEntity())))
                 }
                 break
             }
