@@ -2271,7 +2271,7 @@ class ServiceTests: QuickSpec {
                     
                     let expect = self.expectation(description: "Expectation")
                     
-                    service.setupIVR(access_token: "asdkjasjd", properties: properties!) {
+                    service.setupIVR(access_token: "asdkjasjd", phone: "+919876543210", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)

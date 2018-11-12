@@ -36,7 +36,7 @@ public class LinkUnlinkController {
         // validating fields
         if (master_sub == "" || sub_to_link == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "master_sub or sub_to_link must not be empty"
+            error.errorMessage = "master_sub or sub_to_link must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -108,7 +108,7 @@ public class LinkUnlinkController {
         // validating fields
         if (sub == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "sub must not be empty"
+            error.errorMessage = "sub must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -180,7 +180,7 @@ public class LinkUnlinkController {
         // validating fields
         if (identityId == "" || sub == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "identityId or sub must not be empty"
+            error.errorMessage = "identityId or sub must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }

@@ -62,7 +62,7 @@ public class DeduplicationService {
                         let errorResponseEntity = try decoder.decode(ErrorResponseEntity.self, from: data)
                         
                         // return failure
-                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.DEDUPLICATION_DETAILS_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error: response.value ?? response.error?.localizedDescription ?? "")))
+                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.DEDUPLICATION_DETAILS_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error: errorResponseEntity)))
                     }
                     catch(let error) {
                         // return failure
@@ -147,7 +147,7 @@ public class DeduplicationService {
                         let errorResponseEntity = try decoder.decode(ErrorResponseEntity.self, from: data)
                         
                         // return failure
-                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.REGISTER_DEDUPLICATION_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error: response.value ?? response.error?.localizedDescription ?? "")))
+                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.REGISTER_DEDUPLICATION_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error: errorResponseEntity)))
                     }
                     catch(let error) {
                         // return failure
@@ -247,7 +247,7 @@ public class DeduplicationService {
                         let errorResponseEntity = try decoder.decode(ErrorResponseEntity.self, from: data)
                         
                         // return failure
-                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.DEDUPLICATION_LOGIN_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error: response.value ?? response.error?.localizedDescription ?? "")))
+                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.DEDUPLICATION_LOGIN_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error: errorResponseEntity)))
                     }
                     catch(let error) {
                         // return failure

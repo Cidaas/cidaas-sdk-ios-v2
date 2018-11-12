@@ -114,7 +114,7 @@ public class DeviceVerificationService {
                 }
                 else {
                     // return failure
-                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.VALIDATE_DEVICE_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.VALIDATE_DEVICE_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  response.value ?? response.error?.localizedDescription ?? "")))
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.VALIDATE_DEVICE_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.VALIDATE_DEVICE_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  ErrorResponseEntity())))
                 }
                 break
             }

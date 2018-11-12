@@ -46,7 +46,7 @@ public class IVRVerificationController {
         // validating fields
         if (sub == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "sub must not be empty"
+            error.errorMessage = "sub must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -71,12 +71,11 @@ public class IVRVerificationController {
                 let loggerMessage = "Access Token success : " + "Access Token  - " + String(describing: tokenResponse.data.access_token)
                 logw(loggerMessage, cname: "cidaas-sdk-success-log")
                 
-                // call configureIVR service
-                IVRVerificationService.shared.setupIVR(access_token: tokenResponse.data.access_token, properties: properties) {
+                UsersService.shared.getUserInfo(accessToken: tokenResponse.data.access_token, properties: properties) {
                     switch $0 {
                     case .failure(let error):
                         // log error
-                        let loggerMessage = "Configure IVR service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                        let loggerMessage = "Configure user info service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
                         logw(loggerMessage, cname: "cidaas-sdk-error-log")
                         
                         // return failure callback
@@ -86,16 +85,37 @@ public class IVRVerificationController {
                         return
                     case .success(let serviceResponse):
                         // log success
-                        let loggerMessage = "Configure IVR service success : " + "Status Id  - " + String(describing: serviceResponse.data.statusId)
+                        let loggerMessage = "Configure user info service success : " + "Status Id  - " + String(describing: serviceResponse.mobile_number)
                         logw(loggerMessage, cname: "cidaas-sdk-success-log")
                         
-                        self.authenticationType = AuthenticationTypes.CONFIGURE.rawValue
-                        self.sub = sub
-                        
-                        // return callback
-                        DispatchQueue.main.async {
-                            callback(Result.success(result: serviceResponse))
+                        // call configureIVR service
+                        IVRVerificationService.shared.setupIVR(access_token: tokenResponse.data.access_token, phone: serviceResponse.mobile_number, properties: properties) {
+                            switch $0 {
+                            case .failure(let error):
+                                // log error
+                                let loggerMessage = "Configure IVR service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                                logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                                
+                                // return failure callback
+                                DispatchQueue.main.async {
+                                    callback(Result.failure(error: error))
+                                }
+                                return
+                            case .success(let serviceResponse):
+                                // log success
+                                let loggerMessage = "Configure IVR service success : " + "Status Id  - " + String(describing: serviceResponse.data.statusId)
+                                logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                                
+                                self.authenticationType = AuthenticationTypes.CONFIGURE.rawValue
+                                self.sub = sub
+                                
+                                // return callback
+                                DispatchQueue.main.async {
+                                    callback(Result.success(result: serviceResponse))
+                                }
+                            }
                         }
+                        
                     }
                 }
             }
@@ -120,7 +140,7 @@ public class IVRVerificationController {
         // validating fields
         if (statusId == "" || code == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "statusId or code must not be empty"
+            error.errorMessage = "statusId or code must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -130,7 +150,7 @@ public class IVRVerificationController {
             // validating fields
             if (self.sub == "") {
                 let error = WebAuthError.shared.propertyMissingException()
-                error.error = "sub must not be empty"
+                error.errorMessage = "sub must not be empty"
                 DispatchQueue.main.async {
                     callback(Result.failure(error: error))
                 }
@@ -208,7 +228,7 @@ public class IVRVerificationController {
         // validating fields
         if ((email == "" && sub == "" && mobile == "") || requestId == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "email or sub or mobile or requestId must not be empty"
+            error.errorMessage = "email or sub or mobile or requestId must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -218,7 +238,7 @@ public class IVRVerificationController {
         if (usageType == UsageTypes.MFA.rawValue) {
             if (trackId == "") {
                 let error = WebAuthError.shared.propertyMissingException()
-                error.error = "trackId must not be empty"
+                error.errorMessage = "trackId must not be empty"
                 DispatchQueue.main.async {
                     callback(Result.failure(error: error))
                 }
@@ -228,7 +248,7 @@ public class IVRVerificationController {
         else {
             if (usageType != UsageTypes.PASSWORDLESS.rawValue) {
                 let error = WebAuthError.shared.propertyMissingException()
-                error.error = "Invalid usageType. usageType should be either PASSWORDLESS_AUTHENTICATION or MULTIFACTOR_AUTHENTICATION"
+                error.errorMessage = "Invalid usageType. usageType should be either PASSWORDLESS_AUTHENTICATION or MULTIFACTOR_AUTHENTICATION"
                 DispatchQueue.main.async {
                     callback(Result.failure(error: error))
                 }
@@ -295,7 +315,7 @@ public class IVRVerificationController {
         // validating fields
         if (statusId == "" || code == "" || self.requestId == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "statusId or code or requestId must not be empty"
+            error.errorMessage = "statusId or code or requestId must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }

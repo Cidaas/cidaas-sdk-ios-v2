@@ -116,7 +116,7 @@ public class TouchIdVerificationService {
                 }
                 else {
                     // return failure
-                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.TOUCHID_SETUP_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.TOUCHID_SETUP_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  response.value ?? response.error?.localizedDescription ?? "")))
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.TOUCHID_SETUP_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.TOUCHID_SETUP_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  ErrorResponseEntity())))
                 }
                 break
             }
@@ -219,7 +219,7 @@ public class TouchIdVerificationService {
                 }
                 else {
                     // return failure
-                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.TOUCHID_SCANNED_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.TOUCHID_SCANNED_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  response.value ?? response.error?.localizedDescription ?? "")))
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.TOUCHID_SCANNED_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.TOUCHID_SCANNED_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  ErrorResponseEntity())))
                 }
                 break
             }
@@ -323,7 +323,7 @@ public class TouchIdVerificationService {
                 }
                 else {
                     // return failure
-                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.TOUCHID_ENROLLED_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.TOUCHID_ENROLLED_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  response.value ?? response.error?.localizedDescription ?? "")))
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.TOUCHID_ENROLLED_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.TOUCHID_ENROLLED_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  ErrorResponseEntity())))
                 }
                 break
             }
@@ -427,7 +427,7 @@ public class TouchIdVerificationService {
                 }
                 else {
                     // return failure
-                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.TOUCHID_INITIATE_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.TOUCHID_INITIATE_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  response.value ?? response.error?.localizedDescription ?? "")))
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.TOUCHID_INITIATE_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.TOUCHID_INITIATE_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  ErrorResponseEntity())))
                 }
                 break
             }
@@ -526,7 +526,7 @@ public class TouchIdVerificationService {
                 }
                 else {
                     // return failure
-                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.TOUCHID_AUTHENTICATE_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.TOUCHID_AUTHENTICATE_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  response.value ?? response.error?.localizedDescription ?? "")))
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.TOUCHID_AUTHENTICATE_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.TOUCHID_AUTHENTICATE_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  ErrorResponseEntity())))
                 }
                 break
             }

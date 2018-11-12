@@ -18,7 +18,7 @@ public protocol OauthExceptionDelegate {
     func redirectURLMissingException() -> WebAuthError
     func userCancelledException() -> WebAuthError
     func codeNotFoundException() -> WebAuthError
-    func serviceFailureException(errorCode : Int32, errorMessage : String, statusCode : Int, error: Any) -> WebAuthError
+    func serviceFailureException(errorCode : Int32, errorMessage : String, statusCode : Int, error: ErrorResponseEntity) -> WebAuthError
     func emptyCallbackException() -> WebAuthError
     func noUserFoundException() -> WebAuthError
 }

@@ -20,7 +20,7 @@ public class IVRVerificationService {
     }
     
     // setup IVR
-    public func setupIVR(access_token: String, properties : Dictionary<String, String>, callback: @escaping(Result<SetupIVRResponseEntity>) -> Void) {
+    public func setupIVR(access_token: String, phone: String, properties : Dictionary<String, String>, callback: @escaping(Result<SetupIVRResponseEntity>) -> Void) {
         // local variables
         var headers : HTTPHeaders
         var urlString : String
@@ -36,16 +36,20 @@ public class IVRVerificationService {
         ]
         
         // construct body params
-        var bodyParams = Dictionary<String, Any>()
+        var dict = Dictionary<String, Any>()
         do {
             let encoder = JSONEncoder()
             let data = try encoder.encode(deviceInfoEntity)
-            bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+            dict = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
         }
         catch(_) {
             callback(Result.failure(error: WebAuthError.shared.conversionException()))
             return
         }
+        
+        var bodyParams = Dictionary<String, Any>()
+        bodyParams["deviceInfo"] = dict
+        bodyParams["phone"] = phone
         
         // assign base url
         baseURL = (properties["DomainURL"]) ?? ""
@@ -99,10 +103,10 @@ public class IVRVerificationService {
                     do {
                         let data = jsonString.data(using: .utf8)!
                         // decode the json data to object
-                        let errorResponseEntity = try decoder.decode(VerificationErrorResponseEntity.self, from: data)
+                        let errorResponseEntity = try decoder.decode(ErrorResponseEntity.self, from: data)
                         
                         // return failure
-                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.SETUP_IVR_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error: errorResponseEntity.error)))
+                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.SETUP_IVR_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error: errorResponseEntity)))
                     }
                     catch(let error) {
                         // return failure
@@ -200,10 +204,10 @@ public class IVRVerificationService {
                     do {
                         let data = jsonString.data(using: .utf8)!
                         // decode the json data to object
-                        let errorResponseEntity = try decoder.decode(VerificationErrorResponseEntity.self, from: data)
+                        let errorResponseEntity = try decoder.decode(ErrorResponseEntity.self, from: data)
                         
                         // return failure
-                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.ENROLL_IVR_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error: errorResponseEntity.error)))
+                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.ENROLL_IVR_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error: errorResponseEntity)))
                     }
                     catch(let error) {
                         // return failure
@@ -299,10 +303,10 @@ public class IVRVerificationService {
                     do {
                         let data = jsonString.data(using: .utf8)!
                         // decode the json data to object
-                        let errorResponseEntity = try decoder.decode(VerificationErrorResponseEntity.self, from: data)
+                        let errorResponseEntity = try decoder.decode(ErrorResponseEntity.self, from: data)
                         
                         // return failure
-                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.INITIATE_IVR_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error: errorResponseEntity.error)))
+                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.INITIATE_IVR_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error: errorResponseEntity)))
                     }
                     catch(let error) {
                         // return failure
@@ -397,10 +401,10 @@ public class IVRVerificationService {
                     do {
                         let data = jsonString.data(using: .utf8)!
                         // decode the json data to object
-                        let errorResponseEntity = try decoder.decode(VerificationErrorResponseEntity.self, from: data)
+                        let errorResponseEntity = try decoder.decode(ErrorResponseEntity.self, from: data)
                         
                         // return failure
-                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.AUTHENTICATE_IVR_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error: errorResponseEntity.error)))
+                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.AUTHENTICATE_IVR_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error: errorResponseEntity)))
                     }
                     catch(let error) {
                         // return failure

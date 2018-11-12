@@ -35,7 +35,7 @@ public class VerificationSettingsController {
         // validating fields
         if (sub == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "sub must not be empty"
+            error.errorMessage = "sub must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }

@@ -116,7 +116,7 @@ public class PushVerificationService {
                 }
                 else {
                     // return failure
-                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.PUSH_SETUP_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.PUSH_SETUP_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  response.value ?? response.error?.localizedDescription ?? "")))
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.PUSH_SETUP_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.PUSH_SETUP_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  ErrorResponseEntity())))
                 }
                 break
             }
@@ -219,7 +219,7 @@ public class PushVerificationService {
                 }
                 else {
                     // return failure
-                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.PUSH_SCANNED_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.PUSH_SCANNED_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  response.value ?? response.error?.localizedDescription ?? "")))
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.PUSH_SCANNED_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.PUSH_SCANNED_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  ErrorResponseEntity())))
                 }
                 break
             }
@@ -322,7 +322,7 @@ public class PushVerificationService {
                 }
                 else {
                     // return failure
-                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.PUSH_ENROLLED_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.PUSH_ENROLLED_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  response.value ?? response.error?.localizedDescription ?? "")))
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.PUSH_ENROLLED_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.PUSH_ENROLLED_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  ErrorResponseEntity())))
                 }
                 break
             }
@@ -426,7 +426,7 @@ public class PushVerificationService {
                 }
                 else {
                     // return failure
-                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.PUSH_INITIATE_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.PUSH_INITIATE_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  response.value ?? response.error?.localizedDescription ?? "")))
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.PUSH_INITIATE_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.PUSH_INITIATE_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  ErrorResponseEntity())))
                 }
                 break
             }
@@ -524,7 +524,7 @@ public class PushVerificationService {
                 }
                 else {
                     // return failure
-                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.PUSH_AUTHENTICATE_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.PUSH_AUTHENTICATE_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  response.value ?? response.error?.localizedDescription ?? "")))
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.PUSH_AUTHENTICATE_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.PUSH_AUTHENTICATE_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  ErrorResponseEntity())))
                 }
                 break
             }

@@ -8,23 +8,16 @@
 
 Pod::Spec.new do |s|
   s.name             = 'Cidaas'
-  s.version          = '0.0.1.12'
+  s.version          = '0.0.1.13'
   s.summary          = 'Native SDK for iOS providing login, registration and verification functionalities'
   s.homepage         = 'https://github.com/Cidaas/cidaas-sdk-ios-v2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'Cidaas' => 'ganesh.kumar@widas.in' }
+  s.author           = { 'Cidaas' => 'developer@cidaas.de' }
   s.source       = { :git => 'https://github.com/Cidaas/cidaas-sdk-ios-v2.git', :tag => s.version }
   s.ios.deployment_target = '10.0'
   s.source_files = 'Cidaas/Classes/Core/**/*'
   s.dependency 'Alamofire', '~> 4.7.3'
   s.dependency 'OneTimePassword', '~> 3.1.4'
   s.dependency 'CryptoSwift', '~> 0.12'
-  
-  # s.subspec 'Facebook' do |facebook|
-      # facebook.name             = 'Facebook'
-      # facebook.source_files = 'Cidaas/Classes/Facebook/**/*'
-      # facebook.dependency 'FacebookCore', '~> 0.3.1'
-      # facebook.dependency 'FacebookLogin', '~> 0.3.1'
-      # end
   
 end

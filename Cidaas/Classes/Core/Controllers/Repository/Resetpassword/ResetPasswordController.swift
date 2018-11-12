@@ -36,7 +36,7 @@ public class ResetPasswordController {
         // validating fields
         if (requestId == "" || resetMedium == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "requestId or resetMedium must not be empty"
+            error.errorMessage = "requestId or resetMedium must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -44,7 +44,7 @@ public class ResetPasswordController {
         }
         if (resetMedium == "email" && email == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "email must not be empty"
+            error.errorMessage = "email must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -52,7 +52,7 @@ public class ResetPasswordController {
         }
         if ((resetMedium == "sms" || resetMedium == "ivr") && mobile == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "mobile must not be empty"
+            error.errorMessage = "mobile must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -111,7 +111,7 @@ public class ResetPasswordController {
         // validating fields
         if (code == "" || rprq == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "code or rprq must not be empty"
+            error.errorMessage = "code or rprq must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -167,7 +167,7 @@ public class ResetPasswordController {
         // validating fields
         if (password == "" || confirmPassword == "" || exchangeId == "" || rprq == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "password or confirmPassword or exchangeId or rprq must not be empty"
+            error.errorMessage = "password or confirmPassword or exchangeId or rprq must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -175,7 +175,7 @@ public class ResetPasswordController {
         }
         if (password != confirmPassword) {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "password and confirmPassword must be same"
+            error.errorMessage = "password and confirmPassword must be same"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }

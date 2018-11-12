@@ -36,7 +36,7 @@ public class AccountVerificationController {
         // validating fields
         if (requestId == "" || sub == "" || verificationMedium == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "requestId or sub or verificationMedium must not be empty"
+            error.errorMessage = "requestId or sub or verificationMedium must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -94,7 +94,7 @@ public class AccountVerificationController {
         // validating fields
         if (code == "" || accvid == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "code or accvid must not be empty"
+            error.errorMessage = "code or accvid must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -150,7 +150,7 @@ public class AccountVerificationController {
         // validating fields
         if (sub == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "sub must not be empty"
+            error.errorMessage = "sub must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }

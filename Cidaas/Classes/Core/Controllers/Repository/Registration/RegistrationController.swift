@@ -39,7 +39,7 @@ public class RegistrationController {
         // validating fields
         if (requestId == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "requestId must not be empty"
+            error.errorMessage = "requestId must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -98,7 +98,7 @@ public class RegistrationController {
         // validating fields
         if (requestId == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "requestId must not be empty"
+            error.errorMessage = "requestId must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -112,7 +112,7 @@ public class RegistrationController {
             // check email
             if let emailKey = self.registrationFields.first(where: {$0.fieldKey == "email"}) {
                 if (emailKey.required == true && registrationEntity.email == "") {
-                    error.error = "email must not be empty"
+                    error.errorMessage = "email must not be empty"
                     DispatchQueue.main.async {
                         callback(Result.failure(error: error))
                     }
@@ -122,7 +122,7 @@ public class RegistrationController {
             // check given_name
             if let given_nameKey = self.registrationFields.first(where: {$0.fieldKey == "given_name"}) {
                 if (given_nameKey.required == true && registrationEntity.given_name == "") {
-                    error.error = "given_name must not be empty"
+                    error.errorMessage = "given_name must not be empty"
                     DispatchQueue.main.async {
                         callback(Result.failure(error: error))
                     }
@@ -132,7 +132,7 @@ public class RegistrationController {
             // check family_name
             if let family_nameKey = self.registrationFields.first(where: {$0.fieldKey == "family_name"}) {
                 if (family_nameKey.required == true && registrationEntity.family_name == "") {
-                    error.error = "family_name must not be empty"
+                    error.errorMessage = "family_name must not be empty"
                     DispatchQueue.main.async {
                         callback(Result.failure(error: error))
                     }
@@ -142,7 +142,7 @@ public class RegistrationController {
             // check mobile_number
             if let mobile_numberKey = self.registrationFields.first(where: {$0.fieldKey == "mobile_number"}) {
                 if (mobile_numberKey.required == true && registrationEntity.mobile_number == "") {
-                    error.error = "mobile_number must not be empty"
+                    error.errorMessage = "mobile_number must not be empty"
                     DispatchQueue.main.async {
                         callback(Result.failure(error: error))
                     }
@@ -152,7 +152,7 @@ public class RegistrationController {
             // check password
             if let passwordKey = self.registrationFields.first(where: {$0.fieldKey == "password"}) {
                 if (passwordKey.required == true && registrationEntity.password == "") {
-                    error.error = "password must not be empty"
+                    error.errorMessage = "password must not be empty"
                     DispatchQueue.main.async {
                         callback(Result.failure(error: error))
                     }
@@ -162,14 +162,14 @@ public class RegistrationController {
             // check password_echo
             if let password_echoKey = self.registrationFields.first(where: {$0.fieldKey == "password_echo"}) {
                 if (password_echoKey.required == true && registrationEntity.password_echo == "") {
-                    error.error = "password_echo must not be empty"
+                    error.errorMessage = "password_echo must not be empty"
                     DispatchQueue.main.async {
                         callback(Result.failure(error: error))
                     }
                     return
                 }
                 if (registrationEntity.password != registrationEntity.password_echo) {
-                    error.error = "password and password_echo must be same"
+                    error.errorMessage = "password and password_echo must be same"
                     DispatchQueue.main.async {
                         callback(Result.failure(error: error))
                     }
@@ -179,7 +179,7 @@ public class RegistrationController {
             // check username
             if let usernameKey = self.registrationFields.first(where: {$0.fieldKey == "username"}) {
                 if (usernameKey.required == true && registrationEntity.username == "") {
-                    error.error = "username must not be empty"
+                    error.errorMessage = "username must not be empty"
                     DispatchQueue.main.async {
                         callback(Result.failure(error: error))
                     }
@@ -189,7 +189,7 @@ public class RegistrationController {
             // check birthdate
             if let birthdateKey = self.registrationFields.first(where: {$0.fieldKey == "birthdate"}) {
                 if (birthdateKey.required == true && registrationEntity.birthdate == "") {
-                    error.error = "birthdate must not be empty"
+                    error.errorMessage = "birthdate must not be empty"
                     DispatchQueue.main.async {
                         callback(Result.failure(error: error))
                     }
@@ -198,7 +198,7 @@ public class RegistrationController {
             }
             // check provider
             if (registrationEntity.provider == "") {
-                error.error = "provider must not be empty"
+                error.errorMessage = "provider must not be empty"
                 DispatchQueue.main.async {
                     callback(Result.failure(error: error))
                 }
@@ -209,7 +209,7 @@ public class RegistrationController {
             for(key, value) in registrationEntity.customFields {
                 if let customKey = self.registrationFields.first(where: {$0.fieldKey == key}) {
                     if (customKey.required == true && value.value == "" ) {
-                        error.error = "\(value.key) must not be empty"
+                        error.errorMessage = "\(value.key) must not be empty"
                         DispatchQueue.main.async {
                             callback(Result.failure(error: error))
                         }
@@ -263,7 +263,7 @@ public class RegistrationController {
         // validating fields
         if (sub == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "sub must not be empty"
+            error.errorMessage = "sub must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -277,7 +277,7 @@ public class RegistrationController {
             // check email
             if let emailKey = self.registrationFields.first(where: {$0.fieldKey == "email"}) {
                 if (emailKey.required == true && registrationEntity.email == "") {
-                    error.error = "email must not be empty"
+                    error.errorMessage = "email must not be empty"
                     DispatchQueue.main.async {
                         callback(Result.failure(error: error))
                     }
@@ -287,7 +287,7 @@ public class RegistrationController {
             // check given_name
             if let given_nameKey = self.registrationFields.first(where: {$0.fieldKey == "given_name"}) {
                 if (given_nameKey.required == true && registrationEntity.given_name == "") {
-                    error.error = "given_name must not be empty"
+                    error.errorMessage = "given_name must not be empty"
                     DispatchQueue.main.async {
                         callback(Result.failure(error: error))
                     }
@@ -297,7 +297,7 @@ public class RegistrationController {
             // check family_name
             if let family_nameKey = self.registrationFields.first(where: {$0.fieldKey == "family_name"}) {
                 if (family_nameKey.required == true && registrationEntity.family_name == "") {
-                    error.error = "family_name must not be empty"
+                    error.errorMessage = "family_name must not be empty"
                     DispatchQueue.main.async {
                         callback(Result.failure(error: error))
                     }
@@ -307,7 +307,7 @@ public class RegistrationController {
             // check mobile_number
             if let mobile_numberKey = self.registrationFields.first(where: {$0.fieldKey == "mobile_number"}) {
                 if (mobile_numberKey.required == true && registrationEntity.mobile_number == "") {
-                    error.error = "mobile_number must not be empty"
+                    error.errorMessage = "mobile_number must not be empty"
                     DispatchQueue.main.async {
                         callback(Result.failure(error: error))
                     }
@@ -317,7 +317,7 @@ public class RegistrationController {
             // check username
             if let usernameKey = self.registrationFields.first(where: {$0.fieldKey == "username"}) {
                 if (usernameKey.required == true && registrationEntity.username == "") {
-                    error.error = "username must not be empty"
+                    error.errorMessage = "username must not be empty"
                     DispatchQueue.main.async {
                         callback(Result.failure(error: error))
                     }
@@ -327,7 +327,7 @@ public class RegistrationController {
             // check birthdate
             if let birthdateKey = self.registrationFields.first(where: {$0.fieldKey == "birthdate"}) {
                 if (birthdateKey.required == true && registrationEntity.birthdate == "") {
-                    error.error = "birthdate must not be empty"
+                    error.errorMessage = "birthdate must not be empty"
                     DispatchQueue.main.async {
                         callback(Result.failure(error: error))
                     }
@@ -336,7 +336,7 @@ public class RegistrationController {
             }
             // check provider
             if (registrationEntity.provider == "") {
-                error.error = "provider must not be empty"
+                error.errorMessage = "provider must not be empty"
                 DispatchQueue.main.async {
                     callback(Result.failure(error: error))
                 }
@@ -347,7 +347,7 @@ public class RegistrationController {
             for(key, value) in registrationEntity.customFields {
                 if let customKey = self.registrationFields.first(where: {$0.fieldKey == key}) {
                     if (customKey.required == true && value.value == "" ) {
-                        error.error = "\(value.key) must not be empty"
+                        error.errorMessage = "\(value.key) must not be empty"
                         DispatchQueue.main.async {
                             callback(Result.failure(error: error))
                         }
