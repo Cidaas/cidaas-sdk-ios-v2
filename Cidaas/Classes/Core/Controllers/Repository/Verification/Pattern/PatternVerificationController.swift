@@ -46,7 +46,7 @@ public class PatternVerificationController {
         // validating fields
         if (pattern == "" || sub == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "sub or pattern must not be empty"
+            error.errorMessage = "sub or pattern must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -230,7 +230,7 @@ public class PatternVerificationController {
         
         if (DBHelper.shared.getUserDeviceId(key: properties["DomainURL"] ?? "OAuthUserDeviceId") == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "There is no physical verification configured in this mobile"
+            error.errorMessage = "There is no physical verification configured in this mobile"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -245,7 +245,7 @@ public class PatternVerificationController {
         // validating fields
         if ((email == "" && sub == "" && mobile == "") || requestId == "" || pattern == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "email or sub or mobile or requestId or pattern must not be empty"
+            error.errorMessage = "email or sub or mobile or requestId or pattern must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -255,7 +255,7 @@ public class PatternVerificationController {
         if (usageType == UsageTypes.MFA.rawValue) {
             if (trackId == "") {
                 let error = WebAuthError.shared.propertyMissingException()
-                error.error = "trackId must not be empty"
+                error.errorMessage = "trackId must not be empty"
                 DispatchQueue.main.async {
                     callback(Result.failure(error: error))
                 }
@@ -265,7 +265,7 @@ public class PatternVerificationController {
         else {
             if (usageType != UsageTypes.PASSWORDLESS.rawValue) {
                 let error = WebAuthError.shared.propertyMissingException()
-                error.error = "Invalid usageType. usageType should be either PASSWORDLESS_AUTHENTICATION or MULTIFACTOR_AUTHENTICATION"
+                error.errorMessage = "Invalid usageType. usageType should be either PASSWORDLESS_AUTHENTICATION or MULTIFACTOR_AUTHENTICATION"
                 DispatchQueue.main.async {
                     callback(Result.failure(error: error))
                 }
@@ -481,7 +481,7 @@ public class PatternVerificationController {
         // validating fields
         if (statusId == "" || pattern == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "statusId or pattern must not be empty"
+            error.errorMessage = "statusId or pattern must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -490,7 +490,7 @@ public class PatternVerificationController {
         
         // construct object
         let authenticatePatternEntity = AuthenticatePatternEntity()
-        authenticatePatternEntity.statusId = self.statusId
+        authenticatePatternEntity.statusId = statusId
         authenticatePatternEntity.verifierPassword = pattern
         
         // getting user device id

@@ -75,7 +75,7 @@ public class AccountVerificationService {
                         let errorResponseEntity = try decoder.decode(ErrorResponseEntity.self, from: data)
                         
                         // return failure
-                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.INITIATE_ACCOUNT_VERIFICATION_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error: response.value ?? response.error?.localizedDescription ?? "")))
+                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.INITIATE_ACCOUNT_VERIFICATION_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error: errorResponseEntity)))
                     }
                     catch(let error) {
                         // return failure
@@ -173,7 +173,7 @@ public class AccountVerificationService {
                         let errorResponseEntity = try decoder.decode(ErrorResponseEntity.self, from: data)
                         
                         // return failure
-                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.VERIFY_ACCOUNT_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error: response.value ?? response.error?.localizedDescription ?? "")))
+                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.VERIFY_ACCOUNT_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error: errorResponseEntity)))
                     }
                     catch(let error) {
                         // return failure
@@ -258,7 +258,7 @@ public class AccountVerificationService {
                         let errorResponseEntity = try decoder.decode(ErrorResponseEntity.self, from: data)
                         
                         // return failure
-                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.VERIFY_ACCOUNT_LIST_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error: response.value ?? response.error?.localizedDescription ?? "")))
+                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.VERIFY_ACCOUNT_LIST_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error: errorResponseEntity)))
                     }
                     catch(let error) {
                         // return failure

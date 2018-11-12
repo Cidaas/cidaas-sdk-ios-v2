@@ -36,7 +36,7 @@ public class UsersController {
         // validating fields
         if (sub == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "sub must not be empty"
+            error.errorMessage = "sub must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -74,14 +74,23 @@ public class UsersController {
                             callback(Result.failure(error: error))
                         }
                         return
-                    case .success(let tenantInfoResponse):
+                    case .success(let userInfoResponse):
                         // log success
-                        let loggerMessage = "User-Info service success : " + "Email  - " + String(describing: tenantInfoResponse.email)
+                        let loggerMessage = "User-Info service success : " + "Email  - " + String(describing: userInfoResponse.email)
                         logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                        
+                        // assign base url
+                        let baseURL = (properties["DomainURL"]) ?? ""
+                        let currentTime = self.getCurrentMillis()
+                        
+                        // set profile picture if not set
+                        if userInfoResponse.picture == "" {
+                            userInfoResponse.picture = baseURL + "/profile/" + sub + "?v=" + String(describing: currentTime)
+                        }
                         
                         // return callback
                         DispatchQueue.main.async {
-                            callback(Result.success(result: tenantInfoResponse))
+                            callback(Result.success(result: userInfoResponse))
                         }
                     }
                 }
@@ -108,7 +117,7 @@ public class UsersController {
         // validating fields
         if (sub == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "sub must not be empty"
+            error.errorMessage = "sub must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -160,5 +169,9 @@ public class UsersController {
                 
             }
         }
+    }
+    
+    func getCurrentMillis()->Int64 {
+        return Int64(Date().timeIntervalSince1970 * 1000)
     }
 }

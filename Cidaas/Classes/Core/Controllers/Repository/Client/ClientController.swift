@@ -36,7 +36,7 @@ public class ClientController {
         // validating fields
         if (requestId == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "requestId must not be empty"
+            error.errorMessage = "requestId must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }

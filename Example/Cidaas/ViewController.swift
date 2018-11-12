@@ -167,7 +167,7 @@ class ViewController: UIViewController {
 
                 if (error.errorMessage == "ConsentRequired") {
                     let vc = self.storyboard?.instantiateViewController(withIdentifier: "ConsentManagementViewController") as! ConsentManagementViewController
-                    let consentError = error.error as! LoginErrorResponseDataEntity
+                    let consentError = error.error.error
                     vc.consent_name = consentError.consent_name
                     vc.sub = consentError.sub
                     vc.track_id = consentError.track_id
@@ -179,7 +179,7 @@ class ViewController: UIViewController {
                 }
                 else if (error.errorMessage == "email_not_verified") {
                     let vc = self.storyboard?.instantiateViewController(withIdentifier: "AccountVerificationViewController") as! AccountVerificationViewController
-                    let emailError = error.error as! LoginErrorResponseDataEntity
+                    let emailError = error.error.error
                     vc.sub = emailError.sub
                     vc.requestId = self.requestId
                     vc.logo_uri = self.logourl.image!
@@ -187,7 +187,7 @@ class ViewController: UIViewController {
                 }
                 else if (error.errorMessage == "mfa_required") {
                     let vc = self.storyboard?.instantiateViewController(withIdentifier: "LoginWithEmailViewController") as! LoginWithEmailViewController
-                    let emailError = error.error as! LoginErrorResponseDataEntity
+                    let emailError = error.error.error
                     vc.sub = emailError.sub
                     vc.requestId = self.requestId
                     vc.trackId = emailError.track_id

@@ -116,7 +116,7 @@ public class FaceVerificationService {
                 }
                 else {
                     // return failure
-                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.FACE_SETUP_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.FACE_SETUP_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  response.value ?? response.error?.localizedDescription ?? "")))
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.FACE_SETUP_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.FACE_SETUP_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  ErrorResponseEntity())))
                 }
                 break
             }
@@ -219,7 +219,7 @@ public class FaceVerificationService {
                 }
                 else {
                     // return failure
-                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.FACE_SCANNED_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.FACE_SCANNED_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  response.value ?? response.error?.localizedDescription ?? "")))
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.FACE_SCANNED_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.FACE_SCANNED_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  ErrorResponseEntity())))
                 }
                 break
             }
@@ -440,7 +440,7 @@ public class FaceVerificationService {
                 }
                 else {
                     // return failure
-                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.FACE_INITIATE_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.FACE_INITIATE_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  response.value ?? response.error?.localizedDescription ?? "")))
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.FACE_INITIATE_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.FACE_INITIATE_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  ErrorResponseEntity())))
                 }
                 break
             }

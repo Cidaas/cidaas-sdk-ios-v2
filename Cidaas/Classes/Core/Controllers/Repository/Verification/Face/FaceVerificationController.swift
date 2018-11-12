@@ -219,7 +219,7 @@ public class FaceVerificationController {
         
         if (DBHelper.shared.getUserDeviceId(key: properties["DomainURL"] ?? "OAuthUserDeviceId") == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "There is no physical verification configured in this mobile"
+            error.errorMessage = "There is no physical verification configured in this mobile"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -234,7 +234,7 @@ public class FaceVerificationController {
         // validating fields
         if ((email == "" && sub == "" && mobile == "") || requestId == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "email or sub or mobile or requestId must not be empty"
+            error.errorMessage = "email or sub or mobile or requestId must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -244,7 +244,7 @@ public class FaceVerificationController {
         if (usageType == UsageTypes.MFA.rawValue) {
             if (trackId == "") {
                 let error = WebAuthError.shared.propertyMissingException()
-                error.error = "trackId must not be empty"
+                error.errorMessage = "trackId must not be empty"
                 DispatchQueue.main.async {
                     callback(Result.failure(error: error))
                 }
@@ -254,7 +254,7 @@ public class FaceVerificationController {
         else {
             if (usageType != UsageTypes.PASSWORDLESS.rawValue) {
                 let error = WebAuthError.shared.propertyMissingException()
-                error.error = "Invalid usageType. usageType should be either PASSWORDLESS_AUTHENTICATION or MULTIFACTOR_AUTHENTICATION"
+                error.errorMessage = "Invalid usageType. usageType should be either PASSWORDLESS_AUTHENTICATION or MULTIFACTOR_AUTHENTICATION"
                 DispatchQueue.main.async {
                     callback(Result.failure(error: error))
                 }
@@ -470,7 +470,7 @@ public class FaceVerificationController {
         // validating fields
         if (statusId == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "statusId must not be empty"
+            error.errorMessage = "statusId must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -479,7 +479,7 @@ public class FaceVerificationController {
         
         // construct object
         let authenticateFaceEntity = AuthenticateFaceEntity()
-        authenticateFaceEntity.statusId = self.statusId
+        authenticateFaceEntity.statusId = statusId
         
         // getting user device id
         authenticateFaceEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomainURL"] ?? "OAuthUserDeviceId")

@@ -36,7 +36,7 @@ public class ConsentController {
         // validating fields
         if (consent_name == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "consent_name must not be empty"
+            error.errorMessage = "consent_name must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -87,7 +87,7 @@ public class ConsentController {
         // validating fields
         if (consentEntity.consent_name == "" || consentEntity.version == "" || consentEntity.sub == "" || consentEntity.accepted == false || consentEntity.track_id == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "consent_name or version or sub or accepted or track_id must not be empty"
+            error.errorMessage = "consent_name or version or sub or accepted or track_id must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }

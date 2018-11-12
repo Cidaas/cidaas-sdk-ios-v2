@@ -98,7 +98,7 @@ public class RegistrationService {
                 }
                 else {
                     // return failure
-                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.REGISTRATION_FIELDS_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.REGISTRATION_FIELDS_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  response.value ?? response.error?.localizedDescription ?? "")))
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.REGISTRATION_FIELDS_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.REGISTRATION_FIELDS_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  ErrorResponseEntity())))
                 }
                 break
             }
@@ -198,7 +198,7 @@ public class RegistrationService {
                 }
                 else {
                     // return failure
-                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.REGISTRATION_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.REGISTRATION_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  response.value ?? response.error?.localizedDescription ?? "")))
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.REGISTRATION_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.REGISTRATION_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  ErrorResponseEntity())))
                 }
                 break
             }
@@ -298,7 +298,7 @@ public class RegistrationService {
                 }
                 else {
                     // return failure
-                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.UPDATE_USER_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.UPDATE_USER_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  response.value ?? response.error?.localizedDescription ?? "")))
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.UPDATE_USER_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.UPDATE_USER_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  ErrorResponseEntity())))
                 }
                 break
             }

@@ -35,7 +35,7 @@ public class LocationController {
         // validating fields
         if (sub == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "sub must not be empty"
+            error.errorMessage = "sub must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -148,7 +148,7 @@ public class LocationController {
         // validating fields
         if (locationEmission.deviceId == "" || locationEmission.locationIds.count == 0 || locationEmission.sessionId == "" || locationEmission.status == "" || locationEmission.sub == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "deviceId or locationIds or sessionId or status or sub must not be empty"
+            error.errorMessage = "deviceId or locationIds or sessionId or status or sub must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -220,7 +220,7 @@ public class LocationController {
         // validating fields
         if (beaconEmission.deviceId == "" || beaconEmission.beacon.uniqueId == "" || beaconEmission.beacon.major == "" || beaconEmission.beacon.minor == "" || beaconEmission.distance == 0.0 || beaconEmission.geo.coordinates.count == 0 || beaconEmission.sub == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.error = "deviceId or uniqueId or major or minor or distance or coordinates or sub must not be empty"
+            error.errorMessage = "deviceId or uniqueId or major or minor or distance or coordinates or sub must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }

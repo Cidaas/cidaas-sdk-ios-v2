@@ -17,14 +17,14 @@ public class WebAuthError : Error, OauthExceptionDelegate {
     public var errorCode : Int32 = WebAuthErrorCode.DEFAULT.rawValue
     public var statusCode : Int = HttpStatusCode.DEFAULT.rawValue
     public var errorMessage : String = StringsHelper.shared.DEFAULT
-    public var error: Any = ""
+    public var error: ErrorResponseEntity = ErrorResponseEntity()
     
     // file not found exception
     public func fileNotFoundException() -> WebAuthError {
         WebAuthError.shared.errorCode = WebAuthErrorCode.FILE_NOT_FOUND.rawValue
         WebAuthError.shared.errorMessage = StringsHelper.shared.FILE_NOT_FOUND
         WebAuthError.shared.statusCode = HttpStatusCode.NOT_FOUND.rawValue
-        WebAuthError.shared.error = ""
+        WebAuthError.shared.error = ErrorResponseEntity()
         return WebAuthError.shared
     }
     
@@ -33,7 +33,7 @@ public class WebAuthError : Error, OauthExceptionDelegate {
         WebAuthError.shared.errorCode = WebAuthErrorCode.NO_CONTENT_IN_FILE.rawValue
         WebAuthError.shared.errorMessage = StringsHelper.shared.NO_CONTENT_IN_FILE
         WebAuthError.shared.statusCode = HttpStatusCode.NO_CONTENT.rawValue
-        WebAuthError.shared.error = ""
+        WebAuthError.shared.error = ErrorResponseEntity()
         return WebAuthError.shared
     }
     
@@ -42,7 +42,7 @@ public class WebAuthError : Error, OauthExceptionDelegate {
         WebAuthError.shared.errorCode = WebAuthErrorCode.NOTIFICATION_TIMEOUT.rawValue
         WebAuthError.shared.errorMessage = StringsHelper.shared.NOTIFICATION_TIMEOUT
         WebAuthError.shared.statusCode = HttpStatusCode.EXPECTATION_FAILED.rawValue
-        WebAuthError.shared.error = ""
+        WebAuthError.shared.error = ErrorResponseEntity()
         return WebAuthError.shared
     }
     
@@ -51,7 +51,7 @@ public class WebAuthError : Error, OauthExceptionDelegate {
         WebAuthError.shared.errorCode = WebAuthErrorCode.PROPERT_MISSING.rawValue
         WebAuthError.shared.errorMessage = StringsHelper.shared.PROPERTY_MISSING
         WebAuthError.shared.statusCode = HttpStatusCode.EXPECTATION_FAILED.rawValue
-        WebAuthError.shared.error = ""
+        WebAuthError.shared.error = ErrorResponseEntity()
         return WebAuthError.shared
     }
     
@@ -60,12 +60,12 @@ public class WebAuthError : Error, OauthExceptionDelegate {
         WebAuthError.shared.errorCode = WebAuthErrorCode.CONVERSION_EXCEPTION.rawValue
         WebAuthError.shared.errorMessage = StringsHelper.shared.CONVERSION_EXCEPTION
         WebAuthError.shared.statusCode = HttpStatusCode.INTERNAL_SERVER_ERROR.rawValue
-        WebAuthError.shared.error = ""
+        WebAuthError.shared.error = ErrorResponseEntity()
         return WebAuthError.shared
     }
     
     // service failure exception
-    public func serviceFailureException(errorCode : Int32, errorMessage : String, statusCode : Int, error: Any = "") -> WebAuthError {
+    public func serviceFailureException(errorCode : Int32, errorMessage : String, statusCode : Int, error: ErrorResponseEntity = ErrorResponseEntity()) -> WebAuthError {
         WebAuthError.shared.errorCode = errorCode
         WebAuthError.shared.errorMessage = errorMessage
         WebAuthError.shared.statusCode = statusCode
@@ -78,7 +78,7 @@ public class WebAuthError : Error, OauthExceptionDelegate {
         WebAuthError.shared.errorCode = WebAuthErrorCode.EMPTY_LOGIN_URL.rawValue
         WebAuthError.shared.errorMessage = StringsHelper.shared.EMPTY_LOGIN_URL
         WebAuthError.shared.statusCode = HttpStatusCode.EXPECTATION_FAILED.rawValue
-        WebAuthError.shared.error = ""
+        WebAuthError.shared.error = ErrorResponseEntity()
         return WebAuthError.shared
     }
     
@@ -87,7 +87,7 @@ public class WebAuthError : Error, OauthExceptionDelegate {
         WebAuthError.shared.errorCode = WebAuthErrorCode.EMPTY_REDIRECT_URL.rawValue
         WebAuthError.shared.errorMessage = StringsHelper.shared.EMPTY_REDIRECT_URL
         WebAuthError.shared.statusCode = HttpStatusCode.EXPECTATION_FAILED.rawValue
-        WebAuthError.shared.error = ""
+        WebAuthError.shared.error = ErrorResponseEntity()
         return WebAuthError.shared
     }
     
@@ -96,7 +96,7 @@ public class WebAuthError : Error, OauthExceptionDelegate {
         WebAuthError.shared.errorCode = WebAuthErrorCode.EMPTY_DELEGATE.rawValue
         WebAuthError.shared.errorMessage = StringsHelper.shared.EMPTY_DELEGATE
         WebAuthError.shared.statusCode = HttpStatusCode.EXPECTATION_FAILED.rawValue
-        WebAuthError.shared.error = ""
+        WebAuthError.shared.error = ErrorResponseEntity()
         return WebAuthError.shared
     }
     
@@ -105,7 +105,7 @@ public class WebAuthError : Error, OauthExceptionDelegate {
         WebAuthError.shared.errorCode = WebAuthErrorCode.USER_CANCELLED_LOGIN.rawValue
         WebAuthError.shared.errorMessage = StringsHelper.shared.USER_CANCELLED_LOGIN
         WebAuthError.shared.statusCode = HttpStatusCode.CANCEL_REQUEST.rawValue
-        WebAuthError.shared.error = ""
+        WebAuthError.shared.error = ErrorResponseEntity()
         return WebAuthError.shared
     }
     
@@ -114,7 +114,7 @@ public class WebAuthError : Error, OauthExceptionDelegate {
         WebAuthError.shared.errorCode = WebAuthErrorCode.CODE_NOT_FOUND.rawValue
         WebAuthError.shared.errorMessage = StringsHelper.shared.CODE_NOT_FOUND
         WebAuthError.shared.statusCode = HttpStatusCode.NO_CONTENT.rawValue
-        WebAuthError.shared.error = ""
+        WebAuthError.shared.error = ErrorResponseEntity()
         return WebAuthError.shared
     }
     
@@ -123,7 +123,7 @@ public class WebAuthError : Error, OauthExceptionDelegate {
         WebAuthError.shared.errorCode = WebAuthErrorCode.EMPTY_CALLBACK.rawValue
         WebAuthError.shared.errorMessage = StringsHelper.shared.EMPTY_CALLBACK
         WebAuthError.shared.statusCode = HttpStatusCode.BAD_REQUEST.rawValue
-        WebAuthError.shared.error = ""
+        WebAuthError.shared.error = ErrorResponseEntity()
         return WebAuthError.shared
     }
     
@@ -132,7 +132,7 @@ public class WebAuthError : Error, OauthExceptionDelegate {
         WebAuthError.shared.errorCode = WebAuthErrorCode.NO_USER_FOUND.rawValue
         WebAuthError.shared.errorMessage = StringsHelper.shared.NO_USER_FOUND
         WebAuthError.shared.statusCode = HttpStatusCode.NOT_FOUND.rawValue
-        WebAuthError.shared.error = ""
+        WebAuthError.shared.error = ErrorResponseEntity()
         return WebAuthError.shared
     }
 }

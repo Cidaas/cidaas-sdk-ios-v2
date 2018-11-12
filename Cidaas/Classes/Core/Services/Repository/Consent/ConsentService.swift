@@ -90,10 +90,10 @@ public class ConsentService {
                     do {
                         let data = jsonString.data(using: .utf8)!
                         // decode the json data to object
-                        let errorResponseEntity = try decoder.decode(ConsentErrorResponseEntity.self, from: data)
+                        let errorResponseEntity = try decoder.decode(ErrorResponseEntity.self, from: data)
                         
                         // return failure
-                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.TENANT_INFO_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error: response.value ?? errorResponseEntity.error)))
+                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.TENANT_INFO_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error: errorResponseEntity)))
                     }
                     catch(let error) {
                         // return failure
@@ -181,10 +181,10 @@ public class ConsentService {
                     do {
                         let data = jsonString.data(using: .utf8)!
                         // decode the json data to object
-                        let errorResponseEntity = try decoder.decode(ConsentErrorResponseEntity.self, from: data)
+                        let errorResponseEntity = try decoder.decode(ErrorResponseEntity.self, from: data)
                         
                         // return failure
-                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.CONSENT_DETAILS_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error: errorResponseEntity.error)))
+                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.CONSENT_DETAILS_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error: errorResponseEntity)))
                     }
                     catch(let error) {
                         // return failure
@@ -284,10 +284,10 @@ public class ConsentService {
                     do {
                         let data = jsonString.data(using: .utf8)!
                         // decode the json data to object
-                        let errorResponseEntity = try decoder.decode(ConsentErrorResponseEntity.self, from: data)
+                        let errorResponseEntity = try decoder.decode(ErrorResponseEntity.self, from: data)
                         
                         // return failure
-                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.ACCEPT_CONSENT_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error: errorResponseEntity.error)))
+                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.ACCEPT_CONSENT_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error: errorResponseEntity)))
                     }
                     catch(let error) {
                         // return failure
@@ -382,10 +382,10 @@ public class ConsentService {
                     do {
                         let data = jsonString.data(using: .utf8)!
                         // decode the json data to object
-                        let errorResponseEntity = try decoder.decode(LoginErrorResponseEntity.self, from: data)
+                        let errorResponseEntity = try decoder.decode(ErrorResponseEntity.self, from: data)
                         
                         // return failure
-                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.CONSENT_CONTINUE_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error: errorResponseEntity.error)))
+                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.CONSENT_CONTINUE_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error: errorResponseEntity)))
                     }
                     catch(let error) {
                         // return failure
@@ -394,7 +394,7 @@ public class ConsentService {
                 }
                 else {
                     // return failure
-                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.CONSENT_CONTINUE_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.CONSENT_CONTINUE_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error: response.value ?? response.error?.localizedDescription ?? "")))
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.CONSENT_CONTINUE_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.CONSENT_CONTINUE_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error: ErrorResponseEntity())))
                 }
                 break
             }
