@@ -1508,6 +1508,20 @@ public class Cidaas {
     
 // -------------------------------------------------------------------------------------------------- //
     
+    // set access token
+    // 1. Call setAccessToken method
+    
+    public func setAccessToken(accessTokenEntity: AccessTokenEntity, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+        // assign to access token model
+        EntityToModelConverter.shared.accessTokenEntityToAccessTokenModel(accessTokenEntity: accessTokenEntity, callback: { _ in
+            
+            AccessTokenController.shared.saveAccessToken(accessTokenEntity: accessTokenEntity, callback: callback)
+            
+        })
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
     // get access token from social token
     // 1. Call getAccessToken method
     
