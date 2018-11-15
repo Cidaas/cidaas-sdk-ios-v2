@@ -49,7 +49,7 @@ public class CidaasUserAgentBuilder {
     
     public func UAString() -> String {
         
-        return "\(appNameAndVersion())\(getFrameworkVersion(framework: Cidaas.self)) \(deviceName()) \(deviceVersion()) \(CFNetworkVersion()) \(DarwinVersion())"
+        return "\(appNameAndVersion())(1.0.1)\(deviceName()) \(deviceVersion()) \(CFNetworkVersion()) \(DarwinVersion())"
     }
     
     func getFrameworkVersion(framework:AnyClass) -> String {
