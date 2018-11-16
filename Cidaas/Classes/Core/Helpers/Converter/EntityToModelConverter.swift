@@ -17,12 +17,12 @@ public class EntityToModelConverter {
     public func accessTokenEntityToAccessTokenModel(accessTokenEntity : AccessTokenEntity, callback: @escaping (AccessTokenModel)-> Void) {
         
         AccessTokenModel.shared.salt = randomString(length: 16)
-        AccessTokenModel.shared.expiresIn = accessTokenEntity.expires_in
-        AccessTokenModel.shared.idToken = accessTokenEntity.id_token
-        AccessTokenModel.shared.refreshToken = accessTokenEntity.refresh_token
-        AccessTokenModel.shared.userId = accessTokenEntity.sub
-        AccessTokenModel.shared.accessToken = try! accessTokenEntity.access_token.aesEncrypt(key: AccessTokenModel.shared.salt, iv: AccessTokenModel.shared.salt)
-        AccessTokenModel.shared.isEncrypted = true
+        AccessTokenModel.shared.key = randomString(length: 16)
+        AccessTokenModel.shared.expires_in = accessTokenEntity.expires_in
+        AccessTokenModel.shared.id_token = accessTokenEntity.id_token
+        AccessTokenModel.shared.refresh_token = accessTokenEntity.refresh_token
+        AccessTokenModel.shared.sub = accessTokenEntity.sub
+        AccessTokenModel.shared.access_token = try! accessTokenEntity.access_token.aesEncrypt(key: AccessTokenModel.shared.key, iv: AccessTokenModel.shared.salt)
         
         callback(AccessTokenModel.shared)
     }
@@ -31,20 +31,14 @@ public class EntityToModelConverter {
     public func accessTokenModelToAccessTokenEntity(accessTokenModel : AccessTokenModel = AccessTokenModel.shared, callback: @escaping (AccessTokenEntity)-> Void) {
         let accessTokenEntity = AccessTokenEntity()
         
+        accessTokenEntity.expires_in = accessTokenModel.expires_in
+        accessTokenEntity.id_token = accessTokenModel.id_token
+        accessTokenEntity.refresh_token = accessTokenModel.refresh_token
+        accessTokenEntity.sub = accessTokenModel.sub
+
+        accessTokenEntity.access_token = try! accessTokenModel.access_token.aesDecrypt(key: accessTokenModel.key, iv: accessTokenModel.salt)
         
-        accessTokenEntity.expires_in = accessTokenModel.expiresIn
-        accessTokenEntity.id_token = accessTokenModel.idToken
-        accessTokenEntity.refresh_token = accessTokenModel.refreshToken
-        accessTokenEntity.sub = accessTokenModel.userId
-        
-        if accessTokenModel.isEncrypted == true {
-            accessTokenEntity.access_token = try! accessTokenModel.accessToken.aesDecrypt(key: accessTokenModel.salt, iv: accessTokenModel.salt)
-            callback(accessTokenEntity)
-        }
-        else {
-            accessTokenEntity.access_token = accessTokenModel.accessToken
-            callback(accessTokenEntity)
-        }
+        callback(accessTokenEntity)
     }
     
     public func randomString(length: Int) -> String {

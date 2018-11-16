@@ -139,7 +139,7 @@ public class Cidaas {
 // -------------------------------------------------------------------------------------------------- //
     
     // set url manually
-    public func setURL(domainURL: String, clientId: String, redirectURL: String) {
+    public func setURL(domainURL: String, clientId: String, redirectURL: String, userDeviceId: String = "") {
         FileHelper.shared.paramsToDictionaryConverter(domainURL: domainURL, clientId: clientId, redirectURL: redirectURL) {
             switch $0 {
             case .failure(let error):
@@ -165,6 +165,11 @@ public class Cidaas {
                         // log success
                         let loggerMessage = "Saved Property status : \(response)"
                         logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                        
+                        if userDeviceId != "" {
+                            DBHelper.shared.setUserDeviceId(userDeviceId: userDeviceId, key: properties["DomainURL"] ?? "")
+                        }
+                        
                         break
                     }
                 }
