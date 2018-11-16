@@ -98,7 +98,7 @@ public class DBHelper : NSObject {
     public func setAccessToken(accessTokenModel : AccessTokenModel) {
         let encoder = JSONEncoder()
         do {
-            let userId = accessTokenModel.userId
+            let userId = accessTokenModel.sub
             let data = try encoder.encode(accessTokenModel)
             let access_token_string = String(data : data, encoding : .utf8)
             userDefaults.set(access_token_string, forKey: "cidaas_user_details_\(userId)")

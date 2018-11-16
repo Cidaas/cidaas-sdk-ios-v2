@@ -76,7 +76,7 @@ class HelperTests: QuickSpec {
                 it("call set and get access token") {
                     let db = DBHelper.shared
                     let accessTokenModel = AccessTokenModel()
-                    accessTokenModel.userId = "765q763572"
+                    accessTokenModel.sub = "765q763572"
                     db.setAccessToken(accessTokenModel: accessTokenModel)
                     _ = db.getAccessToken(key: "765q763572")
                 }

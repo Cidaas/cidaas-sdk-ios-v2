@@ -73,7 +73,7 @@ public class AccessTokenController {
         let seconds = Int64(milliseconds / 1000)
         
         let accessTokenModel = DBHelper.shared.getAccessToken(key: sub)
-        let expires = accessTokenModel.expiresIn
+        let expires = accessTokenModel.expires_in
         let secs: Int64 = Int64(accessTokenModel.seconds)
         let expires_in = expires + secs - 10
         
@@ -103,7 +103,7 @@ public class AccessTokenController {
             }
             
             // call access token from refresh token service
-            AccessTokenService.shared.getAccessToken(refreshToken: accessTokenModel.refreshToken, properties: properties!) {
+            AccessTokenService.shared.getAccessToken(refreshToken: accessTokenModel.refresh_token, properties: properties!) {
                 switch $0 {
                 case .failure(let error):
                     
