@@ -43,13 +43,14 @@ public class CidaasUserAgentBuilder {
     func appNameAndVersion() -> String {
         let dictionary = Bundle.main.infoDictionary!
         let version = dictionary["CFBundleShortVersionString"] as! String
-        let name = dictionary["CFBundleDisplayName"] as! String
+        var name = dictionary["CFBundleDisplayName"] as! String
+        name = name.replacingOccurrences(of: " ", with: "_")
         return "\(name)/\(version)"
     }
     
     public func UAString() -> String {
         
-        return "\(appNameAndVersion())(1.0.1)\(deviceName()) \(deviceVersion()) \(CFNetworkVersion()) \(DarwinVersion())"
+        return "\(appNameAndVersion())\(getFrameworkVersion(framework: Cidaas.self)) \(deviceName()) \(deviceVersion()) \(CFNetworkVersion()) \(DarwinVersion())"
     }
     
     func getFrameworkVersion(framework:AnyClass) -> String {
