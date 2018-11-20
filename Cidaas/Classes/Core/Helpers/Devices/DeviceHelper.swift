@@ -64,93 +64,93 @@ open class DeviceHelper {
     public func hardware() -> Hardware {
         let hardware = hardwareString()
         
-        if (hardware == "iPhone1,1")         { return Hardware.iphone2g }
-        if (hardware == "iPhone1,2")         { return Hardware.iphone3g }
-        if (hardware == "iPhone2,1")         { return Hardware.iphone3gs }
+        if (hardware == "iPhone1,1")         { return Hardware.iPhone2g }
+        if (hardware == "iPhone1,2")         { return Hardware.iPhone3g }
+        if (hardware == "iPhone2,1")         { return Hardware.iPhone3gs }
         
-        if (hardware == "iPhone3,1")         { return Hardware.iphone4 }
-        if (hardware == "iPhone3,2")         { return Hardware.iphone4 }
-        if (hardware == "iPhone3,3")         { return Hardware.iphone4_cdma }
-        if (hardware == "iPhone4,1")         { return Hardware.iphone4s }
+        if (hardware == "iPhone3,1")         { return Hardware.iPhone4 }
+        if (hardware == "iPhone3,2")         { return Hardware.iPhone4 }
+        if (hardware == "iPhone3,3")         { return Hardware.iPhone4_cdma }
+        if (hardware == "iPhone4,1")         { return Hardware.iPhone4s }
         
-        if (hardware == "iPhone5,1")         { return Hardware.iphone5 }
-        if (hardware == "iPhone5,2")         { return Hardware.iphone5_cdma_gsm }
-        if (hardware == "iPhone5,3")         { return Hardware.iphone5c }
-        if (hardware == "iPhone5,4")         { return Hardware.iphone5c_cdma_gsm }
-        if (hardware == "iPhone6,1")         { return Hardware.iphone5s }
-        if (hardware == "iPhone6,2")         { return Hardware.iphone5s_cdma_gsm }
+        if (hardware == "iPhone5,1")         { return Hardware.iPhone5 }
+        if (hardware == "iPhone5,2")         { return Hardware.iPhone5_cdma_gsm }
+        if (hardware == "iPhone5,3")         { return Hardware.iPhone5c }
+        if (hardware == "iPhone5,4")         { return Hardware.iPhone5c_cdma_gsm }
+        if (hardware == "iPhone6,1")         { return Hardware.iPhone5s }
+        if (hardware == "iPhone6,2")         { return Hardware.iPhone5s_cdma_gsm }
         
-        if (hardware == "iPhone7,1")         { return Hardware.iphone6Plus }
-        if (hardware == "iPhone7,2")         { return Hardware.iphone6 }
-        if (hardware == "iPhone8,1")         { return Hardware.iphone6s }
-        if (hardware == "iPhone8,2")         { return Hardware.iphone6sPlus }
-        if (hardware == "iPhone8,4")         { return Hardware.iphoneSE }
+        if (hardware == "iPhone7,1")         { return Hardware.iPhone6Plus }
+        if (hardware == "iPhone7,2")         { return Hardware.iPhone6 }
+        if (hardware == "iPhone8,1")         { return Hardware.iPhone6s }
+        if (hardware == "iPhone8,2")         { return Hardware.iPhone6sPlus }
+        if (hardware == "iPhone8,4")         { return Hardware.iPhoneSE }
         
-        if (hardware == "iPhone9,1")         { return Hardware.iphone7 }
-        if (hardware == "iPhone9,2")         { return Hardware.iphone7Plus }
-        if (hardware == "iPhone9,3")         { return Hardware.iphone7 }
-        if (hardware == "iPhone9,4")         { return Hardware.iphone7Plus }
+        if (hardware == "iPhone9,1")         { return Hardware.iPhone7 }
+        if (hardware == "iPhone9,2")         { return Hardware.iPhone7Plus }
+        if (hardware == "iPhone9,3")         { return Hardware.iPhone7 }
+        if (hardware == "iPhone9,4")         { return Hardware.iPhone7Plus }
         
-        if (hardware == "iPhone10,1")         { return Hardware.iphone8_cn }
-        if (hardware == "iPhone10,2")         { return Hardware.iphone8Plus_cn }
-        if (hardware == "iPhone10,3")         { return Hardware.iphoneX_cn }
-        if (hardware == "iPhone10,4")         { return Hardware.iphone8 }
-        if (hardware == "iPhone10,5")         { return Hardware.iphone8Plus }
-        if (hardware == "iPhone10,6")         { return Hardware.iphoneX }
+        if (hardware == "iPhone10,1")         { return Hardware.iPhone8_cn }
+        if (hardware == "iPhone10,2")         { return Hardware.iPhone8Plus_cn }
+        if (hardware == "iPhone10,3")         { return Hardware.iPhoneX_cn }
+        if (hardware == "iPhone10,4")         { return Hardware.iPhone8 }
+        if (hardware == "iPhone10,5")         { return Hardware.iPhone8Plus }
+        if (hardware == "iPhone10,6")         { return Hardware.iPhoneX }
         
         
         
-        if (hardware == "iPod1,1")           { return Hardware.ipodTouch1g }
-        if (hardware == "iPod2,1")           { return Hardware.ipodTouch2g }
-        if (hardware == "iPod3,1")           { return Hardware.ipodTouch3g }
-        if (hardware == "iPod4,1")           { return Hardware.ipodTouch4g }
-        if (hardware == "iPod5,1")           { return Hardware.ipodTouch5g }
-        if (hardware == "iPod7,1")           { return Hardware.ipodTouch6g }
+        if (hardware == "iPod1,1")           { return Hardware.iPodTouch1g }
+        if (hardware == "iPod2,1")           { return Hardware.iPodTouch2g }
+        if (hardware == "iPod3,1")           { return Hardware.iPodTouch3g }
+        if (hardware == "iPod4,1")           { return Hardware.iPodTouch4g }
+        if (hardware == "iPod5,1")           { return Hardware.iPodTouch5g }
+        if (hardware == "iPod7,1")           { return Hardware.iPodTouch6g }
         
-        if (hardware == "iPad1,1")           { return Hardware.ipad }
-        if (hardware == "iPad1,2")           { return Hardware.ipad3g }
+        if (hardware == "iPad1,1")           { return Hardware.iPad }
+        if (hardware == "iPad1,2")           { return Hardware.iPad3g }
         
-        if (hardware == "iPad2,1")           { return Hardware.ipad2_wifi }
-        if (hardware == "iPad2,2")           { return Hardware.ipad2 }
-        if (hardware == "iPad2,3")           { return Hardware.ipad2_cdma }
-        if (hardware == "iPad2,4")           { return Hardware.ipad2 }
-        if (hardware == "iPad2,5")           { return Hardware.ipadMini_wifi }
-        if (hardware == "iPad2,6")           { return Hardware.ipadMini }
-        if (hardware == "iPad2,7")           { return Hardware.ipadMini_wifi_cdma }
+        if (hardware == "iPad2,1")           { return Hardware.iPad2_wifi }
+        if (hardware == "iPad2,2")           { return Hardware.iPad2 }
+        if (hardware == "iPad2,3")           { return Hardware.iPad2_cdma }
+        if (hardware == "iPad2,4")           { return Hardware.iPad2 }
+        if (hardware == "iPad2,5")           { return Hardware.iPadMini_wifi }
+        if (hardware == "iPad2,6")           { return Hardware.iPadMini }
+        if (hardware == "iPad2,7")           { return Hardware.iPadMini_wifi_cdma }
         
-        if (hardware == "iPad3,1")           { return Hardware.ipad3_wifi }
-        if (hardware == "iPad3,2")           { return Hardware.ipad3_wifi_cdma }
-        if (hardware == "iPad3,3")           { return Hardware.ipad3 }
-        if (hardware == "iPad3,4")           { return Hardware.ipad4_wifi }
-        if (hardware == "iPad3,5")           { return Hardware.ipad4 }
-        if (hardware == "iPad3,6")           { return Hardware.ipad4_gsm_cdma }
+        if (hardware == "iPad3,1")           { return Hardware.iPad3_wifi }
+        if (hardware == "iPad3,2")           { return Hardware.iPad3_wifi_cdma }
+        if (hardware == "iPad3,3")           { return Hardware.iPad3 }
+        if (hardware == "iPad3,4")           { return Hardware.iPad4_wifi }
+        if (hardware == "iPad3,5")           { return Hardware.iPad4 }
+        if (hardware == "iPad3,6")           { return Hardware.iPad4_gsm_cdma }
         
-        if (hardware == "iPad4,1")           { return Hardware.ipadAir_wifi }
-        if (hardware == "iPad4,2")           { return Hardware.ipadAir_wifi_gsm }
-        if (hardware == "iPad4,3")           { return Hardware.ipadAir_wifi_cdma }
-        if (hardware == "iPad4,4")           { return Hardware.ipadMiniRetina_wifi }
-        if (hardware == "iPad4,5")           { return Hardware.ipadMiniRetina_wifi_cdma }
-        if (hardware == "iPad4,6")           { return Hardware.ipadMiniRetina_wifi_cellular_cn }
-        if (hardware == "iPad4,7")           { return Hardware.ipadMini3_wifi }
-        if (hardware == "iPad4,8")           { return Hardware.ipadMini3_wifi_cellular }
-        if (hardware == "iPad4,9")           { return Hardware.ipadMini3_wifi_cellular_cn }
+        if (hardware == "iPad4,1")           { return Hardware.iPadAir_wifi }
+        if (hardware == "iPad4,2")           { return Hardware.iPadAir_wifi_gsm }
+        if (hardware == "iPad4,3")           { return Hardware.iPadAir_wifi_cdma }
+        if (hardware == "iPad4,4")           { return Hardware.iPadMiniRetina_wifi }
+        if (hardware == "iPad4,5")           { return Hardware.iPadMiniRetina_wifi_cdma }
+        if (hardware == "iPad4,6")           { return Hardware.iPadMiniRetina_wifi_cellular_cn }
+        if (hardware == "iPad4,7")           { return Hardware.iPadMini3_wifi }
+        if (hardware == "iPad4,8")           { return Hardware.iPadMini3_wifi_cellular }
+        if (hardware == "iPad4,9")           { return Hardware.iPadMini3_wifi_cellular_cn }
         
-        if (hardware == "iPad5,1")           { return Hardware.ipadMini4_wifi }
-        if (hardware == "iPad5,2")           { return Hardware.ipadMini4_wifi_cellular }
-        if (hardware == "iPad5,3")           { return Hardware.ipadAir2_wifi }
-        if (hardware == "iPad5,4")           { return Hardware.ipadAir2_wifi_cellular }
+        if (hardware == "iPad5,1")           { return Hardware.iPadMini4_wifi }
+        if (hardware == "iPad5,2")           { return Hardware.iPadMini4_wifi_cellular }
+        if (hardware == "iPad5,3")           { return Hardware.iPadAir2_wifi }
+        if (hardware == "iPad5,4")           { return Hardware.iPadAir2_wifi_cellular }
         
-        if (hardware == "iPad6,3")           { return Hardware.ipadPro_97_wifi }
-        if (hardware == "iPad6,4")           { return Hardware.ipadPro_97_wifi_cellular }
-        if (hardware == "iPad6,7")           { return Hardware.ipadPro_wifi }
-        if (hardware == "iPad6,8")           { return Hardware.ipadPro_wifi_cellular }
-        if (hardware == "iPad6,11")          { return Hardware.ipad5_wifi }
-        if (hardware == "iPad6,12")          { return Hardware.ipad5_wifi_cellular }
+        if (hardware == "iPad6,3")           { return Hardware.iPadPro_97_wifi }
+        if (hardware == "iPad6,4")           { return Hardware.iPadPro_97_wifi_cellular }
+        if (hardware == "iPad6,7")           { return Hardware.iPadPro_wifi }
+        if (hardware == "iPad6,8")           { return Hardware.iPadPro_wifi_cellular }
+        if (hardware == "iPad6,11")          { return Hardware.iPad5_wifi }
+        if (hardware == "iPad6,12")          { return Hardware.iPad5_wifi_cellular }
         
-        if (hardware == "iPad7,1")           { return Hardware.ipadPro2g_wifi }
-        if (hardware == "iPad7,2")           { return Hardware.ipadPro2g_wifi_cellular }
-        if (hardware == "iPad7,3")           { return Hardware.ipadPro_105_wifi }
-        if (hardware == "iPad7,4")           { return Hardware.ipadPro_105_wifi_cellular }
+        if (hardware == "iPad7,1")           { return Hardware.iPadPro2g_wifi }
+        if (hardware == "iPad7,2")           { return Hardware.iPadPro2g_wifi_cellular }
+        if (hardware == "iPad7,3")           { return Hardware.iPadPro_105_wifi }
+        if (hardware == "iPad7,4")           { return Hardware.iPadPro_105_wifi_cellular }
         
         if (hardware == "AppleTV1,1")        { return Hardware.appleTv1g }
         if (hardware == "AppleTV2,1")        { return Hardware.appleTv2g }
@@ -241,46 +241,46 @@ open class DeviceHelper {
     ///
     public func backCameraStillImageResolutionInPixels(_ hardware: Hardware) -> CGSize {
         switch (hardware) {
-        case .iphone2g, .iphone3g:
+        case .iPhone2g, .iPhone3g:
             return CGSize(width: 1600, height: 1200)
             
-        case .iphone3gs:
+        case .iPhone3gs:
             return CGSize(width: 2048, height: 1536)
             
-        case .iphone4, .iphone4_cdma, .ipad3_wifi, .ipad3_wifi_cdma, .ipad3, .ipad4_wifi, .ipad4, .ipad4_gsm_cdma:
+        case .iPhone4, .iPhone4_cdma, .iPad3_wifi, .iPad3_wifi_cdma, .iPad3, .iPad4_wifi, .iPad4, .iPad4_gsm_cdma:
             return CGSize(width: 2592, height: 1936)
             
-        case .iphone4s, .iphone5, .iphone5_cdma_gsm, .iphone5c, .iphone5c_cdma_gsm, .iphone6, .iphone6Plus:
+        case .iPhone4s, .iPhone5, .iPhone5_cdma_gsm, .iPhone5c, .iPhone5c_cdma_gsm, .iPhone6, .iPhone6Plus:
             return CGSize(width: 3264, height: 2448)
             
-        case .ipodTouch4g:
+        case .iPodTouch4g:
             return CGSize(width: 960, height: 720)
             
-        case .ipodTouch5g:
+        case .iPodTouch5g:
             return CGSize(width: 2440, height: 1605)
             
-        case .ipad2_wifi, .ipad2, .ipad2_cdma:
+        case .iPad2_wifi, .iPad2, .iPad2_cdma:
             return CGSize(width: 872, height: 720)
             
-        case .ipadMini_wifi, .ipadMini, .ipadMini_wifi_cdma:
+        case .iPadMini_wifi, .iPadMini, .iPadMini_wifi_cdma:
             return CGSize(width: 1820, height: 1304)
             
-        case .ipadMini4_wifi, .ipadMini4_wifi_cellular:
+        case .iPadMini4_wifi, .iPadMini4_wifi_cellular:
             return CGSize(width: 3264, height: 2448)
             
-        case .ipadAir2_wifi, .ipadAir2_wifi_cellular:
+        case .iPadAir2_wifi, .iPadAir2_wifi_cellular:
             return CGSize(width: 2048, height: 1536)
             
-        case .iphone6s, .iphone6sPlus, .iphoneSE, .iphone7, .iphone7Plus:
+        case .iPhone6s, .iPhone6sPlus, .iPhoneSE, .iPhone7, .iPhone7Plus:
             return CGSize(width: 4032, height: 3024)
             
-        case .ipadPro_97_wifi, .ipadPro_97_wifi_cellular:
+        case .iPadPro_97_wifi, .iPadPro_97_wifi_cellular:
             return CGSize(width: 4032, height: 3024)
             
-        case .ipadPro_wifi, .ipadPro_wifi_cellular:
+        case .iPadPro_wifi, .iPadPro_wifi_cellular:
             return CGSize(width: 3264, height: 2448)
             
-        case .ipadPro2g_wifi, .ipadPro2g_wifi_cellular, .ipadPro_105_wifi, .ipadPro_105_wifi_cellular:
+        case .iPadPro2g_wifi, .iPadPro2g_wifi_cellular, .iPadPro_105_wifi, .iPadPro_105_wifi_cellular:
             return CGSize(width: 4032, height: 3024)
             
         default:

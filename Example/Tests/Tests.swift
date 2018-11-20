@@ -339,6 +339,11 @@ class GeneralTests: QuickSpec {
                     cidaas.cancelListenTOTP()
                 }
                 
+                it("call cancel listening TOTP from public") {
+                    let useragent = CidaasUserAgentBuilder.shared.UAString()
+                    print(useragent)
+                }
+                
                 it("call get access token by code from controller") {
                     
                     accessTokenController.getAccessToken(code: "234234234234") {
