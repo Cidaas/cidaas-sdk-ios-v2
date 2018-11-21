@@ -215,4 +215,7 @@ public class StringsHelper {
     public var DOCUMENT_ENROLLED_SERVICE_FAILURE: String = "Document Scan service failure"
     
     public var SOCIAL_TOKEN_SERVICE_FAILURE: String = "Social token service failure"
+    
+    public var EMPTY_DELETE_VERIFICATION_SERVICE: String = "Delete verification service is empty"
+    public var DELETE_VERIFICATION_SERVICE_FAILURE: String = "Delete verification service failure"
 }

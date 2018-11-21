@@ -12,6 +12,7 @@ public class ScannedPatternEntity : Codable {
     // properties
     public var usage_pass: String = ""
     public var statusId: String = ""
+    public var client_id: String = ""
     public var deviceInfo: DeviceInfoModel = DeviceInfoModel()
     
     // Constructors

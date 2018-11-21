@@ -116,7 +116,7 @@ public class DBHelper : NSObject {
             let userId = userInfoModel.userId
             let data = try encoder.encode(userInfoModel)
             let user_info_string = String(data : data, encoding : .utf8)
-            userDefaults.set(user_info_string, forKey: "cidaas_user_details_\(userId)")
+            userDefaults.set(user_info_string, forKey: "cidaas_user_info_details_\(userId)")
             userDefaults.synchronize()
         }
         catch {
@@ -145,7 +145,7 @@ public class DBHelper : NSObject {
     // get user info
     public func getUserInfo(key : String) -> UserInfoModel? {
         let userId = key
-        guard let value = userDefaults.object(forKey: "cidaas_user_details_\(userId)") else {
+        guard let value = userDefaults.object(forKey: "cidaas_user_info_details_\(userId)") else {
             return nil
         }
         let user_info_string = value as? String ?? ""

@@ -207,7 +207,7 @@ public class Cidaas {
     
     // validate device
     public func validateDevice(userInfo: [AnyHashable: Any]) {
-        if let intermediate_id = (userInfo as NSDictionary).value(forKey: "intermediate_verifiation_id") as! String? {
+        if let intermediate_id = (userInfo as NSDictionary).value(forKey: "usage_pass") as! String? {
             Cidaas.intermediate_verifiation_id = intermediate_id
         }
     }
@@ -1317,6 +1317,62 @@ public class Cidaas {
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
             ResetPasswordController.shared.resetPassword(rprq: rprq, exchangeId: exchangeId, password: password, confirmPassword: confirmPassword, properties: savedProp!, callback: callback)
+        }
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // scanned pattern from plist
+    // 1. Read properties from file
+    // 2. Call scannedPattern method
+    // 3. Maintain logs based on flags
+    
+    public func scannedPattern(statusId: String, callback: @escaping(Result<ScannedPatternResponseEntity>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            PatternVerificationController.shared.scannedPatternRecognition(statusId: statusId, properties: savedProp!, callback: callback)
+        }
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // enroll pattern from plist
+    // 1. Read properties from file
+    // 2. Call enrollPattern method
+    // 3. Maintain logs based on flags
+    
+    public func enrollPattern(access_token: String, enrollPatternEntity: EnrollPatternEntity, callback: @escaping(Result<EnrollPatternResponseEntity>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            PatternVerificationController.shared.enrollPatternRecognition(access_token: access_token, enrollPatternEntity: enrollPatternEntity, properties: savedProp!, callback: callback)
         }
         else {
             // log error
