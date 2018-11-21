@@ -49,6 +49,8 @@ public class URLHelper {
     public var setupTOTPURL = "/verification-srv/totp/setup"
     public var enrollTOTPURL = "/verification-srv/totp/enroll"
     
+    public var deleteURL = "/verification-srv/settings/delete/"
+    
     public var authenticateBackupcodeURL = "/verification-srv/backupcode/authenticate"
     public var authenticateTOTPURL = "/verification-srv/totp/authenticate"
     public var mfaContinueURL = "/login-srv/precheck/continue/sdk"
@@ -237,6 +239,10 @@ public class URLHelper {
     
     public func getAuthenticateBackupcodeURL() -> String {
         return authenticateBackupcodeURL
+    }
+    
+    public func getDeleteURL(userDeviceId: String, verificationType: String) -> String {
+        return deleteURL + userDeviceId + "/" + verificationType.uppercased()
     }
     
     public func getAuthenticateTOTPURL() -> String {

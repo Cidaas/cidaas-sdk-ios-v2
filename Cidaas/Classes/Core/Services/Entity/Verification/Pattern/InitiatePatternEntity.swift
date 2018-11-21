@@ -18,7 +18,6 @@ public class InitiatePatternEntity : Codable {
     public var client_id: String = ""
     public var usage_pass: String = ""
     public var deviceInfo: DeviceInfoModel = DeviceInfoModel()
-    public var source: String = "MOBILE"
     
     // Constructors
     public init() {
