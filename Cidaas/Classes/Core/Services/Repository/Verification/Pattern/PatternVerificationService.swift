@@ -35,6 +35,7 @@ public class PatternVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "verification_api_version": "2",
             "access_token" : accessToken
         ]
         deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
@@ -135,12 +136,13 @@ public class PatternVerificationService {
         
         // construct headers
         headers = [
-            "User-Agent": CidaasUserAgentBuilder.shared.UAString()
+            "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "verification_api_version": "2"
         ]
         
         deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
         scannedPatternEntity.deviceInfo = deviceInfoEntity
-        
+        scannedPatternEntity.client_id = properties["ClientId"] ?? ""
         
         // construct body params
         var bodyParams = Dictionary<String, Any>()
@@ -237,12 +239,13 @@ public class PatternVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "verification_api_version": "2",
             "access_token" : accessToken
         ]
         
         deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
         enrollPatternEntity.deviceInfo = deviceInfoEntity
-        
+        enrollPatternEntity.client_id = properties["ClientId"] ?? ""
         
         // construct body params
         var bodyParams = Dictionary<String, Any>()
@@ -338,7 +341,8 @@ public class PatternVerificationService {
         
         // construct headers
         headers = [
-            "User-Agent": CidaasUserAgentBuilder.shared.UAString()
+            "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "verification_api_version": "2"
         ]
         
         deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
@@ -436,108 +440,13 @@ public class PatternVerificationService {
         
         // construct headers
         headers = [
-            "User-Agent": CidaasUserAgentBuilder.shared.UAString()
+            "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "verification_api_version": "2"
         ]
         
         deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
         authenticatePatternEntity.deviceInfo = deviceInfoEntity
-        
-        // construct body params
-        var bodyParams = Dictionary<String, Any>()
-        do {
-            let encoder = JSONEncoder()
-            let data = try encoder.encode(authenticatePatternEntity)
-            bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
-        }
-        catch(_) {
-            callback(Result.failure(error: WebAuthError.shared.conversionException()))
-            return
-        }
-        
-        // assign base url
-        baseURL = (properties["DomainURL"]) ?? ""
-        
-        if (baseURL == "") {
-            callback(Result.failure(error: WebAuthError.shared.propertyMissingException()))
-            return
-        }
-        
-        // construct url
-        urlString = baseURL + URLHelper.shared.getAuthenticatePatternURL()
-        
-        // call service
-        Alamofire.request(urlString, method: .post, parameters: bodyParams, headers: headers).validate().responseString { response in
-            switch response.result {
-            case .success:
-                if response.response?.statusCode == 200 {
-                    if let jsonString = response.result.value {
-                        let decoder = JSONDecoder()
-                        do {
-                            let data = jsonString.data(using: .utf8)!
-                            // decode the json data to object
-                            let authenticatePatternResponseEntity = try decoder.decode(AuthenticatePatternResponseEntity.self, from: data)
-                            
-                            // return success
-                            callback(Result.success(result: authenticatePatternResponseEntity))
-                        }
-                        catch(let error) {
-                            // return failure
-                            callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.EMPTY_PATTERN_AUTHENTICATE_SERVICE.rawValue, errorMessage: error.localizedDescription, statusCode: 400)))
-                        }
-                    }
-                    else {
-                        // return failure
-                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.EMPTY_PATTERN_AUTHENTICATE_SERVICE.rawValue, errorMessage: StringsHelper.shared.EMPTY_PATTERN_AUTHENTICATE_SERVICE, statusCode: response.response?.statusCode ?? 400)))
-                    }
-                }
-                else {
-                    // return failure
-                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.PATTERN_AUTHENTICATE_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.PATTERN_AUTHENTICATE_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
-                }
-                break
-            case .failure:
-                if (response.data != nil) {
-                    let jsonString = String(decoding: response.data!, as: UTF8.self)
-                    let decoder = JSONDecoder()
-                    do {
-                        let data = jsonString.data(using: .utf8)!
-                        // decode the json data to object
-                        let errorResponseEntity = try decoder.decode(ErrorResponseEntity.self, from: data)
-                        
-                        // return failure
-                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.PATTERN_AUTHENTICATE_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error:errorResponseEntity)))
-                    }
-                    catch(let error) {
-                        // return failure
-                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.PATTERN_AUTHENTICATE_SERVICE_FAILURE.rawValue, errorMessage: error.localizedDescription, statusCode: 400)))
-                    }
-                }
-                else {
-                    // return failure
-                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.PATTERN_AUTHENTICATE_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.PATTERN_AUTHENTICATE_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400, error:  ErrorResponseEntity())))
-                }
-                break
-            }
-        }
-    }
-    
-    // Delete pattern
-    public func deletePattern(authenticatePatternEntity: AuthenticatePatternEntity, properties : Dictionary<String, String>, callback: @escaping(Result<AuthenticatePatternResponseEntity>) -> Void) {
-        // local variables
-        var headers : HTTPHeaders
-        var urlString : String
-        var baseURL : String
-        
-        // get device information
-        let deviceInfoEntity = DBHelper.shared.getDeviceInfo()
-        
-        // construct headers
-        headers = [
-            "User-Agent": CidaasUserAgentBuilder.shared.UAString()
-        ]
-        
-        deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
-        authenticatePatternEntity.deviceInfo = deviceInfoEntity
+        authenticatePatternEntity.client_id = properties["ClientId"] ?? ""
         
         // construct body params
         var bodyParams = Dictionary<String, Any>()

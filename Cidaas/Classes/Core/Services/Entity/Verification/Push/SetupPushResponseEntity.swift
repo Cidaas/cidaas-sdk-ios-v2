@@ -29,11 +29,17 @@ public class SetupPushResponseEntity : Codable {
 
 public class SetupPushResponseDataEntity : Codable {
     // properties
-    public var qrCode: String = ""
-    public var queryString: String = ""
-    public var statusId: String = ""
-    public var verifierId: String = ""
-    public var randomNumber: String = ""
+    public var secret: String = ""
+    public var t: String = ""
+    public var d: String = ""
+    public var issuer: String = ""
+    public var l: String = ""
+    public var sub: String = ""
+    public var rns: String = ""
+    public var cid: String = ""
+    public var rurl: String = ""
+    public var st: String = ""
+    public var udi: String = ""
     public var current_status: String = ""
     
     // Constructors
@@ -43,11 +49,17 @@ public class SetupPushResponseDataEntity : Codable {
     
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.qrCode = try container.decodeIfPresent(String.self, forKey: .qrCode) ?? ""
-        self.queryString = try container.decodeIfPresent(String.self, forKey: .queryString) ?? ""
-        self.statusId = try container.decodeIfPresent(String.self, forKey: .statusId) ?? ""
-        self.verifierId = try container.decodeIfPresent(String.self, forKey: .verifierId) ?? ""
-        self.randomNumber = try container.decodeIfPresent(String.self, forKey: .randomNumber) ?? ""
+        self.secret = try container.decodeIfPresent(String.self, forKey: .secret) ?? ""
+        self.t = try container.decodeIfPresent(String.self, forKey: .t) ?? ""
+        self.d = try container.decodeIfPresent(String.self, forKey: .d) ?? ""
+        self.issuer = try container.decodeIfPresent(String.self, forKey: .issuer) ?? ""
+        self.l = try container.decodeIfPresent(String.self, forKey: .l) ?? ""
+        self.sub = try container.decodeIfPresent(String.self, forKey: .sub) ?? ""
+        self.rns = try container.decodeIfPresent(String.self, forKey: .rns) ?? ""
+        self.cid = try container.decodeIfPresent(String.self, forKey: .cid) ?? ""
+        self.rurl = try container.decodeIfPresent(String.self, forKey: .rurl) ?? ""
+        self.st = try container.decodeIfPresent(String.self, forKey: .st) ?? ""
+        self.udi = try container.decodeIfPresent(String.self, forKey: .udi) ?? ""
         self.current_status = try container.decodeIfPresent(String.self, forKey: .current_status) ?? ""
     }
 }

@@ -95,7 +95,7 @@ public class PatternVerificationController {
                         return
                     case .success(let serviceResponse):
                         // log success
-                        let loggerMessage = "Configure Pattern service success : " + "Status Id  - " + String(describing: serviceResponse.data.st)
+                        let loggerMessage = "Configure Pattern service success : " + "Current Status  - " + String(describing: serviceResponse.data.current_status)
                         logw(loggerMessage, cname: "cidaas-sdk-success-log")
                         
                         var timer: Timer = Timer()
@@ -308,6 +308,10 @@ public class PatternVerificationController {
             return
         }
         
+        if enrollPatternEntity.userDeviceId == "" {
+            enrollPatternEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomainURL"] ?? "OAuthUserDeviceId")
+        }
+        
         // validating fields
         if (enrollPatternEntity.statusId == "" || enrollPatternEntity.userDeviceId == "" || enrollPatternEntity.verifierPassword == "") {
             let error = WebAuthError.shared.propertyMissingException()
@@ -341,8 +345,6 @@ public class PatternVerificationController {
                 let loggerMessage = "Enroll Pattern success : " + "Tracking Code - " + String(describing: enrollResponse.data.trackingCode + ", Sub - " + String(describing: enrollResponse.data.sub))
                 logw(loggerMessage, cname: "cidaas-sdk-success-log")
                 
-                // default set intermediate id to empty
-                Cidaas.intermediate_verifiation_id = intermediate_id
                 
                 var timer: Timer = Timer()
                 var timerCount: Int16 = 0
@@ -709,7 +711,7 @@ public class PatternVerificationController {
                                 
                                 // return success callback
                                 DispatchQueue.main.async {
-                                    callback(Result.success(result: patternResponse))
+                                    callback(Result.success(result: initiatePatternResponse))
                                 }
                                 
                                 break

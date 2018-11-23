@@ -29,6 +29,7 @@ public class ScannedPushResponseEntity : Codable {
 public class ScannedPushResponseDataEntity : Codable {
     // properties
     public var userDeviceId: String = ""
+    public var current_status: String = ""
     
     // Constructors
     public init() {
@@ -38,5 +39,6 @@ public class ScannedPushResponseDataEntity : Codable {
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.userDeviceId = try container.decodeIfPresent(String.self, forKey: .userDeviceId) ?? ""
+        self.current_status = try container.decodeIfPresent(String.self, forKey: .current_status) ?? ""
     }
 }
