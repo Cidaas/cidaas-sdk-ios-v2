@@ -13,6 +13,7 @@ public class AuthenticatePatternEntity : Codable {
     public var verifierPassword: String = ""
     public var userDeviceId: String = ""
     public var usage_pass: String = ""
+    public var client_id: String = ""
     public var deviceInfo: DeviceInfoModel = DeviceInfoModel()
     
     // Constructors
