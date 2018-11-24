@@ -30,6 +30,7 @@ public class AuthenticateFaceResponseDataEntity : Codable {
     // properties
     public var sub: String = ""
     public var trackingCode: String = ""
+    public var current_status: String = ""
     
     // Constructors
     public init() {
@@ -40,5 +41,6 @@ public class AuthenticateFaceResponseDataEntity : Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.sub = try container.decodeIfPresent(String.self, forKey: .sub) ?? ""
         self.trackingCode = try container.decodeIfPresent(String.self, forKey: .trackingCode) ?? ""
+        self.current_status = try container.decodeIfPresent(String.self, forKey: .current_status) ?? ""
     }
 }

@@ -91,7 +91,7 @@ class HelperTests: QuickSpec {
                 
                 it("call set and get totp secret") {
                     let db = DBHelper.shared
-                    db.setTOTPSecret(qrcode: "765q763572")
+                    db.setTOTPSecret(secret: "765q763572", name: "test", issuer: "demo")
                     _ = db.getTOTPSecret()
                 }
                 

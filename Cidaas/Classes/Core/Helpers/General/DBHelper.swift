@@ -175,8 +175,8 @@ public class DBHelper : NSObject {
     }
     
     // set TOTP secret qrcode
-    public func setTOTPSecret(qrcode : String, key : String = "OAuthTOTPSecret") {
-        userDefaults.set(qrcode, forKey: key + "-totp")
+    public func setTOTPSecret(secret : String, name: String, issuer: String, key : String = "OAuthTOTPSecret") {
+        userDefaults.set("otpauth://totp?secret=\(secret)&name=\(name)&issuer=\(issuer)", forKey: key + "-totp")
         userDefaults.synchronize()
     }
     

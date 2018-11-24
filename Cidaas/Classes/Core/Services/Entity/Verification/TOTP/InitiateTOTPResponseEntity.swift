@@ -29,6 +29,7 @@ public class InitiateTOTPResponseEntity : Codable {
 public class InitiateTOTPResponseDataEntity : Codable {
     // properties
     public var statusId: String = ""
+    public var current_status: String = ""
     
     // Constructors
     public init() {
@@ -38,5 +39,6 @@ public class InitiateTOTPResponseDataEntity : Codable {
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.statusId = try container.decodeIfPresent(String.self, forKey: .statusId) ?? ""
+        self.current_status = try container.decodeIfPresent(String.self, forKey: .current_status) ?? ""
     }
 }

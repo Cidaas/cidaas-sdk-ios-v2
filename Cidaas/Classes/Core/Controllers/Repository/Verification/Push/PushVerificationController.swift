@@ -199,19 +199,19 @@ public class PushVerificationController {
         
         // default set intermediate id to empty
         Cidaas.intermediate_verifiation_id = intermediate_id
-        self.verificationType = VerificationTypes.PATTERN.rawValue
+        self.verificationType = VerificationTypes.PUSH.rawValue
         self.authenticationType = AuthenticationTypes.CONFIGURE.rawValue
         
         // construct object
         var scannedPushEntity = ScannedPushEntity()
         scannedPushEntity.statusId = statusId
         
-        // call setupPattern service
+        // call setupPush service
         PushVerificationService.shared.scannedPush(scannedPushEntity: scannedPushEntity, properties: properties) {
             switch $0 {
             case .failure(let error):
                 // log error
-                let loggerMessage = "Scanned Pattern service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                let loggerMessage = "Scanned Push service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
                 logw(loggerMessage, cname: "cidaas-sdk-error-log")
                 
                 // return failure callback
@@ -221,7 +221,7 @@ public class PushVerificationController {
                 return
             case .success(let serviceResponse):
                 // log success
-                let loggerMessage = "Scanned Pattern service success : " + "Current Status  - " + String(describing: serviceResponse.data.current_status)
+                let loggerMessage = "Scanned Push service success : " + "Current Status  - " + String(describing: serviceResponse.data.current_status)
                 logw(loggerMessage, cname: "cidaas-sdk-success-log")
                 
                 var timer: Timer = Timer()
@@ -315,7 +315,7 @@ public class PushVerificationController {
         
         // default set intermediate id to empty
         Cidaas.intermediate_verifiation_id = intermediate_id
-        self.verificationType = VerificationTypes.PATTERN.rawValue
+        self.verificationType = VerificationTypes.PUSH.rawValue
         self.authenticationType = AuthenticationTypes.CONFIGURE.rawValue
         
         // call enroll service
@@ -619,7 +619,7 @@ public class PushVerificationController {
         }
     }
     
-    public func verifySmartPush(randomNumber: String, statusId: String, properties: Dictionary<String, String>, callback: @escaping(Result<AuthenticatePushResponseEntity>) -> Void) {
+    public func verifySmartPush(randomNumber: String, statusId: String, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<AuthenticatePushResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -632,6 +632,11 @@ public class PushVerificationController {
             }
             return
         }
+        
+        // default set intermediate id to empty
+        Cidaas.intermediate_verifiation_id = intermediate_id
+        self.verificationType = VerificationTypes.PUSH.rawValue
+        self.authenticationType = AuthenticationTypes.LOGIN.rawValue
         
         // validating fields
         if (statusId == "" || randomNumber == "") {
@@ -664,9 +669,9 @@ public class PushVerificationController {
                     callback(Result.failure(error: error))
                 }
                 return
-            case .success(let patternResponse):
+            case .success(let pushResponse):
                 // log success
-                let loggerMessage = "Authenticate Push success : " + "Tracking Code - " + String(describing: patternResponse.data.trackingCode + ", Sub - " + String(describing: patternResponse.data.sub))
+                let loggerMessage = "Authenticate Push success : " + "Tracking Code - " + String(describing: pushResponse.data.trackingCode + ", Sub - " + String(describing: pushResponse.data.sub))
                 logw(loggerMessage, cname: "cidaas-sdk-success-log")
                 
                 var timer: Timer = Timer()
@@ -698,14 +703,14 @@ public class PushVerificationController {
                         // call authenticate with usage service
                         PushVerificationService.shared.authenticatePush(authenticatePushEntity: authenticatePushEntity, properties: properties) {
                             switch $0 {
-                            case .success(let initiatePatternResponse):
+                            case .success(let initiatePushResponse):
                                 // log success
-                                let loggerMessage = "Authenticate with usage pass success : " + "Status Id - " + String(describing: initiatePatternResponse.data.sub)
+                                let loggerMessage = "Authenticate with usage pass success : " + "Status Id - " + String(describing: initiatePushResponse.data.sub)
                                 logw(loggerMessage, cname: "cidaas-sdk-success-log")
                                 
                                 // return success callback
                                 DispatchQueue.main.async {
-                                    callback(Result.success(result: initiatePatternResponse))
+                                    callback(Result.success(result: initiatePushResponse))
                                 }
                                 
                                 break

@@ -11,6 +11,7 @@ public class SetupVoiceEntity : Codable {
     // properties
     public var logoUrl: String = ""
     public var client_id: String = ""
+    public var usage_pass: String = ""
     public var deviceInfo: DeviceInfoModel = DeviceInfoModel()
     
     // Constructors

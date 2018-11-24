@@ -32,6 +32,7 @@ public class AuthenticateTOTPResponseDataEntity : Codable {
     public var trackingCode: String = ""
     public var verificationType: String = ""
     public var usageType: String = ""
+    public var current_status: String = ""
     
     // Constructors
     public init() {
@@ -44,5 +45,6 @@ public class AuthenticateTOTPResponseDataEntity : Codable {
         self.trackingCode = try container.decodeIfPresent(String.self, forKey: .trackingCode) ?? ""
         self.verificationType = try container.decodeIfPresent(String.self, forKey: .verificationType) ?? ""
         self.usageType = try container.decodeIfPresent(String.self, forKey: .usageType) ?? ""
+        self.current_status = try container.decodeIfPresent(String.self, forKey: .current_status) ?? ""
     }
 }
