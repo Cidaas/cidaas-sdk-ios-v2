@@ -128,13 +128,13 @@ public class PushVerificationController {
                                         // save user device id based on tenant
                                         DBHelper.shared.setUserDeviceId(userDeviceId: validateDeviceResponse.data.udi, key: properties["DomainURL"] ?? "OAuthUserDeviceId")
                                         
-                                        self.randomNumber = validateDeviceResponse.data.rns
+                                        self.randomNumber = validateDeviceResponse.data.prn
                                         self.statusId = validateDeviceResponse.data.st
                                         
                                         let enrollPushEntity = EnrollPushEntity()
                                         enrollPushEntity.statusId = validateDeviceResponse.data.st
                                         enrollPushEntity.userDeviceId = validateDeviceResponse.data.udi
-                                        enrollPushEntity.verifierPassword = validateDeviceResponse.data.rns
+                                        enrollPushEntity.verifierPassword = validateDeviceResponse.data.prn
                                         
                                         // call scanned Push service
                                         PushVerificationController.shared.enrollPush(access_token:tokenResponse.data.access_token, enrollPushEntity: enrollPushEntity, properties: properties) {

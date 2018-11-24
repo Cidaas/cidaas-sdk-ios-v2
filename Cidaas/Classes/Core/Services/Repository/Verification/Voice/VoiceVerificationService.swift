@@ -256,6 +256,8 @@ public class VoiceVerificationService {
         bodyParams["deviceMake"] = deviceInfoEntity.deviceMake
         bodyParams["deviceModel"] = deviceInfoEntity.deviceModel
         bodyParams["deviceId"] = deviceInfoEntity.deviceId
+        bodyParams["client_id"] = enrollVoiceEntity.client_id
+        bodyParams["usage_pass"] = enrollVoiceEntity.usage_pass
         
         // assign base url
         baseURL = (properties["DomainURL"]) ?? ""
@@ -468,6 +470,8 @@ public class VoiceVerificationService {
         bodyParams["deviceMake"] = deviceInfoEntity.deviceMake
         bodyParams["deviceModel"] = deviceInfoEntity.deviceModel
         bodyParams["deviceId"] = deviceInfoEntity.deviceId
+        bodyParams["client_id"] = authenticateVoiceEntity.client_id
+        bodyParams["usage_pass"] = authenticateVoiceEntity.usage_pass
         
         // assign base url
         baseURL = (properties["DomainURL"]) ?? ""

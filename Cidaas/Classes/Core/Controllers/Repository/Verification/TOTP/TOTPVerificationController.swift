@@ -140,7 +140,7 @@ public class TOTPVerificationController {
                                         enrollTOTPEntity.statusId = self.statusId
                                         self.secret = DBHelper.shared.getTOTPSecret(key: self.sub)
                                             
-                                        enrollTOTPEntity.verifierPassword = self.gettingTOTPCode(url: URL(string: self.secret)!).totp_string
+                                        enrollTOTPEntity.verifierPassword = self.gettingTOTPCode(url: URL(string: self.secret.addingPercentEncoding(withAllowedCharacters:NSCharacterSet.urlQueryAllowed)!)!).totp_string
                                         
                                         // call enroll totpResponse service
                                         TOTPVerificationController.shared.enrollTOTP(access_token: tokenResponse.data.access_token, enrollTOTPEntity: enrollTOTPEntity, properties: properties) {
@@ -532,7 +532,7 @@ public class TOTPVerificationController {
                                 authenticateTOTPEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomainURL"] ?? "OAuthUserDeviceId")
                                 
                                 // generate token
-                                authenticateTOTPEntity.verifierPassword = self.gettingTOTPCode(url: URL(string: self.secret)!).totp_string
+                                authenticateTOTPEntity.verifierPassword = self.gettingTOTPCode(url: URL(string: self.secret.addingPercentEncoding(withAllowedCharacters:NSCharacterSet.urlQueryAllowed)!)!).totp_string
                                 
                                 // call authenticateTOTP service
                                 TOTPVerificationService.shared.authenticateTOTP(authenticateTOTPEntity: authenticateTOTPEntity, properties: properties) {

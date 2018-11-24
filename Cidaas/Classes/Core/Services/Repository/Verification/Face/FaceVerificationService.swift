@@ -255,6 +255,8 @@ public class FaceVerificationService {
         bodyParams["deviceMake"] = deviceInfoEntity.deviceMake
         bodyParams["deviceModel"] = deviceInfoEntity.deviceModel
         bodyParams["deviceId"] = deviceInfoEntity.deviceId
+        bodyParams["client_id"] = enrollFaceEntity.client_id
+        bodyParams["usage_pass"] = enrollFaceEntity.usage_pass
         
         // assign base url
         baseURL = (properties["DomainURL"]) ?? ""
@@ -469,6 +471,8 @@ public class FaceVerificationService {
         bodyParams["deviceMake"] = deviceInfoEntity.deviceMake
         bodyParams["deviceModel"] = deviceInfoEntity.deviceModel
         bodyParams["deviceId"] = deviceInfoEntity.deviceId
+        bodyParams["client_id"] = authenticateFaceEntity.client_id
+        bodyParams["usage_pass"] = authenticateFaceEntity.usage_pass
         
         // assign base url
         baseURL = (properties["DomainURL"]) ?? ""
