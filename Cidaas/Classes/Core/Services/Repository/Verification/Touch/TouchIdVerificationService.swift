@@ -36,9 +36,7 @@ public class TouchIdVerificationService {
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
             "verification_api_version" : "2",
-            "access_token" : accessToken,
-            "access_challenge" : properties["Challenge"] ?? "",
-            "access_challenge_method" : properties["Method"] ?? ""
+            "access_token" : accessToken
         ]
         deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
         setupTouchIdEntity.deviceInfo = deviceInfoEntity
@@ -124,7 +122,7 @@ public class TouchIdVerificationService {
     }
     
     // scanned pattern
-    public func scannedTouchId(accessToken: String, scannedTouchIdEntity: ScannedTouchEntity, properties : Dictionary<String, String>, callback: @escaping(Result<ScannedTouchResponseEntity>) -> Void) {
+    public func scannedTouchId(scannedTouchIdEntity: ScannedTouchEntity, properties : Dictionary<String, String>, callback: @escaping(Result<ScannedTouchResponseEntity>) -> Void) {
         // local variables
         var headers : HTTPHeaders
         var urlString : String
@@ -139,13 +137,12 @@ public class TouchIdVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
-            "verification_api_version" : "2",
-            "access_token" : accessToken
+            "verification_api_version" : "2"
         ]
         
         deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
         scannedTouchIdEntity.deviceInfo = deviceInfoEntity
-        
+        scannedTouchIdEntity.client_id = properties["ClientId"] ?? ""
         
         // construct body params
         var bodyParams = Dictionary<String, Any>()
@@ -249,7 +246,7 @@ public class TouchIdVerificationService {
         deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
         enrollTouchIdEntity.verifierPassword = deviceInfoEntity.deviceId
         enrollTouchIdEntity.deviceInfo = deviceInfoEntity
-        
+        enrollTouchIdEntity.client_id = properties["ClientId"] ?? ""
         
         // construct body params
         var bodyParams = Dictionary<String, Any>()
@@ -346,9 +343,7 @@ public class TouchIdVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
-            "verification_api_version" : "2",
-            "access_challenge" : properties["Challenge"] ?? "",
-            "access_challenge_method" : properties["Method"] ?? ""
+            "verification_api_version" : "2"
         ]
         
         deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
@@ -453,6 +448,7 @@ public class TouchIdVerificationService {
         deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
         authenticateTouchIdEntity.verifierPassword = deviceInfoEntity.deviceId
         authenticateTouchIdEntity.deviceInfo = deviceInfoEntity
+        authenticateTouchIdEntity.client_id = properties["ClientId"] ?? ""
         
         // construct body params
         var bodyParams = Dictionary<String, Any>()

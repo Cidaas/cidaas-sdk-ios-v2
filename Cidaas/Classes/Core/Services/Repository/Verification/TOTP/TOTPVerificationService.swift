@@ -36,9 +36,7 @@ public class TOTPVerificationService {
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
             "verification_api_version" : "2",
-            "access_token" : accessToken,
-            "access_challenge" : properties["Challenge"] ?? "",
-            "access_challenge_method" : properties["Method"] ?? ""
+            "access_token" : accessToken
         ]
         deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
         setupTOTPEntity.deviceInfo = deviceInfoEntity
@@ -124,7 +122,7 @@ public class TOTPVerificationService {
     }
     
     // scanned TOTP
-    public func scannedTOTP(accessToken: String, scannedTOTPEntity: ScannedTOTPEntity, properties : Dictionary<String, String>, callback: @escaping(Result<ScannedTOTPResponseEntity>) -> Void) {
+    public func scannedTOTP(scannedTOTPEntity: ScannedTOTPEntity, properties : Dictionary<String, String>, callback: @escaping(Result<ScannedTOTPResponseEntity>) -> Void) {
         // local variables
         var headers : HTTPHeaders
         var urlString : String
@@ -139,13 +137,12 @@ public class TOTPVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
-            "verification_api_version" : "2",
-            "access_token" : accessToken
+            "verification_api_version" : "2"
         ]
         
         deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
         scannedTOTPEntity.deviceInfo = deviceInfoEntity
-        
+        scannedTOTPEntity.client_id = properties["ClientId"] ?? ""
         
         // construct body params
         var bodyParams = Dictionary<String, Any>()
@@ -248,7 +245,7 @@ public class TOTPVerificationService {
         
         deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
         enrollTOTPEntity.deviceInfo = deviceInfoEntity
-        
+        enrollTOTPEntity.client_id = properties["ClientId"] ?? ""
         
         // construct body params
         var bodyParams = Dictionary<String, Any>()
@@ -345,9 +342,7 @@ public class TOTPVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
-            "verification_api_version" : "2",
-            "access_challenge" : properties["Challenge"] ?? "",
-            "access_challenge_method" : properties["Method"] ?? ""
+            "verification_api_version" : "2"
         ]
         
         deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
@@ -451,6 +446,7 @@ public class TOTPVerificationService {
         
         deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
         authenticateTOTPEntity.deviceInfo = deviceInfoEntity
+        authenticateTOTPEntity.client_id = properties["ClientId"] ?? ""
         
         // construct body params
         var bodyParams = Dictionary<String, Any>()

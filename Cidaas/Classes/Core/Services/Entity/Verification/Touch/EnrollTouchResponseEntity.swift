@@ -28,6 +28,7 @@ public class EnrollTouchResponseEntity : Codable {
 
 public class EnrollTouchResponseDataEntity : Codable {
     // properties
+    public var current_status: String = ""
     public var sub: String = ""
     public var trackingCode: String = ""
     public var verificationType: String = ""
@@ -40,6 +41,7 @@ public class EnrollTouchResponseDataEntity : Codable {
     
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.current_status = try container.decodeIfPresent(String.self, forKey: .current_status) ?? ""
         self.sub = try container.decodeIfPresent(String.self, forKey: .sub) ?? ""
         self.trackingCode = try container.decodeIfPresent(String.self, forKey: .trackingCode) ?? ""
         self.verificationType = try container.decodeIfPresent(String.self, forKey: .verificationType) ?? ""

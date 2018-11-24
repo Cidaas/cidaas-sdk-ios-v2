@@ -87,10 +87,8 @@ public class TouchIdVerificationController {
                         return
                     case .success(let serviceResponse):
                         // log success
-                        let loggerMessage = "Configure TouchId service success : " + "Status Id  - " + String(describing: serviceResponse.data.statusId)
+                        let loggerMessage = "Configure TouchId service success : " + "Current Status  - " + String(describing: serviceResponse.data.current_status)
                         logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                        
-                        self.statusId = serviceResponse.data.statusId
                         
                         var timer: Timer = Timer()
                         var timerCount: Int16 = 0
@@ -115,70 +113,38 @@ public class TouchIdVerificationController {
                                 timer.invalidate()
                                 
                                 // construct object
-                                let validateDeviceEntity = ValidateDeviceEntity()
-                                validateDeviceEntity.intermediate_verifiation_id = Cidaas.intermediate_verifiation_id
-                                validateDeviceEntity.statusId = self.statusId
+                                let setupTouchIdEntity = SetupTouchEntity()
+                                setupTouchIdEntity.usage_pass = Cidaas.intermediate_verifiation_id
                                 
                                 // call validate device
-                                DeviceVerificationService.shared.validateDevice(validateDeviceEntity: validateDeviceEntity, properties: properties) {
+                                TouchIdVerificationService.shared.setupTouchId(accessToken: tokenResponse.data.access_token, setupTouchIdEntity: setupTouchIdEntity, properties: properties) {
                                     switch $0 {
                                     case .success(let validateDeviceResponse):
                                         // log success
-                                        let loggerMessage = "Validate device success : " + "Usage pass - " + String(describing: validateDeviceResponse.data.usage_pass)
+                                        let loggerMessage = "Validate device success : " + "Status Id - " + String(describing: validateDeviceResponse.data.st)
                                         logw(loggerMessage, cname: "cidaas-sdk-success-log")
                                         
-                                        let scannedTouchIdEntity = ScannedTouchEntity()
-                                        scannedTouchIdEntity.usage_pass = validateDeviceResponse.data.usage_pass
-                                        scannedTouchIdEntity.statusId = self.statusId
+                                        // save user device id based on tenant
+                                        DBHelper.shared.setUserDeviceId(userDeviceId: validateDeviceResponse.data.udi, key: properties["DomainURL"] ?? "OAuthUserDeviceId")
+                                        
+                                        self.statusId = validateDeviceResponse.data.st
+                                        
+                                        let enrollTouchEntity = EnrollTouchEntity()
+                                        enrollTouchEntity.statusId = self.statusId
                                         
                                         // call scanned TouchId service
-                                        TouchIdVerificationService.shared.scannedTouchId(accessToken:tokenResponse.data.access_token, scannedTouchIdEntity: scannedTouchIdEntity, properties: properties) {
+                                        TouchIdVerificationController.shared.enrollToucId(access_token:tokenResponse.data.access_token, enrollTouchEntity: enrollTouchEntity, properties: properties) {
                                             switch $0 {
                                             case .failure(let error):
-                                                // log error
-                                                let loggerMessage = "TouchId Scanned service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                                                logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                                                
                                                 // return failure callback
                                                 DispatchQueue.main.async {
                                                     callback(Result.failure(error: error))
                                                 }
                                                 return
-                                            case .success(let serviceResponse):
-                                                // log success
-                                                let loggerMessage = "Scanned TouchId success : " + "User Device Id - " + String(describing: serviceResponse.data.userDeviceId)
-                                                logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                                                
-                                                // save user device id based on tenant
-                                                DBHelper.shared.setUserDeviceId(userDeviceId: serviceResponse.data.userDeviceId, key: properties["DomainURL"] ?? "OAuthUserDeviceId")
-                                                
-                                                // construct method
-                                                let enrollTouchIdEntity = EnrollTouchEntity()
-                                                enrollTouchIdEntity.statusId = self.statusId
-                                                enrollTouchIdEntity.userDeviceId = serviceResponse.data.userDeviceId
-                                                
-                                                // call enroll service
-                                                TouchIdVerificationService.shared.enrollTouchId(accessToken:tokenResponse.data.access_token, enrollTouchIdEntity: enrollTouchIdEntity, properties: properties) {
-                                                    switch $0 {
-                                                    case .failure(let error):
-                                                        // log error
-                                                        let loggerMessage = "Enroll TouchId service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                                                        logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                                                        
-                                                        // return failure callback
-                                                        DispatchQueue.main.async {
-                                                            callback(Result.failure(error: error))
-                                                        }
-                                                        return
-                                                    case .success(let enrollResponse):
-                                                        // log success
-                                                        let loggerMessage = "Enroll TouchId success : " + "Tracking Code - " + String(describing: enrollResponse.data.trackingCode + ", Sub - " + String(describing: enrollResponse.data.sub))
-                                                        logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                                                        
-                                                        DispatchQueue.main.async {
-                                                            callback(Result.success(result: enrollResponse))
-                                                        }
-                                                    }
+                                            case .success(let enrollResponse):
+                                                // return success callback
+                                                DispatchQueue.main.async {
+                                                    callback(Result.success(result: enrollResponse))
                                                 }
                                             }
                                         }
@@ -199,6 +165,230 @@ public class TouchIdVerificationController {
                         })
                     }
                 }
+            }
+        }
+    }
+    
+    // Web to Mobile
+    // scanned touch from properties
+    public func scannedTouchId(statusId: String, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<ScannedTouchResponseEntity>) -> Void) {
+        // null check
+        if properties["DomainURL"] == "" || properties["DomainURL"] == nil || properties["ClientId"] == "" || properties["ClientId"] == nil {
+            let error = WebAuthError.shared.propertyMissingException()
+            // log error
+            let loggerMessage = "Read properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+        
+        // validating fields
+        if (statusId == "") {
+            let error = WebAuthError.shared.propertyMissingException()
+            error.errorMessage = "statusId must not be empty"
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+        
+        // default set intermediate id to empty
+        Cidaas.intermediate_verifiation_id = intermediate_id
+        self.verificationType = VerificationTypes.TOUCH.rawValue
+        self.authenticationType = AuthenticationTypes.CONFIGURE.rawValue
+        
+        // construct object
+        var scannedTouchEntity = ScannedTouchEntity()
+        scannedTouchEntity.statusId = statusId
+        
+        // call setupTouch service
+        TouchIdVerificationService.shared.scannedTouchId(scannedTouchIdEntity: scannedTouchEntity, properties: properties) {
+            switch $0 {
+            case .failure(let error):
+                // log error
+                let loggerMessage = "Scanned Touch Id service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                
+                // return failure callback
+                DispatchQueue.main.async {
+                    callback(Result.failure(error: error))
+                }
+                return
+            case .success(let serviceResponse):
+                // log success
+                let loggerMessage = "Scanned Touch Id service success : " + "Current Status  - " + String(describing: serviceResponse.data.current_status)
+                logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                
+                var timer: Timer = Timer()
+                var timerCount: Int16 = 0
+                timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { (timer_response) in
+                    if (timerCount > 10) {
+                        timerCount = 0
+                        timer.invalidate()
+                        
+                        let error = WebAuthError.shared.notificationTimeoutException()
+                        
+                        // log error
+                        let loggerMessage = "Device Verification failure. Notification timeout : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                        logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                        
+                        DispatchQueue.main.async {
+                            callback(Result.failure(error: error))
+                        }
+                        return
+                    }
+                    if (Cidaas.intermediate_verifiation_id != "") {
+                        timerCount = 0
+                        timer.invalidate()
+                        
+                        // construct object
+                        scannedTouchEntity = ScannedTouchEntity()
+                        scannedTouchEntity.usage_pass = Cidaas.intermediate_verifiation_id
+                        
+                        // call validate device
+                        TouchIdVerificationService.shared.scannedTouchId(scannedTouchIdEntity: scannedTouchEntity, properties: properties) {
+                            switch $0 {
+                            case .success(let validateDeviceResponse):
+                                // log success
+                                let loggerMessage = "Scanned Touch Id with usage pass service success : " + "User device Id - " + String(describing: validateDeviceResponse.data.userDeviceId)
+                                logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                                
+                                // save user device id based on tenant
+                                DBHelper.shared.setUserDeviceId(userDeviceId: validateDeviceResponse.data.userDeviceId, key: properties["DomainURL"] ?? "OAuthUserDeviceId")
+                                
+                                DispatchQueue.main.async {
+                                    callback(Result.success(result: validateDeviceResponse))
+                                }
+                                
+                                break
+                            case .failure(let error):
+                                // return callback
+                                DispatchQueue.main.async {
+                                    callback(Result.failure(error: error))
+                                }
+                                break
+                            }
+                        }
+                    }
+                    else {
+                        timerCount = timerCount + 1
+                    }
+                })
+            }
+        }
+    }
+    
+    // Web to Mobile
+    // enroll Touch Id from properties
+    public func enrollToucId(access_token: String, enrollTouchEntity: EnrollTouchEntity, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<EnrollTouchResponseEntity>) -> Void) {
+        // null check
+        if properties["DomainURL"] == "" || properties["DomainURL"] == nil || properties["ClientId"] == "" || properties["ClientId"] == nil {
+            let error = WebAuthError.shared.propertyMissingException()
+            // log error
+            let loggerMessage = "Read properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+        
+        if enrollTouchEntity.userDeviceId == "" {
+            enrollTouchEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomainURL"] ?? "OAuthUserDeviceId")
+        }
+        
+        // validating fields
+        if (enrollTouchEntity.statusId == "" || enrollTouchEntity.userDeviceId == "") {
+            let error = WebAuthError.shared.propertyMissingException()
+            error.errorMessage = "statusId or userDeviceId must not be empty"
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+        
+        // default set intermediate id to empty
+        Cidaas.intermediate_verifiation_id = intermediate_id
+        self.verificationType = VerificationTypes.TOUCH.rawValue
+        self.authenticationType = AuthenticationTypes.CONFIGURE.rawValue
+        
+        // call enroll service
+        TouchIdVerificationService.shared.enrollTouchId(accessToken:access_token, enrollTouchIdEntity: enrollTouchEntity, properties: properties) {
+            switch $0 {
+            case .failure(let error):
+                // log error
+                let loggerMessage = "Enroll Touch Id service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                
+                // return failure callback
+                DispatchQueue.main.async {
+                    callback(Result.failure(error: error))
+                }
+                return
+            case .success(let enrollResponse):
+                // log success
+                let loggerMessage = "Enroll Touch Id success : " + "Tracking Code - " + String(describing: enrollResponse.data.trackingCode + ", Sub - " + String(describing: enrollResponse.data.sub))
+                logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                
+                
+                var timer: Timer = Timer()
+                var timerCount: Int16 = 0
+                timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { (timer_response) in
+                    if (timerCount > 10) {
+                        timerCount = 0
+                        timer.invalidate()
+                        
+                        let error = WebAuthError.shared.notificationTimeoutException()
+                        
+                        // log error
+                        let loggerMessage = "Device Verification failure. Notification timeout : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                        logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                        
+                        DispatchQueue.main.async {
+                            callback(Result.failure(error: error))
+                        }
+                        return
+                    }
+                    if (Cidaas.intermediate_verifiation_id != "") {
+                        timerCount = 0
+                        timer.invalidate()
+                        
+                        // construct object
+                        let enrollTouchEntity = EnrollTouchEntity()
+                        enrollTouchEntity.usage_pass = Cidaas.intermediate_verifiation_id
+                        
+                        // call enroll service
+                        TouchIdVerificationService.shared.enrollTouchId(accessToken: access_token, enrollTouchIdEntity: enrollTouchEntity, properties: properties) {
+                            switch $0 {
+                            case .failure(let error):
+                                // log error
+                                let loggerMessage = "Enroll Touch Id  with usage pass service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                                logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                                
+                                // return failure callback
+                                DispatchQueue.main.async {
+                                    callback(Result.failure(error: error))
+                                }
+                                return
+                            case .success(let enrollResponse):
+                                // log success
+                                let loggerMessage = "Enroll Touch Id with usage pass success : " + "Tracking Code - " + String(describing: enrollResponse.data.trackingCode + ", Sub - " + String(describing: enrollResponse.data.sub))
+                                logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                                
+                                DispatchQueue.main.async {
+                                    callback(Result.success(result: enrollResponse))
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        timerCount = timerCount + 1
+                    }
+                })
             }
         }
     }
@@ -454,7 +644,7 @@ public class TouchIdVerificationController {
         }
     }
     
-    public func verifyTouchId(statusId: String, properties: Dictionary<String, String>, callback: @escaping(Result<AuthenticateTouchResponseEntity>) -> Void) {
+    public func verifyTouchId(statusId: String, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<AuthenticateTouchResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -468,6 +658,11 @@ public class TouchIdVerificationController {
             return
         }
         
+        // default set intermediate id to empty
+        Cidaas.intermediate_verifiation_id = intermediate_id
+        self.verificationType = VerificationTypes.TOUCH.rawValue
+        self.authenticationType = AuthenticationTypes.LOGIN.rawValue
+        
         // validating fields
         if (statusId == "") {
             let error = WebAuthError.shared.propertyMissingException()
@@ -479,7 +674,7 @@ public class TouchIdVerificationController {
         }
         
         // construct object
-        let authenticateTouchEntity = AuthenticateTouchEntity()
+        var authenticateTouchEntity = AuthenticateTouchEntity()
         authenticateTouchEntity.statusId = statusId
         
         // getting user device id
@@ -498,15 +693,64 @@ public class TouchIdVerificationController {
                     callback(Result.failure(error: error))
                 }
                 return
-            case .success(let patternResponse):
+            case .success(let touchResponse):
                 // log success
-                let loggerMessage = "Authenticate Touch success : " + "Tracking Code - " + String(describing: patternResponse.data.trackingCode + ", Sub - " + String(describing: patternResponse.data.sub))
+                let loggerMessage = "Authenticate Touch success : " + "Tracking Code - " + String(describing: touchResponse.data.trackingCode + ", Sub - " + String(describing: touchResponse.data.sub))
                 logw(loggerMessage, cname: "cidaas-sdk-success-log")
                 
-                // return success callback
-                DispatchQueue.main.async {
-                    callback(Result.success(result: patternResponse))
-                }
+                var timer: Timer = Timer()
+                var timerCount: Int16 = 0
+                timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { (timer_response) in
+                    if (timerCount > 10) {
+                        timerCount = 0
+                        timer.invalidate()
+                        
+                        let error = WebAuthError.shared.notificationTimeoutException()
+                        
+                        // log error
+                        let loggerMessage = "Device Verification failure. Notification timeout : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                        logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                        
+                        DispatchQueue.main.async {
+                            callback(Result.failure(error: error))
+                        }
+                        return
+                    }
+                    if (Cidaas.intermediate_verifiation_id != "") {
+                        timerCount = 0
+                        timer.invalidate()
+                        
+                        // construct object
+                        authenticateTouchEntity = AuthenticateTouchEntity()
+                        authenticateTouchEntity.usage_pass = Cidaas.intermediate_verifiation_id
+                        
+                        // call authenticate with usage service
+                        TouchIdVerificationService.shared.authenticateTouchId(authenticateTouchIdEntity: authenticateTouchEntity, properties: properties) {
+                            switch $0 {
+                            case .success(let initiateTouchResponse):
+                                // log success
+                                let loggerMessage = "Authenticate with usage pass success : " + "Status Id - " + String(describing: initiateTouchResponse.data.sub)
+                                logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                                
+                                // return success callback
+                                DispatchQueue.main.async {
+                                    callback(Result.success(result: initiateTouchResponse))
+                                }
+                                
+                                break
+                            case .failure(let error):
+                                // return callback
+                                DispatchQueue.main.async {
+                                    callback(Result.failure(error: error))
+                                }
+                                break
+                            }
+                        }
+                    }
+                    else {
+                        timerCount = timerCount + 1
+                    }
+                })
             }
         }
     }

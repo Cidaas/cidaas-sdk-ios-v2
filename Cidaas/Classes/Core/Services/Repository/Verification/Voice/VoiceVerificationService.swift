@@ -37,9 +37,7 @@ public class VoiceVerificationService {
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
             "verification_api_version" : "2",
-            "access_token" : accessToken,
-            "access_challenge" : properties["Challenge"] ?? "",
-            "access_challenge_method" : properties["Method"] ?? ""
+            "access_token" : accessToken
         ]
         deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
         setupVoiceEntity.deviceInfo = deviceInfoEntity
@@ -125,7 +123,7 @@ public class VoiceVerificationService {
     }
     
     // scanned voice
-    public func scannedVoice(accessToken: String, scannedVoiceEntity: ScannedVoiceEntity, properties : Dictionary<String, String>, callback: @escaping(Result<ScannedVoiceResponseEntity>) -> Void) {
+    public func scannedVoice(scannedVoiceEntity: ScannedVoiceEntity, properties : Dictionary<String, String>, callback: @escaping(Result<ScannedVoiceResponseEntity>) -> Void) {
         // local variables
         var headers : HTTPHeaders
         var urlString : String
@@ -140,13 +138,12 @@ public class VoiceVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
-            "verification_api_version" : "2",
-            "access_token" : accessToken
+            "verification_api_version" : "2"
         ]
         
         deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
         scannedVoiceEntity.deviceInfo = deviceInfoEntity
-        
+        scannedVoiceEntity.client_id = properties["ClientId"] ?? ""
         
         // construct body params
         var bodyParams = Dictionary<String, Any>()
@@ -249,7 +246,7 @@ public class VoiceVerificationService {
         
         deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
         enrollVoiceEntity.deviceInfo = deviceInfoEntity
-        
+        enrollVoiceEntity.client_id = properties["ClientId"] ?? ""
         
         // construct body params
         var bodyParams = Dictionary<String, String>()
@@ -358,9 +355,7 @@ public class VoiceVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
-            "verification_api_version" : "2",
-            "access_challenge" : properties["Challenge"] ?? "",
-            "access_challenge_method" : properties["Method"] ?? ""
+            "verification_api_version" : "2"
         ]
         
         deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
@@ -464,6 +459,7 @@ public class VoiceVerificationService {
         
         deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
         authenticateVoiceEntity.deviceInfo = deviceInfoEntity
+        authenticateVoiceEntity.client_id = properties["ClientId"] ?? ""
         
         // construct body params
         var bodyParams = Dictionary<String, String>()

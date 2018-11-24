@@ -67,7 +67,7 @@ public class VoiceVerificationController {
                 logw(loggerMessage, cname: "cidaas-sdk-success-log")
                 
                 // construct object
-                let setupVoiceEntity = SetupVoiceEntity()
+                var setupVoiceEntity = SetupVoiceEntity()
                 setupVoiceEntity.logoUrl = logoUrl
                 
                 // call setupVoice service
@@ -85,10 +85,8 @@ public class VoiceVerificationController {
                         return
                     case .success(let serviceResponse):
                         // log success
-                        let loggerMessage = "Configure Voice service success : " + "Status Id  - " + String(describing: serviceResponse.data.statusId)
+                        let loggerMessage = "Configure Voice service success : " + "Current Status  - " + String(describing: serviceResponse.data.current_status)
                         logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                        
-                        self.statusId = serviceResponse.data.statusId
                         
                         var timer: Timer = Timer()
                         var timerCount: Int16 = 0
@@ -113,70 +111,37 @@ public class VoiceVerificationController {
                                 timer.invalidate()
                                 
                                 // construct object
-                                let validateDeviceEntity = ValidateDeviceEntity()
-                                validateDeviceEntity.intermediate_verifiation_id = Cidaas.intermediate_verifiation_id
-                                validateDeviceEntity.statusId = self.statusId
+                                setupVoiceEntity = SetupVoiceEntity()
+                                setupVoiceEntity.usage_pass = Cidaas.intermediate_verifiation_id
                                 
                                 // call validate device
-                                DeviceVerificationService.shared.validateDevice(validateDeviceEntity: validateDeviceEntity, properties: properties) {
+                                VoiceVerificationService.shared.setupVoice(accessToken: tokenResponse.data.access_token, setupVoiceEntity: setupVoiceEntity, properties: properties) {
                                     switch $0 {
                                     case .success(let validateDeviceResponse):
                                         // log success
-                                        let loggerMessage = "Validate device success : " + "Usage pass - " + String(describing: validateDeviceResponse.data.usage_pass)
+                                        let loggerMessage = "Validate device success : " + "Status Id - " + String(describing: validateDeviceResponse.data.st)
                                         logw(loggerMessage, cname: "cidaas-sdk-success-log")
                                         
-                                        let scannedVoiceEntity = ScannedVoiceEntity()
-                                        scannedVoiceEntity.usage_pass = validateDeviceResponse.data.usage_pass
-                                        scannedVoiceEntity.statusId = self.statusId
+                                        // save user device id based on tenant
+                                        DBHelper.shared.setUserDeviceId(userDeviceId: validateDeviceResponse.data.udi, key: properties["DomainURL"] ?? "OAuthUserDeviceId")
                                         
-                                        // call scanned Voice service
-                                        VoiceVerificationService.shared.scannedVoice(accessToken:tokenResponse.data.access_token, scannedVoiceEntity: scannedVoiceEntity, properties: properties) {
+                                        self.statusId = validateDeviceResponse.data.st
+                                        
+                                        let enrollVoiceEntity = EnrollVoiceEntity()
+                                        enrollVoiceEntity.statusId = self.statusId
+                                        
+                                        // call enroll service
+                                        VoiceVerificationController.shared.enrollVoiceRecognition(access_token: tokenResponse.data.access_token, voice: voice, enrollVoiceEntity: enrollVoiceEntity, properties: properties) {
                                             switch $0 {
                                             case .failure(let error):
-                                                // log error
-                                                let loggerMessage = "Voice Scanned service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                                                logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                                                
                                                 // return failure callback
                                                 DispatchQueue.main.async {
                                                     callback(Result.failure(error: error))
                                                 }
                                                 return
-                                            case .success(let serviceResponse):
-                                                // log success
-                                                let loggerMessage = "Scanned Voice success : " + "User Device Id - " + String(describing: serviceResponse.data.userDeviceId)
-                                                logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                                                
-                                                // save user device id based on tenant
-                                                DBHelper.shared.setUserDeviceId(userDeviceId: serviceResponse.data.userDeviceId, key: properties["DomainURL"] ?? "OAuthUserDeviceId")
-                                                
-                                                // construct method
-                                                let enrollVoiceEntity = EnrollVoiceEntity()
-                                                enrollVoiceEntity.statusId = self.statusId
-                                                enrollVoiceEntity.userDeviceId = serviceResponse.data.userDeviceId
-                                                
-                                                // call enroll service
-                                                VoiceVerificationService.shared.enrollVoice(accessToken:tokenResponse.data.access_token, voice: voice, enrollVoiceEntity: enrollVoiceEntity, properties: properties) {
-                                                    switch $0 {
-                                                    case .failure(let error):
-                                                        // log error
-                                                        let loggerMessage = "Enroll Voice service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                                                        logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                                                        
-                                                        // return failure callback
-                                                        DispatchQueue.main.async {
-                                                            callback(Result.failure(error: error))
-                                                        }
-                                                        return
-                                                    case .success(let enrollResponse):
-                                                        // log success
-                                                        let loggerMessage = "Enroll Voice success : " + "Tracking Code - " + String(describing: enrollResponse.data.trackingCode + ", Sub - " + String(describing: enrollResponse.data.sub))
-                                                        logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                                                        
-                                                        DispatchQueue.main.async {
-                                                            callback(Result.success(result: enrollResponse))
-                                                        }
-                                                    }
+                                            case .success(let enrollResponse):
+                                                DispatchQueue.main.async {
+                                                    callback(Result.success(result: enrollResponse))
                                                 }
                                             }
                                         }
@@ -197,6 +162,230 @@ public class VoiceVerificationController {
                         })
                     }
                 }
+            }
+        }
+    }
+    
+    // Web to Mobile
+    // scanned Voice from properties
+    public func scannedVoiceRecognition(statusId: String, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<ScannedVoiceResponseEntity>) -> Void) {
+        // null check
+        if properties["DomainURL"] == "" || properties["DomainURL"] == nil || properties["ClientId"] == "" || properties["ClientId"] == nil {
+            let error = WebAuthError.shared.propertyMissingException()
+            // log error
+            let loggerMessage = "Read properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+        
+        // validating fields
+        if (statusId == "") {
+            let error = WebAuthError.shared.propertyMissingException()
+            error.errorMessage = "statusId must not be empty"
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+        
+        // default set intermediate id to empty
+        Cidaas.intermediate_verifiation_id = intermediate_id
+        self.verificationType = VerificationTypes.VOICE.rawValue
+        self.authenticationType = AuthenticationTypes.CONFIGURE.rawValue
+        
+        // construct object
+        var scannedVoiceEntity = ScannedVoiceEntity()
+        scannedVoiceEntity.statusId = statusId
+        
+        // call scannedVoice service
+        VoiceVerificationService.shared.scannedVoice(scannedVoiceEntity: scannedVoiceEntity, properties: properties) {
+            switch $0 {
+            case .failure(let error):
+                // log error
+                let loggerMessage = "Scanned Voice service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                
+                // return failure callback
+                DispatchQueue.main.async {
+                    callback(Result.failure(error: error))
+                }
+                return
+            case .success(let serviceResponse):
+                // log success
+                let loggerMessage = "Scanned Voice service success : " + "Current Status  - " + String(describing: serviceResponse.data.current_status)
+                logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                
+                var timer: Timer = Timer()
+                var timerCount: Int16 = 0
+                timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { (timer_response) in
+                    if (timerCount > 10) {
+                        timerCount = 0
+                        timer.invalidate()
+                        
+                        let error = WebAuthError.shared.notificationTimeoutException()
+                        
+                        // log error
+                        let loggerMessage = "Device Verification failure. Notification timeout : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                        logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                        
+                        DispatchQueue.main.async {
+                            callback(Result.failure(error: error))
+                        }
+                        return
+                    }
+                    if (Cidaas.intermediate_verifiation_id != "") {
+                        timerCount = 0
+                        timer.invalidate()
+                        
+                        // construct object
+                        scannedVoiceEntity = ScannedVoiceEntity()
+                        scannedVoiceEntity.usage_pass = Cidaas.intermediate_verifiation_id
+                        
+                        // call validate device
+                        VoiceVerificationService.shared.scannedVoice(scannedVoiceEntity: scannedVoiceEntity, properties: properties) {
+                            switch $0 {
+                            case .success(let validateDeviceResponse):
+                                // log success
+                                let loggerMessage = "Scanned Voice with usage pass service success : " + "User device Id - " + String(describing: validateDeviceResponse.data.userDeviceId)
+                                logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                                
+                                // save user device id based on tenant
+                                DBHelper.shared.setUserDeviceId(userDeviceId: validateDeviceResponse.data.userDeviceId, key: properties["DomainURL"] ?? "OAuthUserDeviceId")
+                                
+                                DispatchQueue.main.async {
+                                    callback(Result.success(result: validateDeviceResponse))
+                                }
+                                
+                                break
+                            case .failure(let error):
+                                // return callback
+                                DispatchQueue.main.async {
+                                    callback(Result.failure(error: error))
+                                }
+                                break
+                            }
+                        }
+                    }
+                    else {
+                        timerCount = timerCount + 1
+                    }
+                })
+            }
+        }
+    }
+    
+    // Web to Mobile
+    // enroll Voice from properties
+    public func enrollVoiceRecognition(access_token: String, voice: Data, enrollVoiceEntity: EnrollVoiceEntity, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<EnrollVoiceResponseEntity>) -> Void) {
+        // null check
+        if properties["DomainURL"] == "" || properties["DomainURL"] == nil || properties["ClientId"] == "" || properties["ClientId"] == nil {
+            let error = WebAuthError.shared.propertyMissingException()
+            // log error
+            let loggerMessage = "Read properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+        
+        if enrollVoiceEntity.userDeviceId == "" {
+            enrollVoiceEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomainURL"] ?? "OAuthUserDeviceId")
+        }
+        
+        // validating fields
+        if (enrollVoiceEntity.statusId == "" || enrollVoiceEntity.userDeviceId == "") {
+            let error = WebAuthError.shared.propertyMissingException()
+            error.errorMessage = "statusId or userDeviceId must not be empty"
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+        
+        // default set intermediate id to empty
+        Cidaas.intermediate_verifiation_id = intermediate_id
+        self.verificationType = VerificationTypes.VOICE.rawValue
+        self.authenticationType = AuthenticationTypes.CONFIGURE.rawValue
+        
+        // call enroll service
+        VoiceVerificationService.shared.enrollVoice(accessToken:access_token, voice: voice, enrollVoiceEntity: enrollVoiceEntity, properties: properties) {
+            switch $0 {
+            case .failure(let error):
+                // log error
+                let loggerMessage = "Enroll Voice service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                
+                // return failure callback
+                DispatchQueue.main.async {
+                    callback(Result.failure(error: error))
+                }
+                return
+            case .success(let enrollResponse):
+                // log success
+                let loggerMessage = "Enroll Voice success : " + "Tracking Code - " + String(describing: enrollResponse.data.trackingCode + ", Sub - " + String(describing: enrollResponse.data.sub))
+                logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                
+                
+                var timer: Timer = Timer()
+                var timerCount: Int16 = 0
+                timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { (timer_response) in
+                    if (timerCount > 10) {
+                        timerCount = 0
+                        timer.invalidate()
+                        
+                        let error = WebAuthError.shared.notificationTimeoutException()
+                        
+                        // log error
+                        let loggerMessage = "Device Verification failure. Notification timeout : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                        logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                        
+                        DispatchQueue.main.async {
+                            callback(Result.failure(error: error))
+                        }
+                        return
+                    }
+                    if (Cidaas.intermediate_verifiation_id != "") {
+                        timerCount = 0
+                        timer.invalidate()
+                        
+                        // construct object
+                        let enrollVoiceEntity = EnrollVoiceEntity()
+                        enrollVoiceEntity.usage_pass = Cidaas.intermediate_verifiation_id
+                        
+                        // call enroll service
+                        VoiceVerificationService.shared.enrollVoice(accessToken:access_token, voice: voice, enrollVoiceEntity: enrollVoiceEntity, properties: properties) {
+                            switch $0 {
+                            case .failure(let error):
+                                // log error
+                                let loggerMessage = "Enroll Voice  with usage pass service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                                logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                                
+                                // return failure callback
+                                DispatchQueue.main.async {
+                                    callback(Result.failure(error: error))
+                                }
+                                return
+                            case .success(let enrollResponse):
+                                // log success
+                                let loggerMessage = "Enroll Voice with usage pass success : " + "Tracking Code - " + String(describing: enrollResponse.data.trackingCode + ", Sub - " + String(describing: enrollResponse.data.sub))
+                                logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                                
+                                DispatchQueue.main.async {
+                                    callback(Result.success(result: enrollResponse))
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        timerCount = timerCount + 1
+                    }
+                })
             }
         }
     }
@@ -317,123 +506,85 @@ public class VoiceVerificationController {
                         timer.invalidate()
                         
                         // construct object
-                        let validateDeviceEntity = ValidateDeviceEntity()
-                        validateDeviceEntity.intermediate_verifiation_id = Cidaas.intermediate_verifiation_id
-                        validateDeviceEntity.statusId = self.statusId
+                        initiateVoiceEntity.usage_pass = Cidaas.intermediate_verifiation_id
                         
-                        // call validate device
-                        DeviceVerificationService.shared.validateDevice(validateDeviceEntity: validateDeviceEntity, properties: properties) {
+                        // call initiateVoice with usage service
+                        VoiceVerificationService.shared.initiateVoice(initiateVoiceEntity: initiateVoiceEntity, properties: properties) {
                             switch $0 {
-                            case .success(let validateDeviceResponse):
+                            case .success(let initiateVoiceResponse):
                                 // log success
-                                let loggerMessage = "Validate device success : " + "Usage pass - " + String(describing: validateDeviceResponse.data.usage_pass)
+                                let loggerMessage = "Initiate with usage pass success : " + "Status Id - " + String(describing: initiateVoiceResponse.data.statusId)
                                 logw(loggerMessage, cname: "cidaas-sdk-success-log")
                                 
-                                initiateVoiceEntity.usage_pass = validateDeviceResponse.data.usage_pass
+                                self.statusId = initiateVoiceResponse.data.statusId
                                 
-                                // call initiateVoice with usage service
-                                VoiceVerificationService.shared.initiateVoice(initiateVoiceEntity: initiateVoiceEntity, properties: properties) {
+                                
+                                // call authenticateVoice service
+                                VoiceVerificationController.shared.verifyVoice(voice: voice, statusId: self.statusId, properties: properties) {
                                     switch $0 {
-                                    case .success(let initiateVoiceResponse):
-                                        // log success
-                                        let loggerMessage = "Initiate with usage pass success : " + "Status Id - " + String(describing: initiateVoiceResponse.data.statusId)
-                                        logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                                        
-                                        self.statusId = initiateVoiceResponse.data.statusId
-                                        
-                                        // construct object
-                                        let authenticateVoiceEntity = AuthenticateVoiceEntity()
-                                        authenticateVoiceEntity.statusId = self.statusId
-                                        
-                                        // getting user device id
-                                        authenticateVoiceEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomainURL"] ?? "OAuthUserDeviceId")
-                                        
-                                        
-                                        // call authenticateVoice service
-                                        VoiceVerificationService.shared.authenticateVoice(voice: voice, authenticateVoiceEntity: authenticateVoiceEntity, properties: properties) {
-                                            switch $0 {
-                                            case .failure(let error):
-                                                // log error
-                                                let loggerMessage = "Authenticate Voice service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                                                logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                                                
-                                                // return failure callback
-                                                DispatchQueue.main.async {
-                                                    callback(Result.failure(error: error))
-                                                }
-                                                return
-                                            case .success(let VoiceResponse):
-                                                // log success
-                                                let loggerMessage = "Authenticate Voice success : " + "Tracking Code - " + String(describing: VoiceResponse.data.trackingCode + ", Sub - " + String(describing: VoiceResponse.data.sub))
-                                                logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                                                
-                                                let mfaContinueEntity = MFAContinueEntity()
-                                                mfaContinueEntity.requestId = requestId
-                                                mfaContinueEntity.sub = VoiceResponse.data.sub
-                                                mfaContinueEntity.trackId = trackId
-                                                mfaContinueEntity.trackingCode = VoiceResponse.data.trackingCode
-                                                mfaContinueEntity.verificationType = "VOICE"
-                                                
-                                                if(self.usageType == UsageTypes.PASSWORDLESS.rawValue) {
-                                                    VerificationSettingsService.shared.passwordlessContinue(mfaContinueEntity: mfaContinueEntity, properties: properties) {
-                                                        switch $0 {
-                                                        case .failure(let error):
-                                                            // log error
-                                                            let loggerMessage = "MFA Continue service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                                                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                                                            
-                                                            // return failure callback
-                                                            DispatchQueue.main.async {
-                                                                callback(Result.failure(error: error))
-                                                            }
-                                                            return
-                                                        case .success(let serviceResponse):
-                                                            // log success
-                                                            let loggerMessage = "MFA Continue service success : " + "Authz Code  - " + String(describing: serviceResponse.data.code) + ", Grant Type  - " + String(describing: serviceResponse.data.grant_type)
-                                                            logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                                                            
-                                                            AccessTokenController.shared.getAccessToken(code: serviceResponse.data.code, callback: callback)
-                                                            
-                                                        }
-                                                    }
-                                                }
-                                                else {
-                                                    
-                                                    VerificationSettingsService.shared.mfaContinue(mfaContinueEntity: mfaContinueEntity, properties: properties) {
-                                                        switch $0 {
-                                                        case .failure(let error):
-                                                            // log error
-                                                            let loggerMessage = "MFA Continue service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                                                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                                                            
-                                                            // return failure callback
-                                                            DispatchQueue.main.async {
-                                                                callback(Result.failure(error: error))
-                                                            }
-                                                            return
-                                                        case .success(let serviceResponse):
-                                                            // log success
-                                                            let loggerMessage = "MFA Continue service success : " + "Authz Code  - " + String(describing: serviceResponse.data.code) + ", Grant Type  - " + String(describing: serviceResponse.data.grant_type)
-                                                            logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                                                            
-                                                            AccessTokenController.shared.getAccessToken(code: serviceResponse.data.code, callback: callback)
-                                                            
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        
-                                        break
                                     case .failure(let error):
-                                        // return callback
+                                        // return failure callback
                                         DispatchQueue.main.async {
                                             callback(Result.failure(error: error))
                                         }
-                                        break
+                                        return
+                                    case .success(let VoiceResponse):
+                                        let mfaContinueEntity = MFAContinueEntity()
+                                        mfaContinueEntity.requestId = requestId
+                                        mfaContinueEntity.sub = VoiceResponse.data.sub
+                                        mfaContinueEntity.trackId = trackId
+                                        mfaContinueEntity.trackingCode = VoiceResponse.data.trackingCode
+                                        mfaContinueEntity.verificationType = "VOICE"
+                                        
+                                        if(self.usageType == UsageTypes.PASSWORDLESS.rawValue) {
+                                            VerificationSettingsService.shared.passwordlessContinue(mfaContinueEntity: mfaContinueEntity, properties: properties) {
+                                                switch $0 {
+                                                case .failure(let error):
+                                                    // log error
+                                                    let loggerMessage = "MFA Continue service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                                                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                                                    
+                                                    // return failure callback
+                                                    DispatchQueue.main.async {
+                                                        callback(Result.failure(error: error))
+                                                    }
+                                                    return
+                                                case .success(let serviceResponse):
+                                                    // log success
+                                                    let loggerMessage = "MFA Continue service success : " + "Authz Code  - " + String(describing: serviceResponse.data.code) + ", Grant Type  - " + String(describing: serviceResponse.data.grant_type)
+                                                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                                                    
+                                                    AccessTokenController.shared.getAccessToken(code: serviceResponse.data.code, callback: callback)
+                                                    
+                                                }
+                                            }
+                                        }
+                                        else {
+                                            
+                                            VerificationSettingsService.shared.mfaContinue(mfaContinueEntity: mfaContinueEntity, properties: properties) {
+                                                switch $0 {
+                                                case .failure(let error):
+                                                    // log error
+                                                    let loggerMessage = "MFA Continue service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                                                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                                                    
+                                                    // return failure callback
+                                                    DispatchQueue.main.async {
+                                                        callback(Result.failure(error: error))
+                                                    }
+                                                    return
+                                                case .success(let serviceResponse):
+                                                    // log success
+                                                    let loggerMessage = "MFA Continue service success : " + "Authz Code  - " + String(describing: serviceResponse.data.code) + ", Grant Type  - " + String(describing: serviceResponse.data.grant_type)
+                                                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                                                    
+                                                    AccessTokenController.shared.getAccessToken(code: serviceResponse.data.code, callback: callback)
+                                                    
+                                                }
+                                            }
+                                        }
                                     }
                                 }
-                                
                                 
                                 break
                             case .failure(let error):
@@ -454,7 +605,7 @@ public class VoiceVerificationController {
         }
     }
     
-    public func verifyVoice(voice: Data, statusId: String, properties: Dictionary<String, String>, callback: @escaping(Result<AuthenticateVoiceResponseEntity>) -> Void) {
+    public func verifyVoice(voice: Data, statusId: String, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<AuthenticateVoiceResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -468,6 +619,11 @@ public class VoiceVerificationController {
             return
         }
         
+        // default set intermediate id to empty
+        Cidaas.intermediate_verifiation_id = intermediate_id
+        self.verificationType = VerificationTypes.VOICE.rawValue
+        self.authenticationType = AuthenticationTypes.LOGIN.rawValue
+        
         // validating fields
         if (statusId == "") {
             let error = WebAuthError.shared.propertyMissingException()
@@ -479,7 +635,7 @@ public class VoiceVerificationController {
         }
         
         // construct object
-        let authenticateVoiceEntity = AuthenticateVoiceEntity()
+        var authenticateVoiceEntity = AuthenticateVoiceEntity()
         authenticateVoiceEntity.statusId = statusId
         
         // getting user device id
@@ -503,10 +659,59 @@ public class VoiceVerificationController {
                 let loggerMessage = "Authenticate Voice success : " + "Tracking Code - " + String(describing: patternResponse.data.trackingCode + ", Sub - " + String(describing: patternResponse.data.sub))
                 logw(loggerMessage, cname: "cidaas-sdk-success-log")
                 
-                // return success callback
-                DispatchQueue.main.async {
-                    callback(Result.success(result: patternResponse))
-                }
+                var timer: Timer = Timer()
+                var timerCount: Int16 = 0
+                timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { (timer_response) in
+                    if (timerCount > 10) {
+                        timerCount = 0
+                        timer.invalidate()
+                        
+                        let error = WebAuthError.shared.notificationTimeoutException()
+                        
+                        // log error
+                        let loggerMessage = "Device Verification failure. Notification timeout : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                        logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                        
+                        DispatchQueue.main.async {
+                            callback(Result.failure(error: error))
+                        }
+                        return
+                    }
+                    if (Cidaas.intermediate_verifiation_id != "") {
+                        timerCount = 0
+                        timer.invalidate()
+                        
+                        // construct object
+                        authenticateVoiceEntity = AuthenticateVoiceEntity()
+                        authenticateVoiceEntity.usage_pass = Cidaas.intermediate_verifiation_id
+                        
+                        // call authenticate with usage service
+                        VoiceVerificationService.shared.authenticateVoice(voice: voice, authenticateVoiceEntity: authenticateVoiceEntity, properties: properties) {
+                            switch $0 {
+                            case .success(let initiateVoiceResponse):
+                                // log success
+                                let loggerMessage = "Authenticate with usage pass success : " + "Status Id - " + String(describing: initiateVoiceResponse.data.sub)
+                                logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                                
+                                // return success callback
+                                DispatchQueue.main.async {
+                                    callback(Result.success(result: initiateVoiceResponse))
+                                }
+                                
+                                break
+                            case .failure(let error):
+                                // return callback
+                                DispatchQueue.main.async {
+                                    callback(Result.failure(error: error))
+                                }
+                                break
+                            }
+                        }
+                    }
+                    else {
+                        timerCount = timerCount + 1
+                    }
+                })
             }
         }
     }
