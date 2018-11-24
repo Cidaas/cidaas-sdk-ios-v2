@@ -509,121 +509,85 @@ public class TouchIdVerificationController {
                         timer.invalidate()
                         
                         // construct object
-                        let validateDeviceEntity = ValidateDeviceEntity()
-                        validateDeviceEntity.intermediate_verifiation_id = Cidaas.intermediate_verifiation_id
-                        validateDeviceEntity.statusId = self.statusId
+                        initiateTouchIdEntity.usage_pass = Cidaas.intermediate_verifiation_id
                         
-                        // call validate device
-                        DeviceVerificationService.shared.validateDevice(validateDeviceEntity: validateDeviceEntity, properties: properties) {
+                        // call initiateTouchId with usage service
+                        TouchIdVerificationService.shared.initiateTouchId(initiateTouchIdEntity: initiateTouchIdEntity, properties: properties) {
                             switch $0 {
-                            case .success(let validateDeviceResponse):
+                            case .success(let initiateTouchIdResponse):
                                 // log success
-                                let loggerMessage = "Validate device success : " + "Usage pass - " + String(describing: validateDeviceResponse.data.usage_pass)
+                                let loggerMessage = "Initiate with usage pass success : " + "Status Id - " + String(describing: initiateTouchIdResponse.data.statusId)
                                 logw(loggerMessage, cname: "cidaas-sdk-success-log")
                                 
-                                initiateTouchIdEntity.usage_pass = validateDeviceResponse.data.usage_pass
+                                self.statusId = initiateTouchIdResponse.data.statusId
                                 
-                                // call initiateTouchId with usage service
-                                TouchIdVerificationService.shared.initiateTouchId(initiateTouchIdEntity: initiateTouchIdEntity, properties: properties) {
+                                // call authenticateTouchId service
+                                TouchIdVerificationController.shared.verifyTouchId(statusId: self.statusId, properties: properties) {
                                     switch $0 {
-                                    case .success(let initiateTouchIdResponse):
-                                        // log success
-                                        let loggerMessage = "Initiate with usage pass success : " + "Status Id - " + String(describing: initiateTouchIdResponse.data.statusId)
-                                        logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                                        
-                                        self.statusId = initiateTouchIdResponse.data.statusId
-                                        
-                                        // construct object
-                                        let authenticateTouchIdEntity = AuthenticateTouchEntity()
-                                        authenticateTouchIdEntity.statusId = self.statusId
-                                        // getting user device id
-                                        authenticateTouchIdEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomainURL"] ?? "OAuthUserDeviceId")
-                                        
-                                        // call authenticateTouchId service
-                                        TouchIdVerificationService.shared.authenticateTouchId(authenticateTouchIdEntity: authenticateTouchIdEntity, properties: properties) {
-                                            switch $0 {
-                                            case .failure(let error):
-                                                // log error
-                                                let loggerMessage = "Authenticate TouchId service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                                                logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                                                
-                                                // return failure callback
-                                                DispatchQueue.main.async {
-                                                    callback(Result.failure(error: error))
-                                                }
-                                                return
-                                            case .success(let TouchIdResponse):
-                                                // log success
-                                                let loggerMessage = "Authenticate TouchId success : " + "Tracking Code - " + String(describing: TouchIdResponse.data.trackingCode + ", Sub - " + String(describing: TouchIdResponse.data.sub))
-                                                logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                                                
-                                                let mfaContinueEntity = MFAContinueEntity()
-                                                mfaContinueEntity.requestId = requestId
-                                                mfaContinueEntity.sub = TouchIdResponse.data.sub
-                                                mfaContinueEntity.trackId = trackId
-                                                mfaContinueEntity.trackingCode = TouchIdResponse.data.trackingCode
-                                                mfaContinueEntity.verificationType = "TOUCHID"
-                                                
-                                                if(self.usageType == UsageTypes.PASSWORDLESS.rawValue) {
-                                                    VerificationSettingsService.shared.passwordlessContinue(mfaContinueEntity: mfaContinueEntity, properties: properties) {
-                                                        switch $0 {
-                                                        case .failure(let error):
-                                                            // log error
-                                                            let loggerMessage = "MFA Continue service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                                                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                                                            
-                                                            // return failure callback
-                                                            DispatchQueue.main.async {
-                                                                callback(Result.failure(error: error))
-                                                            }
-                                                            return
-                                                        case .success(let serviceResponse):
-                                                            // log success
-                                                            let loggerMessage = "MFA Continue service success : " + "Authz Code  - " + String(describing: serviceResponse.data.code) + ", Grant Type  - " + String(describing: serviceResponse.data.grant_type)
-                                                            logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                                                            
-                                                            AccessTokenController.shared.getAccessToken(code: serviceResponse.data.code, callback: callback)
-                                                            
-                                                        }
-                                                    }
-                                                }
-                                                else {
-                                                    
-                                                    VerificationSettingsService.shared.mfaContinue(mfaContinueEntity: mfaContinueEntity, properties: properties) {
-                                                        switch $0 {
-                                                        case .failure(let error):
-                                                            // log error
-                                                            let loggerMessage = "MFA Continue service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                                                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                                                            
-                                                            // return failure callback
-                                                            DispatchQueue.main.async {
-                                                                callback(Result.failure(error: error))
-                                                            }
-                                                            return
-                                                        case .success(let serviceResponse):
-                                                            // log success
-                                                            let loggerMessage = "MFA Continue service success : " + "Authz Code  - " + String(describing: serviceResponse.data.code) + ", Grant Type  - " + String(describing: serviceResponse.data.grant_type)
-                                                            logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                                                            
-                                                            AccessTokenController.shared.getAccessToken(code: serviceResponse.data.code, callback: callback)
-                                                            
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        
-                                        break
                                     case .failure(let error):
-                                        // return callback
+                                        // return failure callback
                                         DispatchQueue.main.async {
                                             callback(Result.failure(error: error))
                                         }
-                                        break
+                                        return
+                                    case .success(let TouchIdResponse):
+                                        
+                                        let mfaContinueEntity = MFAContinueEntity()
+                                        mfaContinueEntity.requestId = requestId
+                                        mfaContinueEntity.sub = TouchIdResponse.data.sub
+                                        mfaContinueEntity.trackId = trackId
+                                        mfaContinueEntity.trackingCode = TouchIdResponse.data.trackingCode
+                                        mfaContinueEntity.verificationType = "TOUCHID"
+                                        
+                                        if(self.usageType == UsageTypes.PASSWORDLESS.rawValue) {
+                                            VerificationSettingsService.shared.passwordlessContinue(mfaContinueEntity: mfaContinueEntity, properties: properties) {
+                                                switch $0 {
+                                                case .failure(let error):
+                                                    // log error
+                                                    let loggerMessage = "MFA Continue service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                                                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                                                    
+                                                    // return failure callback
+                                                    DispatchQueue.main.async {
+                                                        callback(Result.failure(error: error))
+                                                    }
+                                                    return
+                                                case .success(let serviceResponse):
+                                                    // log success
+                                                    let loggerMessage = "MFA Continue service success : " + "Authz Code  - " + String(describing: serviceResponse.data.code) + ", Grant Type  - " + String(describing: serviceResponse.data.grant_type)
+                                                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                                                    
+                                                    AccessTokenController.shared.getAccessToken(code: serviceResponse.data.code, callback: callback)
+                                                    
+                                                }
+                                            }
+                                        }
+                                        else {
+                                            
+                                            VerificationSettingsService.shared.mfaContinue(mfaContinueEntity: mfaContinueEntity, properties: properties) {
+                                                switch $0 {
+                                                case .failure(let error):
+                                                    // log error
+                                                    let loggerMessage = "MFA Continue service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                                                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                                                    
+                                                    // return failure callback
+                                                    DispatchQueue.main.async {
+                                                        callback(Result.failure(error: error))
+                                                    }
+                                                    return
+                                                case .success(let serviceResponse):
+                                                    // log success
+                                                    let loggerMessage = "MFA Continue service success : " + "Authz Code  - " + String(describing: serviceResponse.data.code) + ", Grant Type  - " + String(describing: serviceResponse.data.grant_type)
+                                                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                                                    
+                                                    AccessTokenController.shared.getAccessToken(code: serviceResponse.data.code, callback: callback)
+                                                    
+                                                }
+                                            }
+                                        }
                                     }
                                 }
-                                
                                 
                                 break
                             case .failure(let error):

@@ -41,6 +41,7 @@ public class SetupPushResponseDataEntity : Codable {
     public var st: String = ""
     public var udi: String = ""
     public var current_status: String = ""
+    public var prn: String = ""
     
     // Constructors
     public init() {
@@ -61,5 +62,6 @@ public class SetupPushResponseDataEntity : Codable {
         self.st = try container.decodeIfPresent(String.self, forKey: .st) ?? ""
         self.udi = try container.decodeIfPresent(String.self, forKey: .udi) ?? ""
         self.current_status = try container.decodeIfPresent(String.self, forKey: .current_status) ?? ""
+        self.prn = try container.decodeIfPresent(String.self, forKey: .prn) ?? ""
     }
 }
