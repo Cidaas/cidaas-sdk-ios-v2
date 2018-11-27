@@ -1421,7 +1421,7 @@ public class Cidaas {
         }
     }
     
-    // -------------------------------------------------------------------------------------------------- //
+// -------------------------------------------------------------------------------------------------- //
     
     // enroll push from plist
     // 1. Read properties from file
@@ -1437,6 +1437,183 @@ public class Cidaas {
             enrollPushEntity.verifierPassword = verifierPassword
             
             PushVerificationController.shared.enrollPush(access_token: access_token, enrollPushEntity: enrollPushEntity, properties: savedProp!, callback: callback)
+        }
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // scanned touch id from plist
+    // 1. Read properties from file
+    // 2. Call scannedTouch method
+    // 3. Maintain logs based on flags
+    
+    public func scannedTouchId(statusId: String, callback: @escaping(Result<ScannedTouchResponseEntity>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            TouchIdVerificationController.shared.scannedTouchId(statusId: statusId, properties: savedProp!, callback: callback)
+        }
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // enroll Touch Id from plist
+    // 1. Read properties from file
+    // 2. Call enrollTouch method
+    // 3. Maintain logs based on flags
+    
+    public func enrollTouchId(access_token: String, verifierPassword: String, statusId: String, callback: @escaping(Result<EnrollTouchResponseEntity>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            let enrollTouchEntity = EnrollTouchEntity()
+            enrollTouchEntity.statusId = statusId
+            
+            TouchIdVerificationController.shared.enrollToucId(access_token: access_token, enrollTouchEntity: enrollTouchEntity, properties: savedProp!, callback: callback)
+        }
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // scanned Face from plist
+    // 1. Read properties from file
+    // 2. Call scannedFace method
+    // 3. Maintain logs based on flags
+    
+    public func scannedFaceRecognition(statusId: String, callback: @escaping(Result<ScannedFaceResponseEntity>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            FaceVerificationController.shared.scannedFaceRecognition(statusId: statusId, properties: savedProp!, callback: callback)
+        }
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+    }
+    
+    // -------------------------------------------------------------------------------------------------- //
+    
+    // enroll face recognition from plist
+    // 1. Read properties from file
+    // 2. Call enrollTouch method
+    // 3. Maintain logs based on flags
+    
+    public func enrollFaceRecognition(access_token: String, photo: UIImage, statusId: String, callback: @escaping(Result<EnrollFaceResponseEntity>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            let enrollFaceEntity = EnrollFaceEntity()
+            enrollFaceEntity.statusId = statusId
+            
+            FaceVerificationController.shared.enrollFaceRecognition(access_token: access_token, photo: photo, enrollFaceEntity: enrollFaceEntity, properties: savedProp!, callback: callback)
+        }
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+    }
+
+    // -------------------------------------------------------------------------------------------------- //
+    
+    // scanned voice from plist
+    // 1. Read properties from file
+    // 2. Call scannedFace method
+    // 3. Maintain logs based on flags
+    
+    public func scannedVoiceRecognition(statusId: String, callback: @escaping(Result<ScannedVoiceResponseEntity>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            VoiceVerificationController.shared.scannedVoiceRecognition(statusId: statusId, properties: savedProp!, callback: callback)
+        }
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // enroll voice recognition from plist
+    // 1. Read properties from file
+    // 2. Call enrollvoice method
+    // 3. Maintain logs based on flags
+    
+    public func enrollVoiceRecognition(access_token: String, voice: Data, statusId: String, callback: @escaping(Result<EnrollVoiceResponseEntity>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            let enrollVoiceEntity = EnrollVoiceEntity()
+            enrollVoiceEntity.statusId = statusId
+            
+            VoiceVerificationController.shared.enrollVoiceRecognition(access_token: access_token, voice: voice, enrollVoiceEntity: enrollVoiceEntity, properties: savedProp!, callback: callback)
         }
         else {
             // log error
