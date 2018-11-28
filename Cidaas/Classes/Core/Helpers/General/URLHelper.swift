@@ -49,7 +49,8 @@ public class URLHelper {
     public var setupTOTPURL = "/verification-srv/totp/setup"
     public var enrollTOTPURL = "/verification-srv/totp/enroll"
     
-    public var deleteURL = "/verification-srv/settings/delete/"
+    public var deleteVerificationURL = "/verification-srv/settings/delete/"
+    public var deleteAllVerificationURL = "/verification-srv/settings/deleteall/"
     
     public var authenticateBackupcodeURL = "/verification-srv/backupcode/authenticate"
     public var authenticateTOTPURL = "/verification-srv/totp/authenticate"
@@ -117,8 +118,14 @@ public class URLHelper {
     
     public var socialURL = "/login-srv/social/token"
     
+    public var endpointsURL = "/.well-known/openid-configuration"
+    
     public func getRequestIdURL() -> String {
         return requestIdURL
+    }
+    
+    public func getEndpointsURL() -> String {
+        return endpointsURL
     }
     
     public func getLocationListURL() -> String {
@@ -241,8 +248,12 @@ public class URLHelper {
         return authenticateBackupcodeURL
     }
     
-    public func getDeleteURL(userDeviceId: String, verificationType: String) -> String {
-        return deleteURL + userDeviceId + "/" + verificationType.uppercased()
+    public func getDeleteVerificationURL(userDeviceId: String, verificationType: String) -> String {
+        return deleteVerificationURL + userDeviceId + "/" + verificationType.uppercased()
+    }
+    
+    public func getDeleteAllVerificationURL(userDeviceId: String) -> String {
+        return deleteAllVerificationURL + userDeviceId
     }
     
     public func getAuthenticateTOTPURL() -> String {

@@ -218,4 +218,6 @@ public class StringsHelper {
     
     public var EMPTY_DELETE_VERIFICATION_SERVICE: String = "Delete verification service is empty"
     public var DELETE_VERIFICATION_SERVICE_FAILURE: String = "Delete verification service failure"
+    
+    public var END_POINTS_SERVICE_FAILURE: String = "Well known openid config service failure"
 }

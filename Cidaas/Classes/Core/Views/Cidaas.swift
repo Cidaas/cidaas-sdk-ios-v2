@@ -1368,7 +1368,7 @@ public class Cidaas {
     // 2. Call enrollPattern method
     // 3. Maintain logs based on flags
     
-    public func enrollPattern(access_token: String, pattern: String, statusId: String, callback: @escaping(Result<EnrollPatternResponseEntity>) -> Void) {
+    public func enrollPattern(sub: String, pattern: String, statusId: String, callback: @escaping(Result<EnrollPatternResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
@@ -1376,7 +1376,7 @@ public class Cidaas {
             enrollPatternEntity.statusId = statusId
             enrollPatternEntity.verifierPassword = pattern
             
-            PatternVerificationController.shared.enrollPatternRecognition(access_token: access_token, enrollPatternEntity: enrollPatternEntity, properties: savedProp!, callback: callback)
+            PatternVerificationController.shared.enrollPatternRecognition(sub: sub, access_token: "", enrollPatternEntity: enrollPatternEntity, properties: savedProp!, callback: callback)
         }
         else {
             // log error
@@ -1428,7 +1428,7 @@ public class Cidaas {
     // 2. Call enrollPush method
     // 3. Maintain logs based on flags
     
-    public func enrollPush(access_token: String, verifierPassword: String, statusId: String, callback: @escaping(Result<EnrollPushResponseEntity>) -> Void) {
+    public func enrollPush(sub: String, verifierPassword: String, statusId: String, callback: @escaping(Result<EnrollPushResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
@@ -1436,7 +1436,7 @@ public class Cidaas {
             enrollPushEntity.statusId = statusId
             enrollPushEntity.verifierPassword = verifierPassword
             
-            PushVerificationController.shared.enrollPush(access_token: access_token, enrollPushEntity: enrollPushEntity, properties: savedProp!, callback: callback)
+            PushVerificationController.shared.enrollPush(sub: sub, access_token: "", enrollPushEntity: enrollPushEntity, properties: savedProp!, callback: callback)
         }
         else {
             // log error
@@ -1488,14 +1488,14 @@ public class Cidaas {
     // 2. Call enrollTouch method
     // 3. Maintain logs based on flags
     
-    public func enrollTouchId(access_token: String, verifierPassword: String, statusId: String, callback: @escaping(Result<EnrollTouchResponseEntity>) -> Void) {
+    public func enrollTouchId(sub: String, verifierPassword: String, statusId: String, callback: @escaping(Result<EnrollTouchResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
             let enrollTouchEntity = EnrollTouchEntity()
             enrollTouchEntity.statusId = statusId
             
-            TouchIdVerificationController.shared.enrollToucId(access_token: access_token, enrollTouchEntity: enrollTouchEntity, properties: savedProp!, callback: callback)
+            TouchIdVerificationController.shared.enrollTouchId(sub: sub, access_token: "", enrollTouchEntity: enrollTouchEntity, properties: savedProp!, callback: callback)
         }
         else {
             // log error
@@ -1547,14 +1547,14 @@ public class Cidaas {
     // 2. Call enrollTouch method
     // 3. Maintain logs based on flags
     
-    public func enrollFaceRecognition(access_token: String, photo: UIImage, statusId: String, callback: @escaping(Result<EnrollFaceResponseEntity>) -> Void) {
+    public func enrollFaceRecognition(sub: String, photo: UIImage, statusId: String, callback: @escaping(Result<EnrollFaceResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
             let enrollFaceEntity = EnrollFaceEntity()
             enrollFaceEntity.statusId = statusId
             
-            FaceVerificationController.shared.enrollFaceRecognition(access_token: access_token, photo: photo, enrollFaceEntity: enrollFaceEntity, properties: savedProp!, callback: callback)
+            FaceVerificationController.shared.enrollFaceRecognition(sub: sub, access_token: "", photo: photo, enrollFaceEntity: enrollFaceEntity, properties: savedProp!, callback: callback)
         }
         else {
             // log error
@@ -1571,7 +1571,7 @@ public class Cidaas {
         }
     }
 
-    // -------------------------------------------------------------------------------------------------- //
+// -------------------------------------------------------------------------------------------------- //
     
     // scanned voice from plist
     // 1. Read properties from file
@@ -1606,14 +1606,42 @@ public class Cidaas {
     // 2. Call enrollvoice method
     // 3. Maintain logs based on flags
     
-    public func enrollVoiceRecognition(access_token: String, voice: Data, statusId: String, callback: @escaping(Result<EnrollVoiceResponseEntity>) -> Void) {
+    public func enrollVoiceRecognition(sub: String, voice: Data, statusId: String, callback: @escaping(Result<EnrollVoiceResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
             let enrollVoiceEntity = EnrollVoiceEntity()
             enrollVoiceEntity.statusId = statusId
             
-            VoiceVerificationController.shared.enrollVoiceRecognition(access_token: access_token, voice: voice, enrollVoiceEntity: enrollVoiceEntity, properties: savedProp!, callback: callback)
+            VoiceVerificationController.shared.enrollVoiceRecognition(sub: sub, access_token: "", voice: voice, enrollVoiceEntity: enrollVoiceEntity, properties: savedProp!, callback: callback)
+        }
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // scanned TOTP from plist
+    // 1. Read properties from file
+    // 2. Call scannedTOTP method
+    // 3. Maintain logs based on flags
+    
+    public func scannedTOTP(statusId: String, callback: @escaping(Result<ScannedTOTPResponseEntity>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            TOTPVerificationController.shared.scannedTOTP(statusId: statusId, properties: savedProp!, callback: callback)
         }
         else {
             // log error
@@ -1783,6 +1811,32 @@ public class Cidaas {
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
             UsersController.shared.getUserInfo(sub: sub, properties: savedProp!, callback: callback)
+        }
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // get endpoints
+    // 1. Call getEndpoints method
+    
+    public func getEndpoints(callback: @escaping(Result<EndpointsResponseEntity>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            SettingsController.shared.getEndpoints(properties: savedProp!, callback: callback)
         }
         else {
             // log error

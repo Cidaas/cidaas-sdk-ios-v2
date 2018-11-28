@@ -285,7 +285,7 @@ public class PushVerificationController {
     
     // Web to Mobile
     // enroll push from properties
-    public func enrollPush(access_token: String, enrollPushEntity: EnrollPushEntity, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<EnrollPushResponseEntity>) -> Void) {
+    public func enrollPush(sub: String = "", access_token: String, enrollPushEntity: EnrollPushEntity, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<EnrollPushResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil || properties["ClientId"] == "" || properties["ClientId"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -313,11 +313,43 @@ public class PushVerificationController {
             return
         }
         
+        if access_token == "" {
+            if sub == "" {
+                let error = WebAuthError.shared.propertyMissingException()
+                error.errorMessage = "access_token or sub must not be empty"
+                DispatchQueue.main.async {
+                    callback(Result.failure(error: error))
+                }
+                return
+            }
+        }
+        
         // default set intermediate id to empty
         Cidaas.intermediate_verifiation_id = intermediate_id
         self.verificationType = VerificationTypes.PUSH.rawValue
         self.authenticationType = AuthenticationTypes.CONFIGURE.rawValue
         
+        
+        if access_token == "" {
+            Cidaas.shared.getAccessToken(sub: sub) {
+                switch $0 {
+                case .success(let successResponse):
+                    self.enrollPushAPI(access_token: successResponse.data.access_token, enrollPushEntity: enrollPushEntity, properties: properties, callback: callback)
+                    break
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        callback(Result.failure(error: error))
+                    }
+                    break
+                }
+            }
+        }
+        else {
+            self.enrollPushAPI(access_token: access_token, enrollPushEntity: enrollPushEntity, properties: properties, callback: callback)
+        }
+    }
+    
+    private func enrollPushAPI(access_token: String, enrollPushEntity: EnrollPushEntity, properties: Dictionary<String, String>, callback: @escaping(Result<EnrollPushResponseEntity>) -> Void) {
         // call enroll service
         PushVerificationService.shared.enrollPush(accessToken:access_token, enrollPushEntity: enrollPushEntity, properties: properties) {
             switch $0 {

@@ -280,7 +280,7 @@ public class VoiceVerificationController {
     
     // Web to Mobile
     // enroll Voice from properties
-    public func enrollVoiceRecognition(access_token: String, voice: Data, enrollVoiceEntity: EnrollVoiceEntity, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<EnrollVoiceResponseEntity>) -> Void) {
+    public func enrollVoiceRecognition(sub: String = "", access_token: String, voice: Data, enrollVoiceEntity: EnrollVoiceEntity, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<EnrollVoiceResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil || properties["ClientId"] == "" || properties["ClientId"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -308,11 +308,42 @@ public class VoiceVerificationController {
             return
         }
         
+        if access_token == "" {
+            if sub == "" {
+                let error = WebAuthError.shared.propertyMissingException()
+                error.errorMessage = "access_token or sub must not be empty"
+                DispatchQueue.main.async {
+                    callback(Result.failure(error: error))
+                }
+                return
+            }
+        }
+        
         // default set intermediate id to empty
         Cidaas.intermediate_verifiation_id = intermediate_id
         self.verificationType = VerificationTypes.VOICE.rawValue
         self.authenticationType = AuthenticationTypes.CONFIGURE.rawValue
         
+        if access_token == "" {
+            Cidaas.shared.getAccessToken(sub: sub) {
+                switch $0 {
+                case .success(let successResponse):
+                    self.enrollVoiceAPI(access_token: successResponse.data.access_token, voice: voice, enrollVoiceEntity: enrollVoiceEntity, properties: properties, callback: callback)
+                    break
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        callback(Result.failure(error: error))
+                    }
+                    break
+                }
+            }
+        }
+        else {
+            self.enrollVoiceAPI(access_token: access_token, voice: voice, enrollVoiceEntity: enrollVoiceEntity, properties: properties, callback: callback)
+        }
+    }
+    
+    private func enrollVoiceAPI(access_token: String, voice: Data, enrollVoiceEntity: EnrollVoiceEntity, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<EnrollVoiceResponseEntity>) -> Void) {
         // call enroll service
         VoiceVerificationService.shared.enrollVoice(accessToken:access_token, voice: voice, enrollVoiceEntity: enrollVoiceEntity, properties: properties) {
             switch $0 {
@@ -389,7 +420,6 @@ public class VoiceVerificationController {
             }
         }
     }
-    
     
     // login with Voice from properties
     public func loginWithVoice(email : String, mobile: String, sub: String, trackId: String, requestId: String, voice: Data, usageType: String, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
