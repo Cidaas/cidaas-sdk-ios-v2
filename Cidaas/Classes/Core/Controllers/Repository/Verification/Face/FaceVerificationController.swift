@@ -281,7 +281,7 @@ public class FaceVerificationController {
     
     // Web to Mobile
     // enroll Face from properties
-    public func enrollFaceRecognition(access_token: String, photo: UIImage, enrollFaceEntity: EnrollFaceEntity, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<EnrollFaceResponseEntity>) -> Void) {
+    public func enrollFaceRecognition(sub: String = "", access_token: String, photo: UIImage, enrollFaceEntity: EnrollFaceEntity, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<EnrollFaceResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil || properties["ClientId"] == "" || properties["ClientId"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -309,11 +309,42 @@ public class FaceVerificationController {
             return
         }
         
+        if access_token == "" {
+            if sub == "" {
+                let error = WebAuthError.shared.propertyMissingException()
+                error.errorMessage = "access_token or sub must not be empty"
+                DispatchQueue.main.async {
+                    callback(Result.failure(error: error))
+                }
+                return
+            }
+        }
+        
         // default set intermediate id to empty
         Cidaas.intermediate_verifiation_id = intermediate_id
         self.verificationType = VerificationTypes.FACE.rawValue
         self.authenticationType = AuthenticationTypes.CONFIGURE.rawValue
         
+        if access_token == "" {
+            Cidaas.shared.getAccessToken(sub: sub) {
+                switch $0 {
+                case .success(let successResponse):
+                    self.enrollFaceAPI(access_token: successResponse.data.access_token, photo: photo, enrollFaceEntity: enrollFaceEntity, properties: properties, callback: callback)
+                    break
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        callback(Result.failure(error: error))
+                    }
+                    break
+                }
+            }
+        }
+        else {
+            self.enrollFaceAPI(access_token: access_token, photo: photo, enrollFaceEntity: enrollFaceEntity, properties: properties, callback: callback)
+        }
+    }
+    
+    private func enrollFaceAPI(access_token: String, photo: UIImage, enrollFaceEntity: EnrollFaceEntity, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<EnrollFaceResponseEntity>) -> Void) {
         // call enroll service
         FaceVerificationService.shared.enrollFace(accessToken:access_token, photo: photo, enrollFaceEntity: enrollFaceEntity, properties: properties) {
             switch $0 {

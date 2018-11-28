@@ -133,7 +133,7 @@ public class TouchIdVerificationController {
                                         enrollTouchEntity.statusId = self.statusId
                                         
                                         // call scanned TouchId service
-                                        TouchIdVerificationController.shared.enrollToucId(access_token:tokenResponse.data.access_token, enrollTouchEntity: enrollTouchEntity, properties: properties) {
+                                        TouchIdVerificationController.shared.enrollTouchId(access_token:tokenResponse.data.access_token, enrollTouchEntity: enrollTouchEntity, properties: properties) {
                                             switch $0 {
                                             case .failure(let error):
                                                 // return failure callback
@@ -283,7 +283,7 @@ public class TouchIdVerificationController {
     
     // Web to Mobile
     // enroll Touch Id from properties
-    public func enrollToucId(access_token: String, enrollTouchEntity: EnrollTouchEntity, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<EnrollTouchResponseEntity>) -> Void) {
+    public func enrollTouchId(sub: String = "", access_token: String, enrollTouchEntity: EnrollTouchEntity, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<EnrollTouchResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil || properties["ClientId"] == "" || properties["ClientId"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -311,11 +311,42 @@ public class TouchIdVerificationController {
             return
         }
         
+        if access_token == "" {
+            if sub == "" {
+                let error = WebAuthError.shared.propertyMissingException()
+                error.errorMessage = "access_token or sub must not be empty"
+                DispatchQueue.main.async {
+                    callback(Result.failure(error: error))
+                }
+                return
+            }
+        }
+        
         // default set intermediate id to empty
         Cidaas.intermediate_verifiation_id = intermediate_id
         self.verificationType = VerificationTypes.TOUCH.rawValue
         self.authenticationType = AuthenticationTypes.CONFIGURE.rawValue
         
+        if access_token == "" {
+            Cidaas.shared.getAccessToken(sub: sub) {
+                switch $0 {
+                case .success(let successResponse):
+                    self.enrollTouchAPI(access_token: successResponse.data.access_token, enrollTouchEntity: enrollTouchEntity, properties: properties, callback: callback)
+                    break
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        callback(Result.failure(error: error))
+                    }
+                    break
+                }
+            }
+        }
+        else {
+            self.enrollTouchAPI(access_token: access_token, enrollTouchEntity: enrollTouchEntity, properties: properties, callback: callback)
+        } 
+    }
+    
+    private func enrollTouchAPI(access_token: String, enrollTouchEntity: EnrollTouchEntity, properties: Dictionary<String, String>, callback: @escaping(Result<EnrollTouchResponseEntity>) -> Void) {
         // call enroll service
         TouchIdVerificationService.shared.enrollTouchId(accessToken:access_token, enrollTouchIdEntity: enrollTouchEntity, properties: properties) {
             switch $0 {
@@ -392,7 +423,6 @@ public class TouchIdVerificationController {
             }
         }
     }
-    
     
     // login with TouchId from properties
     public func loginWithTouchId(email : String, mobile: String, sub: String, trackId: String, requestId: String, usageType: String, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
