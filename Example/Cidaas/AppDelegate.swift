@@ -7,9 +7,7 @@
 //
 
 import UIKit
-import IQKeyboardManagerSwift
 import Cidaas
-import UserNotifications
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -18,12 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        IQKeyboardManager.sharedManager().enable = true
         Cidaas.shared.ENABLE_LOG = true
-        
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { (permissionGranted, error) in
-            print (error ?? "")
-        }
         
         return true
     }
