@@ -220,4 +220,7 @@ public class StringsHelper {
     public var DELETE_VERIFICATION_SERVICE_FAILURE: String = "Delete verification service failure"
     
     public var END_POINTS_SERVICE_FAILURE: String = "Well known openid config service failure"
+    public var DENY_REQUEST_SERVICE_FAILURE: String = "Deny request service failure"
+    public var UPDATE_FCM_SERVICE_FAILURE: String = "Update FCM token service failure"
+    public var PENDING_NOTIFICATION_LIST_SERVICE_FAILURE: String = "Pending notification service failure"
 }

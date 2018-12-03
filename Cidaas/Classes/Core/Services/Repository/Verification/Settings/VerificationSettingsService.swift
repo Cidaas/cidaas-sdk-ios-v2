@@ -314,7 +314,7 @@ public class VerificationSettingsService {
     }
     
     // delete verification
-    public func deleteVerification(userDeviceId: String, verificationType: String, properties : Dictionary<String, String>, callback: @escaping(Result<DeleteResponseEntity>) -> Void) {
+    public func deleteVerification(accessToken: String, userDeviceId: String, verificationType: String, properties : Dictionary<String, String>, callback: @escaping(Result<DeleteResponseEntity>) -> Void) {
         // local variables
         var headers : HTTPHeaders
         var urlString : String
@@ -329,7 +329,8 @@ public class VerificationSettingsService {
             "deviceId": deviceInfoEntity.deviceId,
             "deviceMake": deviceInfoEntity.deviceMake,
             "deviceModel": deviceInfoEntity.deviceModel,
-            "deviceVersion": deviceInfoEntity.deviceVersion
+            "deviceVersion": deviceInfoEntity.deviceVersion,
+            "access_token": accessToken
         ]
         
         // assign base url
@@ -404,7 +405,7 @@ public class VerificationSettingsService {
     }
     
     // delete all verification by tenant
-    public func deleteAllVerification(userDeviceId: String, properties : Dictionary<String, String>, callback: @escaping(Result<DeleteResponseEntity>) -> Void) {
+    public func deleteAllVerification(accessToken: String, userDeviceId: String, properties : Dictionary<String, String>, callback: @escaping(Result<DeleteResponseEntity>) -> Void) {
         // local variables
         var headers : HTTPHeaders
         var urlString : String
@@ -419,7 +420,8 @@ public class VerificationSettingsService {
             "deviceId": deviceInfoEntity.deviceId,
             "deviceMake": deviceInfoEntity.deviceMake,
             "deviceModel": deviceInfoEntity.deviceModel,
-            "deviceVersion": deviceInfoEntity.deviceVersion
+            "deviceVersion": deviceInfoEntity.deviceVersion,
+            "access_token": accessToken
         ]
         
         // assign base url

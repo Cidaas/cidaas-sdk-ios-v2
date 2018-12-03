@@ -109,16 +109,15 @@ public class URLHelper {
     public var linkUserURL = "/users-srv/user/linkaccount"
     public var linkedUsersURL = "/users-srv/userinfo/social"
     public var unlinkUserURL = "/users-srv/user/unlinkaccount"
-    
     public var locationListURL = "/access-control-srv/location/list"
     public var locationEmissionURL = "/access-control-srv/notification/locationchange"
-    
     public var beaconListURL = "/access-control-srv/devices/beacons/configs"
     public var beaconEmissionURL = "/access-control-srv/notification/beaconemit"
-    
     public var socialURL = "/login-srv/social/token"
-    
     public var endpointsURL = "/.well-known/openid-configuration"
+    public var denyRequestURL = "/verification-srv/notification/reject"
+    public var updateFCMTokenURL = "/devices-srv/device/updatefcm"
+    public var pendingNotificationListURL = "/verification-srv/notification/initiated"
     
     public func getRequestIdURL() -> String {
         return requestIdURL
@@ -126,6 +125,18 @@ public class URLHelper {
     
     public func getEndpointsURL() -> String {
         return endpointsURL
+    }
+    
+    public func getDenyRequestURL() -> String {
+        return denyRequestURL
+    }
+    
+    public func getUpdateFCMTokenURL() -> String {
+        return updateFCMTokenURL
+    }
+    
+    public func getPendingNotificationListURL(userDeviceId: String) -> String {
+        return pendingNotificationListURL + "/" + userDeviceId
     }
     
     public func getLocationListURL() -> String {
