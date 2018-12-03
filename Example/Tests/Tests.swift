@@ -20,10 +20,6 @@ class GeneralTests: QuickSpec {
                     cidaas.ENABLE_PKCE = true
                 }
 
-                it("set fcm") {
-                    cidaas.FCM_TOKEN = "adasdasdasdasddfskjahdukqguqe"
-                }
-
                 it("set user device id") {
                     let userDeviceId = "72846746545"
                     let properties = DBHelper.shared.getPropertyFile()

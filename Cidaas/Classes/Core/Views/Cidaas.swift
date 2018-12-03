@@ -56,18 +56,6 @@ public class Cidaas {
         }
     }
 
-    public var FCM_TOKEN : String {
-        get {
-            self.fcmToken = DBHelper.shared.getFCM()
-            return self.fcmToken
-        }
-        
-        set(fcmtoken) {
-            DBHelper.shared.setFCM(fcmToken: fcmtoken)
-            self.fcmToken = fcmtoken
-        }
-    }
-
 // -------------------------------------------------------------------------------------------------- //
     
     // constructor
@@ -210,6 +198,31 @@ public class Cidaas {
         if let intermediate_id = (userInfo as NSDictionary).value(forKey: "usage_pass") as! String? {
             Cidaas.intermediate_verifiation_id = intermediate_id
         }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // set fcm token
+    public func setFCMToken(sub: String, fcmToken: String) {
+        self.fcmToken = DBHelper.shared.getFCM()
+        DBHelper.shared.setFCM(fcmToken: fcmToken)
+        if self.fcmToken != fcmToken {
+            self.updateFCMToken(sub: sub, fcmId: fcmToken) {
+                switch $0 {
+                    case .failure(let error):
+                        // log error
+                        let loggerMessage = "Update FCM failure : " + "Error Code -  10001, Error Message - " + error.errorMessage
+                        logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                        break
+                    case .success(let successResponse):
+                        // log success
+                        let loggerMessage = "Update FCM success : " + "Status  - " + String(describing: successResponse.status)
+                        logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                        break
+                }
+            }
+        }
+        self.fcmToken = fcmToken
     }
     
 // -------------------------------------------------------------------------------------------------- //
@@ -2382,6 +2395,146 @@ public class Cidaas {
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
             LocationController.shared.emitBeacon(beaconEmission: beaconEmission, properties: savedProp!, callback: callback)
+        }
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // delete verification by type from plist
+    // 1. Read properties from file
+    // 2. Call deleteVerificationByType method
+    // 3. Maintain logs based on flags
+    
+    public func deleteVerificationByType(sub: String, verificationType: String, callback: @escaping(Result<DeleteResponseEntity>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            VerificationSettingsController.shared.deleteVerificationByType(sub: sub, verificationType: verificationType, properties: savedProp!, callback: callback)
+        }
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // delete verification by Device from plist
+    // 1. Read properties from file
+    // 2. Call deleteVerificationByDevice method
+    // 3. Maintain logs based on flags
+    
+    public func deleteVerificationByDevice(sub: String, callback: @escaping(Result<DeleteResponseEntity>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            VerificationSettingsController.shared.deleteVerificationByDevice(sub: sub, properties: savedProp!, callback: callback)
+        }
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // update fcm token from plist
+    // 1. Read properties from file
+    // 2. Call updateFCMToken method
+    // 3. Maintain logs based on flags
+    
+    public func updateFCMToken(sub: String, fcmId: String, callback: @escaping(Result<UpdateFCMTokenResponseEntity>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            SettingsController.shared.updateFCMToken(sub: sub, fcmId: fcmId, properties: savedProp!, callback: callback)
+        }
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // get pending notification from plist
+    // 1. Read properties from file
+    // 2. Call getPendingNotifications method
+    // 3. Maintain logs based on flags
+    
+    public func getPendingNotifications(sub: String, fcmId: String, callback: @escaping(Result<PendingNotificationListResponseEntity>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            SettingsController.shared.getPendingNotification(sub: sub, properties: savedProp!, callback: callback)
+        }
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // deny notification request from plist
+    // 1. Read properties from file
+    // 2. Call denyNotificationRequest method
+    // 3. Maintain logs based on flags
+    
+    public func denyNotificationRequest(sub: String, statusId: String, rejectReason: String, callback: @escaping(Result<DenyNotificationResponseEntity>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            SettingsController.shared.denyNotificationRequest(sub: sub, statusId: statusId, rejectReason: rejectReason, properties: savedProp!, callback: callback)
         }
         else {
             // log error

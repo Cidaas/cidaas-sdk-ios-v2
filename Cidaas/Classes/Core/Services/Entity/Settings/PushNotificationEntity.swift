@@ -1,0 +1,146 @@
+//
+//  PushNotificationEntity.swift
+//  Cidaas
+//
+//  Created by ganesh on 30/11/18.
+//
+
+import Foundation
+
+public class PushNotificationEntity : Codable {
+    public var requestTime : Int64 = 0
+    public var physicalVerificationId : String = ""
+    public var statusId : String = ""
+    public var sub : String = ""
+    public var verificationType : String = ""
+    public var randomNumbers : String = ""
+    public var address : PushAddress = PushAddress()
+    public var deviceInfo : PushDeviceInfo = PushDeviceInfo()
+    
+    public init() {
+        
+    }
+    
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.requestTime = try container.decodeIfPresent(Int64.self, forKey: .requestTime) ?? 0
+        self.physicalVerificationId = try container.decodeIfPresent(String.self, forKey: .physicalVerificationId) ?? ""
+        self.statusId = try container.decodeIfPresent(String.self, forKey: .statusId) ?? ""
+        self.sub = try container.decodeIfPresent(String.self, forKey: .sub) ?? ""
+        self.verificationType = try container.decodeIfPresent(String.self, forKey: .verificationType) ?? ""
+        self.randomNumbers = try container.decodeIfPresent(String.self, forKey: .randomNumbers) ?? ""
+        self.address = try container.decodeIfPresent(PushAddress.self, forKey: .address) ?? PushAddress()
+        self.deviceInfo = try container.decodeIfPresent(PushDeviceInfo.self, forKey: .deviceInfo) ?? PushDeviceInfo()
+    }
+}
+
+
+public class PushDeviceInfo : Codable {
+    public var os : PushOS = PushOS()
+    public var browser : PushBrowser = PushBrowser()
+    public var engine : PushEngine = PushEngine()
+    public var deviceMake : String = ""
+    public var deviceModel : String = ""
+    public var userAgent : String = ""
+    
+    public init() {
+        
+    }
+    
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.os = try container.decodeIfPresent(PushOS.self, forKey: .os) ?? PushOS()
+        self.browser = try container.decodeIfPresent(PushBrowser.self, forKey: .browser) ?? PushBrowser()
+        self.engine = try container.decodeIfPresent(PushEngine.self, forKey: .engine) ?? PushEngine()
+        self.deviceMake = try container.decodeIfPresent(String.self, forKey: .deviceMake) ?? ""
+        self.deviceModel = try container.decodeIfPresent(String.self, forKey: .deviceModel) ?? ""
+        self.userAgent = try container.decodeIfPresent(String.self, forKey: .userAgent) ?? ""
+    }
+}
+
+public class PushAddress : Codable {
+    public var zipcode : String = ""
+    public var country_short : String = ""
+    public var ip_no : String = ""
+    public var formattedAddress : String = ""
+    public var city : String = ""
+    public var ip : String = ""
+    public var latitude : Double = 0.0
+    public var region : String = ""
+    public var country_long : String = ""
+    public var longitude : Double = 0.0
+    public var status : String = ""
+    public var street: String = ""
+    public var houseNo: String = ""
+    public var resolver: String = ""
+    
+    
+    public init() {
+        
+    }
+    
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.zipcode = try container.decodeIfPresent(String.self, forKey: .zipcode) ?? ""
+        self.country_short = try container.decodeIfPresent(String.self, forKey: .country_short) ?? ""
+        self.ip_no = try container.decodeIfPresent(String.self, forKey: .ip_no) ?? ""
+        self.formattedAddress = try container.decodeIfPresent(String.self, forKey: .formattedAddress) ?? ""
+        self.city = try container.decodeIfPresent(String.self, forKey: .city) ?? ""
+        self.ip = try container.decodeIfPresent(String.self, forKey: .ip) ?? ""
+        self.latitude = try container.decodeIfPresent(Double.self, forKey: .latitude) ?? 0.0
+        self.region = try container.decodeIfPresent(String.self, forKey: .region) ?? ""
+        self.country_long = try container.decodeIfPresent(String.self, forKey: .country_long) ?? ""
+        self.longitude = try container.decodeIfPresent(Double.self, forKey: .longitude) ?? 0.0
+        self.status = try container.decodeIfPresent(String.self, forKey: .status) ?? ""
+        self.street = try container.decodeIfPresent(String.self, forKey: .street) ?? ""
+        self.houseNo = try container.decodeIfPresent(String.self, forKey: .houseNo) ?? ""
+        self.resolver = try container.decodeIfPresent(String.self, forKey: .resolver) ?? ""
+    }
+}
+
+public class PushBrowser : Codable {
+    public var major : String = ""
+    public var name : String = ""
+    public var version : String = ""
+    
+    public init() {
+        
+    }
+    
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.major = try container.decodeIfPresent(String.self, forKey: .major) ?? ""
+        self.name = try container.decodeIfPresent(String.self, forKey: .name) ?? ""
+        self.version = try container.decodeIfPresent(String.self, forKey: .version) ?? ""
+    }
+}
+
+public class PushOS : Codable {
+    public var name : String = ""
+    public var version : String = ""
+    
+    public init() {
+        
+    }
+    
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.name = try container.decodeIfPresent(String.self, forKey: .name) ?? ""
+        self.version = try container.decodeIfPresent(String.self, forKey: .version) ?? ""
+    }
+}
+
+public class PushEngine : Codable {
+    public var name : String = ""
+    public var version : String = ""
+    
+    public init() {
+        
+    }
+    
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.name = try container.decodeIfPresent(String.self, forKey: .name) ?? ""
+        self.version = try container.decodeIfPresent(String.self, forKey: .version) ?? ""
+    }
+}
