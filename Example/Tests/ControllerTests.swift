@@ -187,7 +187,7 @@ class ControllerTests: QuickSpec {
                     })
                 }
                 
-                it("call get access token from sub from local db controller") {
+                xit("call get access token from sub from local db controller") {
                     
                     let controller = AccessTokenController.shared
                     
