@@ -203,12 +203,14 @@ public class Cidaas {
 // -------------------------------------------------------------------------------------------------- //
     
     // set fcm token
-    public func setFCMToken(sub: String, fcmToken: String) {
+    public func setFCMToken(sub: String = "", fcmToken: String) {
         self.fcmToken = DBHelper.shared.getFCM()
         DBHelper.shared.setFCM(fcmToken: fcmToken)
-        if self.fcmToken != fcmToken {
-            self.updateFCMToken(sub: sub, fcmId: fcmToken) {
-                switch $0 {
+        
+        if sub != "" {
+            if self.fcmToken != fcmToken {
+                self.updateFCMToken(sub: sub, fcmId: fcmToken) {
+                    switch $0 {
                     case .failure(let error):
                         // log error
                         let loggerMessage = "Update FCM failure : " + "Error Code -  10001, Error Message - " + error.errorMessage
@@ -219,6 +221,7 @@ public class Cidaas {
                         let loggerMessage = "Update FCM success : " + "Status  - " + String(describing: successResponse.status)
                         logw(loggerMessage, cname: "cidaas-sdk-success-log")
                         break
+                    }
                 }
             }
         }
