@@ -49,6 +49,9 @@ public class URLHelper {
     public var setupTOTPURL = "/verification-srv/totp/setup"
     public var enrollTOTPURL = "/verification-srv/totp/enroll"
     
+    public var deleteVerificationURL = "/verification-srv/settings/delete/"
+    public var deleteAllVerificationURL = "/verification-srv/settings/deleteall/"
+    
     public var authenticateBackupcodeURL = "/verification-srv/backupcode/authenticate"
     public var authenticateTOTPURL = "/verification-srv/totp/authenticate"
     public var mfaContinueURL = "/login-srv/precheck/continue/sdk"
@@ -106,17 +109,34 @@ public class URLHelper {
     public var linkUserURL = "/users-srv/user/linkaccount"
     public var linkedUsersURL = "/users-srv/userinfo/social"
     public var unlinkUserURL = "/users-srv/user/unlinkaccount"
-    
     public var locationListURL = "/access-control-srv/location/list"
     public var locationEmissionURL = "/access-control-srv/notification/locationchange"
-    
     public var beaconListURL = "/access-control-srv/devices/beacons/configs"
     public var beaconEmissionURL = "/access-control-srv/notification/beaconemit"
-    
     public var socialURL = "/login-srv/social/token"
+    public var endpointsURL = "/.well-known/openid-configuration"
+    public var denyRequestURL = "/verification-srv/notification/reject"
+    public var updateFCMTokenURL = "/devices-srv/device/updatefcm"
+    public var pendingNotificationListURL = "/verification-srv/notification/initiated"
     
     public func getRequestIdURL() -> String {
         return requestIdURL
+    }
+    
+    public func getEndpointsURL() -> String {
+        return endpointsURL
+    }
+    
+    public func getDenyRequestURL() -> String {
+        return denyRequestURL
+    }
+    
+    public func getUpdateFCMTokenURL() -> String {
+        return updateFCMTokenURL
+    }
+    
+    public func getPendingNotificationListURL(userDeviceId: String) -> String {
+        return pendingNotificationListURL + "/" + userDeviceId
     }
     
     public func getLocationListURL() -> String {
@@ -159,8 +179,12 @@ public class URLHelper {
         return acceptConsentURL
     }
     
-    public func getMFAListURL(sub: String, userDeviceId: String) -> String {
-        return "\(mfaListURL)?sub=\(sub)&userDeviceId=\(userDeviceId)&common_configs=true"
+    public func getMFAListURL(sub: String, userDeviceId: String, common_config: Bool) -> String {
+        
+        if (common_config == false) {
+            return "\(mfaListURL)?sub=\(sub)&userDeviceId=\(userDeviceId)"
+        }
+        return "\(mfaListURL)?sub=\(sub)&userDeviceId=\(userDeviceId)&common_configs=\(common_config)"
     }
     
     public func getSetupEmailURL() -> String {
@@ -237,6 +261,14 @@ public class URLHelper {
     
     public func getAuthenticateBackupcodeURL() -> String {
         return authenticateBackupcodeURL
+    }
+    
+    public func getDeleteVerificationURL(userDeviceId: String, verificationType: String) -> String {
+        return deleteVerificationURL + userDeviceId + "/" + verificationType.uppercased()
+    }
+    
+    public func getDeleteAllVerificationURL(userDeviceId: String) -> String {
+        return deleteAllVerificationURL + userDeviceId
     }
     
     public func getAuthenticateTOTPURL() -> String {

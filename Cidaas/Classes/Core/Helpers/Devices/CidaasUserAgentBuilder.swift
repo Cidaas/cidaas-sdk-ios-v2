@@ -43,7 +43,8 @@ public class CidaasUserAgentBuilder {
     func appNameAndVersion() -> String {
         let dictionary = Bundle.main.infoDictionary!
         let version = dictionary["CFBundleShortVersionString"] as! String
-        let name = dictionary["CFBundleDisplayName"] as! String
+        var name = dictionary["CFBundleDisplayName"] as! String
+        name = name.replacingOccurrences(of: " ", with: "_")
         return "\(name)/\(version)"
     }
     

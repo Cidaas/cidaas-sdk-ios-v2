@@ -20,10 +20,6 @@ class GeneralTests: QuickSpec {
                     cidaas.ENABLE_PKCE = true
                 }
 
-                it("set fcm") {
-                    cidaas.FCM_TOKEN = "adasdasdasdasddfskjahdukqguqe"
-                }
-
                 it("set user device id") {
                     let userDeviceId = "72846746545"
                     let properties = DBHelper.shared.getPropertyFile()
@@ -59,7 +55,7 @@ class GeneralTests: QuickSpec {
                     cidaas.readPropertyFile()
                 }
 
-                it("call get access token by sub from public") {
+                xit("call get access token by sub from public") {
 
                     cidaas.getAccessToken(sub: "234234234234") {
                         switch $0 {
@@ -71,7 +67,7 @@ class GeneralTests: QuickSpec {
                     }
                 }
                 
-                it("call get access token by sub failure from public") {
+                xit("call get access token by sub failure from public") {
                     
                     DBHelper.shared.userDefaults.removeObject(forKey: "OAuthProperty")
                     
@@ -87,7 +83,7 @@ class GeneralTests: QuickSpec {
                     cidaas.readPropertyFile()
                 }
 
-                it("call get access token by refresh token from public") {
+                xit("call get access token by refresh token from public") {
 
                     cidaas.getAccessToken(refreshToken: "234234234234") {
                         switch $0 {
@@ -99,7 +95,7 @@ class GeneralTests: QuickSpec {
                     }
                 }
                 
-                it("call get access token by refresh token failure from public") {
+                xit("call get access token by refresh token failure from public") {
                     
                     DBHelper.shared.userDefaults.removeObject(forKey: "OAuthProperty")
                     
@@ -339,7 +335,12 @@ class GeneralTests: QuickSpec {
                     cidaas.cancelListenTOTP()
                 }
                 
-                it("call get access token by code from controller") {
+                it("call cancel listening TOTP from public") {
+                    let useragent = CidaasUserAgentBuilder.shared.UAString()
+                    print(useragent)
+                }
+                
+                xit("call get access token by code from controller") {
                     
                     accessTokenController.getAccessToken(code: "234234234234") {
                         switch $0 {

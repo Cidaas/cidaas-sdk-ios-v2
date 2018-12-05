@@ -36,9 +36,7 @@ public class PushVerificationService {
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
             "verification_api_version" : "2",
-            "access_token" : accessToken,
-            "access_challenge" : properties["Challenge"] ?? "",
-            "access_challenge_method" : properties["Method"] ?? ""
+            "access_token" : accessToken
         ]
         deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
         setupPushEntity.deviceInfo = deviceInfoEntity
@@ -124,7 +122,7 @@ public class PushVerificationService {
     }
     
     // scanned push
-    public func scannedPush(accessToken: String, scannedPushEntity: ScannedPushEntity, properties : Dictionary<String, String>, callback: @escaping(Result<ScannedPushResponseEntity>) -> Void) {
+    public func scannedPush(scannedPushEntity: ScannedPushEntity, properties : Dictionary<String, String>, callback: @escaping(Result<ScannedPushResponseEntity>) -> Void) {
         // local variables
         var headers : HTTPHeaders
         var urlString : String
@@ -139,13 +137,12 @@ public class PushVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
-            "verification_api_version" : "2",
-            "access_token" : accessToken
+            "verification_api_version" : "2"
         ]
         
         deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
         scannedPushEntity.deviceInfo = deviceInfoEntity
-        
+        scannedPushEntity.client_id = properties["ClientId"] ?? ""
         
         // construct body params
         var bodyParams = Dictionary<String, Any>()
@@ -248,7 +245,7 @@ public class PushVerificationService {
         
         deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
         enrollPushEntity.deviceInfo = deviceInfoEntity
-        
+        enrollPushEntity.client_id = properties["ClientId"] ?? ""
         
         // construct body params
         var bodyParams = Dictionary<String, Any>()
@@ -345,9 +342,7 @@ public class PushVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
-            "verification_api_version" : "2",
-            "access_challenge" : properties["Challenge"] ?? "",
-            "access_challenge_method" : properties["Method"] ?? ""
+            "verification_api_version" : "2"
         ]
         
         deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
@@ -451,6 +446,7 @@ public class PushVerificationService {
         
         deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
         authenticatePushEntity.deviceInfo = deviceInfoEntity
+        authenticatePushEntity.client_id = properties["ClientId"] ?? ""
         
         // construct body params
         var bodyParams = Dictionary<String, Any>()

@@ -12,86 +12,86 @@ import Foundation
 public enum Hardware {
     case notAvailable
     
-    case iphone2g
-    case iphone3g
-    case iphone3gs
+    case iPhone2g
+    case iPhone3g
+    case iPhone3gs
     
-    case iphone4
-    case iphone4_cdma
-    case iphone4s
+    case iPhone4
+    case iPhone4_cdma
+    case iPhone4s
     
-    case iphone5
-    case iphone5_cdma_gsm
-    case iphone5c
-    case iphone5c_cdma_gsm
-    case iphone5s
-    case iphone5s_cdma_gsm
+    case iPhone5
+    case iPhone5_cdma_gsm
+    case iPhone5c
+    case iPhone5c_cdma_gsm
+    case iPhone5s
+    case iPhone5s_cdma_gsm
     
-    case iphone6
-    case iphone6Plus
-    case iphone6s
-    case iphone6sPlus
-    case iphoneSE
+    case iPhone6
+    case iPhone6Plus
+    case iPhone6s
+    case iPhone6sPlus
+    case iPhoneSE
     
-    case iphone7
-    case iphone7Plus
+    case iPhone7
+    case iPhone7Plus
     
-    case iphone8
-    case iphone8_cn
-    case iphone8Plus
-    case iphone8Plus_cn
-    case iphoneX
-    case iphoneX_cn
+    case iPhone8
+    case iPhone8_cn
+    case iPhone8Plus
+    case iPhone8Plus_cn
+    case iPhoneX
+    case iPhoneX_cn
     
-    case ipodTouch1g
-    case ipodTouch2g
-    case ipodTouch3g
-    case ipodTouch4g
-    case ipodTouch5g
-    case ipodTouch6g
+    case iPodTouch1g
+    case iPodTouch2g
+    case iPodTouch3g
+    case iPodTouch4g
+    case iPodTouch5g
+    case iPodTouch6g
     
-    case ipad
-    case ipad2
-    case ipad2_wifi
-    case ipad2_cdma
-    case ipad3
-    case ipad3g
-    case ipad3_wifi
-    case ipad3_wifi_cdma
-    case ipad4
-    case ipad4_wifi
-    case ipad4_gsm_cdma
+    case iPad
+    case iPad2
+    case iPad2_wifi
+    case iPad2_cdma
+    case iPad3
+    case iPad3g
+    case iPad3_wifi
+    case iPad3_wifi_cdma
+    case iPad4
+    case iPad4_wifi
+    case iPad4_gsm_cdma
     
-    case ipadMini
-    case ipadMini_wifi
-    case ipadMini_wifi_cdma
-    case ipadMiniRetina_wifi
-    case ipadMiniRetina_wifi_cdma
-    case ipadMini3_wifi
-    case ipadMini3_wifi_cellular
-    case ipadMini3_wifi_cellular_cn
-    case ipadMini4_wifi
-    case ipadMini4_wifi_cellular
-    case ipadMiniRetina_wifi_cellular_cn
+    case iPadMini
+    case iPadMini_wifi
+    case iPadMini_wifi_cdma
+    case iPadMiniRetina_wifi
+    case iPadMiniRetina_wifi_cdma
+    case iPadMini3_wifi
+    case iPadMini3_wifi_cellular
+    case iPadMini3_wifi_cellular_cn
+    case iPadMini4_wifi
+    case iPadMini4_wifi_cellular
+    case iPadMiniRetina_wifi_cellular_cn
     
-    case ipadAir_wifi
-    case ipadAir_wifi_gsm
-    case ipadAir_wifi_cdma
-    case ipadAir2_wifi
-    case ipadAir2_wifi_cellular
+    case iPadAir_wifi
+    case iPadAir_wifi_gsm
+    case iPadAir_wifi_cdma
+    case iPadAir2_wifi
+    case iPadAir2_wifi_cellular
     
-    case ipadPro_97_wifi
-    case ipadPro_97_wifi_cellular
-    case ipadPro_wifi
-    case ipadPro_wifi_cellular
+    case iPadPro_97_wifi
+    case iPadPro_97_wifi_cellular
+    case iPadPro_wifi
+    case iPadPro_wifi_cellular
     
-    case ipad5_wifi
-    case ipad5_wifi_cellular
+    case iPad5_wifi
+    case iPad5_wifi_cellular
     
-    case ipadPro2g_wifi
-    case ipadPro2g_wifi_cellular
-    case ipadPro_105_wifi
-    case ipadPro_105_wifi_cellular
+    case iPadPro2g_wifi
+    case iPadPro2g_wifi_cellular
+    case iPadPro_105_wifi
+    case iPadPro_105_wifi_cellular
     
     case appleTv1g
     case appleTv2g
@@ -111,9 +111,9 @@ public enum Hardware {
 
 /// Enum of the different Apple's device platforms
 public enum Platform: String {
-    case iPhone = "iphone"
-    case iPodTouch = "ipod"
-    case iPad = "ipad"
+    case iPhone = "iPhone"
+    case iPodTouch = "iPod"
+    case iPad = "iPad"
     case appleTV = "appletv"
     case appleWatch = "watch"
     case unknown = "unknown"

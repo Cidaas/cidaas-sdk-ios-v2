@@ -14,4 +14,8 @@ public enum VerificationTypes : String {
     case FACE = "FACE"
     case VOICE = "VOICE"
     case TOTP = "TOTP"
+    case EMAIL = "EMAIL"
+    case SMS = "SMS"
+    case IVR = "IVR"
+    case BACKUPCODE = "BACKUPCODE"
 }

@@ -35,10 +35,8 @@ public class PatternVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
-            "verification_api_version" : "2",
-            "access_token" : accessToken,
-            "access_challenge" : properties["Challenge"] ?? "",
-            "access_challenge_method" : properties["Method"] ?? ""
+            "verification_api_version": "2",
+            "access_token" : accessToken
         ]
         deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
         setupPatternEntity.deviceInfo = deviceInfoEntity
@@ -124,7 +122,7 @@ public class PatternVerificationService {
     }
     
     // scanned pattern
-    public func scannedPattern(accessToken: String, scannedPatternEntity: ScannedPatternEntity, properties : Dictionary<String, String>, callback: @escaping(Result<ScannedPatternResponseEntity>) -> Void) {
+    public func scannedPattern(scannedPatternEntity: ScannedPatternEntity, properties : Dictionary<String, String>, callback: @escaping(Result<ScannedPatternResponseEntity>) -> Void) {
         // local variables
         var headers : HTTPHeaders
         var urlString : String
@@ -139,13 +137,12 @@ public class PatternVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
-            "verification_api_version" : "2",
-            "access_token" : accessToken
+            "verification_api_version": "2"
         ]
         
         deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
         scannedPatternEntity.deviceInfo = deviceInfoEntity
-        
+        scannedPatternEntity.client_id = properties["ClientId"] ?? ""
         
         // construct body params
         var bodyParams = Dictionary<String, Any>()
@@ -242,13 +239,13 @@ public class PatternVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
-            "verification_api_version" : "2",
+            "verification_api_version": "2",
             "access_token" : accessToken
         ]
         
         deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
         enrollPatternEntity.deviceInfo = deviceInfoEntity
-        
+        enrollPatternEntity.client_id = properties["ClientId"] ?? ""
         
         // construct body params
         var bodyParams = Dictionary<String, Any>()
@@ -345,9 +342,7 @@ public class PatternVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
-            "verification_api_version" : "2",
-            "access_challenge" : properties["Challenge"] ?? "",
-            "access_challenge_method" : properties["Method"] ?? ""
+            "verification_api_version": "2"
         ]
         
         deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
@@ -451,6 +446,7 @@ public class PatternVerificationService {
         
         deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
         authenticatePatternEntity.deviceInfo = deviceInfoEntity
+        authenticatePatternEntity.client_id = properties["ClientId"] ?? ""
         
         // construct body params
         var bodyParams = Dictionary<String, Any>()

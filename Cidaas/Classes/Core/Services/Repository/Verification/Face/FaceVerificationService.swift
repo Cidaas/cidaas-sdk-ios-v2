@@ -36,9 +36,7 @@ public class FaceVerificationService {
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
             "verification_api_version" : "2",
-            "access_token" : accessToken,
-            "access_challenge" : properties["Challenge"] ?? "",
-            "access_challenge_method" : properties["Method"] ?? ""
+            "access_token" : accessToken
         ]
         deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
         setupFaceEntity.deviceInfo = deviceInfoEntity
@@ -124,7 +122,7 @@ public class FaceVerificationService {
     }
     
     // scanned pattern
-    public func scannedFace(accessToken: String, scannedFaceEntity: ScannedFaceEntity, properties : Dictionary<String, String>, callback: @escaping(Result<ScannedFaceResponseEntity>) -> Void) {
+    public func scannedFace(scannedFaceEntity: ScannedFaceEntity, properties : Dictionary<String, String>, callback: @escaping(Result<ScannedFaceResponseEntity>) -> Void) {
         // local variables
         var headers : HTTPHeaders
         var urlString : String
@@ -139,13 +137,12 @@ public class FaceVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
-            "verification_api_version" : "2",
-            "access_token" : accessToken
+            "verification_api_version" : "2"
         ]
         
         deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
         scannedFaceEntity.deviceInfo = deviceInfoEntity
-        
+        scannedFaceEntity.client_id = properties["ClientId"] ?? ""
         
         // construct body params
         var bodyParams = Dictionary<String, Any>()
@@ -248,7 +245,7 @@ public class FaceVerificationService {
         
         deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
         enrollFaceEntity.deviceInfo = deviceInfoEntity
-        
+        enrollFaceEntity.client_id = properties["ClientId"] ?? ""
         
         // construct body params
         var bodyParams = Dictionary<String, String>()
@@ -258,6 +255,8 @@ public class FaceVerificationService {
         bodyParams["deviceMake"] = deviceInfoEntity.deviceMake
         bodyParams["deviceModel"] = deviceInfoEntity.deviceModel
         bodyParams["deviceId"] = deviceInfoEntity.deviceId
+        bodyParams["client_id"] = enrollFaceEntity.client_id
+        bodyParams["usage_pass"] = enrollFaceEntity.usage_pass
         
         // assign base url
         baseURL = (properties["DomainURL"]) ?? ""
@@ -359,9 +358,7 @@ public class FaceVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
-            "verification_api_version" : "2",
-            "access_challenge" : properties["Challenge"] ?? "",
-            "access_challenge_method" : properties["Method"] ?? ""
+            "verification_api_version" : "2"
         ]
         
         deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
@@ -465,6 +462,7 @@ public class FaceVerificationService {
         
         deviceInfoEntity.pushNotificationId = DBHelper.shared.getFCM()
         authenticateFaceEntity.deviceInfo = deviceInfoEntity
+        authenticateFaceEntity.client_id = properties["ClientId"] ?? ""
         
         // construct body params
         var bodyParams = Dictionary<String, String>()
@@ -473,6 +471,8 @@ public class FaceVerificationService {
         bodyParams["deviceMake"] = deviceInfoEntity.deviceMake
         bodyParams["deviceModel"] = deviceInfoEntity.deviceModel
         bodyParams["deviceId"] = deviceInfoEntity.deviceId
+        bodyParams["client_id"] = authenticateFaceEntity.client_id
+        bodyParams["usage_pass"] = authenticateFaceEntity.usage_pass
         
         // assign base url
         baseURL = (properties["DomainURL"]) ?? ""

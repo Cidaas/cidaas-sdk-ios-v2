@@ -88,11 +88,8 @@ public class PushVerificationController {
                         return
                     case .success(let serviceResponse):
                         // log success
-                        let loggerMessage = "Configure Push service success : " + "Status Id  - " + String(describing: serviceResponse.data.statusId) + ", Random Number  - " + String(describing: serviceResponse.data.randomNumber)
+                        let loggerMessage = "Configure Push service success : " + "Current Status  - " + String(describing: serviceResponse.data.current_status)
                         logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                        
-                        self.statusId = serviceResponse.data.statusId
-                        self.randomNumber = serviceResponse.data.randomNumber
                         
                         var timer: Timer = Timer()
                         var timerCount: Int16 = 0
@@ -117,82 +114,50 @@ public class PushVerificationController {
                                 timer.invalidate()
                                 
                                 // construct object
-                                let validateDeviceEntity = ValidateDeviceEntity()
-                                validateDeviceEntity.intermediate_verifiation_id = Cidaas.intermediate_verifiation_id
-                                validateDeviceEntity.statusId = self.statusId
+                                let setupPushEntity = SetupPushEntity()
+                                setupPushEntity.usage_pass = Cidaas.intermediate_verifiation_id
                                 
-                                // call validate device
-                                DeviceVerificationService.shared.validateDevice(validateDeviceEntity: validateDeviceEntity, properties: properties) {
+                                // call setup service with usage pass
+                                PushVerificationService.shared.setupPush(accessToken: tokenResponse.data.access_token, setupPushEntity: setupPushEntity, properties: properties) {
                                     switch $0 {
                                     case .success(let validateDeviceResponse):
                                         // log success
-                                        let loggerMessage = "Validate device success : " + "Usage pass - " + String(describing: validateDeviceResponse.data.usage_pass)
+                                        let loggerMessage = "Setup with usage pass success : " + "Status Id - " + String(describing: validateDeviceResponse.data.st)
                                         logw(loggerMessage, cname: "cidaas-sdk-success-log")
                                         
-                                        let scannedPushEntity = ScannedPushEntity()
-                                        scannedPushEntity.usage_pass = validateDeviceResponse.data.usage_pass
-                                        scannedPushEntity.statusId = self.statusId
+                                        // save user device id based on tenant
+                                        DBHelper.shared.setUserDeviceId(userDeviceId: validateDeviceResponse.data.udi, key: properties["DomainURL"] ?? "OAuthUserDeviceId")
+                                        
+                                        self.randomNumber = validateDeviceResponse.data.prn
+                                        self.statusId = validateDeviceResponse.data.st
+                                        
+                                        let enrollPushEntity = EnrollPushEntity()
+                                        enrollPushEntity.statusId = validateDeviceResponse.data.st
+                                        enrollPushEntity.userDeviceId = validateDeviceResponse.data.udi
+                                        enrollPushEntity.verifierPassword = validateDeviceResponse.data.prn
                                         
                                         // call scanned Push service
-                                        PushVerificationService.shared.scannedPush(accessToken:tokenResponse.data.access_token, scannedPushEntity: scannedPushEntity, properties: properties) {
+                                        PushVerificationController.shared.enrollPush(access_token:tokenResponse.data.access_token, enrollPushEntity: enrollPushEntity, properties: properties) {
                                             switch $0 {
                                             case .failure(let error):
-                                                // log error
-                                                let loggerMessage = "Push Scanned service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                                                logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                                                
                                                 // return failure callback
                                                 DispatchQueue.main.async {
                                                     callback(Result.failure(error: error))
                                                 }
                                                 return
                                             case .success(let serviceResponse):
-                                                // log success
-                                                let loggerMessage = "Scanned Push success : " + "User Device Id - " + String(describing: serviceResponse.data.userDeviceId)
-                                                logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                                                
-                                                // save user device id based on tenant
-                                                DBHelper.shared.setUserDeviceId(userDeviceId: serviceResponse.data.userDeviceId, key: properties["DomainURL"] ?? "OAuthUserDeviceId")
-                                                
-                                                // construct method
-                                                let enrollPushEntity = EnrollPushEntity()
-                                                enrollPushEntity.statusId = self.statusId
-                                                enrollPushEntity.verifierPassword = self.randomNumber
-                                                enrollPushEntity.userDeviceId = serviceResponse.data.userDeviceId
-                                                
-                                                // call enroll service
-                                                PushVerificationService.shared.enrollPush(accessToken:tokenResponse.data.access_token, enrollPushEntity: enrollPushEntity, properties: properties) {
-                                                    switch $0 {
-                                                    case .failure(let error):
-                                                        // log error
-                                                        let loggerMessage = "Enroll Push service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                                                        logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                                                        
-                                                        // return failure callback
-                                                        DispatchQueue.main.async {
-                                                            callback(Result.failure(error: error))
-                                                        }
-                                                        return
-                                                    case .success(let enrollResponse):
-                                                        // log success
-                                                        let loggerMessage = "Enroll Push success : " + "Tracking Code - " + String(describing: enrollResponse.data.trackingCode + ", Sub - " + String(describing: enrollResponse.data.sub))
-                                                        logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                                                        
-                                                        DispatchQueue.main.async {
-                                                            callback(Result.success(result: enrollResponse))
-                                                        }
-                                                    }
+                                                DispatchQueue.main.async {
+                                                    callback(Result.success(result: serviceResponse))
                                                 }
+                                                break
                                             }
                                         }
-                                        
-                                        break
-                                    case .failure(let error):
-                                        // return callback
-                                        DispatchQueue.main.async {
-                                            callback(Result.failure(error: error))
-                                        }
-                                        break
+                                        case .failure(let error):
+                                            // return failure callback
+                                            DispatchQueue.main.async {
+                                                callback(Result.failure(error: error))
+                                            }
+                                            break
                                     }
                                 }
                             }
@@ -202,6 +167,261 @@ public class PushVerificationController {
                         })
                     }
                 }
+            }
+        }
+    }
+    
+    // Web to Mobile
+    // scanned Push from properties
+    public func scannedPush(statusId: String, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<ScannedPushResponseEntity>) -> Void) {
+        // null check
+        if properties["DomainURL"] == "" || properties["DomainURL"] == nil || properties["ClientId"] == "" || properties["ClientId"] == nil {
+            let error = WebAuthError.shared.propertyMissingException()
+            // log error
+            let loggerMessage = "Read properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+        
+        // validating fields
+        if (statusId == "") {
+            let error = WebAuthError.shared.propertyMissingException()
+            error.errorMessage = "statusId must not be empty"
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+        
+        // default set intermediate id to empty
+        Cidaas.intermediate_verifiation_id = intermediate_id
+        self.verificationType = VerificationTypes.PUSH.rawValue
+        self.authenticationType = AuthenticationTypes.CONFIGURE.rawValue
+        
+        // construct object
+        var scannedPushEntity = ScannedPushEntity()
+        scannedPushEntity.statusId = statusId
+        
+        // call setupPush service
+        PushVerificationService.shared.scannedPush(scannedPushEntity: scannedPushEntity, properties: properties) {
+            switch $0 {
+            case .failure(let error):
+                // log error
+                let loggerMessage = "Scanned Push service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                
+                // return failure callback
+                DispatchQueue.main.async {
+                    callback(Result.failure(error: error))
+                }
+                return
+            case .success(let serviceResponse):
+                // log success
+                let loggerMessage = "Scanned Push service success : " + "Current Status  - " + String(describing: serviceResponse.data.current_status)
+                logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                
+                var timer: Timer = Timer()
+                var timerCount: Int16 = 0
+                timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { (timer_response) in
+                    if (timerCount > 10) {
+                        timerCount = 0
+                        timer.invalidate()
+                        
+                        let error = WebAuthError.shared.notificationTimeoutException()
+                        
+                        // log error
+                        let loggerMessage = "Device Verification failure. Notification timeout : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                        logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                        
+                        DispatchQueue.main.async {
+                            callback(Result.failure(error: error))
+                        }
+                        return
+                    }
+                    if (Cidaas.intermediate_verifiation_id != "") {
+                        timerCount = 0
+                        timer.invalidate()
+                        
+                        // construct object
+                        scannedPushEntity = ScannedPushEntity()
+                        scannedPushEntity.usage_pass = Cidaas.intermediate_verifiation_id
+                        
+                        // call validate device
+                        PushVerificationService.shared.scannedPush(scannedPushEntity: scannedPushEntity, properties: properties) {
+                            switch $0 {
+                            case .success(let validateDeviceResponse):
+                                // log success
+                                let loggerMessage = "Scanned Push with usage pass service success : " + "User device Id - " + String(describing: validateDeviceResponse.data.userDeviceId)
+                                logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                                
+                                // save user device id based on tenant
+                                DBHelper.shared.setUserDeviceId(userDeviceId: validateDeviceResponse.data.userDeviceId, key: properties["DomainURL"] ?? "OAuthUserDeviceId")
+                                
+                                DispatchQueue.main.async {
+                                    callback(Result.success(result: validateDeviceResponse))
+                                }
+                                
+                                break
+                            case .failure(let error):
+                                // return callback
+                                DispatchQueue.main.async {
+                                    callback(Result.failure(error: error))
+                                }
+                                break
+                            }
+                        }
+                    }
+                    else {
+                        timerCount = timerCount + 1
+                    }
+                })
+            }
+        }
+    }
+    
+    // Web to Mobile
+    // enroll push from properties
+    public func enrollPush(sub: String = "", access_token: String, enrollPushEntity: EnrollPushEntity, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<EnrollPushResponseEntity>) -> Void) {
+        // null check
+        if properties["DomainURL"] == "" || properties["DomainURL"] == nil || properties["ClientId"] == "" || properties["ClientId"] == nil {
+            let error = WebAuthError.shared.propertyMissingException()
+            // log error
+            let loggerMessage = "Read properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+        
+        if enrollPushEntity.userDeviceId == "" {
+            enrollPushEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomainURL"] ?? "OAuthUserDeviceId")
+        }
+        
+        // validating fields
+        if (enrollPushEntity.statusId == "" || enrollPushEntity.userDeviceId == "" || enrollPushEntity.verifierPassword == "") {
+            let error = WebAuthError.shared.propertyMissingException()
+            error.errorMessage = "statusId or userDeviceId or verifierPassword must not be empty"
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+        
+        if access_token == "" {
+            if sub == "" {
+                let error = WebAuthError.shared.propertyMissingException()
+                error.errorMessage = "access_token or sub must not be empty"
+                DispatchQueue.main.async {
+                    callback(Result.failure(error: error))
+                }
+                return
+            }
+        }
+        
+        // default set intermediate id to empty
+        Cidaas.intermediate_verifiation_id = intermediate_id
+        self.verificationType = VerificationTypes.PUSH.rawValue
+        self.authenticationType = AuthenticationTypes.CONFIGURE.rawValue
+        
+        
+        if access_token == "" {
+            Cidaas.shared.getAccessToken(sub: sub) {
+                switch $0 {
+                case .success(let successResponse):
+                    self.enrollPushAPI(access_token: successResponse.data.access_token, enrollPushEntity: enrollPushEntity, properties: properties, callback: callback)
+                    break
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        callback(Result.failure(error: error))
+                    }
+                    break
+                }
+            }
+        }
+        else {
+            self.enrollPushAPI(access_token: access_token, enrollPushEntity: enrollPushEntity, properties: properties, callback: callback)
+        }
+    }
+    
+    private func enrollPushAPI(access_token: String, enrollPushEntity: EnrollPushEntity, properties: Dictionary<String, String>, callback: @escaping(Result<EnrollPushResponseEntity>) -> Void) {
+        // call enroll service
+        PushVerificationService.shared.enrollPush(accessToken:access_token, enrollPushEntity: enrollPushEntity, properties: properties) {
+            switch $0 {
+            case .failure(let error):
+                // log error
+                let loggerMessage = "Enroll Push service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                
+                // return failure callback
+                DispatchQueue.main.async {
+                    callback(Result.failure(error: error))
+                }
+                return
+            case .success(let enrollResponse):
+                // log success
+                let loggerMessage = "Enroll Push success : " + "Tracking Code - " + String(describing: enrollResponse.data.trackingCode + ", Sub - " + String(describing: enrollResponse.data.sub))
+                logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                
+                var timer: Timer = Timer()
+                var timerCount: Int16 = 0
+                timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { (timer_response) in
+                    if (timerCount > 10) {
+                        timerCount = 0
+                        timer.invalidate()
+                        
+                        let error = WebAuthError.shared.notificationTimeoutException()
+                        
+                        // log error
+                        let loggerMessage = "Device Verification failure. Notification timeout : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                        logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                        
+                        DispatchQueue.main.async {
+                            callback(Result.failure(error: error))
+                        }
+                        return
+                    }
+                    if (Cidaas.intermediate_verifiation_id != "") {
+                        timerCount = 0
+                        timer.invalidate()
+                        
+                        // construct object
+                        let enrollPushEntity = EnrollPushEntity()
+                        enrollPushEntity.usage_pass = Cidaas.intermediate_verifiation_id
+                        
+                        // call enroll service
+                        PushVerificationService.shared.enrollPush(accessToken: access_token, enrollPushEntity: enrollPushEntity, properties: properties) {
+                            switch $0 {
+                            case .failure(let error):
+                                // log error
+                                let loggerMessage = "Enroll Push  with usage pass service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                                logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                                
+                                // return failure callback
+                                DispatchQueue.main.async {
+                                    callback(Result.failure(error: error))
+                                }
+                                return
+                            case .success(let enrollResponse):
+                                // log success
+                                let loggerMessage = "Enroll Push with usage pass success : " + "Tracking Code - " + String(describing: enrollResponse.data.trackingCode + ", Sub - " + String(describing: enrollResponse.data.sub))
+                                logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                                
+                                DispatchQueue.main.async {
+                                    callback(Result.success(result: enrollResponse))
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        timerCount = timerCount + 1
+                    }
+                })
             }
         }
     }
@@ -272,7 +492,7 @@ public class PushVerificationController {
         
         
         // construct object
-        let initiatePushEntity = InitiatePushEntity()
+        var initiatePushEntity = InitiatePushEntity()
         initiatePushEntity.email = email
         initiatePushEntity.sub = sub
         initiatePushEntity.usageType = usageType
@@ -323,125 +543,94 @@ public class PushVerificationController {
                         timerCount = 0
                         timer.invalidate()
                         
-                        // construct object
-                        let validateDeviceEntity = ValidateDeviceEntity()
-                        validateDeviceEntity.intermediate_verifiation_id = Cidaas.intermediate_verifiation_id
-                        validateDeviceEntity.statusId = self.statusId
+                        initiatePushEntity = InitiatePushEntity()
+                        initiatePushEntity.usage_pass = Cidaas.intermediate_verifiation_id
                         
-                        // call validate device
-                        DeviceVerificationService.shared.validateDevice(validateDeviceEntity: validateDeviceEntity, properties: properties) {
+                        // call initiatePush with usage service
+                        PushVerificationService.shared.initiatePush(initiatePushEntity: initiatePushEntity, properties: properties) {
                             switch $0 {
-                            case .success(let validateDeviceResponse):
+                            case .success(let initiatePushResponse):
                                 // log success
-                                let loggerMessage = "Validate device success : " + "Usage pass - " + String(describing: validateDeviceResponse.data.usage_pass)
+                                let loggerMessage = "Initiate with usage pass success : " + "Status Id - " + String(describing: initiatePushResponse.data.statusId)
                                 logw(loggerMessage, cname: "cidaas-sdk-success-log")
                                 
-                                initiatePushEntity.usage_pass = validateDeviceResponse.data.usage_pass
+                                self.statusId = initiatePushResponse.data.statusId
+                                self.randomNumber = initiatePushResponse.data.randomNumber
                                 
-                                // call initiatePush with usage service
-                                PushVerificationService.shared.initiatePush(initiatePushEntity: initiatePushEntity, properties: properties) {
+                                // construct object
+                                let authenticatePushEntity = AuthenticatePushEntity()
+                                authenticatePushEntity.statusId = self.statusId
+                                authenticatePushEntity.verifierPassword = self.randomNumber
+                                
+                                // getting user device id
+                                authenticatePushEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomainURL"] ?? "OAuthUserDeviceId")
+                                
+                                // call authenticatePush service
+                                PushVerificationController.shared.verifySmartPush(randomNumber: self.randomNumber, statusId: self.statusId, properties: properties) {
                                     switch $0 {
-                                    case .success(let initiatePushResponse):
-                                        // log success
-                                        let loggerMessage = "Initiate with usage pass success : " + "Status Id - " + String(describing: initiatePushResponse.data.statusId)
-                                        logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                                        
-                                        self.statusId = initiatePushResponse.data.statusId
-                                        self.randomNumber = initiatePushResponse.data.randomNumber
-                                        
-                                        // construct object
-                                        let authenticatePushEntity = AuthenticatePushEntity()
-                                        authenticatePushEntity.statusId = self.statusId
-                                        authenticatePushEntity.verifierPassword = self.randomNumber
-                                        
-                                        // getting user device id
-                                        authenticatePushEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomainURL"] ?? "OAuthUserDeviceId")
-                                        
-                                        // call authenticatePush service
-                                        PushVerificationService.shared.authenticatePush(authenticatePushEntity: authenticatePushEntity, properties: properties) {
-                                            switch $0 {
-                                            case .failure(let error):
-                                                // log error
-                                                let loggerMessage = "Authenticate Push service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                                                logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                                                
-                                                // return failure callback
-                                                DispatchQueue.main.async {
-                                                    callback(Result.failure(error: error))
-                                                }
-                                                return
-                                            case .success(let PushResponse):
-                                                // log success
-                                                let loggerMessage = "Authenticate Push success : " + "Tracking Code - " + String(describing: PushResponse.data.trackingCode + ", Sub - " + String(describing: PushResponse.data.sub))
-                                                logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                                                
-                                                let mfaContinueEntity = MFAContinueEntity()
-                                                mfaContinueEntity.requestId = requestId
-                                                mfaContinueEntity.sub = PushResponse.data.sub
-                                                mfaContinueEntity.trackId = trackId
-                                                mfaContinueEntity.trackingCode = PushResponse.data.trackingCode
-                                                mfaContinueEntity.verificationType = "PUSH"
-                                                
-                                                if(self.usageType == UsageTypes.PASSWORDLESS.rawValue) {
-                                                    VerificationSettingsService.shared.passwordlessContinue(mfaContinueEntity: mfaContinueEntity, properties: properties) {
-                                                        switch $0 {
-                                                        case .failure(let error):
-                                                            // log error
-                                                            let loggerMessage = "MFA Continue service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                                                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                                                            
-                                                            // return failure callback
-                                                            DispatchQueue.main.async {
-                                                                callback(Result.failure(error: error))
-                                                            }
-                                                            return
-                                                        case .success(let serviceResponse):
-                                                            // log success
-                                                            let loggerMessage = "MFA Continue service success : " + "Authz Code  - " + String(describing: serviceResponse.data.code) + ", Grant Type  - " + String(describing: serviceResponse.data.grant_type)
-                                                            logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                                                            
-                                                            AccessTokenController.shared.getAccessToken(code: serviceResponse.data.code, callback: callback)
-                                                            
-                                                        }
-                                                    }
-                                                }
-                                                else {
-                                                    
-                                                    VerificationSettingsService.shared.mfaContinue(mfaContinueEntity: mfaContinueEntity, properties: properties) {
-                                                        switch $0 {
-                                                        case .failure(let error):
-                                                            // log error
-                                                            let loggerMessage = "MFA Continue service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                                                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                                                            
-                                                            // return failure callback
-                                                            DispatchQueue.main.async {
-                                                                callback(Result.failure(error: error))
-                                                            }
-                                                            return
-                                                        case .success(let serviceResponse):
-                                                            // log success
-                                                            let loggerMessage = "MFA Continue service success : " + "Authz Code  - " + String(describing: serviceResponse.data.code) + ", Grant Type  - " + String(describing: serviceResponse.data.grant_type)
-                                                            logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                                                            
-                                                            AccessTokenController.shared.getAccessToken(code: serviceResponse.data.code, callback: callback)
-                                                            
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        
-                                        break
                                     case .failure(let error):
-                                        // return callback
+                                        // return failure callback
                                         DispatchQueue.main.async {
                                             callback(Result.failure(error: error))
                                         }
-                                        break
+                                        return
+                                    case .success(let PushResponse):
+                                        let mfaContinueEntity = MFAContinueEntity()
+                                        mfaContinueEntity.requestId = requestId
+                                        mfaContinueEntity.sub = PushResponse.data.sub
+                                        mfaContinueEntity.trackId = trackId
+                                        mfaContinueEntity.trackingCode = PushResponse.data.trackingCode
+                                        mfaContinueEntity.verificationType = "PUSH"
+                                        
+                                        if(self.usageType == UsageTypes.PASSWORDLESS.rawValue) {
+                                            VerificationSettingsService.shared.passwordlessContinue(mfaContinueEntity: mfaContinueEntity, properties: properties) {
+                                                switch $0 {
+                                                case .failure(let error):
+                                                    // log error
+                                                    let loggerMessage = "MFA Continue service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                                                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                                                    
+                                                    // return failure callback
+                                                    DispatchQueue.main.async {
+                                                        callback(Result.failure(error: error))
+                                                    }
+                                                    return
+                                                case .success(let serviceResponse):
+                                                    // log success
+                                                    let loggerMessage = "MFA Continue service success : " + "Authz Code  - " + String(describing: serviceResponse.data.code) + ", Grant Type  - " + String(describing: serviceResponse.data.grant_type)
+                                                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                                                    
+                                                    AccessTokenController.shared.getAccessToken(code: serviceResponse.data.code, callback: callback)
+                                                    
+                                                }
+                                            }
+                                        }
+                                        else {
+                                            
+                                            VerificationSettingsService.shared.mfaContinue(mfaContinueEntity: mfaContinueEntity, properties: properties) {
+                                                switch $0 {
+                                                case .failure(let error):
+                                                    // log error
+                                                    let loggerMessage = "MFA Continue service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                                                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                                                    
+                                                    // return failure callback
+                                                    DispatchQueue.main.async {
+                                                        callback(Result.failure(error: error))
+                                                    }
+                                                    return
+                                                case .success(let serviceResponse):
+                                                    // log success
+                                                    let loggerMessage = "MFA Continue service success : " + "Authz Code  - " + String(describing: serviceResponse.data.code) + ", Grant Type  - " + String(describing: serviceResponse.data.grant_type)
+                                                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                                                    
+                                                    AccessTokenController.shared.getAccessToken(code: serviceResponse.data.code, callback: callback)
+                                                    
+                                                }
+                                            }
+                                        }
                                     }
                                 }
-                                
                                 
                                 break
                             case .failure(let error):
@@ -462,7 +651,7 @@ public class PushVerificationController {
         }
     }
     
-    public func verifySmartPush(randomNumber: String, statusId: String, properties: Dictionary<String, String>, callback: @escaping(Result<AuthenticatePushResponseEntity>) -> Void) {
+    public func verifySmartPush(randomNumber: String, statusId: String, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<AuthenticatePushResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -476,6 +665,11 @@ public class PushVerificationController {
             return
         }
         
+        // default set intermediate id to empty
+        Cidaas.intermediate_verifiation_id = intermediate_id
+        self.verificationType = VerificationTypes.PUSH.rawValue
+        self.authenticationType = AuthenticationTypes.LOGIN.rawValue
+        
         // validating fields
         if (statusId == "" || randomNumber == "") {
             let error = WebAuthError.shared.propertyMissingException()
@@ -487,7 +681,7 @@ public class PushVerificationController {
         }
         
         // construct object
-        let authenticatePushEntity = AuthenticatePushEntity()
+        var authenticatePushEntity = AuthenticatePushEntity()
         authenticatePushEntity.statusId = statusId
         authenticatePushEntity.verifierPassword = randomNumber
         
@@ -507,15 +701,64 @@ public class PushVerificationController {
                     callback(Result.failure(error: error))
                 }
                 return
-            case .success(let patternResponse):
+            case .success(let pushResponse):
                 // log success
-                let loggerMessage = "Authenticate Push success : " + "Tracking Code - " + String(describing: patternResponse.data.trackingCode + ", Sub - " + String(describing: patternResponse.data.sub))
+                let loggerMessage = "Authenticate Push success : " + "Tracking Code - " + String(describing: pushResponse.data.trackingCode + ", Sub - " + String(describing: pushResponse.data.sub))
                 logw(loggerMessage, cname: "cidaas-sdk-success-log")
                 
-                // return success callback
-                DispatchQueue.main.async {
-                    callback(Result.success(result: patternResponse))
-                }
+                var timer: Timer = Timer()
+                var timerCount: Int16 = 0
+                timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { (timer_response) in
+                    if (timerCount > 10) {
+                        timerCount = 0
+                        timer.invalidate()
+                        
+                        let error = WebAuthError.shared.notificationTimeoutException()
+                        
+                        // log error
+                        let loggerMessage = "Device Verification failure. Notification timeout : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                        logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                        
+                        DispatchQueue.main.async {
+                            callback(Result.failure(error: error))
+                        }
+                        return
+                    }
+                    if (Cidaas.intermediate_verifiation_id != "") {
+                        timerCount = 0
+                        timer.invalidate()
+                        
+                        // construct object
+                        authenticatePushEntity = AuthenticatePushEntity()
+                        authenticatePushEntity.usage_pass = Cidaas.intermediate_verifiation_id
+                        
+                        // call authenticate with usage service
+                        PushVerificationService.shared.authenticatePush(authenticatePushEntity: authenticatePushEntity, properties: properties) {
+                            switch $0 {
+                            case .success(let initiatePushResponse):
+                                // log success
+                                let loggerMessage = "Authenticate with usage pass success : " + "Status Id - " + String(describing: initiatePushResponse.data.sub)
+                                logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                                
+                                // return success callback
+                                DispatchQueue.main.async {
+                                    callback(Result.success(result: initiatePushResponse))
+                                }
+                                
+                                break
+                            case .failure(let error):
+                                // return callback
+                                DispatchQueue.main.async {
+                                    callback(Result.failure(error: error))
+                                }
+                                break
+                            }
+                        }
+                    }
+                    else {
+                        timerCount = timerCount + 1
+                    }
+                })
             }
         }
     }

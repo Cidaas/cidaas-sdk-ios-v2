@@ -17,7 +17,7 @@ public class TOTPVerificationController {
     private var sub: String
     private var email: String
     private var verificationType: String
-    private var qrcode: String
+    private var secret: String
     private var usageType: String = UsageTypes.MFA.rawValue
     
     // shared instance
@@ -30,7 +30,7 @@ public class TOTPVerificationController {
         self.statusId = ""
         self.authenticationType = AuthenticationTypes.CONFIGURE.rawValue
         self.verificationType = ""
-        self.qrcode = ""
+        self.secret = ""
     }
     
     // configure TOTP from properties
@@ -73,7 +73,7 @@ public class TOTPVerificationController {
                 logw(loggerMessage, cname: "cidaas-sdk-success-log")
                 
                 // construct object
-                let setupTOTPEntity = SetupTOTPEntity()
+                var setupTOTPEntity = SetupTOTPEntity()
                 setupTOTPEntity.logoUrl = logoUrl
                 
                 // call setupTOTP service
@@ -91,14 +91,8 @@ public class TOTPVerificationController {
                         return
                     case .success(let serviceResponse):
                         // log success
-                        let loggerMessage = "Configure TOTP service success : " + "Status Id  - " + String(describing: serviceResponse.data.statusId)
+                        let loggerMessage = "Configure TOTP service success : " + "Current Status  - " + String(describing: serviceResponse.data.current_status)
                         logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                        
-                        self.statusId = serviceResponse.data.statusId
-                        self.qrcode = serviceResponse.data.qrCode
-                        
-                        // save qrcode
-                        DBHelper.shared.setTOTPSecret(qrcode: self.qrcode, key: self.sub)
                         
                         var timer: Timer = Timer()
                         var timerCount: Int16 = 0
@@ -123,74 +117,43 @@ public class TOTPVerificationController {
                                 timer.invalidate()
                                 
                                 // construct object
-                                let validateDeviceEntity = ValidateDeviceEntity()
-                                validateDeviceEntity.intermediate_verifiation_id = Cidaas.intermediate_verifiation_id
-                                validateDeviceEntity.statusId = self.statusId
+                                setupTOTPEntity = SetupTOTPEntity()
+                                setupTOTPEntity.usage_pass = Cidaas.intermediate_verifiation_id
                                 
                                 // call validate device
-                                DeviceVerificationService.shared.validateDevice(validateDeviceEntity: validateDeviceEntity, properties: properties) {
+                                TOTPVerificationService.shared.setupTOTP(accessToken: tokenResponse.data.access_token, setupTOTPEntity: setupTOTPEntity, properties: properties) {
                                     switch $0 {
                                     case .success(let validateDeviceResponse):
                                         // log success
-                                        let loggerMessage = "Validate device success : " + "Usage pass - " + String(describing: validateDeviceResponse.data.usage_pass)
+                                        let loggerMessage = "Validate device success : " + "Status Id - " + String(describing: validateDeviceResponse.data.st)
                                         logw(loggerMessage, cname: "cidaas-sdk-success-log")
                                         
-                                        let scannedTOTPEntity = ScannedTOTPEntity()
-                                        scannedTOTPEntity.usage_pass = validateDeviceResponse.data.usage_pass
-                                        scannedTOTPEntity.statusId = self.statusId
+                                        self.statusId = validateDeviceResponse.data.st
                                         
-                                        // call scanned pattern service
-                                        TOTPVerificationService.shared.scannedTOTP(accessToken:tokenResponse.data.access_token, scannedTOTPEntity: scannedTOTPEntity, properties: properties) {
+                                        // save user device id based on tenant
+                                        DBHelper.shared.setUserDeviceId(userDeviceId: validateDeviceResponse.data.udi, key: properties["DomainURL"] ?? "OAuthUserDeviceId")
+                                        
+                                        // save qrcode
+                                        DBHelper.shared.setTOTPSecret(secret: validateDeviceResponse.data.secret, name: validateDeviceResponse.data.d, issuer: validateDeviceResponse.data.issuer, key: self.sub)
+                                        
+                                        let enrollTOTPEntity = EnrollTOTPEntity()
+                                        enrollTOTPEntity.statusId = self.statusId
+                                        self.secret = DBHelper.shared.getTOTPSecret(key: self.sub)
+                                            
+                                        enrollTOTPEntity.verifierPassword = self.gettingTOTPCode(url: URL(string: self.secret.addingPercentEncoding(withAllowedCharacters:NSCharacterSet.urlQueryAllowed)!)!).totp_string
+                                        
+                                        // call enroll totpResponse service
+                                        TOTPVerificationController.shared.enrollTOTP(access_token: tokenResponse.data.access_token, enrollTOTPEntity: enrollTOTPEntity, properties: properties) {
                                             switch $0 {
                                             case .failure(let error):
-                                                // log error
-                                                let loggerMessage = "TOTP Scanned service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                                                logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                                                
                                                 // return failure callback
                                                 DispatchQueue.main.async {
                                                     callback(Result.failure(error: error))
                                                 }
                                                 return
-                                            case .success(let serviceResponse):
-                                                // log success
-                                                let loggerMessage = "Scanned TOTP success : " + "User Device Id - " + String(describing: serviceResponse.data.userDeviceId)
-                                                logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                                                
-                                                // save user device id based on tenant
-                                                DBHelper.shared.setUserDeviceId(userDeviceId: serviceResponse.data.userDeviceId, key: properties["DomainURL"] ?? "OAuthUserDeviceId")
-                                                
-                                                // construct method
-                                                let enrollTOTPEntity = EnrollTOTPEntity()
-                                                enrollTOTPEntity.statusId = self.statusId
-                                                enrollTOTPEntity.userDeviceId = serviceResponse.data.userDeviceId
-                                                
-                                                // generate TOTP
-                                                enrollTOTPEntity.verifierPassword = self.gettingTOTPCode(url: URL(string: self.qrcode)!).totp_string
-                                                
-                                                
-                                                // call enroll service
-                                                TOTPVerificationService.shared.enrollTOTP(accessToken:tokenResponse.data.access_token, enrollTOTPEntity: enrollTOTPEntity, properties: properties) {
-                                                    switch $0 {
-                                                    case .failure(let error):
-                                                        // log error
-                                                        let loggerMessage = "Enroll TOTP service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                                                        logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                                                        
-                                                        // return failure callback
-                                                        DispatchQueue.main.async {
-                                                            callback(Result.failure(error: error))
-                                                        }
-                                                        return
-                                                    case .success(let enrollResponse):
-                                                        // log success
-                                                        let loggerMessage = "Enroll TOTP success : " + "Tracking Code - " + String(describing: enrollResponse.data.trackingCode + ", Sub - " + String(describing: enrollResponse.data.sub))
-                                                        logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                                                        
-                                                        DispatchQueue.main.async {
-                                                            callback(Result.success(result: enrollResponse))
-                                                        }
-                                                    }
+                                            case .success(let enrollResponse):
+                                                DispatchQueue.main.async {
+                                                    callback(Result.success(result: enrollResponse))
                                                 }
                                             }
                                         }
@@ -215,8 +178,231 @@ public class TOTPVerificationController {
         }
     }
     
+    // Web to Mobile
+    // scanned TOTP from properties
+    public func scannedTOTP(statusId: String, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<ScannedTOTPResponseEntity>) -> Void) {
+        // null check
+        if properties["DomainURL"] == "" || properties["DomainURL"] == nil || properties["ClientId"] == "" || properties["ClientId"] == nil {
+            let error = WebAuthError.shared.propertyMissingException()
+            // log error
+            let loggerMessage = "Read properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+        
+        // validating fields
+        if (statusId == "") {
+            let error = WebAuthError.shared.propertyMissingException()
+            error.errorMessage = "statusId must not be empty"
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+        
+        // default set intermediate id to empty
+        Cidaas.intermediate_verifiation_id = intermediate_id
+        self.verificationType = VerificationTypes.TOTP.rawValue
+        self.authenticationType = AuthenticationTypes.CONFIGURE.rawValue
+        
+        // construct object
+        var scannedTOTPEntity = ScannedTOTPEntity()
+        scannedTOTPEntity.statusId = statusId
+        
+        // call scannedTOTP service
+        TOTPVerificationService.shared.scannedTOTP(scannedTOTPEntity: scannedTOTPEntity, properties: properties) {
+            switch $0 {
+            case .failure(let error):
+                // log error
+                let loggerMessage = "Scanned TOTP service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                
+                // return failure callback
+                DispatchQueue.main.async {
+                    callback(Result.failure(error: error))
+                }
+                return
+            case .success(let serviceResponse):
+                // log success
+                let loggerMessage = "Scanned TOTP service success : " + "Current Status  - " + String(describing: serviceResponse.data.current_status)
+                logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                
+                var timer: Timer = Timer()
+                var timerCount: Int16 = 0
+                timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { (timer_response) in
+                    if (timerCount > 10) {
+                        timerCount = 0
+                        timer.invalidate()
+                        
+                        let error = WebAuthError.shared.notificationTimeoutException()
+                        
+                        // log error
+                        let loggerMessage = "Device Verification failure. Notification timeout : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                        logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                        
+                        DispatchQueue.main.async {
+                            callback(Result.failure(error: error))
+                        }
+                        return
+                    }
+                    if (Cidaas.intermediate_verifiation_id != "") {
+                        timerCount = 0
+                        timer.invalidate()
+                        
+                        // construct object
+                        scannedTOTPEntity = ScannedTOTPEntity()
+                        scannedTOTPEntity.usage_pass = Cidaas.intermediate_verifiation_id
+                        
+                        // call validate device
+                        TOTPVerificationService.shared.scannedTOTP(scannedTOTPEntity: scannedTOTPEntity, properties: properties) {
+                            switch $0 {
+                            case .success(let validateDeviceResponse):
+                                // log success
+                                let loggerMessage = "Scanned TOTP with usage pass service success : " + "User device Id - " + String(describing: validateDeviceResponse.data.userDeviceId)
+                                logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                                
+                                // save user device id based on tenant
+                                DBHelper.shared.setUserDeviceId(userDeviceId: validateDeviceResponse.data.userDeviceId, key: properties["DomainURL"] ?? "OAuthUserDeviceId")
+                                
+                                DispatchQueue.main.async {
+                                    callback(Result.success(result: validateDeviceResponse))
+                                }
+                                
+                                break
+                            case .failure(let error):
+                                // return callback
+                                DispatchQueue.main.async {
+                                    callback(Result.failure(error: error))
+                                }
+                                break
+                            }
+                        }
+                    }
+                    else {
+                        timerCount = timerCount + 1
+                    }
+                })
+            }
+        }
+    }
     
-    // login with pattern recognition from properties
+    // Web to Mobile
+    // enroll TOTP from properties
+    public func enrollTOTP(access_token: String, enrollTOTPEntity: EnrollTOTPEntity, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<EnrollTOTPResponseEntity>) -> Void) {
+        // null check
+        if properties["DomainURL"] == "" || properties["DomainURL"] == nil || properties["ClientId"] == "" || properties["ClientId"] == nil {
+            let error = WebAuthError.shared.propertyMissingException()
+            // log error
+            let loggerMessage = "Read properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+        
+        if enrollTOTPEntity.userDeviceId == "" {
+            enrollTOTPEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomainURL"] ?? "OAuthUserDeviceId")
+        }
+        
+        // validating fields
+        if (enrollTOTPEntity.statusId == "" || enrollTOTPEntity.userDeviceId == "" || enrollTOTPEntity.verifierPassword == "") {
+            let error = WebAuthError.shared.propertyMissingException()
+            error.errorMessage = "statusId or userDeviceId or verifierPassword must not be empty"
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+        
+        // default set intermediate id to empty
+        Cidaas.intermediate_verifiation_id = intermediate_id
+        self.verificationType = VerificationTypes.TOTP.rawValue
+        self.authenticationType = AuthenticationTypes.CONFIGURE.rawValue
+        
+        // call enroll service
+        TOTPVerificationService.shared.enrollTOTP(accessToken:access_token, enrollTOTPEntity: enrollTOTPEntity, properties: properties) {
+            switch $0 {
+            case .failure(let error):
+                // log error
+                let loggerMessage = "Enroll TOTP service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                
+                // return failure callback
+                DispatchQueue.main.async {
+                    callback(Result.failure(error: error))
+                }
+                return
+            case .success(let enrollResponse):
+                // log success
+                let loggerMessage = "Enroll TOTP success : " + "Tracking Code - " + String(describing: enrollResponse.data.trackingCode + ", Sub - " + String(describing: enrollResponse.data.sub))
+                logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                
+                var timer: Timer = Timer()
+                var timerCount: Int16 = 0
+                timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { (timer_response) in
+                    if (timerCount > 10) {
+                        timerCount = 0
+                        timer.invalidate()
+                        
+                        let error = WebAuthError.shared.notificationTimeoutException()
+                        
+                        // log error
+                        let loggerMessage = "Device Verification failure. Notification timeout : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                        logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                        
+                        DispatchQueue.main.async {
+                            callback(Result.failure(error: error))
+                        }
+                        return
+                    }
+                    if (Cidaas.intermediate_verifiation_id != "") {
+                        timerCount = 0
+                        timer.invalidate()
+                        
+                        // construct object
+                        let enrollTOTPEntity = EnrollTOTPEntity()
+                        enrollTOTPEntity.usage_pass = Cidaas.intermediate_verifiation_id
+                        
+                        // call enroll service
+                        TOTPVerificationService.shared.enrollTOTP(accessToken: access_token, enrollTOTPEntity: enrollTOTPEntity, properties: properties) {
+                            switch $0 {
+                            case .failure(let error):
+                                // log error
+                                let loggerMessage = "Enroll TOTP  with usage pass service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                                logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                                
+                                // return failure callback
+                                DispatchQueue.main.async {
+                                    callback(Result.failure(error: error))
+                                }
+                                return
+                            case .success(let enrollResponse):
+                                // log success
+                                let loggerMessage = "Enroll TOTP with usage pass success : " + "Tracking Code - " + String(describing: enrollResponse.data.trackingCode + ", Sub - " + String(describing: enrollResponse.data.sub))
+                                logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                                
+                                DispatchQueue.main.async {
+                                    callback(Result.success(result: enrollResponse))
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        timerCount = timerCount + 1
+                    }
+                })
+            }
+        }
+    }
+    
+    
+    // login with totp recognition from properties
     public func loginWithTOTP(email : String, mobile: String, sub: String, trackId: String, requestId: String, usageType: String, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil {
@@ -272,7 +458,7 @@ public class TOTPVerificationController {
         self.usageType = usageType
         
         // construct object
-        let initiateTOTPEntity = InitiateTOTPEntity()
+        var initiateTOTPEntity = InitiateTOTPEntity()
         initiateTOTPEntity.email = email
         initiateTOTPEntity.sub = sub
         initiateTOTPEntity.usageType = usageType
@@ -322,126 +508,153 @@ public class TOTPVerificationController {
                         timer.invalidate()
                         
                         // construct object
-                        let validateDeviceEntity = ValidateDeviceEntity()
-                        validateDeviceEntity.intermediate_verifiation_id = Cidaas.intermediate_verifiation_id
-                        validateDeviceEntity.statusId = self.statusId
+                        initiateTOTPEntity = InitiateTOTPEntity()
+                        initiateTOTPEntity.usage_pass = Cidaas.intermediate_verifiation_id
                         
-                        // call validate device
-                        DeviceVerificationService.shared.validateDevice(validateDeviceEntity: validateDeviceEntity, properties: properties) {
+                        // call initiateTOTP with usage service
+                        TOTPVerificationService.shared.initiateTOTP(initiateTOTPEntity: initiateTOTPEntity, properties: properties) {
                             switch $0 {
-                            case .success(let validateDeviceResponse):
+                            case .success(let initiateTOTPResponse):
                                 // log success
-                                let loggerMessage = "Validate device success : " + "Usage pass - " + String(describing: validateDeviceResponse.data.usage_pass)
+                                let loggerMessage = "Initiate with usage pass success : " + "Status Id - " + String(describing: initiateTOTPResponse.data.statusId)
                                 logw(loggerMessage, cname: "cidaas-sdk-success-log")
                                 
-                                initiateTOTPEntity.usage_pass = validateDeviceResponse.data.usage_pass
+                                self.statusId = initiateTOTPResponse.data.statusId
                                 
-                                // call initiateTOTP with usage service
-                                TOTPVerificationService.shared.initiateTOTP(initiateTOTPEntity: initiateTOTPEntity, properties: properties) {
+                                // getting secret
+                                self.secret = DBHelper.shared.getTOTPSecret(key: self.sub)
+                                
+                                // construct object
+                                var authenticateTOTPEntity = AuthenticateTOTPEntity()
+                                authenticateTOTPEntity.statusId = self.statusId
+                                
+                                // getting user device id
+                                authenticateTOTPEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomainURL"] ?? "OAuthUserDeviceId")
+                                
+                                // generate token
+                                authenticateTOTPEntity.verifierPassword = self.gettingTOTPCode(url: URL(string: self.secret.addingPercentEncoding(withAllowedCharacters:NSCharacterSet.urlQueryAllowed)!)!).totp_string
+                                
+                                // call authenticateTOTP service
+                                TOTPVerificationService.shared.authenticateTOTP(authenticateTOTPEntity: authenticateTOTPEntity, properties: properties) {
                                     switch $0 {
-                                    case .success(let initiateTOTPResponse):
+                                    case .failure(let error):
+                                        // log error
+                                        let loggerMessage = "Authenticate TOTP service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                                        logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                                        
+                                        // return failure callback
+                                        DispatchQueue.main.async {
+                                            callback(Result.failure(error: error))
+                                        }
+                                        return
+                                    case .success(let totpResponse):
                                         // log success
-                                        let loggerMessage = "Initiate with usage pass success : " + "Status Id - " + String(describing: initiateTOTPResponse.data.statusId)
+                                        let loggerMessage = "Authenticate TOTP success : " + "Tracking Code - " + String(describing: totpResponse.data.trackingCode + ", Sub - " + String(describing: totpResponse.data.sub))
                                         logw(loggerMessage, cname: "cidaas-sdk-success-log")
                                         
-                                        self.statusId = initiateTOTPResponse.data.statusId
-                                        
-                                        // getting secret
-                                        self.qrcode = DBHelper.shared.getTOTPSecret(key: self.sub)
-                                        
-                                        // construct object
-                                        let authenticateTOTPEntity = AuthenticateTOTPEntity()
-                                        authenticateTOTPEntity.statusId = self.statusId
-                                        authenticateTOTPEntity.verifierPassword = self.gettingTOTPCode(url: URL(string: self.qrcode)!).totp_string
-                                        
-                                        // getting user device id
-                                        authenticateTOTPEntity.userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomainURL"] ?? "OAuthUserDeviceId")
-                                        
-                                        // generate token
-                                        authenticateTOTPEntity.verifierPassword = self.gettingTOTPCode(url: URL(string: self.qrcode)!).totp_string
-                                        
-                                        // call authenticateTOTP service
-                                        TOTPVerificationService.shared.authenticateTOTP(authenticateTOTPEntity: authenticateTOTPEntity, properties: properties) {
-                                            switch $0 {
-                                            case .failure(let error):
+                                        var timer: Timer = Timer()
+                                        var timerCount: Int16 = 0
+                                        timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { (timer_response) in
+                                            if (timerCount > 10) {
+                                                timerCount = 0
+                                                timer.invalidate()
+                                                
+                                                let error = WebAuthError.shared.notificationTimeoutException()
+                                                
                                                 // log error
-                                                let loggerMessage = "Authenticate TOTP service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                                                let loggerMessage = "Device Verification failure. Notification timeout : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
                                                 logw(loggerMessage, cname: "cidaas-sdk-error-log")
                                                 
-                                                // return failure callback
                                                 DispatchQueue.main.async {
                                                     callback(Result.failure(error: error))
                                                 }
                                                 return
-                                            case .success(let patternResponse):
-                                                // log success
-                                                let loggerMessage = "Authenticate TOTP success : " + "Tracking Code - " + String(describing: patternResponse.data.trackingCode + ", Sub - " + String(describing: patternResponse.data.sub))
-                                                logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                                            }
+                                            if (Cidaas.intermediate_verifiation_id != "") {
+                                                timerCount = 0
+                                                timer.invalidate()
                                                 
-                                                let mfaContinueEntity = MFAContinueEntity()
-                                                mfaContinueEntity.requestId = requestId
-                                                mfaContinueEntity.sub = patternResponse.data.sub
-                                                mfaContinueEntity.trackId = trackId
-                                                mfaContinueEntity.trackingCode = patternResponse.data.trackingCode
-                                                mfaContinueEntity.verificationType = "TOTP"
+                                                // construct object
+                                                authenticateTOTPEntity = AuthenticateTOTPEntity()
+                                                authenticateTOTPEntity.usage_pass = Cidaas.intermediate_verifiation_id
                                                 
-                                                if(self.usageType == UsageTypes.PASSWORDLESS.rawValue) {
-                                                    VerificationSettingsService.shared.passwordlessContinue(mfaContinueEntity: mfaContinueEntity, properties: properties) {
-                                                        switch $0 {
-                                                        case .failure(let error):
-                                                            // log error
-                                                            let loggerMessage = "MFA Continue service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                                                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                                                            
-                                                            // return failure callback
-                                                            DispatchQueue.main.async {
-                                                                callback(Result.failure(error: error))
+                                                // call authenticate with usage service
+                                                TOTPVerificationService.shared.authenticateTOTP(authenticateTOTPEntity: authenticateTOTPEntity, properties: properties) {
+                                                    switch $0 {
+                                                    case .success(let initiateTOTPResponse):
+                                                        // log success
+                                                        let loggerMessage = "Authenticate with usage pass success : " + "Status Id - " + String(describing: initiateTOTPResponse.data.sub)
+                                                        logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                                                        
+                                                        let mfaContinueEntity = MFAContinueEntity()
+                                                        mfaContinueEntity.requestId = requestId
+                                                        mfaContinueEntity.sub = initiateTOTPResponse.data.sub
+                                                        mfaContinueEntity.trackId = trackId
+                                                        mfaContinueEntity.trackingCode = initiateTOTPResponse.data.trackingCode
+                                                        mfaContinueEntity.verificationType = "TOTP"
+                                                        
+                                                        if(self.usageType == UsageTypes.PASSWORDLESS.rawValue) {
+                                                            VerificationSettingsService.shared.passwordlessContinue(mfaContinueEntity: mfaContinueEntity, properties: properties) {
+                                                                switch $0 {
+                                                                case .failure(let error):
+                                                                    // log error
+                                                                    let loggerMessage = "MFA Continue service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                                                                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                                                                    
+                                                                    // return failure callback
+                                                                    DispatchQueue.main.async {
+                                                                        callback(Result.failure(error: error))
+                                                                    }
+                                                                    return
+                                                                case .success(let serviceResponse):
+                                                                    // log success
+                                                                    let loggerMessage = "MFA Continue service success : " + "Authz Code  - " + String(describing: serviceResponse.data.code) + ", Grant Type  - " + String(describing: serviceResponse.data.grant_type)
+                                                                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                                                                    
+                                                                    AccessTokenController.shared.getAccessToken(code: serviceResponse.data.code, callback: callback)
+                                                                    
+                                                                }
                                                             }
-                                                            return
-                                                        case .success(let serviceResponse):
-                                                            // log success
-                                                            let loggerMessage = "MFA Continue service success : " + "Authz Code  - " + String(describing: serviceResponse.data.code) + ", Grant Type  - " + String(describing: serviceResponse.data.grant_type)
-                                                            logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                                                            
-                                                            AccessTokenController.shared.getAccessToken(code: serviceResponse.data.code, callback: callback)
-                                                            
                                                         }
-                                                    }
-                                                }
-                                                else {
-                                                    
-                                                    VerificationSettingsService.shared.mfaContinue(mfaContinueEntity: mfaContinueEntity, properties: properties) {
-                                                        switch $0 {
-                                                        case .failure(let error):
-                                                            // log error
-                                                            let loggerMessage = "MFA Continue service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                                                            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                                                        else {
                                                             
-                                                            // return failure callback
-                                                            DispatchQueue.main.async {
-                                                                callback(Result.failure(error: error))
+                                                            VerificationSettingsService.shared.mfaContinue(mfaContinueEntity: mfaContinueEntity, properties: properties) {
+                                                                switch $0 {
+                                                                case .failure(let error):
+                                                                    // log error
+                                                                    let loggerMessage = "MFA Continue service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                                                                    logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                                                                    
+                                                                    // return failure callback
+                                                                    DispatchQueue.main.async {
+                                                                        callback(Result.failure(error: error))
+                                                                    }
+                                                                    return
+                                                                case .success(let serviceResponse):
+                                                                    // log success
+                                                                    let loggerMessage = "MFA Continue service success : " + "Authz Code  - " + String(describing: serviceResponse.data.code) + ", Grant Type  - " + String(describing: serviceResponse.data.grant_type)
+                                                                    logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                                                                    
+                                                                    AccessTokenController.shared.getAccessToken(code: serviceResponse.data.code, callback: callback)
+                                                                    
+                                                                }
                                                             }
-                                                            return
-                                                        case .success(let serviceResponse):
-                                                            // log success
-                                                            let loggerMessage = "MFA Continue service success : " + "Authz Code  - " + String(describing: serviceResponse.data.code) + ", Grant Type  - " + String(describing: serviceResponse.data.grant_type)
-                                                            logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                                                            
-                                                            AccessTokenController.shared.getAccessToken(code: serviceResponse.data.code, callback: callback)
-                                                            
                                                         }
+                                                        
+                                                        break
+                                                    case .failure(let error):
+                                                        // return callback
+                                                        DispatchQueue.main.async {
+                                                            callback(Result.failure(error: error))
+                                                        }
+                                                        break
                                                     }
                                                 }
                                             }
-                                        }
-                                        
-                                        break
-                                    case .failure(let error):
-                                        // return callback
-                                        DispatchQueue.main.async {
-                                            callback(Result.failure(error: error))
-                                        }
-                                        break
+                                            else {
+                                                timerCount = timerCount + 1
+                                            }
+                                        })
                                     }
                                 }
                                 

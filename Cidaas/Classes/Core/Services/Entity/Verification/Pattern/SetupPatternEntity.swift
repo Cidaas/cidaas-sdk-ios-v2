@@ -12,6 +12,7 @@ public class SetupPatternEntity : Codable {
     // properties
     public var client_id: String = ""
     public var logoUrl: String = ""
+    public var usage_pass: String = ""
     public var deviceInfo: DeviceInfoModel = DeviceInfoModel()
     
     // Constructors

@@ -1,13 +1,11 @@
 PODS:
   - Alamofire (4.7.3)
   - Base32 (1.1.2)
-  - Cidaas (0.0.1.6):
+  - Cidaas (1.0.11):
     - Alamofire (~> 4.7.3)
     - CryptoSwift (~> 0.12)
     - OneTimePassword (~> 3.1.4)
-  - Cosmos (16.0.0)
   - CryptoSwift (0.13.0)
-  - IQKeyboardManagerSwift (5.0.8)
   - Mockingjay (2.0.1):
     - Mockingjay/Core (= 2.0.1)
     - Mockingjay/XCTest (= 2.0.1)
@@ -18,33 +16,21 @@ PODS:
   - OneTimePassword (3.1.4):
     - Base32 (~> 1.1.2)
   - Quick (1.2.0)
-  - SCLAlertView (0.8)
-  - SDWebImage (4.4.2):
-    - SDWebImage/Core (= 4.4.2)
-  - SDWebImage/Core (4.4.2)
   - URITemplate (2.0.3)
 
 DEPENDENCIES:
   - Cidaas (from `../`)
-  - Cosmos (~> 16.0)
-  - IQKeyboardManagerSwift (~> 5.0.3)
   - Mockingjay (~> 2.0)
   - Quick (~> 1.2.0)
-  - SCLAlertView
-  - SDWebImage (~> 4.4)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Alamofire
     - Base32
-    - Cosmos
     - CryptoSwift
-    - IQKeyboardManagerSwift
     - Mockingjay
     - OneTimePassword
     - Quick
-    - SCLAlertView
-    - SDWebImage
     - URITemplate
 
 EXTERNAL SOURCES:
@@ -54,17 +40,13 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
   Base32: 163c298644d184e89ca4e00a996bad6bf5166390
-  Cidaas: b5821015ef2462a57325d6055afbbe4a42ceb288
-  Cosmos: 7bcee0fa858a9355a214f2a181be5dffcee42c81
+  Cidaas: daa0b938f458c3f1da227a1000fc66c56bd86c3d
   CryptoSwift: 16e78bebf567bad1c87b2d58f6547f25b74c31aa
-  IQKeyboardManagerSwift: 2e7dc7f98c111458c1ea2b373f893e8cf95e2b97
   Mockingjay: 11a621880d2887f1775bdcf824341eb68f218450
   OneTimePassword: 2fcf5d0e393a8e630a6bfeed1b250fb008aad487
   Quick: 58d203b1c5e27fff7229c4c1ae445ad7069a7a08
-  SCLAlertView: 6a77bb2edfc65e04dbe57725546cb4107a506b85
-  SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
   URITemplate: ace0c4c46dcf8afe6e89b4060621852886b15c3b
 
-PODFILE CHECKSUM: d1ec5f3ab358229c144a7eaa7205e6074e8489d4
+PODFILE CHECKSUM: 96839d0483befb0bd87ce57251acc4b7d7c9e96e
 
 COCOAPODS: 1.5.3

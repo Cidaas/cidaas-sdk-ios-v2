@@ -11,6 +11,7 @@ import Foundation
 public class SetupTOTPEntity : Codable {
     // properties
     public var client_id: String = ""
+    public var usage_pass: String = ""
     public var deviceInfo: DeviceInfoModel = DeviceInfoModel()
     public var logoUrl: String = ""
     
