@@ -1257,7 +1257,7 @@ class EntityTests: QuickSpec {
                     })
                 }
                 
-                it("call access token model to access token entity") {
+                xit("call access token model to access token entity") {
                     
                     let converter = EntityToModelConverter.shared
                     

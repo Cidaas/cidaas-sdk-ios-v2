@@ -2,11 +2,9 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>DomainURL</key>
-	<string>your_base_url</string>
-	<key>ClientId</key>
-	<string>your_client_id</string>
-	<key>RedirectURL</key>
-	<string>your_redirect_url</string>
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>webcredentials:example.com</string>
+	</array>
 </dict>
 </plist>

@@ -20,7 +20,7 @@ public class VerificationSettingsService {
     }
     
     // get MFA List
-    public func getMFAList(sub: String, userDeviceId: String, properties : Dictionary<String, String>, callback: @escaping(Result<MFAListResponseEntity>) -> Void) {
+    public func getMFAList(sub: String, userDeviceId: String, common_config: Bool, properties : Dictionary<String, String>, callback: @escaping(Result<MFAListResponseEntity>) -> Void) {
         // local variables
         var headers : HTTPHeaders
         var urlString : String
@@ -54,7 +54,7 @@ public class VerificationSettingsService {
         }
         
         // construct url
-        urlString = baseURL + URLHelper.shared.getMFAListURL(sub: sub, userDeviceId: user_device_id)
+        urlString = baseURL + URLHelper.shared.getMFAListURL(sub: sub, userDeviceId: user_device_id, common_config: common_config)
         
         
         // call service

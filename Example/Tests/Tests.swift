@@ -55,7 +55,7 @@ class GeneralTests: QuickSpec {
                     cidaas.readPropertyFile()
                 }
 
-                it("call get access token by sub from public") {
+                xit("call get access token by sub from public") {
 
                     cidaas.getAccessToken(sub: "234234234234") {
                         switch $0 {
@@ -67,7 +67,7 @@ class GeneralTests: QuickSpec {
                     }
                 }
                 
-                it("call get access token by sub failure from public") {
+                xit("call get access token by sub failure from public") {
                     
                     DBHelper.shared.userDefaults.removeObject(forKey: "OAuthProperty")
                     
@@ -83,7 +83,7 @@ class GeneralTests: QuickSpec {
                     cidaas.readPropertyFile()
                 }
 
-                it("call get access token by refresh token from public") {
+                xit("call get access token by refresh token from public") {
 
                     cidaas.getAccessToken(refreshToken: "234234234234") {
                         switch $0 {
@@ -95,7 +95,7 @@ class GeneralTests: QuickSpec {
                     }
                 }
                 
-                it("call get access token by refresh token failure from public") {
+                xit("call get access token by refresh token failure from public") {
                     
                     DBHelper.shared.userDefaults.removeObject(forKey: "OAuthProperty")
                     
@@ -340,7 +340,7 @@ class GeneralTests: QuickSpec {
                     print(useragent)
                 }
                 
-                it("call get access token by code from controller") {
+                xit("call get access token by code from controller") {
                     
                     accessTokenController.getAccessToken(code: "234234234234") {
                         switch $0 {

@@ -2,10 +2,6 @@ use_frameworks!
 
 target 'Cidaas_Example' do
   pod 'Cidaas', :path => '../'
-  pod 'SDWebImage', '~> 4.4'
-  pod 'SCLAlertView'
-  pod 'IQKeyboardManagerSwift', '~> 5.0.3'
-  pod 'Cosmos', '~> 16.0'
 
   target 'Cidaas_Tests' do
     inherit! :search_paths

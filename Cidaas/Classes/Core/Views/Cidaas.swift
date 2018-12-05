@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SafariServices
 
 public class Cidaas {
     
@@ -22,10 +23,9 @@ public class Cidaas {
     var enablePkce : Bool = true
     var deviceInfo : DeviceInfoModel
     var storage: TransactionStore
-    var loginCallback : ((Result<LoginResponseEntity>) -> Void)?
     var timer = Timer()
     var trackingManager: TrackingManager!
-    public var delegate: UIViewController!
+    public var browserCallback: ((Result<LoginResponseEntity>) -> ())!
     
     // static variables
     public static var intermediate_verifiation_id: String = ""
@@ -71,8 +71,6 @@ public class Cidaas {
         
         // set storage in local
         self.storage = storage
-        
-        self.loginCallback = nil
         
         // set enable pkce in local
         self.ENABLE_PKCE = true
@@ -167,6 +165,38 @@ public class Cidaas {
     
 // -------------------------------------------------------------------------------------------------- //
     
+    // login with browser
+    public func loginWithBrowser(delegate: UIViewController, callback: @escaping (Result<LoginResponseEntity>) -> Void) {
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            self.browserCallback = callback
+            LoginController.shared.loginWithBrowser(delegate: delegate, properties: savedProp!, callback: callback)
+        }
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // handle token
+    public func handleToken(url: URL) {
+        let code = url.valueOf("code") ?? ""
+        AccessTokenController.shared.getAccessToken(code: code, callback: browserCallback!)
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
     // stop session tracking
     public func stopTracking() {
         self.trackingManager.stopTracking()
@@ -175,7 +205,7 @@ public class Cidaas {
 // -------------------------------------------------------------------------------------------------- //
     
     // start tracking
-    public func startTracking(sub: String) {
+    public func startTracking(delegate: UIViewController, sub: String) {
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
             self.trackingManager.delegate = delegate
@@ -2253,11 +2283,11 @@ public class Cidaas {
     // 2. Call getMFAList method
     // 3. Maintain logs based on flags
     
-    public func getMFAList(sub: String, callback: @escaping(Result<MFAListResponseEntity>) -> Void) {
+    public func getMFAList(sub: String, common_config: Bool = true, callback: @escaping(Result<MFAListResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            VerificationSettingsController.shared.getMFAList(sub: sub, properties: savedProp!, callback: callback)
+            VerificationSettingsController.shared.getMFAList(sub: sub, common_config: common_config, properties: savedProp!, callback: callback)
         }
         else {
             // log error
