@@ -179,8 +179,12 @@ public class URLHelper {
         return acceptConsentURL
     }
     
-    public func getMFAListURL(sub: String, userDeviceId: String) -> String {
-        return "\(mfaListURL)?sub=\(sub)&userDeviceId=\(userDeviceId)&common_configs=true"
+    public func getMFAListURL(sub: String, userDeviceId: String, common_config: Bool) -> String {
+        
+        if (common_config == false) {
+            return "\(mfaListURL)?sub=\(sub)&userDeviceId=\(userDeviceId)"
+        }
+        return "\(mfaListURL)?sub=\(sub)&userDeviceId=\(userDeviceId)&common_configs=\(common_config)"
     }
     
     public func getSetupEmailURL() -> String {

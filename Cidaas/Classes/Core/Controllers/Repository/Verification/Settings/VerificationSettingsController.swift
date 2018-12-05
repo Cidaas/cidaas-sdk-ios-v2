@@ -18,7 +18,7 @@ public class VerificationSettingsController {
     }
     
     // configure email from properties
-    public func getMFAList(sub: String, properties: Dictionary<String, String>, callback: @escaping(Result<MFAListResponseEntity>) -> Void) {
+    public func getMFAList(sub: String, common_config: Bool, properties: Dictionary<String, String>, callback: @escaping(Result<MFAListResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -46,7 +46,7 @@ public class VerificationSettingsController {
         let userDeviceId = DBHelper.shared.getUserDeviceId(key: properties["DomainURL"] ?? "OAuthUserDeviceId")
         
         // call getMFAList service
-        VerificationSettingsService.shared.getMFAList(sub: sub, userDeviceId: userDeviceId, properties: properties) {
+        VerificationSettingsService.shared.getMFAList(sub: sub, userDeviceId: userDeviceId, common_config: common_config, properties: properties) {
             switch $0 {
             case .failure(let error):
                 // log error
