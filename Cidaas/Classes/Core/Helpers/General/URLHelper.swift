@@ -118,6 +118,7 @@ public class URLHelper {
     public var denyRequestURL = "/verification-srv/notification/reject"
     public var updateFCMTokenURL = "/devices-srv/device/updatefcm"
     public var pendingNotificationListURL = "/verification-srv/notification/initiated"
+    public var socialLoginURL = "/login-srv/social/login/"
     
     public func getRequestIdURL() -> String {
         return requestIdURL
@@ -169,6 +170,10 @@ public class URLHelper {
     
     public func getConsentURL(consent_name: String, version: Int16) -> String {
         return consentURL + "?consent_name=" + consent_name + "&version=" + String(version)
+    }
+    
+    public func getSocialLoginURL(provider: String, requestId: String) -> String {
+        return socialLoginURL + provider + "/" + requestId
     }
     
     public func getConsentDetailsURL(consent_name: String) -> String {
