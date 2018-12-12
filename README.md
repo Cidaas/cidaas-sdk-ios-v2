@@ -1,6 +1,6 @@
 # cidaas-sdk-ios-v2
-[![Build Status](https://travis-ci.org/Cidaas/cidaas-sdk-ios-v2.svg?branch=development)](https://travis-ci.org/Cidaas/cidaas-sdk-ios-v2) 
-[![codecov.io](https://codecov.io/gh/Cidaas/cidaas-sdk-ios-v2/branch/development/graphs/badge.svg)](https://codecov.io/gh/Cidaas/cidaas-sdk-ios-v2/branch/development)
+[![Build Status](https://travis-ci.org/Cidaas/cidaas-sdk-ios-v2.svg?branch=master)](https://travis-ci.org/Cidaas/cidaas-sdk-ios-v2) 
+[![codecov.io](https://codecov.io/gh/Cidaas/cidaas-sdk-ios-v2/branch/master/graphs/badge.svg)](https://codecov.io/gh/Cidaas/cidaas-sdk-ios-v2/branch/master)
 [![Swift support](https://img.shields.io/badge/Swift-3.3%20%7C%204.0%20%7C%204.1-lightgrey.svg?colorA=28a745&colorB=4E4E4E)](#swift-versions-support)
 [![XCode support](https://img.shields.io/badge/Xcode-9.4-lightgrey.svg?colorA=28a745&colorB=4E4E4E)](#swift-versions-support)
 [![CocoaPods Compatible](https://img.shields.io/cocoapods/v/Cidaas.svg?style=flat&label=CocoaPods&colorA=28a745&&colorB=4E4E4E)](https://cocoapods.org/pods/Cidaas)
@@ -8,25 +8,124 @@
 
 The steps here will guide you through setting up and managing authentication and authorization in your apps using cidaas SDK.    
 
-### Requirements
+## Table of Contents
+
+<!--ts-->
+* [Requirements](#requirements)
+* [Installation](#installation)
+* [Getting started](#getting-started)
+* [Getting Client Id and urls](#getting-client-id-and-urls)
+* [Initialisation](#initialisation)
+* [Usage](#usage)
+    <!--ts-->
+    * [Native Browser Login](#native-browser-login)
+        <!--ts-->
+        * [Classic Login](#classic-login)
+        * [Social Login](#social-login)
+        <!--te-->
+    * [Pure Native UI Integration](#pure-native-ui-integration)
+        <!--ts-->
+        * [Getting RequestId](#getting-request-id)
+        * [Getting Tenant Information](#getting-tenant-info)
+        * [Getting Client Information](#getting-client-info)
+        * [Registration](#registration)
+            <!--ts-->
+            * [Getting Registration Fields](#getting-registration-fields)
+            * [Register user](#register-user)
+            <!--te-->
+        * [De-duplication](#de-duplication)
+            <!--ts-->
+            * [Get Deduplication Details](#get-deduplication-details)
+            * [Register user](#register-user-1)
+            * [Login With Deduplication](#login-with-deduplication)
+            <!--te-->
+        * [Account Verification](#account-verification)
+            <!--ts-->
+            * [Initiate Email verification](#initiate-email-verification)
+            * [Initiate SMS verification](#initiate-sms-verification)
+            * [Initiate IVR verification](#initiate-ivr-verification)
+            * [Verify Account](#verify-account)
+            <!--te-->
+        <!--te-->
+        * [Login](#login)
+            <!--ts-->
+            * [Login with credentials](#login-with-credentials)
+            <!--te-->
+        * [Forgot Password](#forgot-password)
+            <!--ts-->
+            * [Initiate Reset Password](#initiate-reset-password)
+            * [Handle Reset Password](#handle-reset-password)
+            * [Reset Password](#reset-password)
+            <!--te-->
+        * [Passwordless or Multifactor Authentication ](#passwordless-or-multifactor-authentication)
+            <!--ts-->
+            * [Email](#email)
+                <!--ts-->
+                * [Configuration](#configure-email)
+                    <!--ts-->
+                    * [Configure Email](#configure-email)
+                    * [Enroll Email](#enroll-email)
+                    <!--te-->
+                * [Usage](#login-via-email)
+                    <!--ts-->
+                    * [Login via Email](#login-via-email)
+                    * [Verify Email](#verify-email)
+                    <!--te-->
+                <!--te-->
+            * [SMS](#sms)
+                <!--ts-->
+                * [Configuration](#configure-sms)
+                    <!--ts-->
+                    * [Configure SMS](#configure-sms)
+                    * [Enroll SMS](#enroll-sms)
+                    <!--te-->
+                * [Usage](#login-via-sms)
+                    <!--ts-->
+                    * [Login via SMS](#login-via-sms)
+                    * [Verify SMS](#verify-sms)
+                    <!--te-->
+                <!--te-->
+            * [IVR](#ivr)
+                <!--ts-->
+                * [Configuration](#configure-ivr)
+                    <!--ts-->
+                    * [Configure IVR](#configure-ivr)
+                    * [Enroll IVR](#enroll-ivr)
+                    <!--te-->
+                * [Usage](#login-via-ivr)
+                    <!--ts-->
+                    * [Login via IVR](#login-via-ivr)
+                    * [Verify IVR](#verify-ivr)
+                    <!--te-->
+                <!--te-->
+            * [Backupcode](#backupcode)
+                <!--ts-->
+                * [Configuration](#configure-backupcode)
+                    <!--ts-->
+                    * [Configure Backupcode](#configure-backupcode)
+                    <!--te-->
+                * [Usage](#login-via-backupcode)
+                <!--te-->
+            <!--te-->
+        <!--te-->
+    <!--te-->
+
+#### Requirements
 
 Operating System | Xcode | Swift
 --- | --- | ---
 iOS 10.0 or above | 9.0 or above | 3.3 or above 
 
-### Steps for integrate native iOS SDKs:
 #### Installation
-
-##### CocoaPods Installations
 
 Cidaas is available through [CocoaPods](https://cocoapods.org/pods/Cidaas). To install it, simply add the following line to your Podfile:
 
 ```
-pod 'Cidaas', '~> 0.0.1'
+pod 'Cidaas'
 ```
 #### Getting started
 
-The following steps are to be followed to use this Cidaas-SDK.
+The following steps are to be followed to use this cidaas SDK.
 
 Create a plist file named as <b>cidaas.plist</b> and fill all the inputs in key value pair. The inputs are below mentioned.
 
@@ -66,12 +165,66 @@ or use the shared instance
 var cidaas = Cidaas.shared
 ```
 
-### Usage
+#### Usage
+
+#### Native Browser Login 
+#### Classic Login
+You can login using your native browser and redirects to the App once successfully logged in. To login with your native browser call ****loginWithBrowser()****.
+
+```swift
+cidaas.loginWithBrowser(delegate: self) {
+    switch $0 {
+        case .success(let successResponse):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+            break
+    }
+}
+```
+
+#### Social Login
+You can also perform social login using your native browser and redirects to the App once successfully logged in. To perform social login call ****loginWithSocial()****.
+
+```swift
+cidaas.loginWithSocial(provider: "your_social_provider", requestId: "your_request_id", delegate: self) { 
+    switch $0 {
+        case .success(let successResponse):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+            break
+    }
+}
+```
+where social provider may be either facebook, google, linkedin or any other providers and requestId can be get from [Getting RequestId](#getting-request-id)
+
+Use [customScheme](https://developer.apple.com/documentation/uikit/core_app/communicating_with_other_apps_using_custom_urls#2928963) or [universalLinks](https://developer.apple.com/library/content/documentation/General/Conceptual/AppSearch/UniversalLinks.html) to return back the control from browser to App.
+
+If you use custom scheme, configure your URL types and resume the SDK from AppDelegate's **open url** method
+
+```swift
+func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+    Cidaas.shared.handleToken(url: url)
+    return true
+}
+```
+
+If you use universal links, configure your Domain setup and resume the SDK from AppDelegate's **userActivity** method
+
+```swift
+func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
+    let url = userActivity.webpageURL!
+    Cidaas.shared.handleToken(url: url)
+    return true
+}
+```
+#### Pure Native UI Integration
 
 #### Getting Request Id
-You have to first get RequestId and use this in your subsequent calls. Server provides a unique Id based on urls configured for your application. Henceforth, in all requests like login, registration, you have to pass requestId, which is utilized to identify your client between two consecutive independant calls. To get the requestId, call 
-
-****getRequestId()****.
+You have to first get RequestId and use this in your subsequent calls. Server provides a unique Id based on urls configured for your application. Henceforth, in all requests like login, registration, you have to pass requestId, which is utilized to identify your client between two consecutive independant calls. To get the requestId, call ****getRequestId()****.
 
 ```swift
 cidaas.getRequestId() {
@@ -136,7 +289,7 @@ cidaas.getTenantInfo() {
 }
 ```
 
-#### Get Client Info
+#### Getting Client Info
 
 Once you get tenant information, if you need to find client information you can call following method. It  contains client name, logo url specified for the client in the Admin's Apps section and details of what all social providers are configured for the App. To get the client information, call ****getClientInfo()****.
 
@@ -299,9 +452,7 @@ Once registering is done, you can verify your account either by Email, SMS or IV
 
 #### Initiate Email verification
 
-This method is to be used when you want to receive a verification code via Email:
-
-**initiateEmailVerification()**.
+This method is to be used when you want to receive a verification code via Email, cal l**initiateEmailVerification()**.
 
 ```swift
 cidaas.initiateEmailVerification(requestId:"45a921cf-ee26-46b0-9bf4-58636dced99f", sub:"7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
@@ -573,7 +724,7 @@ cidaas.configureEmail(sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
 }
 ```
 
-#### Verify Email by entering code
+#### Enroll Email
 
 Once you received your verification code via Email, you need to verify that code. For that verification, call **enrollEmail()**.
 
@@ -637,7 +788,7 @@ cidaas.loginWithEmail(passwordlessEntity: passwordlessEntity) {
 }
 ```
 
-#### Verify Email by entering code
+#### Verify Email
 
 Once you received your verification code via Email, you need to verify the code. For that verification, call **verifyEmail()**.
 
@@ -703,7 +854,7 @@ To receive a verification code via SMS, call **configureSMS()**.
 }
 ```
 
-#### Verify SMS by entering code
+#### Enroll SMS
 
 Once you received your verification code via SMS, you need to verify the code. For that verification, call **enrollSMS()**.
 
@@ -767,7 +918,7 @@ cidaas.loginWithSMS(passwordlessEntity: passwordlessEntity) {
 }
 ```
 
-#### Verify SMS by entering code
+#### Verify SMS
 
 Once you received your verification code via SMS, you need to verify the code. For that verification, call **verifySMS()**.
 
@@ -834,7 +985,7 @@ cidaas.configureIVR(sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
 }
 ```
 
-#### Verify IVR by entering code
+#### Enroll IVR
 
 Once you received your verification code via IVR verification call, you need to verify the code. For that verification, call **enrollIVR()**.
 
@@ -898,7 +1049,7 @@ cidaas.loginWithIVR(passwordlessEntity: passwordlessEntity){
 }
 ```
 
-#### Verify IVR by entering code
+#### Verify IVR
 
 Once you received your verification code via IVR, you need to verify the code. For that verification, call **verifyIVR()**.
 
@@ -1617,7 +1768,7 @@ cidaas.registerUser(track_id:"45a921cf-ee26-46b0-9bf4-58636dced99f") {
 While registering user, if system found similar users already registered,that list is shown to user. User can decide whether to use one of the existing logins, or choose to ignore all shown details. ****loginWithDeduplication()**** method can be called to use one of those existing logins shown by the system. Note that, System will still use the secure authentication and verifications that were setup for earlier user, before login.
 
 ```swift
-cidaas.loginWithDeduplication(track_id:"45a921cf-ee26-46b0-9bf4-58636dced99f") {
+cidaas.loginWithDeduplication(requestId:"45a921cf-ee26-46b0-9bf4-58636dced99f", "sub": "51701ec8-f2d7-4361-a727-f8df476a711a", "password": "123456") {
     switch $0 {
         case .success(let loginWithSuccess):
             // your success code here

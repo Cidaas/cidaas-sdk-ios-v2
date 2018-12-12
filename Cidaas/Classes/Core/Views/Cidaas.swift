@@ -25,7 +25,9 @@ public class Cidaas {
     var storage: TransactionStore
     var timer = Timer()
     var trackingManager: TrackingManager!
-    public var browserCallback: ((Result<LoginResponseEntity>) -> ())!
+    var browserCallback: ((Result<LoginResponseEntity>) -> ())!
+    var propertyFileRead: Bool = false
+    public var extraParams: Dictionary<String, String> = Dictionary<String, String>()
     
     // static variables
     public static var intermediate_verifiation_id: String = ""
@@ -115,6 +117,7 @@ public class Cidaas {
                         // log success
                         let loggerMessage = "Saved Property status : \(response)"
                         logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                        self.propertyFileRead = true
                         break
                     }
                 }
@@ -189,10 +192,90 @@ public class Cidaas {
     
 // -------------------------------------------------------------------------------------------------- //
     
+    // login with social
+    public func loginWithSocial(provider: String, requestId: String, delegate: UIViewController, callback: @escaping (Result<LoginResponseEntity>) -> Void) {
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            self.browserCallback = callback
+            LoginController.shared.loginWithSocial(provider: provider, requestId: requestId, delegate: delegate, properties: savedProp!, callback: callback)
+        }
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // get login url
+    public func getLoginURL(callback: @escaping (Result<URL>) -> Void) {
+        var savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            savedProp?["ViewType"] = "login"
+            callback(Result.success(result: LoginController.shared.constructURL(properties: savedProp!)))
+        }
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // get register url
+    public func getRegistrationURL(callback: @escaping (Result<URL>) -> Void) {
+        var savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            savedProp?["ViewType"] = "register"
+            callback(Result.success(result: LoginController.shared.constructURL(properties: savedProp!)))
+        }
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
     // handle token
     public func handleToken(url: URL) {
-        let code = url.valueOf("code") ?? ""
-        AccessTokenController.shared.getAccessToken(code: code, callback: browserCallback!)
+        if LoginController.shared.delegate != nil {
+            LoginController.shared.delegate.dismiss(animated: true, completion: nil)
+        }
+        
+        if browserCallback != nil {
+            let code = url.valueOf("code") ?? ""
+            if code != "" {
+                AccessTokenController.shared.getAccessToken(code: code, callback: browserCallback!)
+            }
+        }
     }
     
 // -------------------------------------------------------------------------------------------------- //
@@ -2535,7 +2618,7 @@ public class Cidaas {
     // 2. Call getPendingNotifications method
     // 3. Maintain logs based on flags
     
-    public func getPendingNotifications(sub: String, fcmId: String, callback: @escaping(Result<PendingNotificationListResponseEntity>) -> Void) {
+    public func getPendingNotifications(sub: String, callback: @escaping(Result<PendingNotificationListResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {

@@ -21,10 +21,12 @@ public class AuthSession: NSObject, OAuthTransactionDelegate {
     }
     
     public func resume(_ url: URL, options: [UIApplicationOpenURLOptionsKey: Any] = [:]) -> Bool {
+        Cidaas.shared.handleToken(url: url)
         return true
     }
     
     public func cancel() {
         // return error
+        self.callback(Result.failure(error: WebAuthError.shared.userCancelledException()))
     }
 }

@@ -20,9 +20,9 @@ public class SafariAuthenticationSession : AuthSession {
         self.authSession = SFAuthenticationSession(url: self.loginURL, callbackURLScheme: self.redirectURL.absoluteString, completionHandler: { (resultURL, resultError) in
             guard resultError == nil, let callbackURL = resultURL else {
                 if case SFAuthenticationError.canceledLogin = resultError! {
-                    // return error
+                    callback(Result.failure(error: WebAuthError.shared.userCancelledException()))
                 } else {
-                    // return error
+                    callback(Result.failure(error: WebAuthError.shared.userCancelledException()))
                 }
                 return TransactionStore.shared.clear()
             }
