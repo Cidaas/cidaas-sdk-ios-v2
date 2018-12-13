@@ -19,7 +19,7 @@ public class RequestIdController {
     }
     
     // get request id
-    public func getRequestId(properties: Dictionary<String, String>, callback: @escaping (Result<RequestIdResponseEntity>) -> Void) {
+    public func getRequestId(properties: Dictionary<String, String>, extraParams: Dictionary<String, String>, callback: @escaping (Result<RequestIdResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil || properties["ClientId"] == "" || properties["ClientId"] == nil || properties["RedirectURL"] == "" || properties["RedirectURL"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -34,7 +34,7 @@ public class RequestIdController {
         }
         
         // call get request id service
-        RequestIdService.shared.getRequestId(properties: properties) {
+        RequestIdService.shared.getRequestId(properties: properties, extraParams: extraParams) {
             switch $0 {
             case .failure(let error):
                 // log error
