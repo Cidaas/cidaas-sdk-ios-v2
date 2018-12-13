@@ -22,7 +22,7 @@ public class LoginController {
     }
     
     // login With browser
-    public func loginWithBrowser(delegate: UIViewController, properties: Dictionary<String, String>, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+    public func loginWithBrowser(delegate: UIViewController, extraParams: Dictionary<String, String>, properties: Dictionary<String, String>, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil || properties["ClientId"] == "" || properties["ClientId"] == nil || properties["RedirectURL"] == "" || properties["RedirectURL"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -37,7 +37,7 @@ public class LoginController {
         }
         
         // construct url
-        let loginURL = constructURL(properties: properties)
+        let loginURL = constructURL(extraParams: extraParams, properties: properties)
         let redirectURL = URL(string: properties["RedirectURL"] ?? "")!
         
         if #available(iOS 11.0, *) {
@@ -99,7 +99,7 @@ public class LoginController {
         self.delegate.present(vc, animated: true, completion: nil)
     }
     
-    public func constructURL(properties: Dictionary<String, String>) -> URL {
+    public func constructURL(extraParams: Dictionary<String, String>, properties: Dictionary<String, String>) -> URL {
         
         var urlParams = Dictionary<String, String>()
         urlParams["redirect_uri"] = properties["RedirectURL"] ?? ""
@@ -117,7 +117,7 @@ public class LoginController {
             urlComponents?.queryItems?.append(URLQueryItem(name: key, value: value))
         }
         
-        for(key, value) in Cidaas.shared.extraParams {
+        for(key, value) in extraParams {
             urlComponents?.queryItems?.append(URLQueryItem(name: key, value: value))
         }
         

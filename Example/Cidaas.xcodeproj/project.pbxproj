@@ -107,6 +107,8 @@
 		1F56010B212ED08000F842A4 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		1F560118212ED12900F842A4 /* Cidaas.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Cidaas.plist; sourceTree = "<group>"; };
 		1F5D0FCF2146628600D63E9A /* ServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTests.swift; sourceTree = "<group>"; };
+		1F74F84321C117DA00E5C856 /* PureNativeLogin.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = PureNativeLogin.md; sourceTree = "<group>"; };
+		1F74F84421C22E0C00E5C856 /* Passwordless.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Passwordless.md; sourceTree = "<group>"; };
 		1FB3D560214E884B00E6474E /* UsersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersTests.swift; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* Cidaas_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cidaas_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -146,6 +148,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1F74F84221C116C900E5C856 /* Readme */ = {
+			isa = PBXGroup;
+			children = (
+				1F74F84321C117DA00E5C856 /* PureNativeLogin.md */,
+				1F74F84421C22E0C00E5C856 /* Passwordless.md */,
+			);
+			path = Readme;
+			sourceTree = "<group>";
+		};
 		46956B29A513C98116EBEFD5 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -160,6 +171,7 @@
 		607FACC71AFB9204008FA782 = {
 			isa = PBXGroup;
 			children = (
+				1F74F84221C116C900E5C856 /* Readme */,
 				1F174EA021B6AAE500520DF9 /* Cidaas_Example.entitlements */,
 				607FACF51AFB993E008FA782 /* Podspec Metadata */,
 				607FACD21AFB9204008FA782 /* Example for Cidaas */,

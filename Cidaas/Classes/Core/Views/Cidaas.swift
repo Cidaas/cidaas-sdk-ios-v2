@@ -27,7 +27,6 @@ public class Cidaas {
     var trackingManager: TrackingManager!
     var browserCallback: ((Result<LoginResponseEntity>) -> ())!
     var propertyFileRead: Bool = false
-    public var extraParams: Dictionary<String, String> = Dictionary<String, String>()
     
     // static variables
     public static var intermediate_verifiation_id: String = ""
@@ -169,11 +168,11 @@ public class Cidaas {
 // -------------------------------------------------------------------------------------------------- //
     
     // login with browser
-    public func loginWithBrowser(delegate: UIViewController, callback: @escaping (Result<LoginResponseEntity>) -> Void) {
+    public func loginWithBrowser(delegate: UIViewController, extraParams: Dictionary<String, String> = Dictionary<String, String>(), callback: @escaping (Result<LoginResponseEntity>) -> Void) {
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
             self.browserCallback = callback
-            LoginController.shared.loginWithBrowser(delegate: delegate, properties: savedProp!, callback: callback)
+            LoginController.shared.loginWithBrowser(delegate: delegate, extraParams: extraParams, properties: savedProp!, callback: callback)
         }
         else {
             // log error
@@ -193,11 +192,28 @@ public class Cidaas {
 // -------------------------------------------------------------------------------------------------- //
     
     // login with social
-    public func loginWithSocial(provider: String, requestId: String, delegate: UIViewController, callback: @escaping (Result<LoginResponseEntity>) -> Void) {
+    public func loginWithSocial(provider: String, requestId: String = "", delegate: UIViewController, extraParams: Dictionary<String, String> = Dictionary<String, String>(), callback: @escaping (Result<LoginResponseEntity>) -> Void) {
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
             self.browserCallback = callback
-            LoginController.shared.loginWithSocial(provider: provider, requestId: requestId, delegate: delegate, properties: savedProp!, callback: callback)
+            if requestId == "" {
+                self.getRequestId(extraParams: extraParams) {
+                    switch $0 {
+                    case .success(let requestIdSuccessResponse):
+                        LoginController.shared.loginWithSocial(provider: provider, requestId: requestIdSuccessResponse.data.requestId, delegate: delegate, properties: savedProp!, callback: callback)
+                        break
+                    case .failure(let requestIdErrorResponse):
+                        // return failure callback
+                        DispatchQueue.main.async {
+                            callback(Result.failure(error: requestIdErrorResponse))
+                        }
+                        break
+                    }
+                }
+            }
+            else {
+                LoginController.shared.loginWithSocial(provider: provider, requestId: requestId, delegate: delegate, properties: savedProp!, callback: callback)
+            }
         }
         else {
             // log error
@@ -217,11 +233,11 @@ public class Cidaas {
 // -------------------------------------------------------------------------------------------------- //
     
     // get login url
-    public func getLoginURL(callback: @escaping (Result<URL>) -> Void) {
+    public func getLoginURL(extraParams: Dictionary<String, String>, callback: @escaping (Result<URL>) -> Void) {
         var savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
             savedProp?["ViewType"] = "login"
-            callback(Result.success(result: LoginController.shared.constructURL(properties: savedProp!)))
+            callback(Result.success(result: LoginController.shared.constructURL(extraParams: extraParams, properties: savedProp!)))
         }
         else {
             // log error
@@ -241,11 +257,11 @@ public class Cidaas {
 // -------------------------------------------------------------------------------------------------- //
     
     // get register url
-    public func getRegistrationURL(callback: @escaping (Result<URL>) -> Void) {
+    public func getRegistrationURL(extraParams: Dictionary<String, String>, callback: @escaping (Result<URL>) -> Void) {
         var savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
             savedProp?["ViewType"] = "register"
-            callback(Result.success(result: LoginController.shared.constructURL(properties: savedProp!)))
+            callback(Result.success(result: LoginController.shared.constructURL(extraParams: extraParams, properties: savedProp!)))
         }
         else {
             // log error
@@ -347,11 +363,11 @@ public class Cidaas {
     // 1. Read properties from file
     // 2. Call request id from dictionary method
     // 3. Maintain logs based on flags
-    public func getRequestId(callback: @escaping (Result<RequestIdResponseEntity>) -> Void) {
+    public func getRequestId(extraParams: Dictionary<String, String> = Dictionary<String, String>(), callback: @escaping (Result<RequestIdResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            RequestIdController.shared.getRequestId(properties: savedProp!, callback: callback)
+            RequestIdController.shared.getRequestId(properties: savedProp!, extraParams: extraParams, callback: callback)
         }
             
         else {
@@ -403,11 +419,28 @@ public class Cidaas {
     // 2. Call get client info method
     // 3. Maintain logs based on flags
     
-    public func getClientInfo(requestId: String, callback: @escaping(Result<ClientInfoResponseEntity>) -> Void) {
+    public func getClientInfo(requestId: String = "", extraParams: Dictionary<String, String> = Dictionary<String, String>(), callback: @escaping(Result<ClientInfoResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            ClientController.shared.getClientInfo(requestId: requestId, properties: savedProp!, callback: callback)
+            if requestId == "" {
+                self.getRequestId(extraParams: extraParams) {
+                    switch $0 {
+                        case .success(let requestIdSuccessResponse):
+                            ClientController.shared.getClientInfo(requestId: requestIdSuccessResponse.data.requestId, properties: savedProp!, callback: callback)
+                            break
+                        case .failure(let requestIdErrorResponse):
+                            // return failure callback
+                            DispatchQueue.main.async {
+                                callback(Result.failure(error: requestIdErrorResponse))
+                            }
+                            break
+                    }
+                }
+            }
+            else {
+                ClientController.shared.getClientInfo(requestId: requestId, properties: savedProp!, callback: callback)
+            }
         }
         else {
             // log error
@@ -431,11 +464,28 @@ public class Cidaas {
     // 2. Call loginWithCredentials method
     // 3. Maintain logs based on flags
     
-    public func loginWithCredentials(requestId: String, loginEntity: LoginEntity, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+    public func loginWithCredentials(requestId: String = "", extraParams: Dictionary<String, String> = Dictionary<String, String>(), loginEntity: LoginEntity, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            LoginController.shared.loginWithCredentials(requestId: requestId, loginEntity: loginEntity, properties: savedProp!, callback: callback)
+            if requestId == "" {
+                self.getRequestId(extraParams: extraParams) {
+                    switch $0 {
+                    case .success(let requestIdSuccessResponse):
+                        LoginController.shared.loginWithCredentials(requestId: requestIdSuccessResponse.data.requestId, loginEntity: loginEntity, properties: savedProp!, callback: callback)
+                        break
+                    case .failure(let requestIdErrorResponse):
+                        // return failure callback
+                        DispatchQueue.main.async {
+                            callback(Result.failure(error: requestIdErrorResponse))
+                        }
+                        break
+                    }
+                }
+            }
+            else {
+                LoginController.shared.loginWithCredentials(requestId: requestId, loginEntity: loginEntity, properties: savedProp!, callback: callback)
+            }
         }
         else {
             // log error
@@ -599,11 +649,28 @@ public class Cidaas {
     // 2. Call loginWithEmail method
     // 3. Maintain logs based on flags
     
-    public func loginWithEmail(passwordlessEntity: PasswordlessEntity, callback: @escaping(Result<InitiateEmailResponseEntity>) -> Void) {
+    public func loginWithEmail(passwordlessEntity: PasswordlessEntity, extraParams: Dictionary<String, String> = Dictionary<String, String>(), callback: @escaping(Result<InitiateEmailResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            EmailVerificationController.shared.loginWithEmail(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
+            if passwordlessEntity.requestId == "" {
+                self.getRequestId(extraParams: extraParams) {
+                    switch $0 {
+                    case .success(let requestIdSuccessResponse):
+                        EmailVerificationController.shared.loginWithEmail(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: requestIdSuccessResponse.data.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
+                        break
+                    case .failure(let requestIdErrorResponse):
+                        // return failure callback
+                        DispatchQueue.main.async {
+                            callback(Result.failure(error: requestIdErrorResponse))
+                        }
+                        break
+                    }
+                }
+            }
+            else {
+                EmailVerificationController.shared.loginWithEmail(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
+            }
         }
         else {
             // log error
@@ -712,11 +779,28 @@ public class Cidaas {
     // 2. Call loginWithSMS method
     // 3. Maintain logs based on flags
     
-    public func loginWithSMS(passwordlessEntity: PasswordlessEntity, callback: @escaping(Result<InitiateSMSResponseEntity>) -> Void) {
+    public func loginWithSMS(passwordlessEntity: PasswordlessEntity, extraParams: Dictionary<String, String> = Dictionary<String, String>(), callback: @escaping(Result<InitiateSMSResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            SMSVerificationController.shared.loginWithSMS(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
+            if passwordlessEntity.requestId == "" {
+                self.getRequestId(extraParams: extraParams) {
+                    switch $0 {
+                    case .success(let requestIdSuccessResponse):
+                        SMSVerificationController.shared.loginWithSMS(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: requestIdSuccessResponse.data.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
+                        break
+                    case .failure(let requestIdErrorResponse):
+                        // return failure callback
+                        DispatchQueue.main.async {
+                            callback(Result.failure(error: requestIdErrorResponse))
+                        }
+                        break
+                    }
+                }
+            }
+            else {
+                SMSVerificationController.shared.loginWithSMS(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
+            }
         }
         else {
             // log error
@@ -824,11 +908,28 @@ public class Cidaas {
     // 2. Call loginWithIVR method
     // 3. Maintain logs based on flags
     
-    public func loginWithIVR(passwordlessEntity: PasswordlessEntity, callback: @escaping(Result<InitiateIVRResponseEntity>) -> Void) {
+    public func loginWithIVR(passwordlessEntity: PasswordlessEntity, extraParams: Dictionary<String, String> = Dictionary<String, String>(), callback: @escaping(Result<InitiateIVRResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            IVRVerificationController.shared.loginWithIVR(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
+            if passwordlessEntity.requestId == "" {
+                self.getRequestId(extraParams: extraParams) {
+                    switch $0 {
+                    case .success(let requestIdSuccessResponse):
+                        IVRVerificationController.shared.loginWithIVR(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: requestIdSuccessResponse.data.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
+                        break
+                    case .failure(let requestIdErrorResponse):
+                        // return failure callback
+                        DispatchQueue.main.async {
+                            callback(Result.failure(error: requestIdErrorResponse))
+                        }
+                        break
+                    }
+                }
+            }
+            else {
+                IVRVerificationController.shared.loginWithIVR(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
+            }
         }
         else {
             // log error
@@ -880,11 +981,28 @@ public class Cidaas {
     // 2. Call loginWithBackupcode method
     // 3. Maintain logs based on flags
     
-    public func loginWithBackupcode(code: String, passwordlessEntity: PasswordlessEntity, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+    public func loginWithBackupcode(code: String, passwordlessEntity: PasswordlessEntity, extraParams: Dictionary<String, String> = Dictionary<String, String>(), callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            BackupcodeVerificationController.shared.loginWithBackupcode(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, code: code, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
+            if passwordlessEntity.requestId == "" {
+                self.getRequestId(extraParams: extraParams) {
+                    switch $0 {
+                    case .success(let requestIdSuccessResponse):
+                        BackupcodeVerificationController.shared.loginWithBackupcode(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, code: code, trackId: passwordlessEntity.trackId, requestId: requestIdSuccessResponse.data.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
+                        break
+                    case .failure(let requestIdErrorResponse):
+                        // return failure callback
+                        DispatchQueue.main.async {
+                            callback(Result.failure(error: requestIdErrorResponse))
+                        }
+                        break
+                    }
+                }
+            }
+            else {
+                BackupcodeVerificationController.shared.loginWithBackupcode(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, code: code, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
+            }
         }
         else {
             // log error
@@ -936,11 +1054,28 @@ public class Cidaas {
     // 2. Call loginWithPatternRecognition method
     // 3. Maintain logs based on flags
     
-    public func loginWithPatternRecognition(pattern: String, passwordlessEntity: PasswordlessEntity, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+    public func loginWithPatternRecognition(pattern: String, passwordlessEntity: PasswordlessEntity, extraParams: Dictionary<String, String> = Dictionary<String, String>(), callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            PatternVerificationController.shared.loginWithPatternRecognition(pattern: pattern, email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
+            if passwordlessEntity.requestId == "" {
+                self.getRequestId(extraParams: extraParams) {
+                    switch $0 {
+                    case .success(let requestIdSuccessResponse):
+                        PatternVerificationController.shared.loginWithPatternRecognition(pattern: pattern, email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: requestIdSuccessResponse.data.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
+                        break
+                    case .failure(let requestIdErrorResponse):
+                        // return failure callback
+                        DispatchQueue.main.async {
+                            callback(Result.failure(error: requestIdErrorResponse))
+                        }
+                        break
+                    }
+                }
+            }
+            else {
+                PatternVerificationController.shared.loginWithPatternRecognition(pattern: pattern, email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
+            }
         }
         else {
             // log error
@@ -992,11 +1127,28 @@ public class Cidaas {
     // 2. Call loginWithTouchId method
     // 3. Maintain logs based on flags
     
-    public func loginWithTouchId(passwordlessEntity: PasswordlessEntity, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+    public func loginWithTouchId(passwordlessEntity: PasswordlessEntity, extraParams: Dictionary<String, String> = Dictionary<String, String>(), callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            TouchIdVerificationController.shared.loginWithTouchId(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
+            if passwordlessEntity.requestId == "" {
+                self.getRequestId(extraParams: extraParams) {
+                    switch $0 {
+                    case .success(let requestIdSuccessResponse):
+                        TouchIdVerificationController.shared.loginWithTouchId(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: requestIdSuccessResponse.data.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
+                        break
+                    case .failure(let requestIdErrorResponse):
+                        // return failure callback
+                        DispatchQueue.main.async {
+                            callback(Result.failure(error: requestIdErrorResponse))
+                        }
+                        break
+                    }
+                }
+            }
+            else {
+                TouchIdVerificationController.shared.loginWithTouchId(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
+            }
         }
         else {
             // log error
@@ -1048,11 +1200,28 @@ public class Cidaas {
     // 2. Call loginWithFaceRecognition method
     // 3. Maintain logs based on flags
     
-    public func loginWithFaceRecognition(photo: UIImage, passwordlessEntity: PasswordlessEntity, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+    public func loginWithFaceRecognition(photo: UIImage, passwordlessEntity: PasswordlessEntity, extraParams: Dictionary<String, String> = Dictionary<String, String>(), callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            FaceVerificationController.shared.loginWithFace(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, photo: photo, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
+            if passwordlessEntity.requestId == "" {
+                self.getRequestId(extraParams: extraParams) {
+                    switch $0 {
+                    case .success(let requestIdSuccessResponse):
+                        FaceVerificationController.shared.loginWithFace(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: requestIdSuccessResponse.data.requestId, photo: photo, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
+                        break
+                    case .failure(let requestIdErrorResponse):
+                        // return failure callback
+                        DispatchQueue.main.async {
+                            callback(Result.failure(error: requestIdErrorResponse))
+                        }
+                        break
+                    }
+                }
+            }
+            else {
+                FaceVerificationController.shared.loginWithFace(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, photo: photo, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
+            }
         }
         else {
             // log error
@@ -1104,11 +1273,28 @@ public class Cidaas {
     // 2. Call loginWithVoiceRecognition method
     // 3. Maintain logs based on flags
     
-    public func loginWithVoiceRecognition(voice: Data, passwordlessEntity: PasswordlessEntity, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+    public func loginWithVoiceRecognition(voice: Data, passwordlessEntity: PasswordlessEntity, extraParams: Dictionary<String, String> = Dictionary<String, String>(), callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            VoiceVerificationController.shared.loginWithVoice(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, voice: voice, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
+            if passwordlessEntity.requestId == "" {
+                self.getRequestId(extraParams: extraParams) {
+                    switch $0 {
+                    case .success(let requestIdSuccessResponse):
+                        VoiceVerificationController.shared.loginWithVoice(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: requestIdSuccessResponse.data.requestId, voice: voice, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
+                        break
+                    case .failure(let requestIdErrorResponse):
+                        // return failure callback
+                        DispatchQueue.main.async {
+                            callback(Result.failure(error: requestIdErrorResponse))
+                        }
+                        break
+                    }
+                }
+            }
+            else {
+                VoiceVerificationController.shared.loginWithVoice(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, voice: voice, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
+            }
         }
         else {
             // log error
@@ -1160,11 +1346,28 @@ public class Cidaas {
     // 2. Call loginWithSmartPush method
     // 3. Maintain logs based on flags
     
-    public func loginWithSmartPush(passwordlessEntity: PasswordlessEntity, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+    public func loginWithSmartPush(passwordlessEntity: PasswordlessEntity, extraParams: Dictionary<String, String> = Dictionary<String, String>(), callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            PushVerificationController.shared.loginWithPush(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
+            if passwordlessEntity.requestId == "" {
+                self.getRequestId(extraParams: extraParams) {
+                    switch $0 {
+                    case .success(let requestIdSuccessResponse):
+                        PushVerificationController.shared.loginWithPush(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: requestIdSuccessResponse.data.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
+                        break
+                    case .failure(let requestIdErrorResponse):
+                        // return failure callback
+                        DispatchQueue.main.async {
+                            callback(Result.failure(error: requestIdErrorResponse))
+                        }
+                        break
+                    }
+                }
+            }
+            else {
+                PushVerificationController.shared.loginWithPush(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
+            }
         }
         else {
             // log error
@@ -1217,11 +1420,28 @@ public class Cidaas {
     // 2. Call loginWithTOTP method
     // 3. Maintain logs based on flags
     
-    public func loginWithTOTP(passwordlessEntity: PasswordlessEntity, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+    public func loginWithTOTP(passwordlessEntity: PasswordlessEntity, extraParams: Dictionary<String, String> = Dictionary<String, String>(), callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            TOTPVerificationController.shared.loginWithTOTP(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
+            if passwordlessEntity.requestId == "" {
+                self.getRequestId(extraParams: extraParams) {
+                    switch $0 {
+                    case .success(let requestIdSuccessResponse):
+                        TOTPVerificationController.shared.loginWithTOTP(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: requestIdSuccessResponse.data.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
+                        break
+                    case .failure(let requestIdErrorResponse):
+                        // return failure callback
+                        DispatchQueue.main.async {
+                            callback(Result.failure(error: requestIdErrorResponse))
+                        }
+                        break
+                    }
+                }
+            }
+            else {
+                TOTPVerificationController.shared.loginWithTOTP(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
+            }
         }
         else {
             // log error
@@ -1245,11 +1465,28 @@ public class Cidaas {
     // 2. Call initiateEmailVerification method
     // 3. Maintain logs based on flags
     
-    public func initiateEmailVerification(requestId: String, sub: String, callback: @escaping(Result<InitiateAccountVerificationResponseEntity>) -> Void) {
+    public func initiateEmailVerification(requestId: String = "", sub: String, extraParams: Dictionary<String, String> = Dictionary<String, String>(), callback: @escaping(Result<InitiateAccountVerificationResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            AccountVerificationController.shared.initiateAccountVerification(requestId: requestId, sub: sub, verificationMedium: VerificationMedium.EMAIL.rawValue, properties: savedProp!, callback: callback)
+            if requestId == "" {
+                self.getRequestId(extraParams: extraParams) {
+                    switch $0 {
+                    case .success(let requestIdSuccessResponse):
+                        AccountVerificationController.shared.initiateAccountVerification(requestId: requestIdSuccessResponse.data.requestId, sub: sub, verificationMedium: VerificationMedium.EMAIL.rawValue, properties: savedProp!, callback: callback)
+                        break
+                    case .failure(let requestIdErrorResponse):
+                        // return failure callback
+                        DispatchQueue.main.async {
+                            callback(Result.failure(error: requestIdErrorResponse))
+                        }
+                        break
+                    }
+                }
+            }
+            else {
+                AccountVerificationController.shared.initiateAccountVerification(requestId: requestId, sub: sub, verificationMedium: VerificationMedium.EMAIL.rawValue, properties: savedProp!, callback: callback)
+            }
         }
         else {
             // log error
@@ -1273,11 +1510,28 @@ public class Cidaas {
     // 2. Call initiateSMSVerification method
     // 3. Maintain logs based on flags
     
-    public func initiateSMSVerification(requestId: String, sub: String, callback: @escaping(Result<InitiateAccountVerificationResponseEntity>) -> Void) {
+    public func initiateSMSVerification(requestId: String = "", sub: String, extraParams: Dictionary<String, String> = Dictionary<String, String>(), callback: @escaping(Result<InitiateAccountVerificationResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            AccountVerificationController.shared.initiateAccountVerification(requestId: requestId, sub: sub, verificationMedium: VerificationMedium.SMS.rawValue, properties: savedProp!, callback: callback)
+            if requestId == "" {
+                self.getRequestId(extraParams: extraParams) {
+                    switch $0 {
+                    case .success(let requestIdSuccessResponse):
+                        AccountVerificationController.shared.initiateAccountVerification(requestId: requestIdSuccessResponse.data.requestId, sub: sub, verificationMedium: VerificationMedium.SMS.rawValue, properties: savedProp!, callback: callback)
+                        break
+                    case .failure(let requestIdErrorResponse):
+                        // return failure callback
+                        DispatchQueue.main.async {
+                            callback(Result.failure(error: requestIdErrorResponse))
+                        }
+                        break
+                    }
+                }
+            }
+            else {
+                AccountVerificationController.shared.initiateAccountVerification(requestId: requestId, sub: sub, verificationMedium: VerificationMedium.SMS.rawValue, properties: savedProp!, callback: callback)
+            }
         }
         else {
             // log error
@@ -1301,11 +1555,28 @@ public class Cidaas {
     // 2. Call initiateIVRVerification method
     // 3. Maintain logs based on flags
     
-    public func initiateIVRVerification(requestId: String, sub: String, callback: @escaping(Result<InitiateAccountVerificationResponseEntity>) -> Void) {
+    public func initiateIVRVerification(requestId: String = "", sub: String, extraParams: Dictionary<String, String> = Dictionary<String, String>(), callback: @escaping(Result<InitiateAccountVerificationResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            AccountVerificationController.shared.initiateAccountVerification(requestId: requestId, sub: sub, verificationMedium: VerificationMedium.IVR.rawValue, properties: savedProp!, callback: callback)
+            if requestId == "" {
+                self.getRequestId(extraParams: extraParams) {
+                    switch $0 {
+                    case .success(let requestIdSuccessResponse):
+                        AccountVerificationController.shared.initiateAccountVerification(requestId: requestIdSuccessResponse.data.requestId, sub: sub, verificationMedium: VerificationMedium.IVR.rawValue, properties: savedProp!, callback: callback)
+                        break
+                    case .failure(let requestIdErrorResponse):
+                        // return failure callback
+                        DispatchQueue.main.async {
+                            callback(Result.failure(error: requestIdErrorResponse))
+                        }
+                        break
+                    }
+                }
+            }
+            else {
+                AccountVerificationController.shared.initiateAccountVerification(requestId: requestId, sub: sub, verificationMedium: VerificationMedium.IVR.rawValue, properties: savedProp!, callback: callback)
+            }
         }
         else {
             // log error
@@ -1357,11 +1628,28 @@ public class Cidaas {
     // 2. Call initiateResetPassword method
     // 3. Maintain logs based on flags
     
-    public func initiateResetPassword(requestId: String, email: String, callback: @escaping(Result<InitiateResetPasswordResponseEntity>) -> Void) {
+    public func initiateResetPassword(requestId: String = "", email: String, extraParams: Dictionary<String, String> = Dictionary<String, String>(), callback: @escaping(Result<InitiateResetPasswordResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            ResetPasswordController.shared.initiateResetPassword(requestId: requestId, email: email, mobile: "", resetMedium: ResetMedium.EMAIL.rawValue, properties: savedProp!, callback: callback)
+            if requestId == "" {
+                self.getRequestId(extraParams: extraParams) {
+                    switch $0 {
+                    case .success(let requestIdSuccessResponse):
+                        ResetPasswordController.shared.initiateResetPassword(requestId: requestIdSuccessResponse.data.requestId, email: email, mobile: "", resetMedium: ResetMedium.EMAIL.rawValue, properties: savedProp!, callback: callback)
+                        break
+                    case .failure(let requestIdErrorResponse):
+                        // return failure callback
+                        DispatchQueue.main.async {
+                            callback(Result.failure(error: requestIdErrorResponse))
+                        }
+                        break
+                    }
+                }
+            }
+            else {
+                ResetPasswordController.shared.initiateResetPassword(requestId: requestId, email: email, mobile: "", resetMedium: ResetMedium.EMAIL.rawValue, properties: savedProp!, callback: callback)
+            }
         }
         else {
             // log error
@@ -1385,11 +1673,28 @@ public class Cidaas {
     // 2. Call initiateResetPassword method
     // 3. Maintain logs based on flags
     
-    public func initiateResetPassword(requestId: String, mobile: String, callback: @escaping(Result<InitiateResetPasswordResponseEntity>) -> Void) {
+    public func initiateResetPassword(requestId: String = "", mobile: String, extraParams: Dictionary<String, String> = Dictionary<String, String>(), callback: @escaping(Result<InitiateResetPasswordResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            ResetPasswordController.shared.initiateResetPassword(requestId: requestId, email: "", mobile: mobile, resetMedium: ResetMedium.SMS.rawValue, properties: savedProp!, callback: callback)
+            if requestId == "" {
+                self.getRequestId(extraParams: extraParams) {
+                    switch $0 {
+                    case .success(let requestIdSuccessResponse):
+                        ResetPasswordController.shared.initiateResetPassword(requestId: requestIdSuccessResponse.data.requestId, email: "", mobile: mobile, resetMedium: ResetMedium.SMS.rawValue, properties: savedProp!, callback: callback)
+                        break
+                    case .failure(let requestIdErrorResponse):
+                        // return failure callback
+                        DispatchQueue.main.async {
+                            callback(Result.failure(error: requestIdErrorResponse))
+                        }
+                        break
+                    }
+                }
+            }
+            else {
+                ResetPasswordController.shared.initiateResetPassword(requestId: requestId, email: "", mobile: mobile, resetMedium: ResetMedium.SMS.rawValue, properties: savedProp!, callback: callback)
+            }
         }
         else {
             // log error
@@ -2010,8 +2315,25 @@ public class Cidaas {
     // get access token from social token
     // 1. Call getAccessToken method
     
-    public func getAccessToken(requestId: String, socialToken: String, provider: String, viewType: String, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
-        AccessTokenController.shared.getAccessToken(requestId: requestId, socialToken: socialToken, provider: provider, viewType: viewType, callback: callback)
+    public func getAccessToken(requestId: String = "", socialToken: String, provider: String, viewType: String, extraParams: Dictionary<String, String> = Dictionary<String, String>(), callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+        if requestId == "" {
+            self.getRequestId(extraParams: extraParams) {
+                switch $0 {
+                case .success(let requestIdSuccessResponse):
+                    AccessTokenController.shared.getAccessToken(requestId: requestIdSuccessResponse.data.requestId, socialToken: socialToken, provider: provider, viewType: viewType, callback: callback)
+                    break
+                case .failure(let requestIdErrorResponse):
+                    // return failure callback
+                    DispatchQueue.main.async {
+                        callback(Result.failure(error: requestIdErrorResponse))
+                    }
+                    break
+                }
+            }
+        }
+        else {
+            AccessTokenController.shared.getAccessToken(requestId: requestId, socialToken: socialToken, provider: provider, viewType: viewType, callback: callback)
+        }
     }
     
 // -------------------------------------------------------------------------------------------------- //
@@ -2086,11 +2408,28 @@ public class Cidaas {
     // 2. Call deduplicationDetails method
     // 3. Maintain logs based on flags
     
-    public func loginWithDeduplication(requestId: String, sub: String, password: String, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+    public func loginWithDeduplication(requestId: String = "", sub: String, password: String, extraParams: Dictionary<String, String> = Dictionary<String, String>(), callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            DeduplicationController.shared.deduplicationLogin(requestId: requestId, sub: sub, password: password, properties: savedProp!, callback: callback)
+            if requestId == "" {
+                self.getRequestId(extraParams: extraParams) {
+                    switch $0 {
+                    case .success(let requestIdSuccessResponse):
+                        DeduplicationController.shared.deduplicationLogin(requestId: requestIdSuccessResponse.data.requestId, sub: sub, password: password, properties: savedProp!, callback: callback)
+                        break
+                    case .failure(let requestIdErrorResponse):
+                        // return failure callback
+                        DispatchQueue.main.async {
+                            callback(Result.failure(error: requestIdErrorResponse))
+                        }
+                        break
+                    }
+                }
+            }
+            else {
+                DeduplicationController.shared.deduplicationLogin(requestId: requestId, sub: sub, password: password, properties: savedProp!, callback: callback)
+            }
         }
         else {
             // log error
@@ -2142,11 +2481,28 @@ public class Cidaas {
     // 2. Call getRegistrationFields method
     // 3. Maintain logs based on flags
     
-    public func getRegistrationFields(locale: String = "", requestId: String, callback: @escaping(Result<RegistrationFieldsResponseEntity>) -> Void) {
+    public func getRegistrationFields(locale: String = "", requestId: String = "", extraParams: Dictionary<String, String> = Dictionary<String, String>(), callback: @escaping(Result<RegistrationFieldsResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            RegistrationController.shared.getRegistrationFields(locale: locale, requestId: requestId, properties: savedProp!, callback: callback)
+            if requestId == "" {
+                self.getRequestId(extraParams: extraParams) {
+                    switch $0 {
+                    case .success(let requestIdSuccessResponse):
+                        RegistrationController.shared.getRegistrationFields(locale: locale, requestId: requestIdSuccessResponse.data.requestId, properties: savedProp!, callback: callback)
+                        break
+                    case .failure(let requestIdErrorResponse):
+                        // return failure callback
+                        DispatchQueue.main.async {
+                            callback(Result.failure(error: requestIdErrorResponse))
+                        }
+                        break
+                    }
+                }
+            }
+            else {
+                RegistrationController.shared.getRegistrationFields(locale: locale, requestId: requestId, properties: savedProp!, callback: callback)
+            }
         }
         else {
             // log error
@@ -2170,11 +2526,28 @@ public class Cidaas {
     // 2. Call registerUser method
     // 3. Maintain logs based on flags
     
-    public func registerUser(requestId: String, registrationEntity: RegistrationEntity, callback: @escaping(Result<RegistrationResponseEntity>) -> Void) {
+    public func registerUser(requestId: String = "", registrationEntity: RegistrationEntity, extraParams: Dictionary<String, String> = Dictionary<String, String>(), callback: @escaping(Result<RegistrationResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            RegistrationController.shared.registerUser(requestId: requestId, registrationEntity: registrationEntity, properties: savedProp!, callback: callback)
+            if requestId == "" {
+                self.getRequestId(extraParams: extraParams) {
+                    switch $0 {
+                    case .success(let requestIdSuccessResponse):
+                        RegistrationController.shared.registerUser(requestId: requestIdSuccessResponse.data.requestId, registrationEntity: registrationEntity, properties: savedProp!, callback: callback)
+                        break
+                    case .failure(let requestIdErrorResponse):
+                        // return failure callback
+                        DispatchQueue.main.async {
+                            callback(Result.failure(error: requestIdErrorResponse))
+                        }
+                        break
+                    }
+                }
+            }
+            else {
+                RegistrationController.shared.registerUser(requestId: requestId, registrationEntity: registrationEntity, properties: savedProp!, callback: callback)
+            }
         }
         else {
             // log error

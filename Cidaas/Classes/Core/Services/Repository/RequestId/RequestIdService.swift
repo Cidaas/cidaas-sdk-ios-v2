@@ -20,7 +20,7 @@ public class RequestIdService {
     }
     
     // get request id service
-    public func getRequestId(properties : Dictionary<String, String>, callback: @escaping (Result<RequestIdResponseEntity>) -> Void) {
+    public func getRequestId(properties : Dictionary<String, String>, extraParams: Dictionary<String, String>, callback: @escaping (Result<RequestIdResponseEntity>) -> Void) {
         // local variables
         var headers : HTTPHeaders
         var urlString : String
@@ -40,14 +40,17 @@ public class RequestIdService {
         
         // construct body params
         var bodyParams = Dictionary<String, String>()
-        bodyParams["nonce"] = "12345"
+        bodyParams["nonce"] = UUID().uuidString
         bodyParams["redirect_uri"] = properties["RedirectURL"]
         bodyParams["client_id"] = properties["ClientId"]
         bodyParams["client_secret"] = properties["ClientSecret"]
         bodyParams["response_type"] = "code"
-        bodyParams["scope"] = "openid email roles profile offline_access phone"
         bodyParams["code_challenge"] = properties["Challenge"]
         bodyParams["code_challenge_method"] = properties["Method"]
+        
+        for(key, value) in extraParams {
+            bodyParams[key] = value
+        }
         
         // assign base url
         baseURL = (properties["DomainURL"]) ?? ""

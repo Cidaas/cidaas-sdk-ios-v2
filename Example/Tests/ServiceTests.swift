@@ -1220,7 +1220,7 @@ class ServiceTests: QuickSpec {
                     
                     let expect = self.expectation(description: "Expectation")
                     
-                    service.getRequestId(properties: properties!) {
+                    service.getRequestId(properties: properties!, extraParams: Dictionary<String, String>()) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
