@@ -3347,7 +3347,7 @@ class ControllerTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    controller.getRequestId(properties: properties!) {
+                    controller.getRequestId(properties: properties!, extraParams: Dictionary<String, String>()) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -3379,7 +3379,7 @@ class ControllerTests: QuickSpec {
                     
                     let properties = DBHelper.shared.getPropertyFile()
                     
-                    controller.getRequestId(properties: properties!) {
+                    controller.getRequestId(properties: properties!, extraParams: Dictionary<String, String>()) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -3413,7 +3413,7 @@ class ControllerTests: QuickSpec {
                     
                     properties!["DomainURL"] = ""
                     
-                    controller.getRequestId(properties: properties!) {
+                    controller.getRequestId(properties: properties!, extraParams: Dictionary<String, String>()) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
