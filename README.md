@@ -6,7 +6,7 @@
 [![CocoaPods Compatible](https://img.shields.io/cocoapods/v/Cidaas.svg?style=flat&label=CocoaPods&colorA=28a745&&colorB=4E4E4E)](https://cocoapods.org/pods/Cidaas)
 [![Platform](https://img.shields.io/badge/Platforms-iOS-4E4E4E.svg?colorA=28a745)](#installation)
 
-The steps here will guide you through setting up and managing authentication and authorization in your apps using cidaas SDK.    
+The steps here will guide you through setting up and managing authentication and authorization in your apps using cidaas SDK.
 
 ## Table of Contents
 
@@ -25,8 +25,7 @@ The steps here will guide you through setting up and managing authentication and
         <!--te-->
     * [Native UI Integration](/Example/Readme/PureNativeLogin.md)
     <!--te-->
-    
-    
+
 
 #### Requirements
 
@@ -106,7 +105,7 @@ cidaas.loginWithBrowser(delegate: self) {
 You can also perform social login using your native browser and redirects to the App once successfully logged in. To perform social login call ****loginWithSocial()****.
 
 ```swift
-cidaas.loginWithSocial(provider: "your_social_provider", requestId: "your_request_id", delegate: self) { 
+cidaas.loginWithSocial(provider: "your_social_provider", delegate: self) { 
     switch $0 {
         case .success(let successResponse):
             // your success code here
@@ -117,7 +116,7 @@ cidaas.loginWithSocial(provider: "your_social_provider", requestId: "your_reques
     }
 }
 ```
-where social provider may be either facebook, google, linkedin or any other providers and requestId can be get from [Getting RequestId](#getting-request-id)
+where social provider may be either facebook, google, linkedin or any other providers
 
 Use [customScheme](https://developer.apple.com/documentation/uikit/core_app/communicating_with_other_apps_using_custom_urls#2928963) or [universalLinks](https://developer.apple.com/library/content/documentation/General/Conceptual/AppSearch/UniversalLinks.html) to return back the control from browser to App.
 
@@ -142,3 +141,12 @@ func application(_ application: UIApplication, continue userActivity: NSUserActi
     return true
 }
 ```
+
+## Screenshots
+<p align="center">
+
+<img src = "https://user-images.githubusercontent.com/26590601/35260372-3b424b8a-0031-11e8-93be-598f473ac753.png" alt="Screen 1" style="width:40%" height="600">
+
+<img src = "https://user-images.githubusercontent.com/26590601/35260352-18800f2e-0031-11e8-908e-85b98c306e99.png" alt="Screen 2" style="width:40%" height="600">
+
+</p>

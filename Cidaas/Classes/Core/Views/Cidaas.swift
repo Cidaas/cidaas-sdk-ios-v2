@@ -8,6 +8,7 @@
 
 import Foundation
 import SafariServices
+import SwiftKeychainWrapper
 
 public class Cidaas {
     
@@ -60,10 +61,27 @@ public class Cidaas {
 // -------------------------------------------------------------------------------------------------- //
     
     // constructor
-    init(storage : TransactionStore = TransactionStore.shared) {
+    public init(storage : TransactionStore = TransactionStore.shared) {
         // set device info in local
         deviceInfo = DeviceInfoModel()
-        deviceInfo.deviceId = UIDevice.current.identifierForVendor?.uuidString ?? ""
+        
+        // check device id in keychain
+        if let sdk_device_id = KeychainWrapper.standard.string(forKey: "cidaas_sdk_device_id") {
+            // log device id
+            let loggerMessage = "Device Id in Keychain : " + sdk_device_id
+            logw(loggerMessage, cname: "cidaas-sdk-info-log")
+            
+            deviceInfo.deviceId = sdk_device_id
+        }
+        else {
+            // save device id
+            let sdk_device_id = UIDevice.current.identifierForVendor?.uuidString ?? ""
+            _ = KeychainWrapper.standard.set(sdk_device_id, forKey: "cidaas_sdk_device_id")
+            let loggerMessage = "Device Id after saving in Keychain : " + sdk_device_id
+            logw(loggerMessage, cname: "cidaas-sdk-info-log")
+            
+            deviceInfo.deviceId = sdk_device_id
+        }
         deviceInfo.deviceMake = "Apple"
         let deviceHelper = DeviceHelper()
         deviceInfo.deviceModel = String(describing: deviceHelper.hardware())
@@ -2302,6 +2320,14 @@ public class Cidaas {
     // 1. Call setAccessToken method
     
     public func setAccessToken(accessTokenEntity: AccessTokenEntity, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+        
+        // validate fields
+        if accessTokenEntity.access_token == "" || accessTokenEntity.expires_in == 0 || accessTokenEntity.refresh_token == "" || accessTokenEntity.sub == "" {
+            let error = WebAuthError.shared.propertyMissingException()
+            error.errorMessage = "access_token or expires_in or refresh_token or sub must not be empty"
+            callback(Result.failure(error: error))
+        }
+        
         // assign to access token model
         EntityToModelConverter.shared.accessTokenEntityToAccessTokenModel(accessTokenEntity: accessTokenEntity, callback: { _ in
             
