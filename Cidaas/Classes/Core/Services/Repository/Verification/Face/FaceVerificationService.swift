@@ -281,8 +281,9 @@ public class FaceVerificationService {
                 }
                 
                 let uploadImage = UIImageJPEGRepresentation(photo, 0.01)
-                
-                multipartFormData.append(uploadImage!, withName: "photo", fileName: "photo.jpg", mimeType: "image/jpeg")
+                if enrollFaceEntity.usage_pass != "" {
+                    multipartFormData.append(uploadImage!, withName: "photo", fileName: "photo.jpg", mimeType: "image/jpeg")
+                }
                 enrolledURL.addValue(multipartFormData.contentType, forHTTPHeaderField: "Content-Type")
                 
         }, with: enrolledURL,
@@ -498,7 +499,9 @@ public class FaceVerificationService {
                 
                 let uploadImage = UIImageJPEGRepresentation(photo, 0.01)
                 
-                multipartFormData.append(uploadImage!, withName: "photo", fileName: "photo.jpg", mimeType: "image/jpeg")
+                if authenticateFaceEntity.usage_pass != "" {
+                    multipartFormData.append(uploadImage!, withName: "photo", fileName: "photo.jpg", mimeType: "image/jpeg")
+                }
                 enrolledURL.addValue(multipartFormData.contentType, forHTTPHeaderField: "Content-Type")
                 
         }, with: enrolledURL,

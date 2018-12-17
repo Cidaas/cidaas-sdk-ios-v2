@@ -32,6 +32,22 @@ class EntityTests: QuickSpec {
                     XCTAssertEqual(entity.success, true)
                 }
                 
+                it("call pending notification list response entity") {
+                    var entity = PushNotificationEntity()
+                    
+                    let jsonString = "{\"sub\":\"6f7e672c-1e69-4108-92c4-3556f13eda74\",\"physicalVerificationId\":\"b4a47135-2e6e-4805-8a56-e8453a1b699b\",\"verificationType\":\"PATTERN\",\"requestTime\":1544765506643,\"statusId\":\"d6c0e0e7-e376-4804-ab4a-aef4bca839ef\",\"randomNumbers\":\"\",\"address\":{\"ip\":\"182.72.240.54\",\"ip_no\":\"3058233398\",\"country_short\":\"IN\",\"country_long\":\"India\",\"region\":\"Karnataka\",\"city\":\"Bangalore\",\"latitude\":12.97623,\"longitude\":77.603287,\"zipcode\":\"560018\",\"status\":\"OK\",\"elevation\":0,\"formattedAddress\":\"Bangalore, Karnataka, India, 560018\",\"resolver\":\"IP\"},\"deviceInfo\":{\"deviceId\":\"5efcc23ea4bf537ff5f299e7bc4ce710\",\"lat\":\"12.9195361\",\"lon\":\"77.6683974\",\"ipAddress\":\"182.72.240.54\",\"userAgent\":\"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36\",\"deviceModel\":\"\",\"deviceMake\":\"\",\"engine\":{\"version\":\"537.36\",\"name\":\"WebKit\"},\"os\":{\"version\":\"10.14.0\",\"name\":\"Mac OS\"},\"browser\":{\"version\":\"70.0.3538.110\",\"name\":\"Chrome\",\"major\":\"70\"},\"sub\":\"6f7e672c-1e69-4108-92c4-3556f13eda74\"}}}"
+                    let decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        entity = try decoder.decode(PushNotificationEntity.self, from: data)
+                        print(entity.sub)
+                    }
+                    catch(let error) {
+                        print(error.localizedDescription)
+                    }
+                }
+                
                 it("call initiate account verification response entity") {
                     var entity = InitiateAccountVerificationResponseEntity()
                     

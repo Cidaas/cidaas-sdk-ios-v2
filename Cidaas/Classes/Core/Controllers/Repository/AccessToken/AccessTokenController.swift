@@ -70,7 +70,7 @@ public class AccessTokenController {
         
         // getting current seconds
         let milliseconds = Date().timeIntervalSince1970
-        let seconds = Int64(milliseconds / 1000)
+        let seconds = Int64(milliseconds)
         
         let accessTokenModel = DBHelper.shared.getAccessToken(key: sub)
         let expires = accessTokenModel.expires_in
@@ -222,7 +222,7 @@ public class AccessTokenController {
         
         // set current time
         let milliseconds = Date().timeIntervalSince1970
-        let seconds = Int64(milliseconds / 1000)
+        let seconds = Int64(milliseconds)
         accessTokenModel.seconds = seconds
         
         // save access token in local db

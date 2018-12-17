@@ -10,47 +10,74 @@ import UIKit
 import Cidaas
 
 class ViewController: UIViewController {
-
-    var requestId: String = ""
+    
+    var cidaas = Cidaas.shared
     
     // did load
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.getRequestId()
     }
     
     // did receive memory warning
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-
-    @IBAction func loginAction(_ sender: Any) {
-        
-        Cidaas.shared.loginWithSocial(provider: "linkedin", delegate: self) {
+    
+    // login with browser
+    func loginWithBrowser() {
+        self.cidaas.loginWithBrowser(delegate: self) {
             switch $0 {
             case .success(let loginSuccessResponse):
                 print(loginSuccessResponse.data.access_token)
                 break
-            case .failure(let loginErrorResponse):
-                print(loginErrorResponse.errorMessage)
+            case .failure(let loginFailureResponse):
+                print(loginFailureResponse.errorMessage)
                 break
             }
         }
-        
-//        Cidaas.shared.loginWithBrowser(delegate: self) {
-//            switch $0 {
-//            case .failure(let errorResponse):
-//                print(errorResponse.errorMessage)
-//                break
-//            case .success(let successResponse):
-//                let alert = UIAlertController(title: "Access Token", message: "\(successResponse.data.access_token)", preferredStyle: .alert)
-//                alert.addAction(UIAlertAction(title: "Done", style: .default, handler: nil))
-//                self.present(alert, animated: true, completion: nil)
-//                break
-//            }
-//        }
-        
-//        guard let url = URL(string: "https://stackoverflow.com") else { return }
-//        UIApplication.shared.open(url)
-        
+    }
+    
+    // get request id
+    func getRequestId() {
+        self.cidaas.getRequestId() {
+            switch $0 {
+                case .success(let requestIdSuccessResponse):
+                    print(requestIdSuccessResponse.data.requestId)
+                    self.loginWithBrowser()
+                    break
+                case .failure(let requestIdFailureResponse):
+                    print(requestIdFailureResponse.errorMessage)
+                    break
+            }
+        }
+    }
+    
+    // get tenant information
+    func getTenantInformation() {
+        self.cidaas.getTenantInfo() {
+            switch $0 {
+            case .success(let tenantInfoSuccessResponse):
+                print(tenantInfoSuccessResponse.data.tenant_name)
+                break
+            case .failure(let tenantInfoFailureResponse):
+                print(tenantInfoFailureResponse.errorMessage)
+                break
+            }
+        }
+    }
+    
+    // get client information
+    func getClientInformation() {
+        self.cidaas.getClientInfo() {
+            switch $0 {
+            case .success(let clientInfoSuccessResponse):
+                print(clientInfoSuccessResponse.data.login_providers)
+                break
+            case .failure(let clientInfoFailureResponse):
+                print(clientInfoFailureResponse.errorMessage)
+                break
+            }
+        }
     }
 }

@@ -40,7 +40,7 @@ public class LoginController {
         let loginURL = constructURL(extraParams: extraParams, properties: properties)
         let redirectURL = URL(string: properties["RedirectURL"] ?? "")!
         
-        if #available(iOS 11.0, *) {
+        if #available(iOS 12.0, *) {
             
             // initiate safari session with the constructed url performing single sign on
             let session = SafariAuthenticationSession(loginURL: loginURL, redirectURL: redirectURL, callback: callback)
@@ -74,7 +74,7 @@ public class LoginController {
         let loginURL = constructSocialURL(provider: provider, requestId: requestId, properties: properties)
         let redirectURL = URL(string: properties["RedirectURL"] ?? "")!
         
-        if #available(iOS 11.0, *) {
+        if #available(iOS 12.0, *) {
             
             // initiate safari session with the constructed url performing single sign on
             let session = SafariAuthenticationSession(loginURL: loginURL, redirectURL: redirectURL, callback: callback)
@@ -94,7 +94,7 @@ public class LoginController {
         
         // assign url to safari controller
         let vc = SFSafariViewController(url: loginURL)
-
+        vc.view.tintColor = UIColor.orange
         // present the safari controller
         self.delegate.present(vc, animated: true, completion: nil)
     }
