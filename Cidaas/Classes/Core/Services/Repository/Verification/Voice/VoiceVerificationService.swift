@@ -280,8 +280,9 @@ public class VoiceVerificationService {
                 for (key, value) in bodyParams {
                     multipartFormData.append(value.data(using: .utf8)!, withName: key)
                 }
-                
-                multipartFormData.append(voice, withName: "voice", fileName: "voice.wav", mimeType: "audio/mpeg")
+                if enrollVoiceEntity.usage_pass != "" {
+                    multipartFormData.append(voice, withName: "voice", fileName: "voice.wav", mimeType: "audio/mpeg")
+                }
                 enrolledURL.addValue(multipartFormData.contentType, forHTTPHeaderField: "Content-Type")
                 
         }, with: enrolledURL,
@@ -494,8 +495,9 @@ public class VoiceVerificationService {
                 for (key, value) in bodyParams {
                     multipartFormData.append(value.data(using: .utf8)!, withName: key)
                 }
-                
-                multipartFormData.append(voice, withName: "voice", fileName: "voice.wav", mimeType: "audio/mpeg")
+                if authenticateVoiceEntity.usage_pass != "" {
+                    multipartFormData.append(voice, withName: "voice", fileName: "voice.wav", mimeType: "audio/mpeg")
+                }
                 enrolledURL.addValue(multipartFormData.contentType, forHTTPHeaderField: "Content-Type")
                 
         }, with: enrolledURL,
