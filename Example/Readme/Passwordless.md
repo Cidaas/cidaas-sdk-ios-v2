@@ -1,6 +1,6 @@
 # Passwordless or Multifactor Authentication
 
-cidaas provides numerous options to ensure safe and diverse mechanisms for login. It is a good practise to enable multiple factors during login, to ensure there is no misuse of authentication mechanism. To improve convenience, cidaas offers passwordless mechanisms as well. Depending on the end user's comfort, you can offer any of the multi-factor authentication available in cidaas.    
+cidaas provides numerous options to ensure safe and diverse mechanisms for login. It is a good practice to enable multiple factors during login, to ensure that user identities and accesses are not compromised. To improve convenience, cidaas offers passwordless mechanisms as well. Depending on the end user's comfort, you can offer any of the multi-factor authentication methods available in cidaas.    
 
 ## Table of Contents
 <!--ts-->
@@ -100,7 +100,7 @@ cidaas.configureFaceRecognition(photo: photo, sub: "7dfb2122-fa5e-4f7a-8494-dada
 
 #### Login via Face Recognition
 
-Once you configured Face Recognition, you can login with Face Recognition for Passwordless authentication. To login, call **loginWithFaceRecognition()**.
+Once you configure Face Recognition, you can login with Face Recognition for Passwordless authentication. To login, call **loginWithFaceRecognition()**.
 
 ```swift
 let passwordlessEntity = PasswordlessEntity()
@@ -138,7 +138,7 @@ cidaas.loginWithFaceRecognition(photo: photo, passwordlessEntity: passwordlessEn
 
 #### Voice Recognition
 
-Biometric plays an important role in the modern world. cidaas can record your user's voice, extract unique features and use that to verify. To use Voice Recognition as a passwordless login, you need to configure it first.
+Biometric plays an important role in the modern world. cidaas can record your user's voice, extract unique features and use that to verify. To use Voice Recognition for passwordless login, you need to configure it first.
 
 #### Configure Voice Recognition
 
@@ -171,7 +171,7 @@ cidaas.configureVoiceRecognition(voice: audioData, sub: "7dfb2122-fa5e-4f7a-8494
 
 #### Login via Voice Recognition
 
-Once you configured Voice Recognition, you can also login with Voice Recognition as Passwordless authentication. To login, call **loginWithVoiceRecognition()**.
+Once you configure Voice Recognition, you can login with Voice Recognition as Passwordless authentication. To login, call **loginWithVoiceRecognition()**.
 
 ```swift
 let passwordlessEntity = PasswordlessEntity()
@@ -208,7 +208,7 @@ cidaas.loginWithVoiceRecognition(voice: audioData, passwordlessEntity: passwordl
 ```
 
 #### TouchId Verification
-You may want to allow users to use their touchId on their mobile devices or computer peripheral to be used for passwordless login.To do this TouchId Verification as a passwordless login, you need to configure it first.
+You may want to allow users to use their touchId on their mobile devices or computer peripheral to be used for passwordless login.To use TouchId Verification for passwordless login, you need to configure it first.
 
 #### Configure TouchId Verification
 
@@ -241,7 +241,7 @@ cidaas.configureTouchId(sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
 
 #### Login via Touch Id Verification
 
-Once you have configured Touch Id Verification, you can also login with Touch Id Verification via Passwordless authentication. To login, call **loginWithTouchId()**.
+Once you have configured Touch Id Verification, you can also login with Touch Id Verification for Passwordless authentication. To login, call **loginWithTouchId()**.
 
 ```swift
 let passwordlessEntity = PasswordlessEntity()
@@ -278,7 +278,7 @@ cidaas.loginWithTouchId(passwordlessEntity: passwordlessEntity) {
 ```
 
 #### Pattern Recognition
-If you want to offer a passwordless login after securing it with the secure pattern that user can define on their device, you can use this option.  To use Pattern Recognition as a passwordless login, you need to configure it first.
+If you want to offer a passwordless login after securing it with the secure pattern that user can define on their device, you can use this option.  To use Pattern Recognition for passwordless login, you need to configure it first.
 
 #### Configure Pattern Recognition
 
@@ -311,7 +311,7 @@ cidaas.configurePatternRecognition(pattern: "RED[1,2,3]", sub: "7dfb2122-fa5e-4f
 
 #### Login via Pattern Recognition
 
-Once you have configured Pattern Recognition, you can also login with Pattern Recognition via Passwordless authentication. To login, call **loginWithPatternRecognition()**.
+Once you have configured Pattern Recognition, you can also login with Pattern Recognition for Passwordless authentication. To login, call **loginWithPatternRecognition()**.
 
 ```swift
 let passwordlessEntity = PasswordlessEntity()
@@ -348,7 +348,7 @@ cidaas.loginWithPatternRecognition(pattern: "RED[1,2,3], passwordlessEntity: pas
 ```
 
 ### SmartPush Notification
-SmartPush notification can be used when you would like users to recieve a number on their device and use that to authenticate instead of password. To use SmartPush Notification as a passwordless login, you need to configure it first.
+SmartPush notification can be used when you would like users to receive a number on their device and use that to authenticate instead of password. To use SmartPush Notification for passwordless login, you need to configure it first.
 
 #### Configure SmartPush Notification
 
@@ -381,7 +381,7 @@ cidaas.configureSmartPush(sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
 
 #### Login via SmartPush Notification
 
-Once you configured SmartPush Notification, you can also login with SmartPush Notification via Passwordless authentication. To login, call **loginWithSmartPush()**.
+Once you configure SmartPush Notification, you can also login with SmartPush Notification for Passwordless authentication. To login, call **loginWithSmartPush()**.
 
 ```swift
 let passwordlessEntity = PasswordlessEntity()
@@ -417,7 +417,7 @@ cidaas.loginWithSmartPush(passwordlessEntity: passwordlessEntity) {
 }
 ```
 #### TOTP
-You can configure passwordless login with an OTP that has to be valid only for a fixed duration. To use TOTP as a passwordless login, you need to configure TOTP physical verification first.
+You can configure passwordless login with an OTP that has to be valid only for a fixed duration. To use TOTP for passwordless login, you need to configure TOTP physical verification first.
 
 #### Configure TOTP
 
@@ -450,7 +450,7 @@ cidaas.configureTOTP(sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
 
 #### Login via TOTP
 
-Once you configure TOTP, you can login with TOTP via Passwordless authentication. To login, call **loginWithTOTP()**.
+Once you configure TOTP, you can login with TOTP for Passwordless authentication. To login, call **loginWithTOTP()**.
 
 ```swift
 let passwordlessEntity = PasswordlessEntity()
@@ -521,7 +521,7 @@ cidaas.configureEmail(sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
 
 #### Enroll Email
 
-Once you received your verification code via Email, you need to verify that code. For that verification, call **enrollEmail()**.
+Once you receive your verification code via Email, you need to verify that code. For that verification, call **enrollEmail()**.
 
 ```swift
 cidaas.enrollEmail(code: "658144") {
@@ -535,7 +535,7 @@ cidaas.enrollEmail(code: "658144") {
     }
 }
 ```
-Here, **code** is the key where you would get it from the Email
+Here, **code** is the key you would get from the Email
 
 **Response:**
 
@@ -552,7 +552,7 @@ Here, **code** is the key where you would get it from the Email
 
 #### Login via Email
 
-Once you have configured for Email login, you can also login with your Email via Passwordless authentication. To receive a verification code via Email, call **loginWithEmail()**.
+Once you have configured for Email login, you can also login with your Email for Passwordless authentication. To receive a verification code via Email, call **loginWithEmail()**.
 
 ```swift
 let passwordlessEntity = PasswordlessEntity()
@@ -585,7 +585,7 @@ cidaas.loginWithEmail(passwordlessEntity: passwordlessEntity) {
 
 #### Verify Email
 
-Once you received your verification code via Email, you need to verify the code. For that verification, call **verifyEmail()**.
+Once you receive your verification code via Email, you need to verify the code. For that verification, call **verifyEmail()**.
 
 ```swift
 cidaas.verifyEmail(code: "123123") {
@@ -599,7 +599,7 @@ cidaas.verifyEmail(code: "123123") {
     }
 }
 ```
-Here, **code** is the key where you would get it from the Email
+Here, **code** is the key you would get from the Email
 
 **Response:**
 ```json
@@ -619,7 +619,7 @@ Here, **code** is the key where you would get it from the Email
 
 #### SMS
 
-To use SMS as a passwordless login, you need to configure SMS physical verification first, and verify your mobile number. If you already verified your mobile number using SMS during account verification, it is by default setup for passwordless login. 
+To use SMS as a passwordless login, you need to configure SMS physical verification first, and verify your mobile number. If you have already verified your mobile number using SMS during account verification, it is by default setup for passwordless login. 
 
 #### Configure SMS
 
@@ -652,7 +652,7 @@ cidaas.configureSMS(sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
 
 #### Enroll SMS
 
-Once you received your verification code via SMS, you need to verify the code. For that verification, call **enrollSMS()**.
+Once you receive your verification code via SMS, you need to verify the code. For that verification, call **enrollSMS()**.
 
 ```swift
 cidaas.enrollSMS(code: "123123") {
@@ -666,7 +666,7 @@ cidaas.enrollSMS(code: "123123") {
     }
 }
 ```
-Here, **code** is the key where you would get it from the SMS
+Here, **code** is the key you would get from the SMS
 
 **Response:**
 
@@ -683,7 +683,7 @@ Here, **code** is the key where you would get it from the SMS
 
 #### Login via SMS
 
-Once you configured SMS, you can also login with SMS via Passwordless authentication. To receive a verification code via SMS, call **loginWithSMS()**.
+Once you configure SMS, you can also login with SMS for Passwordless authentication. To receive a verification code via SMS, call **loginWithSMS()**.
 
 ```swift
 let passwordlessEntity = PasswordlessEntity()
@@ -716,7 +716,7 @@ cidaas.loginWithSMS(passwordlessEntity: passwordlessEntity) {
 
 #### Verify SMS
 
-Once you received your verification code via SMS, you need to verify the code. For that verification, call **verifySMS()**.
+Once you receive your verification code via SMS, you need to verify the code. For that verification, call **verifySMS()**.
 
 ```swift
 cidaas.verifySMS(code: "123123") {
@@ -730,7 +730,7 @@ cidaas.verifySMS(code: "123123") {
     }
 }
 ```
-Here, **code** is the key where you would get it from the SMS
+Here, **code** is the key you would get from the SMS
 
 **Response:**
 
@@ -751,7 +751,7 @@ Here, **code** is the key where you would get it from the SMS
 
 #### IVR
 
-To use IVR as a passwordless login, you need to configure IVR physical verification first and verify your mobile number. If you already verified your mobile number through account verification via IVR, it is already configured. 
+To use IVR as a passwordless login, you need to configure IVR physical verification first and verify your mobile number. If you have already verified your mobile number through account verification via IVR, it is already configured. 
 
 #### Configure IVR
 
@@ -784,7 +784,7 @@ cidaas.configureIVR(sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
 
 #### Enroll IVR
 
-Once you received your verification code via IVR verification call, you need to verify the code. For that verification, call **enrollIVR()**.
+Once you receive your verification code for IVR verification call, you need to verify the code. For that verification, call **enrollIVR()**.
 
 ```swift
 cidaas.enrollIVR(code: "123123") {
@@ -798,7 +798,7 @@ cidaas.enrollIVR(code: "123123") {
     }
 }
 ```
-Here, **code** is the key where you would get it from the IVR verification call
+Here, **code** is the key you would get from the IVR verification call
 
 **Response:**
 
@@ -815,7 +815,7 @@ Here, **code** is the key where you would get it from the IVR verification call
 
 #### Login via IVR
 
-Once you configured IVR, you can also login with IVR via Passwordless authentication. To receive a verification code via IVR verification call, call **loginWithIVR()**.
+Once you configure IVR, you can also login with IVR for Passwordless authentication. To receive a verification code via IVR verification call, call **loginWithIVR()**.
 
 ```swift
 let passwordlessEntity = PasswordlessEntity()
@@ -848,7 +848,7 @@ cidaas.loginWithIVR(passwordlessEntity: passwordlessEntity){
 
 #### Verify IVR
 
-Once you received your verification code via IVR, you need to verify the code. For that verification, call **verifyIVR()**.
+Once you receive your verification code via IVR, you need to verify the code. For that verification, call **verifyIVR()**.
 
 ```swift
 cidaas.verifyIVR(code: "123123") {
@@ -862,7 +862,7 @@ cidaas.verifyIVR(code: "123123") {
     }
 }
 ```
-Here, **code** is the key where you would get it from the IVR verification call
+Here, **code** is the key you would get from the IVR verification call
 
 **Response:**
 
@@ -883,7 +883,7 @@ Here, **code** is the key where you would get it from the IVR verification call
 
 #### BackupCode
 
-To use Backupcode as a passwordless login, you need to configure Backupcode physical verification first.
+To use Backupcode for passwordless login, you need to configure Backupcode physical verification first.
 
 #### Configure BackupCode
 
@@ -923,7 +923,7 @@ cidaas.configureBackupcode(sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
 
 #### Login via Backupcode
 
-Once you configured Backupcode, you can also login with Backupcode via Passwordless authentication. To login with Backupcode, call **loginWithBackupcode()**.
+Once you configure Backupcode, you can also login with Backupcode for Passwordless authentication. To login with Backupcode, call **loginWithBackupcode()**.
 
 ```swift
 let passwordlessEntity = PasswordlessEntity()
@@ -941,7 +941,7 @@ cidaas.loginWithBackupcode(code: "63537876", passwordlessEntity: passwordlessEnt
     }
 }
 ```
-Here, **code** is the key where you would get it from your saved Backup codes
+Here, **code** is the key you would get from your saved Backup codes
 
 **Response:**
 
