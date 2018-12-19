@@ -44,7 +44,7 @@ pod 'Cidaas'
 
 The following steps are to be followed to use this cidaas SDK.
 
-Create a plist file named as <b>cidaas.plist</b> and fill all the inputs in key value pair. The inputs are below mentioned.
+Create a plist file named <b>cidaas.plist</b> and fill all the inputs in key value pair. The inputs are mentioned below.
 
 A sample plist file would look like this :
 
@@ -63,15 +63,15 @@ A sample plist file would look like this :
 </plist>
 ```
 
-Following sections will help you to generate some of the information that is needed for plist.
+The following sections will help you to generate some of the information that is needed for plist.
 
 #### Getting Client Id and urls
-You can get this by creating your App in App settings section of cidaas Admin portal. Once you select the right scope and application type, and fill in all mandatory fields, you can use the generated Client ID and re-direct URLs.
+You can get this by creating your App in App settings section of cidaas Admin portal. Once you select the right scope and application type, and fill in all mandatory fields, you can use the generated Client ID and redirect URLs.
 
 
-#### Initialisation
+#### Initialization
 
-The first step of integrating cidaas sdk is the initialisation process.
+The first step to integrate cidaas sdk is the initialization process.
 
 ```swift
 var cidaas = Cidaas();
@@ -86,7 +86,7 @@ var cidaas = Cidaas.shared
 
 #### Native Browser Login 
 #### Classic Login
-You can login using your native browser and redirects to the App once successfully logged in. To login with your native browser call ****loginWithBrowser()****.
+You can login using your native browser and you will be redirected to the App after successful login. To login with your native browser call ****loginWithBrowser()****.
 
 ```swift
 cidaas.loginWithBrowser(delegate: self) {
@@ -102,7 +102,7 @@ cidaas.loginWithBrowser(delegate: self) {
 ```
 
 #### Social Login
-You can also perform social login using your native browser and redirects to the App once successfully logged in. To perform social login call ****loginWithSocial()****.
+You can also perform social login using your native browser and you will be redirected to the App after successful login. To perform social login call ****loginWithSocial()****.
 
 ```swift
 cidaas.loginWithSocial(provider: "your_social_provider", delegate: self) { 
