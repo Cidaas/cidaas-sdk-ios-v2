@@ -1,11 +1,10 @@
 # Native UI Integration
 
-The steps here will guide you through setting up and managing authentication and authorization in your apps using cidaas SDK.    
+This document will guide to link the appropriate cidaas methods and services to your customized native login screen using cidaas SDK.   
 
 ## Table of Contents
 
 <!--ts-->
-* [Getting RequestId](#getting-request-id)
 * [Getting Tenant Information](#getting-tenant-info)
 * [Getting Client Information](#getting-client-info)
 * [Login](#login)
@@ -40,37 +39,6 @@ The steps here will guide you through setting up and managing authentication and
 <!--te-->
 
 #### Native UI Integration
-
-#### Getting Request Id
-You have to first get RequestId and use this in your subsequent calls. Server provides a unique Id based on urls configured for your application. Henceforth, in all requests like login, registration, you have to pass requestId, which is utilized to identify your client between two consecutive independant calls. To get the requestId, call ****getRequestId()****.
-
-```swift
-cidaas.getRequestId() {
-    switch $0 {
-        case .success(let requestIdSuccess):
-            // your success code here
-        break
-        case .failure(let error):
-            // your failure code here
-        break
-    }
-}
-```
-
-**Response:**
-
-```json
-{
-    "success":true,
-    "status":200,
-    "data": {
-        "groupname":"default",
-        "lang":"en-US,en;q=0.9,de-DE;q=0.8,de;q=0.7",
-        "view_type":"login",
-        "requestId":"45a921cf-ee26-46b0-9bf4-58636dced99f”
-    }
-}
-```
 
 #### Getting Tenant Info
 Sometimes you may want to lookup different types of login available ('Email', 'Mobile', 'Username') for a particular tenant. 
@@ -108,7 +76,7 @@ cidaas.getTenantInfo() {
 
 #### Getting Client Info
 
-Once you get tenant information, if you need to find client information you can call following method. It  contains client name, logo url specified for the client in the Admin's Apps section and details of what all social providers are configured for the App. To get the client information, call ****getClientInfo()****.
+If you need to find client information you can call the following method. It contains client name, logo url specified for the client in the Admin's Apps section and details of what all social providers are configured for the App. To get the client information, call ****getClientInfo()****.
 
 ```swift
 cidaas.getClientInfo() {
@@ -303,15 +271,15 @@ cidaas.registerUser(registrationEntity: registrationEntity) {
 
 #### De-duplication
 
-User de-duplication is a process that eliminates redundant copies of user thus reducing storage overhead as well as other inefficiencies. This process can be triggered during registion itself by following next steps.
+User de-duplication is a process that eliminates redundant user accounts thus reducing storage overhead as well as other inefficiencies. This process can be triggered during registration itself by the following steps.
 
-When a user is being registered system does a de-duplication check, to verify if that is already existing. System then shows the list of potential duplicate users whose data seems to match most of the information entered during this registration. System then gives an option to the user to use one of the found duplicate record or reject all of them and register this new values as a fresh user.
+When a user is being registered, the system does a de-duplication check, to verify if the user already exists. The system then shows the list of potential users whose data seem to match most of the information entered during this registration. The system then gives an option to the user to use one of the found duplicate record or reject all of them and register as a fresh user.
 
-In order to implement above functionality few of the below methods have to be called.
+In order to implement the above functionality, few of the below methods have to be called.
 
 #### Get Deduplication Details
 
-To get the list of similar users, call ****getDeduplicationDetails()****. If this method is used, system uses some heuristic algorithms and finds out any similar user exists in system and returns them.
+To get the list of similar users, call ****getDeduplicationDetails()****. If this method is used, system uses some heuristic algorithms and finds out if any similar user exists in the system and returns them.
 
 ```swift
 cidaas.getDeduplicationDetails(track_id:"45a921cf-ee26-46b0-9bf4-58636dced99f") {
@@ -325,7 +293,7 @@ cidaas.getDeduplicationDetails(track_id:"45a921cf-ee26-46b0-9bf4-58636dced99f") 
     }
 }
 ```
-Here, **track_id** is the key where you would get it from the success response of the registration 
+Here, **track_id** is the key you would get from the success response of the registration 
 
 **Response:**
 
@@ -370,7 +338,7 @@ Here, **track_id** is the key where you would get it from the success response o
 
 #### Register User
 
-While registering user, if system found similar users already registered,that list is shown to user. User can decide whether to use one of the existing logins, or choose to ignore all shown details. ****registerUser()**** method can be called to ignore shown result and register details in registration form as a new user.
+While registering the new user, if the system finds already registered similar users, the list of similar users is displayed. The user can decide whether to use one of the existing logins, or choose to ignore all shown user accounts. ****registerUser()**** method can be called to ignore shown result and register details in registration form as a new user.
 
 ```swift
 cidaas.registerUser(track_id:"45a921cf-ee26-46b0-9bf4-58636dced99f") {
@@ -384,7 +352,7 @@ cidaas.registerUser(track_id:"45a921cf-ee26-46b0-9bf4-58636dced99f") {
     }
 } 
 ```
-Here, **track_id** is the key where you would get it from the success response of the registration
+Here, **track_id** is the key you would get from the success response of the registration
 
 **Response:**
 
@@ -403,7 +371,7 @@ Here, **track_id** is the key where you would get it from the success response o
 
 #### Login With Deduplication
 
-While registering user, if system found similar users already registered,that list is shown to user. User can decide whether to use one of the existing logins, or choose to ignore all shown details. ****loginWithDeduplication()**** method can be called to use one of those existing logins shown by the system. Note that, System will still use the secure authentication and verifications that were setup for earlier user, before login.
+While registering the new user, if the system finds already registered similar users, the list of similar users is displayed. The user can decide whether to use one of the existing logins, or choose to ignore all shown user accounts. ****loginWithDeduplication()**** method can be called to use one of those existing logins shown by the system. Note that, System will still use the secure authentication and verifications that were setup for the earlier user, before login.
 
 ```swift
 cidaas.loginWithDeduplication("sub": "51701ec8-f2d7-4361-a727-f8df476a711a", "password": "123456") {
@@ -436,8 +404,8 @@ cidaas.loginWithDeduplication("sub": "51701ec8-f2d7-4361-a727-f8df476a711a", "pa
 ```
 
 #### Account Verification
-In order to avoid misuse of user registration functions, it is a good practise to include account verification along with it.
-Once registering is done, you can verify your account either by Email, SMS or IVR verification call. To do this, first you have to initiate the account verification. You can invoke any of the following as it suits your use case.
+In order to avoid misuse of user registration functions, it is a good practice to include account verification along with it.
+Once registeration is done, you can verify your account either by Email, SMS or IVR verification call. To do this, first you have to initiate the account verification. You can invoke any of the following  based on your use case.
 
 #### Initiate Email verification
 
@@ -455,7 +423,7 @@ cidaas.initiateEmailVerification(sub:"7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
     }
 }
 ```
-Here, **sub** is the key where you would get it from the success response of the registration
+Here, **sub** is the key you would get from the success response of the registration
 
 #### Initiate SMS verification
 
@@ -473,7 +441,7 @@ cidaas.initiateSMSVerification(sub:"7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
     }
 }
 ```
-Here, **sub** is the key where you would get it from the success response of the registration
+Here, **sub** is the key you would get from the success response of the registration
 
 #### Initiate IVR verification
 
@@ -491,7 +459,7 @@ cidaas.initiateIVRVerification(sub:"7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
     }
 }
 ```
-Here, **sub** is the key where you would get it from the success response of the registration
+Here, **sub** is the key you would get from the success response of the registration
 
 **Response:**
 
@@ -521,7 +489,7 @@ cidaas.verifyAccount(code:"658144") {
     }
 }
 ```
-Here, **code** is the key where you would get it from the Email, SMS or IVR verification call
+Here, **code** is the key you would get from the Email, SMS or IVR verification call
 
 **Response:**
 
@@ -534,7 +502,7 @@ Here, **code** is the key where you would get it from the Email, SMS or IVR veri
 
 #### Forgot Password
 
-There is an option to reset password if you forget password.
+There is an option to reset password in case the password is forgotten.
 
 #### Initiate Reset Password
 
@@ -582,7 +550,7 @@ cidaas.initateRestPassword(mobile:"+919876543210") {
 
 #### Handle Reset Password
 
-Once verification code received, verify that code by calling ****handleRestPassword()****.
+Once the verification code is received, verify that code by calling ****handleRestPassword()****.
 
 ```swift
 cidaas.handleRestPassword(code:"65864776") {
@@ -596,7 +564,7 @@ cidaas.handleRestPassword(code:"65864776") {
     }
 } 
 ```
-Here, **code** is the key where you would get it from the Email or SMS
+Here, **code** is the key you would get from the Email or SMS
 
 **Response:**
 
@@ -613,7 +581,7 @@ Here, **code** is the key where you would get it from the Email or SMS
 
 #### Reset Password
 
-Once code is verified, reset your password with your new password. To reset your password, call ****restPassword()****.
+Once the code is verified, reset your password with your new password. To reset your password, call ****restPassword()****.
 
 ```swift
 cidaas.restPassword(password:"test#123",confirmPassword:"test#123") {
@@ -642,7 +610,7 @@ cidaas.restPassword(password:"test#123",confirmPassword:"test#123") {
 
 #### Consent Management
 
-Once user has successfully logged in, you may want your user's to accept the terms and conditions. You can configure different consent forms during setup and present that to the user after login.
+Once the user has successfully logged in, you may want your users to accept the terms and conditions. You can configure different consent forms during setup and present that to the user after login.
 
 #### Getting Consent Details 
 
@@ -660,7 +628,7 @@ cidaas.getConsentDetails(consent_name:"default", consent_version:1, track_Id: "4
     }
 } 
 ```
-Here, **consent_name, consent_version, track_Id** is the key where you would get it from the error response of Login
+Here, **consent_name, consent_version, track_Id** is the key you would get from the error response of Login
 
 **Response:**
 
@@ -694,7 +662,7 @@ cidaas.loginAfterConsent(sub:"7dfb2122-fa5e-4f7a-8494-dadac9b43f9d", accepted:tr
     }
 } 
 ```
-Here, **sub** is the key where you would get it from the error response of Login
+Here, **sub** is the key you would get from the error response of Login
 
 **Response:**
 
