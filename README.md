@@ -89,7 +89,9 @@ var cidaas = Cidaas.shared
 You can login using your native browser and you will be redirected to the App after successful login. To login with your native browser call ****loginWithBrowser()****.
 
 ```swift
-cidaas.loginWithBrowser(delegate: self) {
+var extraParams = Dictionary<String, String>()
+extraParams[scopes]="offline_access phone"
+cidaas.loginWithBrowser(delegate: self, extraParams: extraParams) {
     switch $0 {
         case .success(let successResponse):
             // your success code here
