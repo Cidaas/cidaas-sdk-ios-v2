@@ -8,12 +8,13 @@
 
 import Foundation
 import SafariServices
+import WebKit
 
 public class LoginController {
     
     // shared instance
     public static var shared : LoginController = LoginController()
-    public var delegate: UIViewController!
+    public var delegate: Any!
     public var storage: TransactionStore = TransactionStore.shared
     
     // constructor
@@ -96,7 +97,8 @@ public class LoginController {
         let vc = SFSafariViewController(url: loginURL)
         vc.view.tintColor = UIColor.orange
         // present the safari controller
-        self.delegate.present(vc, animated: true, completion: nil)
+        let delegate = self.delegate as! UIViewController
+        delegate.present(vc, animated: true, completion: nil)
     }
     
     public func constructURL(extraParams: Dictionary<String, String>, properties: Dictionary<String, String>) -> URL {

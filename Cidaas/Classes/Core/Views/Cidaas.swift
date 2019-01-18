@@ -9,6 +9,7 @@
 import Foundation
 import SafariServices
 import SwiftKeychainWrapper
+import WebKit
 
 public class Cidaas {
     
@@ -301,7 +302,8 @@ public class Cidaas {
     // handle token
     public func handleToken(url: URL) {
         if LoginController.shared.delegate != nil {
-            LoginController.shared.delegate.dismiss(animated: true, completion: nil)
+            let delegate = LoginController.shared.delegate as! UIViewController
+            delegate.dismiss(animated: true, completion: nil)
         }
         
         if browserCallback != nil {

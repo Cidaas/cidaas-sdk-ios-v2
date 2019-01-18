@@ -15,10 +15,28 @@ Pod::Spec.new do |s|
   s.author           = { 'Cidaas' => 'developer@cidaas.de' }
   s.source       = { :git => 'https://github.com/Cidaas/cidaas-sdk-ios-v2.git', :tag => s.version }
   s.ios.deployment_target = '10.0'
-  s.source_files = 'Cidaas/Classes/Core/**/*'
+  s.source_files = 'Cidaas/Classes/**/*'
   s.dependency 'Alamofire', '~> 4.7.3'
   s.dependency 'OneTimePassword', '~> 3.1.4'
   s.dependency 'CryptoSwift', '~> 0.12'
   s.dependency 'SwiftKeychainWrapper', '~> 3.0'
   
+  s.resources    = 'Cidaas/Resources/**/*.*'
+  
+  s.subspec 'Core' do |core|
+      core.source_files = 'Cidaas/Classes/Core/**/*'
+  end
+  
+  s.subspec 'Facebook' do |fb|
+      fb.source_files = 'Cidaas/Classes/Facebook/**/*'
+      fb.dependency 'FBSDKCoreKit', '~> 4.38.0'
+      fb.dependency 'FBSDKLoginKit', '~> 4.38.0'
+      fb.dependency 'FacebookCore', '~> 0.4'
+      fb.dependency 'FacebookLogin', '~> 0.4'
+  end
+  
+  s.subspec 'Google' do |g|
+      g.source_files = 'Cidaas/Classes/Google/**/*'
+      g.dependency 'GoogleSignIn'
+  end
 end
