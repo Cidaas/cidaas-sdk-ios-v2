@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Cidaas Demo App</string>
+	<string>Cidaas Example iOS</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -29,7 +29,17 @@
 			<string>com.cidaas.sdk.demo</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
+				<string>com.googleusercontent.apps.271883286261-s4tk5qq9onltdquqp5g1dbur9pan6kgp</string>
 				<string>com.cidaas.sdk.demo</string>
+				<string>fb1889502804712451</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>prefs</string>
 			</array>
 		</dict>
 	</array>

@@ -8,15 +8,98 @@
 
 import UIKit
 import Cidaas
+import WebKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, WKNavigationDelegate, CidaasLoaderDelegate {
     
     var cidaas = Cidaas.shared
+    
+    @IBOutlet var cidaasView: CidaasView!
     
     // did load
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.getRequestId()
+        cidaasView.loaderDelegate = self
+        cidaasView.ENABLE_BACK_BUTTON = true
+        cidaasView.enableNativeFacebook = true
+        cidaasView.enableNativeGoogle = true
+        cidaasView.setBackButtonAttributes(title: "BACK", textColor: UIColor.white, backgroundColor: UIColor.orange)
+        CidaasFacebook.shared.delegate = self
+        CidaasGoogle.shared.delegate = self
+        
+        cidaasView.loginWithEmbeddedBrowser(delegate: self) {
+            switch $0 {
+            case .success(let result):
+                let alert = UIAlertController(title: "Alert", message: result.data.access_token, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+                    switch action.style{
+                    case .default:
+                        print("default")
+                        
+                    case .cancel:
+                        print("cancel")
+                        
+                    case .destructive:
+                        print("destructive")
+                    }}))
+                self.present(alert, animated: true, completion: nil)
+                break
+            case .failure(let errorResponse):
+                print(errorResponse.errorMessage)
+                
+                break
+            }
+        }
+
+//        let gl = CidaasGoogle.shared
+//        gl.login(viewType: "login") {
+//            switch $0 {
+//            case .success(let successResponse):
+//                let alert = UIAlertController(title: "Alert", message: successResponse.data.access_token, preferredStyle: .alert)
+//                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+//                    switch action.style{
+//                    case .default:
+//                        print("default")
+//
+//                    case .cancel:
+//                        print("cancel")
+//
+//                    case .destructive:
+//                        print("destructive")
+//                    }}))
+//                self.present(alert, animated: true, completion: nil)
+//                break
+//            case .failure(let errorResponse):
+//                print(errorResponse)
+//                break
+//            }
+//        }
+    }
+    
+    func showLoader() {
+        CustomLoader.shared.showLoader(self.view, using: nil) { (hud) in
+            
+        }
+    }
+    
+    func hideLoader() {
+        CustomLoader.shared.hideLoader(self.view)
+    }
+    
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        cidaasView.webView(webView, didStartProvisionalNavigation: navigation)
+    }
+    
+    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        cidaasView.webView(webView, didFail: navigation, withError: error)
+    }
+    
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        cidaasView.webView(webView, decidePolicyFor: navigationAction, decisionHandler: decisionHandler)
+    }
+    
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        cidaasView.webView(webView, didFinish: navigation)
     }
     
     // did receive memory warning

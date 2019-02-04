@@ -27,6 +27,17 @@ public class DBHelper : NSObject {
         return ((userDefaults.object(forKey: key) ?? false) as? Bool) ?? false
     }
     
+    // set enable back button
+    public func setEnableBackButton(enableBackButton : Bool, key : String = "OAuthEnableBackButton") {
+        userDefaults.set(enableBackButton, forKey: key)
+        userDefaults.synchronize()
+    }
+    
+    // get enable back button
+    public func getEnableBackButton(key : String = "OAuthEnableBackButton") -> Bool {
+        return ((userDefaults.object(forKey: key) ?? false) as? Bool) ?? false
+    }
+    
     // set enable pkce
     public func setEnablePkce(enablePkce : Bool, key : String = "OAuthEnablePkce") {
         userDefaults.set(enablePkce, forKey: key)

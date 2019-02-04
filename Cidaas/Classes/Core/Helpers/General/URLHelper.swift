@@ -20,6 +20,7 @@ public class URLHelper {
     public var clientInfoURL = "/public-srv/public"
     
     public var loginWithCredentialsURL = "/login-srv/login/sdk"
+    public var logoutURL = "/session/end_session"
     
     public var consentURL = "/consent-management-srv/tenant/version/pageurl"
     public var consentDetailsURL = "/consent-management-srv/settings/public"
@@ -166,6 +167,10 @@ public class URLHelper {
     
     public func getLoginWithCredentialsURL() -> String {
         return loginWithCredentialsURL
+    }
+    
+    public func getLogoutURL() -> String {
+        return logoutURL
     }
     
     public func getConsentURL(consent_name: String, version: Int16) -> String {
