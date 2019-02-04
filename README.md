@@ -23,6 +23,7 @@ The steps here will guide you through setting up and managing authentication and
         * [Classic Login](#classic-login)
         * [Social Login](#social-login)
         <!--te-->
+    * [Embedded Browser Integration](#wkwebview-integration)
     * [Native UI Integration](/Example/Readme/PureNativeLogin.md)
     <!--te-->
 
@@ -142,6 +143,53 @@ func application(_ application: UIApplication, continue userActivity: NSUserActi
     Cidaas.shared.handleToken(url: url)
     return true
 }
+```
+
+## WKWebview integration
+
+Drag and drop an empty view in the storyboard
+
+Change the name of the class in the properties window as **CidaasView**
+
+Create an IBOutlet for the class and consider this as an object
+
+```swift
+@IBOutlet var cidaasView: CidaasView! 
+```
+
+Inherit the WKNavigationDelegate and call the methods
+
+```swift
+func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+    cidaasView.webView(webView, didStartProvisionalNavigation: navigation)
+}
+
+func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+    cidaasView.webView(webView, didFail: navigation, withError: error)
+}
+
+func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+    cidaasView.webView(webView, decidePolicyFor: navigationAction, decisionHandler: decisionHandler)
+}
+
+func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+    cidaasView.webView(webView, didFinish: navigation)
+}
+```
+   
+Call the **loginWithEmbeddedBrowser()** function and get the access token as callback
+   
+```swift
+cidaasView.loginWithEmbeddedBrowser(delegate: self) {
+    switch $0 {
+        case .success(let successResponse):
+            // your success code here
+            break
+        case .failure(let error):
+            // your failure code here
+        break
+    }
+}  
 ```
 
 ## Screenshots
