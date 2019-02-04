@@ -10,12 +10,22 @@ import FacebookCore
 import FacebookLogin
 import FBSDKCoreKit
 
-public class CidaasFacebook {
+public class CidaasFacebook: CidaasFacebookDelegate {
     
     public static var shared : CidaasFacebook = CidaasFacebook()
     
     let loginManager : LoginManager = LoginManager()
-    public var delegate: UIViewController!
+    var DELEGATE: UIViewController!
+    
+    public var delegate: UIViewController {
+        get {
+            return self.DELEGATE
+        }
+        set(delegate) {
+            CidaasView.facebookDelegate = self
+            self.DELEGATE = delegate
+        }
+    }
     
     public func login(viewType: String, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         

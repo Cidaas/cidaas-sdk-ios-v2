@@ -13,6 +13,12 @@ public class CidaasView: UIView, WKNavigationDelegate {
     
     public var loaderDelegate: CidaasLoaderDelegate!
     
+    public var enableNativeFacebook : Bool = false
+    public var enableNativeGoogle : Bool = false
+    public static var facebookDelegate: CidaasFacebookDelegate!
+    public static var googleDelegate: CidaasGoogleDelegate!
+    public var viewType: String = "login"
+    
     var browserCallback: ((Result<LoginResponseEntity>) -> ())!
     // instance of webview
     var wkWebView : WKWebView!
@@ -62,7 +68,7 @@ public class CidaasView: UIView, WKNavigationDelegate {
         if wkWebView != nil {
             view.addSubview(wkWebView)
             wkWebView.translatesAutoresizingMaskIntoConstraints = false
-            wkWebView.isHidden = false
+            showWebview()
             webViewTopConstraint = NSLayoutConstraint(item: wkWebView, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1, constant: 0)
             webViewBottomConstraint = NSLayoutConstraint(item: wkWebView, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: 0)
             webViewTrailConstraint = NSLayoutConstraint(item: wkWebView, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .trailing, multiplier: 1, constant: 0)
@@ -103,10 +109,15 @@ public class CidaasView: UIView, WKNavigationDelegate {
     
     // login with embedded browser
     public func loginWithEmbeddedBrowser(delegate: WKNavigationDelegate, extraParams: Dictionary<String, String> = Dictionary<String, String>(), callback: @escaping (Result<LoginResponseEntity>) -> Void) {
-        let savedProp = DBHelper.shared.getPropertyFile()
+        var savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
             self.browserCallback = callback
             self.delegate = delegate
+            // assign view type
+            if extraParams["view_type"] != nil {
+                savedProp!["ViewType"] = extraParams["view_type"]
+                self.viewType = extraParams["view_type"]!
+            }
             loginWithEmbeddedBrowser(delegate: delegate, extraParams: extraParams, properties: savedProp!, callback: callback)
         }
         else {
@@ -121,6 +132,40 @@ public class CidaasView: UIView, WKNavigationDelegate {
                 callback(Result.failure(error: error))
             }
             return
+        }
+    }
+    
+    func showLoader() {
+        if loaderDelegate != nil {
+            loaderDelegate.showLoader()
+        }
+    }
+    
+    func hideLoader() {
+        if loaderDelegate != nil {
+            loaderDelegate.hideLoader()
+        }
+    }
+    
+    func hideWebview() {
+        wkWebView.isHidden = true
+    }
+    
+    func showWebview() {
+        wkWebView.isHidden = false
+    }
+    
+    func hideBackButton() {
+        if enableBackButton == true {
+            backButton.isHidden = true
+            webViewBottomConstraint.constant = 0
+        }
+    }
+    
+    func showBackButton() {
+        if enableBackButton == true {
+            backButton.isHidden = false
+            webViewBottomConstraint.constant = -60
         }
     }
     
@@ -181,8 +226,81 @@ public class CidaasView: UIView, WKNavigationDelegate {
     }
     
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        
+        let url = navigationAction.request.url
+        
+        // check facebook native enabled
+        if enableNativeFacebook == true {
+            if (CidaasView.facebookDelegate == nil) {
+                browserCallback(Result.failure(error: WebAuthError.shared.delegateMissingException()))
+                // callback handler
+                decisionHandler(.cancel)
+                return
+            }
+            
+            let urlMatchString = "social/" + self.viewType + "/facebook"
+            
+            // check facebook url exists
+            if (url?.relativeString.contains(urlMatchString))! {
+                
+                // hide webview and loader
+                hideWebview()
+                hideLoader()
+                webView.stopLoading()
+                
+                // call the facebook sdk flow method
+                facebookSDKFlow()
+                
+                // callback handler
+                decisionHandler(.cancel)
+                return
+            }
+        }
+        
+        // check google native enabled
+        if enableNativeGoogle == true {
+            if (CidaasView.googleDelegate == nil) {
+                // callback handler
+                decisionHandler(.cancel)
+                browserCallback(Result.failure(error: WebAuthError.shared.delegateMissingException()))
+                return
+            }
+            
+            let urlMatchString = "social/" + self.viewType + "/google"
+            
+            // check facebook url exists
+            if (url?.relativeString.contains(urlMatchString))! {
+                
+                // hide webview and loader
+                hideWebview()
+                hideLoader()
+                webView.stopLoading()
+                
+                // call the google sdk flow method
+                googleSDKFlow()
+                
+                // callback handler
+                decisionHandler(.cancel)
+                return
+            }
+        }
+        
         // allow handler by default
         decisionHandler(.allow)
+    }
+    
+    func facebookSDKFlow() {
+        hideWebview()
+        hideBackButton()
+        
+        CidaasView.facebookDelegate.login(viewType: self.viewType, callback: self.browserCallback)
+    }
+    
+    func googleSDKFlow() {
+        hideWebview()
+        hideBackButton()
+        
+        CidaasView.googleDelegate.login(viewType: self.viewType, callback: self.browserCallback)
     }
     
     public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
@@ -196,6 +314,9 @@ public class CidaasView: UIView, WKNavigationDelegate {
     }
     
     func login(delegate: WKNavigationDelegate, loginURL: URLRequest, callback: @escaping (Result<LoginResponseEntity>) -> Void) {
+        
+        clearCookies()
+        
         // assign delegate
         wkWebView.navigationDelegate = delegate
         
@@ -224,40 +345,6 @@ public class CidaasView: UIView, WKNavigationDelegate {
         return (deviceModel, deviceFullModel, deviceVersion)
     }
     
-    func showLoader() {
-        if loaderDelegate != nil {
-            loaderDelegate.showLoader()
-        }
-    }
-    
-    func hideLoader() {
-        if loaderDelegate != nil {
-            loaderDelegate.hideLoader()
-        }
-    }
-    
-    func hideWebview() {
-        wkWebView.isHidden = true
-    }
-    
-    func showWebview() {
-        wkWebView.isHidden = false
-    }
-    
-    func hideBackButton() {
-        if enableBackButton == true {
-            backButton.isHidden = true
-            webViewBottomConstraint.constant = 0
-        }
-    }
-    
-    func showBackButton() {
-        if enableBackButton == true {
-            backButton.isHidden = false
-            webViewBottomConstraint.constant = -60
-        }
-    }
-    
     @IBAction func backButtonAction(_ sender: Any) {
         if wkWebView.canGoBack {
             wkWebView.goBack()
@@ -268,5 +355,40 @@ public class CidaasView: UIView, WKNavigationDelegate {
         backButton.setTitle(title, for: .normal)
         backButton.setTitleColor(textColor, for: .normal)
         backButton.backgroundColor = backgroundColor
+    }
+    
+    public func logout(sub: String, post_logout_url: String = "") {
+        AccessTokenController.shared.getAccessToken(sub: sub) {
+            switch $0 {
+                case .success(let successResponse):
+                    self.logout(accessToken: successResponse.data.access_token, post_logout_url: post_logout_url)
+                    break
+                case .failure( _):
+                    break
+            }
+        }
+    }
+    
+    public func logout(accessToken: String, post_logout_url: String = "") {
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if savedProp != nil {
+            let baseURL = savedProp!["DomainURL"] ?? ""
+            let logoutURLString = baseURL + URLHelper.shared.getLogoutURL()
+            let logoutURL = URLRequest(url: URL(string: logoutURLString)!)
+            wkWebView.load(logoutURL)
+        }
+    }
+    
+    func clearCookies() {
+        // clear all cookies
+        HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
+        print("[WebCacheCleaner] All cookies deleted")
+        
+        WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { (records) in
+            records.forEach { record in
+                WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
+                print("[WebCacheCleaner] Record \(record) deleted")
+            }
+        }
     }
 }

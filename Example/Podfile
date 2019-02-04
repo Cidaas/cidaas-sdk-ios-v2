@@ -2,6 +2,7 @@ use_frameworks!
 
 target 'Cidaas_Example' do
   pod 'Cidaas', :path => '../'
+  pod 'GoogleSignIn'
 
   target 'Cidaas_Tests' do
     inherit! :search_paths

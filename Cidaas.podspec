@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'Cidaas'
-  s.version          = '1.1.1'
+  s.version          = '1.1.2'
   s.summary          = 'Native SDK for iOS providing login, registration and verification functionalities'
   s.homepage         = 'https://github.com/Cidaas/cidaas-sdk-ios-v2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
@@ -21,10 +21,9 @@ Pod::Spec.new do |s|
   s.dependency 'CryptoSwift', '~> 0.12'
   s.dependency 'SwiftKeychainWrapper', '~> 3.0'
   
-  s.resources    = 'Cidaas/Resources/**/*.*'
-  
   s.subspec 'Core' do |core|
       core.source_files = 'Cidaas/Classes/Core/**/*'
+      core.resources    = 'Cidaas/Resources/**/*.*'
   end
   
   s.subspec 'Facebook' do |fb|
@@ -33,10 +32,5 @@ Pod::Spec.new do |s|
       fb.dependency 'FBSDKLoginKit', '~> 4.38.0'
       fb.dependency 'FacebookCore', '~> 0.4'
       fb.dependency 'FacebookLogin', '~> 0.4'
-  end
-  
-  s.subspec 'Google' do |g|
-      g.source_files = 'Cidaas/Classes/Google/**/*'
-      g.dependency 'GoogleSignIn'
   end
 end

@@ -29,8 +29,9 @@
 			<string>com.cidaas.sdk.demo</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
+				<string>com.googleusercontent.apps.271883286261-s4tk5qq9onltdquqp5g1dbur9pan6kgp</string>
 				<string>com.cidaas.sdk.demo</string>
-                <string>fb1889502804712451</string>
+				<string>fb1889502804712451</string>
 			</array>
 		</dict>
 		<dict>
@@ -50,13 +51,13 @@
 	<string>Cidaas Test</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
-    <key>LSApplicationQueriesSchemes</key>
-    <array>
-        <string>fbapi</string>
-        <string>fb-messenger-api</string>
-        <string>fbauth2</string>
-        <string>fbshareextension</string>
-    </array>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbapi</string>
+		<string>fb-messenger-api</string>
+		<string>fbauth2</string>
+		<string>fbshareextension</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>

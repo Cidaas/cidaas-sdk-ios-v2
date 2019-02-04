@@ -40,6 +40,8 @@
 		1F56010C212ED08000F842A4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F56010B212ED08000F842A4 /* ViewController.swift */; };
 		1F560119212ED12900F842A4 /* Cidaas.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1F560118212ED12900F842A4 /* Cidaas.plist */; };
 		1F5D0FD02146628600D63E9A /* ServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5D0FCF2146628600D63E9A /* ServiceTests.swift */; };
+		1FA3C96E21F5A6CF0025F515 /* CidaasGoogle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA3C96D21F5A6CF0025F515 /* CidaasGoogle.swift */; };
+		1FA3C97021F5AD440025F515 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1FA3C96F21F5AD440025F515 /* GoogleService-Info.plist */; };
 		1FB3D561214E884B00E6474E /* UsersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FB3D560214E884B00E6474E /* UsersTests.swift */; };
 		1FFED19321F0573400280114 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FFED19121F0573400280114 /* MBProgressHUD.m */; };
 		1FFED19521F0574800280114 /* CustomLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FFED19421F0574700280114 /* CustomLoader.swift */; };
@@ -111,6 +113,8 @@
 		1F5D0FCF2146628600D63E9A /* ServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTests.swift; sourceTree = "<group>"; };
 		1F74F84321C117DA00E5C856 /* PureNativeLogin.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = PureNativeLogin.md; sourceTree = "<group>"; };
 		1F74F84421C22E0C00E5C856 /* Passwordless.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Passwordless.md; sourceTree = "<group>"; };
+		1FA3C96D21F5A6CF0025F515 /* CidaasGoogle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CidaasGoogle.swift; sourceTree = "<group>"; };
+		1FA3C96F21F5AD440025F515 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		1FB3D560214E884B00E6474E /* UsersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersTests.swift; sourceTree = "<group>"; };
 		1FFED19121F0573400280114 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		1FFED19221F0573400280114 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
@@ -212,6 +216,8 @@
 				1F5600C6212ECE1900F842A4 /* Cidaas_Example-Bridging-Header.h */,
 				1F560118212ED12900F842A4 /* Cidaas.plist */,
 				1F49FA722140C2F2001A49BB /* Test.plist */,
+				1FA3C96D21F5A6CF0025F515 /* CidaasGoogle.swift */,
+				1FA3C96F21F5AD440025F515 /* GoogleService-Info.plist */,
 			);
 			name = "Example for Cidaas";
 			path = Cidaas;
@@ -312,6 +318,7 @@
 				607FACCD1AFB9204008FA782 /* Frameworks */,
 				607FACCE1AFB9204008FA782 /* Resources */,
 				84D70CB9A5305BA7D58B1A3B /* [CP] Embed Pods Frameworks */,
+				799AB20BBC007445235A872D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -401,6 +408,7 @@
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
 				1F560119212ED12900F842A4 /* Cidaas.plist in Resources */,
 				1F560103212ED01D00F842A4 /* Main.storyboard in Resources */,
+				1FA3C97021F5AD440025F515 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -433,6 +441,24 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		799AB20BBC007445235A872D /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Cidaas_Example/Pods-Cidaas_Example-resources.sh",
+				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Cidaas_Example/Pods-Cidaas_Example-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		84D70CB9A5305BA7D58B1A3B /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -449,6 +475,8 @@
 				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FacebookCore/FacebookCore.framework",
 				"${BUILT_PRODUCTS_DIR}/FacebookLogin/FacebookLogin.framework",
+				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
 				"${BUILT_PRODUCTS_DIR}/OneTimePassword/OneTimePassword.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftKeychainWrapper/SwiftKeychainWrapper.framework",
 			);
@@ -463,6 +491,8 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FacebookCore.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FacebookLogin.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OneTimePassword.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftKeychainWrapper.framework",
 			);
@@ -520,6 +550,7 @@
 			files = (
 				1F5600F7212ECF9B00F842A4 /* AppDelegate.swift in Sources */,
 				1FFED19321F0573400280114 /* MBProgressHUD.m in Sources */,
+				1FA3C96E21F5A6CF0025F515 /* CidaasGoogle.swift in Sources */,
 				1F56010C212ED08000F842A4 /* ViewController.swift in Sources */,
 				1FFED19521F0574800280114 /* CustomLoader.swift in Sources */,
 			);

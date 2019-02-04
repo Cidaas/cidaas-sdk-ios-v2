@@ -21,43 +21,59 @@ class ViewController: UIViewController, WKNavigationDelegate, CidaasLoaderDelega
         super.viewDidLoad()
         cidaasView.loaderDelegate = self
         cidaasView.ENABLE_BACK_BUTTON = true
+        cidaasView.enableNativeFacebook = true
+        cidaasView.enableNativeGoogle = true
         cidaasView.setBackButtonAttributes(title: "BACK", textColor: UIColor.white, backgroundColor: UIColor.orange)
-//        cidaasView.loginWithEmbeddedBrowser(delegate: self) {
-//            switch $0 {
-//                case .success(let result):
-//                    print(result.data.access_token)
-//                    break
-//                case .failure(let errorResponse):
-//                    print(errorResponse.errorMessage)
-//                    break
-//            }
-//        }
-
-        let fb = CidaasFacebook.shared
-        fb.delegate = self
-        fb.login(viewType: "login") {
+        CidaasFacebook.shared.delegate = self
+        CidaasGoogle.shared.delegate = self
+        
+        cidaasView.loginWithEmbeddedBrowser(delegate: self) {
             switch $0 {
-                case .success(let successResponse):
-                    let alert = UIAlertController(title: "Alert", message: successResponse.data.access_token, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
-                        switch action.style{
-                        case .default:
-                            print("default")
-                            
-                        case .cancel:
-                            print("cancel")
-                            
-                        case .destructive:
-                            print("destructive")
-                        }}))
-                    self.present(alert, animated: true, completion: nil)
-                    break
-                case .failure(let errorResponse):
-                    print(errorResponse)
-                    break
+            case .success(let result):
+                let alert = UIAlertController(title: "Alert", message: result.data.access_token, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+                    switch action.style{
+                    case .default:
+                        print("default")
+                        
+                    case .cancel:
+                        print("cancel")
+                        
+                    case .destructive:
+                        print("destructive")
+                    }}))
+                self.present(alert, animated: true, completion: nil)
+                break
+            case .failure(let errorResponse):
+                print(errorResponse.errorMessage)
+                
+                break
             }
         }
-        
+
+//        let gl = CidaasGoogle.shared
+//        gl.login(viewType: "login") {
+//            switch $0 {
+//            case .success(let successResponse):
+//                let alert = UIAlertController(title: "Alert", message: successResponse.data.access_token, preferredStyle: .alert)
+//                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+//                    switch action.style{
+//                    case .default:
+//                        print("default")
+//
+//                    case .cancel:
+//                        print("cancel")
+//
+//                    case .destructive:
+//                        print("destructive")
+//                    }}))
+//                self.present(alert, animated: true, completion: nil)
+//                break
+//            case .failure(let errorResponse):
+//                print(errorResponse)
+//                break
+//            }
+//        }
     }
     
     func showLoader() {
