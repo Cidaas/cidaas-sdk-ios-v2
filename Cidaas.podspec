@@ -20,6 +20,7 @@ Pod::Spec.new do |s|
   s.dependency 'OneTimePassword', '~> 3.1.4'
   s.dependency 'CryptoSwift', '~> 0.12'
   s.dependency 'SwiftKeychainWrapper', '~> 3.0'
+  s.swift_version = '4.0'
   
   s.subspec 'Core' do |core|
       core.source_files = 'Cidaas/Classes/Core/**/*'
@@ -32,5 +33,6 @@ Pod::Spec.new do |s|
       fb.dependency 'FBSDKLoginKit', '~> 4.38.0'
       fb.dependency 'FacebookCore', '~> 0.4'
       fb.dependency 'FacebookLogin', '~> 0.4'
+      fb.dependency 'Cidaas/Core'
   end
 end
