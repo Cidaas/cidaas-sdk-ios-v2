@@ -373,8 +373,9 @@ public class CidaasView: UIView, WKNavigationDelegate {
         let savedProp = DBHelper.shared.getPropertyFile()
         if savedProp != nil {
             let baseURL = savedProp!["DomainURL"] ?? ""
-            let logoutURLString = baseURL + URLHelper.shared.getLogoutURL()
+            let logoutURLString = baseURL + URLHelper.shared.getLogoutURL(accessToken: accessToken)
             let logoutURL = URLRequest(url: URL(string: logoutURLString)!)
+            wkWebView.isHidden = false
             wkWebView.load(logoutURL)
         }
     }

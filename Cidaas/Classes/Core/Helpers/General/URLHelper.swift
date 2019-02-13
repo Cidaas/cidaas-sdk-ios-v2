@@ -169,8 +169,8 @@ public class URLHelper {
         return loginWithCredentialsURL
     }
     
-    public func getLogoutURL() -> String {
-        return logoutURL
+    public func getLogoutURL(accessToken: String) -> String {
+        return logoutURL + "?access_token_hint=" + accessToken
     }
     
     public func getConsentURL(consent_name: String, version: Int16) -> String {

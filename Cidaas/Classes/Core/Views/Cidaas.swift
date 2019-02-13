@@ -1119,11 +1119,44 @@ public class Cidaas {
     // 2. Call configureTouchId method
     // 3. Maintain logs based on flags
     
-    public func configureTouchId(sub: String, logoUrl: String, callback: @escaping(Result<EnrollTouchResponseEntity>) -> Void) {
+    public func configureTouchId(sub: String, logoUrl: String, localizedReason: String, callback: @escaping(Result<EnrollTouchResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            TouchIdVerificationController.shared.configureTouchId(sub: sub, logoUrl: logoUrl, properties: savedProp!, callback: callback)
+            
+            // ask for touch id or face id
+            let touchId = TouchID()
+            touchId.checkIfTouchIdAvailable { (success, errorMessage, errorCode) in
+                if success == true {
+                    touchId.checkTouchIDMatching(localizedReason: localizedReason, callback: { (res_success, res_errorMessage, res_errorCode) in
+                        if res_success == true {
+                            TouchIdVerificationController.shared.configureTouchId(sub: sub, logoUrl: logoUrl, properties: savedProp!, callback: callback)
+                        }
+                        else {
+                            let error = WebAuthError.shared
+                            error.errorMessage = res_errorMessage ?? WebAuthError.shared.errorMessage
+                            error.errorCode = res_errorCode ?? WebAuthError.shared.errorCode
+                            
+                            // return failure callback
+                            DispatchQueue.main.async {
+                                callback(Result.failure(error: error))
+                            }
+                            return
+                        }
+                    })
+                }
+                else {
+                    let error = WebAuthError.shared
+                    error.errorMessage = errorMessage ?? WebAuthError.shared.errorMessage
+                    error.errorCode = errorCode ?? WebAuthError.shared.errorCode
+                    
+                    // return failure callback
+                    DispatchQueue.main.async {
+                        callback(Result.failure(error: error))
+                    }
+                    return
+                }
+            }
         }
         else {
             // log error

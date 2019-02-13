@@ -20,7 +20,7 @@ class TouchIdTests: QuickSpec {
                 
                 it("call configure TouchIdRecognition from public") {
                     
-                    cidaas.configureTouchId(sub: "87267324", logoUrl: "askdjhas") {
+                    cidaas.configureTouchId(sub: "87267324", logoUrl: "askdjhas", localizedReason: "Place your finger on your fingerprint sensor") {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -34,7 +34,7 @@ class TouchIdTests: QuickSpec {
                     
                     DBHelper.shared.userDefaults.removeObject(forKey: "OAuthProperty")
                     
-                    cidaas.configureTouchId(sub: "87267324", logoUrl: "askdjhas") {
+                    cidaas.configureTouchId(sub: "87267324", logoUrl: "askdjhas", localizedReason: "Place your fingerprint on your fingerprint sensor") {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)

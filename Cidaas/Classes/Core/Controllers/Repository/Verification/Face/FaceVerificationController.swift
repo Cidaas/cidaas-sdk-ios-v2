@@ -300,9 +300,9 @@ public class FaceVerificationController {
         }
         
         // validating fields
-        if (enrollFaceEntity.statusId == "" || enrollFaceEntity.userDeviceId == "") {
+        if (enrollFaceEntity.statusId == "" || enrollFaceEntity.userDeviceId == "" || enrollFaceEntity.attempt == 0) {
             let error = WebAuthError.shared.propertyMissingException()
-            error.errorMessage = "statusId or userDeviceId must not be empty"
+            error.errorMessage = "statusId or userDeviceId or attempt must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
