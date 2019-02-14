@@ -1225,11 +1225,11 @@ public class Cidaas {
     // 2. Call configureFace method
     // 3. Maintain logs based on flags
     
-    public func configureFaceRecognition(photo: UIImage, sub: String, logoUrl: String, callback: @escaping(Result<EnrollFaceResponseEntity>) -> Void) {
+    public func configureFaceRecognition(photo: UIImage, sub: String, logoUrl: String, attempt: Int32, callback: @escaping(Result<EnrollFaceResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            FaceVerificationController.shared.configureFace(sub: sub, photo:photo, logoUrl: logoUrl, properties: savedProp!, callback: callback)
+            FaceVerificationController.shared.configureFace(sub: sub, photo:photo, logoUrl: logoUrl, attempt: attempt, properties: savedProp!, callback: callback)
         }
         else {
             // log error
@@ -2034,12 +2034,13 @@ public class Cidaas {
     // 2. Call enrollTouch method
     // 3. Maintain logs based on flags
     
-    public func enrollFaceRecognition(sub: String, photo: UIImage, statusId: String, callback: @escaping(Result<EnrollFaceResponseEntity>) -> Void) {
+    public func enrollFaceRecognition(sub: String, photo: UIImage, statusId: String, attempt: Int32, callback: @escaping(Result<EnrollFaceResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
             let enrollFaceEntity = EnrollFaceEntity()
             enrollFaceEntity.statusId = statusId
+            enrollFaceEntity.attempt = attempt
             
             FaceVerificationController.shared.enrollFaceRecognition(sub: sub, access_token: "", photo: photo, enrollFaceEntity: enrollFaceEntity, properties: savedProp!, callback: callback)
         }
