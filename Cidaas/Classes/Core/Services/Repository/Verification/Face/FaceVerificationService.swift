@@ -257,6 +257,7 @@ public class FaceVerificationService {
         bodyParams["deviceId"] = deviceInfoEntity.deviceId
         bodyParams["client_id"] = enrollFaceEntity.client_id
         bodyParams["usage_pass"] = enrollFaceEntity.usage_pass
+        bodyParams["attempt"] = String(describing: enrollFaceEntity.attempt)
         
         // assign base url
         baseURL = (properties["DomainURL"]) ?? ""

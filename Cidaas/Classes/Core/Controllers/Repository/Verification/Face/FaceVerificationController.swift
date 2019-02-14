@@ -71,6 +71,7 @@ public class FaceVerificationController {
                 if attempt > 1 {
                     let enrollFaceEntity = EnrollFaceEntity()
                     enrollFaceEntity.statusId = self.statusId
+                    enrollFaceEntity.attempt = attempt
                     
                     // call enroll service
                     FaceVerificationController.shared.enrollFaceRecognition(access_token: tokenResponse.data.access_token, photo: photo, enrollFaceEntity: enrollFaceEntity, properties: properties, callback: callback)
@@ -142,6 +143,7 @@ public class FaceVerificationController {
                                         
                                         let enrollFaceEntity = EnrollFaceEntity()
                                         enrollFaceEntity.statusId = self.statusId
+                                        enrollFaceEntity.attempt = attempt
                                         
                                         // call enroll service
                                         FaceVerificationController.shared.enrollFaceRecognition(access_token: tokenResponse.data.access_token, photo: photo, enrollFaceEntity: enrollFaceEntity, properties: properties, callback: callback)
@@ -386,11 +388,12 @@ public class FaceVerificationController {
                         timer.invalidate()
                         
                         // construct object
-                        let enrollFaceEntity = EnrollFaceEntity()
-                        enrollFaceEntity.usage_pass = Cidaas.intermediate_verifiation_id
+                        let enrollFaceUsageEntity = EnrollFaceEntity()
+                        enrollFaceUsageEntity.usage_pass = Cidaas.intermediate_verifiation_id
+                        enrollFaceUsageEntity.attempt = enrollFaceEntity.attempt
                         
                         // call enroll service
-                        FaceVerificationService.shared.enrollFace(accessToken:access_token, photo: photo, enrollFaceEntity: enrollFaceEntity, properties: properties) {
+                        FaceVerificationService.shared.enrollFace(accessToken:access_token, photo: photo, enrollFaceEntity: enrollFaceUsageEntity, properties: properties) {
                             switch $0 {
                             case .failure(let error):
                                 // log error
