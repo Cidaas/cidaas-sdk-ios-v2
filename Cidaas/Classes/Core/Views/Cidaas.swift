@@ -1180,27 +1180,60 @@ public class Cidaas {
     // 2. Call loginWithTouchId method
     // 3. Maintain logs based on flags
     
-    public func loginWithTouchId(passwordlessEntity: PasswordlessEntity, extraParams: Dictionary<String, String> = Dictionary<String, String>(), callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+    public func loginWithTouchId(passwordlessEntity: PasswordlessEntity, localizedReason: String, extraParams: Dictionary<String, String> = Dictionary<String, String>(), callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            if passwordlessEntity.requestId == "" {
-                self.getRequestId(extraParams: extraParams) {
-                    switch $0 {
-                    case .success(let requestIdSuccessResponse):
-                        TouchIdVerificationController.shared.loginWithTouchId(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: requestIdSuccessResponse.data.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
-                        break
-                    case .failure(let requestIdErrorResponse):
-                        // return failure callback
-                        DispatchQueue.main.async {
-                            callback(Result.failure(error: requestIdErrorResponse))
+            
+            // ask for touch id or face id
+            let touchId = TouchID()
+            touchId.checkIfTouchIdAvailable { (success, errorMessage, errorCode) in
+                if success == true {
+                    touchId.checkTouchIDMatching(localizedReason: localizedReason, callback: { (res_success, res_errorMessage, res_errorCode) in
+                        if res_success == true {
+                            if passwordlessEntity.requestId == "" {
+                                self.getRequestId(extraParams: extraParams) {
+                                    switch $0 {
+                                    case .success(let requestIdSuccessResponse):
+                                        TouchIdVerificationController.shared.loginWithTouchId(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: requestIdSuccessResponse.data.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
+                                        break
+                                    case .failure(let requestIdErrorResponse):
+                                        // return failure callback
+                                        DispatchQueue.main.async {
+                                            callback(Result.failure(error: requestIdErrorResponse))
+                                        }
+                                        break
+                                    }
+                                }
+                            }
+                            else {
+                                TouchIdVerificationController.shared.loginWithTouchId(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
+                            }
                         }
-                        break
-                    }
+                        else {
+                            let error = WebAuthError.shared
+                            error.errorMessage = res_errorMessage ?? WebAuthError.shared.errorMessage
+                            error.errorCode = res_errorCode ?? WebAuthError.shared.errorCode
+                            
+                            // return failure callback
+                            DispatchQueue.main.async {
+                                callback(Result.failure(error: error))
+                            }
+                            return
+                        }
+                    })
                 }
-            }
-            else {
-                TouchIdVerificationController.shared.loginWithTouchId(email: passwordlessEntity.email, mobile: passwordlessEntity.mobile, sub: passwordlessEntity.sub, trackId: passwordlessEntity.trackId, requestId: passwordlessEntity.requestId, usageType: passwordlessEntity.usageType, properties: savedProp!, callback: callback)
+                else {
+                    let error = WebAuthError.shared
+                    error.errorMessage = errorMessage ?? WebAuthError.shared.errorMessage
+                    error.errorCode = errorCode ?? WebAuthError.shared.errorCode
+                    
+                    // return failure callback
+                    DispatchQueue.main.async {
+                        callback(Result.failure(error: error))
+                    }
+                    return
+                }
             }
         }
         else {
@@ -1975,14 +2008,47 @@ public class Cidaas {
     // 2. Call enrollTouch method
     // 3. Maintain logs based on flags
     
-    public func enrollTouchId(sub: String, verifierPassword: String, statusId: String, callback: @escaping(Result<EnrollTouchResponseEntity>) -> Void) {
+    public func enrollTouchId(sub: String, verifierPassword: String, statusId: String, localizedReason: String, callback: @escaping(Result<EnrollTouchResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            let enrollTouchEntity = EnrollTouchEntity()
-            enrollTouchEntity.statusId = statusId
             
-            TouchIdVerificationController.shared.enrollTouchId(sub: sub, access_token: "", enrollTouchEntity: enrollTouchEntity, properties: savedProp!, callback: callback)
+            // ask for touch id or face id
+            let touchId = TouchID()
+            touchId.checkIfTouchIdAvailable { (success, errorMessage, errorCode) in
+                if success == true {
+                    touchId.checkTouchIDMatching(localizedReason: localizedReason, callback: { (res_success, res_errorMessage, res_errorCode) in
+                        if res_success == true {
+                            let enrollTouchEntity = EnrollTouchEntity()
+                            enrollTouchEntity.statusId = statusId
+                            
+                            TouchIdVerificationController.shared.enrollTouchId(sub: sub, access_token: "", enrollTouchEntity: enrollTouchEntity, properties: savedProp!, callback: callback)
+                        }
+                        else {
+                            let error = WebAuthError.shared
+                            error.errorMessage = res_errorMessage ?? WebAuthError.shared.errorMessage
+                            error.errorCode = res_errorCode ?? WebAuthError.shared.errorCode
+                            
+                            // return failure callback
+                            DispatchQueue.main.async {
+                                callback(Result.failure(error: error))
+                            }
+                            return
+                        }
+                    })
+                }
+                else {
+                    let error = WebAuthError.shared
+                    error.errorMessage = errorMessage ?? WebAuthError.shared.errorMessage
+                    error.errorCode = errorCode ?? WebAuthError.shared.errorCode
+                    
+                    // return failure callback
+                    DispatchQueue.main.async {
+                        callback(Result.failure(error: error))
+                    }
+                    return
+                }
+            }
         }
         else {
             // log error
@@ -2181,11 +2247,44 @@ public class Cidaas {
     // 2. Call verifyPattern method
     // 3. Maintain logs based on flags
     
-    public func verifyTouchId(statusId: String, callback: @escaping(Result<AuthenticateTouchResponseEntity>) -> Void) {
+    public func verifyTouchId(statusId: String, localizedReason: String, callback: @escaping(Result<AuthenticateTouchResponseEntity>) -> Void) {
         
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
-            TouchIdVerificationController.shared.verifyTouchId(statusId: statusId, properties: savedProp!, callback: callback)
+            
+            // ask for touch id or face id
+            let touchId = TouchID()
+            touchId.checkIfTouchIdAvailable { (success, errorMessage, errorCode) in
+                if success == true {
+                    touchId.checkTouchIDMatching(localizedReason: localizedReason, callback: { (res_success, res_errorMessage, res_errorCode) in
+                        if res_success == true {
+                            TouchIdVerificationController.shared.verifyTouchId(statusId: statusId, properties: savedProp!, callback: callback)
+                        }
+                        else {
+                            let error = WebAuthError.shared
+                            error.errorMessage = res_errorMessage ?? WebAuthError.shared.errorMessage
+                            error.errorCode = res_errorCode ?? WebAuthError.shared.errorCode
+                            
+                            // return failure callback
+                            DispatchQueue.main.async {
+                                callback(Result.failure(error: error))
+                            }
+                            return
+                        }
+                    })
+                }
+                else {
+                    let error = WebAuthError.shared
+                    error.errorMessage = errorMessage ?? WebAuthError.shared.errorMessage
+                    error.errorCode = errorCode ?? WebAuthError.shared.errorCode
+                    
+                    // return failure callback
+                    DispatchQueue.main.async {
+                        callback(Result.failure(error: error))
+                    }
+                    return
+                }
+            }
         }
         else {
             // log error
