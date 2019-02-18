@@ -13,6 +13,7 @@ public class VerificationSettingsService {
     
     // shared instance
     public static var shared : VerificationSettingsService = VerificationSettingsService()
+    let location = DBHelper.shared.getLocation()
     
     // constructor
     public init() {
@@ -32,6 +33,8 @@ public class VerificationSettingsService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "deviceId" : deviceInfoEntity.deviceId,
             "deviceMake" : deviceInfoEntity.deviceMake,
             "deviceModel" : deviceInfoEntity.deviceModel,
@@ -130,6 +133,8 @@ public class VerificationSettingsService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "deviceId" : deviceInfoEntity.deviceId,
             "deviceMake" : deviceInfoEntity.deviceMake,
             "deviceModel" : deviceInfoEntity.deviceModel,
@@ -228,6 +233,8 @@ public class VerificationSettingsService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "deviceId" : deviceInfoEntity.deviceId,
             "deviceMake" : deviceInfoEntity.deviceMake,
             "deviceModel" : deviceInfoEntity.deviceModel,
@@ -326,6 +333,8 @@ public class VerificationSettingsService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "deviceId": deviceInfoEntity.deviceId,
             "deviceMake": deviceInfoEntity.deviceMake,
             "deviceModel": deviceInfoEntity.deviceModel,
@@ -417,6 +426,8 @@ public class VerificationSettingsService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "deviceId": deviceInfoEntity.deviceId,
             "deviceMake": deviceInfoEntity.deviceMake,
             "deviceModel": deviceInfoEntity.deviceModel,

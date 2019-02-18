@@ -13,6 +13,7 @@ public class ClientService {
     
     // shared instance
     public static var shared : ClientService = ClientService()
+    let location = DBHelper.shared.getLocation()
     
     // constructor
     public init() {
@@ -32,6 +33,8 @@ public class ClientService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "deviceId" : deviceInfoEntity.deviceId,
             "deviceMake" : deviceInfoEntity.deviceMake,
             "deviceModel" : deviceInfoEntity.deviceModel,

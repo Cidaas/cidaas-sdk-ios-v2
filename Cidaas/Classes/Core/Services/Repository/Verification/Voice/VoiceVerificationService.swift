@@ -14,6 +14,7 @@ public class VoiceVerificationService {
     
     // shared instance
     public static var shared : VoiceVerificationService = VoiceVerificationService()
+    let location = DBHelper.shared.getLocation()
     
     // constructor
     public init() {
@@ -36,6 +37,8 @@ public class VoiceVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "verification_api_version" : "2",
             "access_token" : accessToken
         ]
@@ -138,6 +141,8 @@ public class VoiceVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "verification_api_version" : "2"
         ]
         
@@ -240,6 +245,8 @@ public class VoiceVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "verification_api_version" : "2",
             "access_token" : accessToken
         ]
@@ -358,6 +365,8 @@ public class VoiceVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "verification_api_version" : "2"
         ]
         
@@ -457,6 +466,8 @@ public class VoiceVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "verification_api_version": "2"
         ]
         

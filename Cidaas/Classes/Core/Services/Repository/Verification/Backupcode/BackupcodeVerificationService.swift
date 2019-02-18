@@ -13,6 +13,7 @@ public class BackupcodeVerificationService {
     
     // shared instance
     public static var shared : BackupcodeVerificationService = BackupcodeVerificationService()
+    let location = DBHelper.shared.getLocation()
     
     // constructor
     public init() {
@@ -31,6 +32,8 @@ public class BackupcodeVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "access_token": access_token
         ]
         
@@ -132,6 +135,8 @@ public class BackupcodeVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1
         ]
         
         // construct body params
@@ -231,6 +236,8 @@ public class BackupcodeVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1
         ]
         
         // construct body params

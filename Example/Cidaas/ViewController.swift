@@ -30,6 +30,7 @@ class ViewController: UIViewController, WKNavigationDelegate, CidaasLoaderDelega
         CidaasFacebook.shared.delegate = self
         CidaasGoogle.shared.delegate = self
         
+        
 //        cidaasView.loginWithEmbeddedBrowser(delegate: self) {
 //            switch $0 {
 //            case .success(let result):

@@ -13,6 +13,7 @@ public class TOTPVerificationService {
     
     // shared instance
     public static var shared : TOTPVerificationService = TOTPVerificationService()
+    let location = DBHelper.shared.getLocation()
     
     // constructor
     public init() {
@@ -35,6 +36,8 @@ public class TOTPVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "verification_api_version" : "2",
             "access_token" : accessToken
         ]
@@ -137,6 +140,8 @@ public class TOTPVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "verification_api_version" : "2"
         ]
         
@@ -239,6 +244,8 @@ public class TOTPVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "verification_api_version" : "2",
             "access_token" : accessToken
         ]
@@ -342,6 +349,8 @@ public class TOTPVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "verification_api_version" : "2"
         ]
         
@@ -441,6 +450,8 @@ public class TOTPVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "verification_api_version": "2"
         ]
         

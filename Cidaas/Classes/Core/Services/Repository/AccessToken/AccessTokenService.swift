@@ -13,6 +13,7 @@ public class AccessTokenService {
     
     // shared instance
     public static var shared : AccessTokenService = AccessTokenService()
+    let location = DBHelper.shared.getLocation()
     
     // constructor
     public init() {
@@ -35,6 +36,8 @@ public class AccessTokenService {
             "deviceMake" : deviceInfoEntity.deviceMake,
             "deviceModel" : deviceInfoEntity.deviceModel,
             "deviceVersion" : deviceInfoEntity.deviceVersion,
+            "lat": location.0,
+            "lon": location.1,
             "Content-Type" : "application/x-www-form-urlencoded"
         ]
         
@@ -112,6 +115,8 @@ public class AccessTokenService {
             "deviceMake" : deviceInfoEntity.deviceMake,
             "deviceModel" : deviceInfoEntity.deviceModel,
             "deviceVersion" : deviceInfoEntity.deviceVersion,
+            "lat": location.0,
+            "lon": location.1,
             "Content-Type" : "application/x-www-form-urlencoded"
         ]
         
@@ -179,6 +184,8 @@ public class AccessTokenService {
             "deviceMake" : deviceInfoEntity.deviceMake,
             "deviceModel" : deviceInfoEntity.deviceModel,
             "deviceVersion" : deviceInfoEntity.deviceVersion,
+            "lat": location.0,
+            "lon": location.1,
             "Content-Type" : "application/x-www-form-urlencoded"
         ]
         

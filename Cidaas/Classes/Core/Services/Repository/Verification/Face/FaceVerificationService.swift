@@ -13,6 +13,7 @@ public class FaceVerificationService {
     
     // shared instance
     public static var shared : FaceVerificationService = FaceVerificationService()
+    let location = DBHelper.shared.getLocation()
     
     // constructor
     public init() {
@@ -35,6 +36,8 @@ public class FaceVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "verification_api_version" : "2",
             "access_token" : accessToken
         ]
@@ -137,6 +140,8 @@ public class FaceVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "verification_api_version" : "2"
         ]
         
@@ -239,6 +244,8 @@ public class FaceVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "verification_api_version" : "2",
             "access_token" : accessToken
         ]
@@ -360,6 +367,8 @@ public class FaceVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "verification_api_version" : "2"
         ]
         
@@ -459,6 +468,8 @@ public class FaceVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "verification_api_version": "2"
         ]
         

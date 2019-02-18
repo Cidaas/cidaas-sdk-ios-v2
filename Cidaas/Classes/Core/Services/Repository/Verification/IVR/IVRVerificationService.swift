@@ -13,6 +13,7 @@ public class IVRVerificationService {
     
     // shared instance
     public static var shared : IVRVerificationService = IVRVerificationService()
+    let location = DBHelper.shared.getLocation()
     
     // constructor
     public init() {
@@ -32,6 +33,8 @@ public class IVRVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "access_token": access_token
         ]
         
@@ -138,6 +141,8 @@ public class IVRVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1
         ]
         
         // construct body params
@@ -237,6 +242,8 @@ public class IVRVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1
         ]
         
         // construct body params
@@ -335,6 +342,8 @@ public class IVRVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1
         ]
         
         // construct body params

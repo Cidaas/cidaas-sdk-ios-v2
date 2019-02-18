@@ -13,6 +13,7 @@ public class UserActivityService {
     
     // shared instance
     public static var shared : UserActivityService = UserActivityService()
+    let location = DBHelper.shared.getLocation()
     
     // constructor
     public init() {
@@ -33,6 +34,8 @@ public class UserActivityService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "access_token": accessToken,
             "deviceId" : deviceInfoEntity.deviceId,
             "deviceMake" : deviceInfoEntity.deviceMake,

@@ -13,6 +13,7 @@ public class DeviceVerificationService {
 
     // shared instance
     public static var shared : DeviceVerificationService = DeviceVerificationService()
+    let location = DBHelper.shared.getLocation()
     
     // constructor
     public init() {
@@ -36,6 +37,8 @@ public class DeviceVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1
         ]
         
         validateDeviceEntity.deviceInfo = deviceInfoEntity

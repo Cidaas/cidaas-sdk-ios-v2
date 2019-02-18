@@ -29,6 +29,7 @@ public class Cidaas {
     var trackingManager: TrackingManager!
     var browserCallback: ((Result<LoginResponseEntity>) -> ())!
     var propertyFileRead: Bool = false
+    var locationDetector : LocationDetector
     
     // static variables
     public static var intermediate_verifiation_id: String = ""
@@ -88,6 +89,9 @@ public class Cidaas {
         deviceInfo.deviceModel = String(describing: deviceHelper.hardware())
         deviceInfo.deviceVersion = UIDevice.current.systemVersion
         DBHelper.shared.setDeviceInfo(deviceInfo: deviceInfo)
+        
+        locationDetector = LocationDetector()
+        locationDetector.startTracking()
         
         // set storage in local
         self.storage = storage
@@ -403,6 +407,39 @@ public class Cidaas {
             }
             return
         }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // call biometrics
+    // 1. call biometrics
+    // 2. Maintain logs based on flags
+    public func askDeviceAuthentication(localizedReason: String, invalidateAuthenticationContext: Bool = false, callback: @escaping (DeviceAuthenticationResponseEntity) -> Void) {
+        let touch = TouchID()
+        let response = DeviceAuthenticationResponseEntity()
+        touch.checkIfPasscodeAvailable(invalidateAuthenticationContext: invalidateAuthenticationContext, callback: { (success_pass, message_pass, code_pass) in
+            if success_pass == true {
+                touch.checkTouchIDMatching(localizedReason: localizedReason, callback: { (success_inner, message_inner, code_inner) in
+                    if success_inner == true {
+                        response.success = true
+                        response.status = 200
+                        response.message = "Authentication success"
+                    }
+                    else {
+                        // failure callback
+                        response.success = success_inner
+                        response.status = code_inner ?? 400
+                        response.message = message_inner ?? "Authentication Failed"
+                    }
+                })
+            }
+            else {
+                // failure callback
+                response.success = success_pass
+                response.status = code_pass ?? 400
+                response.message = message_pass ?? "Authentication Failed"
+            }
+        })
     }
     
 // -------------------------------------------------------------------------------------------------- //

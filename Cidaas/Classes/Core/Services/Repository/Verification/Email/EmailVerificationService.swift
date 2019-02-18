@@ -13,6 +13,7 @@ public class EmailVerificationService {
     
     // shared instance
     public static var shared : EmailVerificationService = EmailVerificationService()
+    let location = DBHelper.shared.getLocation()
     
     // constructor
     public init() {
@@ -32,6 +33,8 @@ public class EmailVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "access_token": access_token
         ]
         
@@ -137,6 +140,8 @@ public class EmailVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1
         ]
         
         // construct body params
@@ -236,6 +241,8 @@ public class EmailVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1
         ]
         
         // construct body params
@@ -334,6 +341,8 @@ public class EmailVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1
         ]
         
         // construct body params
