@@ -442,10 +442,10 @@ public class Cidaas {
                 response.success = success_pass
                 response.status = code_pass ?? 400
                 response.message = message_pass ?? "Authentication Failed"
-            }
-            DispatchQueue.main.async {
-                callback(response)
-                return
+                DispatchQueue.main.async {
+                    callback(response)
+                    return
+                }
             }
         })
     }
@@ -2322,6 +2322,8 @@ public class Cidaas {
                             let error = WebAuthError.shared
                             error.errorMessage = res_errorMessage ?? WebAuthError.shared.errorMessage
                             error.errorCode = res_errorCode ?? WebAuthError.shared.errorCode
+                            let errorResponse = error.error
+                            errorResponse.error.code = res_errorCode ?? WebAuthError.shared.errorCode
                             
                             // return failure callback
                             DispatchQueue.main.async {
@@ -2335,6 +2337,8 @@ public class Cidaas {
                     let error = WebAuthError.shared
                     error.errorMessage = errorMessage ?? WebAuthError.shared.errorMessage
                     error.errorCode = errorCode ?? WebAuthError.shared.errorCode
+                    let errorResponse = error.error
+                    errorResponse.error.code = errorCode ?? WebAuthError.shared.errorCode
                     
                     // return failure callback
                     DispatchQueue.main.async {
