@@ -116,6 +116,11 @@ public class DocumentScanService {
                 }
                 break
             case .failure(let error):
+                if error._code == NSURLErrorTimedOut {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
                 // return failure
                 callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.DOCUMENT_ENROLLED_SERVICE_FAILURE.rawValue, errorMessage: error.localizedDescription, statusCode: 400)))
                 break

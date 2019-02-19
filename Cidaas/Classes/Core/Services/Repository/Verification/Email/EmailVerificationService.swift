@@ -98,7 +98,12 @@ public class EmailVerificationService {
                     callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.SETUP_EMAIL_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.SETUP_EMAIL_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
                 }
                 break
-            case .failure:
+            case .failure(let error):
+                if error._code == NSURLErrorTimedOut {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
                 if (response.data != nil) {
                     let jsonString = String(decoding: response.data!, as: UTF8.self)
                     let decoder = JSONDecoder()
@@ -201,7 +206,12 @@ public class EmailVerificationService {
                     callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.ENROLL_EMAIL_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.ENROLL_EMAIL_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
                 }
                 break
-            case .failure:
+            case .failure(let error):
+                if error._code == NSURLErrorTimedOut {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
                 if (response.data != nil) {
                     let jsonString = String(decoding: response.data!, as: UTF8.self)
                     let decoder = JSONDecoder()
@@ -302,7 +312,12 @@ public class EmailVerificationService {
                     callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.INITIATE_EMAIL_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.INITIATE_EMAIL_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
                 }
                 break
-            case .failure:
+            case .failure(let error):
+                if error._code == NSURLErrorTimedOut {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
                 if (response.data != nil) {
                     let jsonString = String(decoding: response.data!, as: UTF8.self)
                     let decoder = JSONDecoder()
@@ -402,7 +417,12 @@ public class EmailVerificationService {
                     callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.AUTHENTICATE_EMAIL_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.AUTHENTICATE_EMAIL_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
                 }
                 break
-            case .failure:
+            case .failure(let error):
+                if error._code == NSURLErrorTimedOut {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
                 if (response.data != nil) {
                     let jsonString = String(decoding: response.data!, as: UTF8.self)
                     let decoder = JSONDecoder()

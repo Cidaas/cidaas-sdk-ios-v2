@@ -223,4 +223,5 @@ public class StringsHelper {
     public var DENY_REQUEST_SERVICE_FAILURE: String = "Deny request service failure"
     public var UPDATE_FCM_SERVICE_FAILURE: String = "Update FCM token service failure"
     public var PENDING_NOTIFICATION_LIST_SERVICE_FAILURE: String = "Pending notification service failure"
+    public var NETWORK_TIMEOUT: String = "Network Timeout"
 }

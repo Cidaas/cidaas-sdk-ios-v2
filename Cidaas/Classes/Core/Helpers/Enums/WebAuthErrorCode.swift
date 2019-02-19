@@ -227,4 +227,5 @@ public enum WebAuthErrorCode : Int32 {
     case TOUCHID_INVALID_CONTEXT = 10187
     case TOUCHID_NOT_INTERACTIVE = 10188
     
+    case NETWORK_TIMEOUT = 10189
 }

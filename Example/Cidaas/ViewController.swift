@@ -30,55 +30,8 @@ class ViewController: UIViewController, WKNavigationDelegate, CidaasLoaderDelega
         CidaasFacebook.shared.delegate = self
         CidaasGoogle.shared.delegate = self
         
+        getRequestId()
         
-//        cidaasView.loginWithEmbeddedBrowser(delegate: self) {
-//            switch $0 {
-//            case .success(let result):
-//                let alert = UIAlertController(title: "Alert", message: result.data.access_token, preferredStyle: .alert)
-//                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
-//                    switch action.style{
-//                    case .default:
-//                        print("default")
-//                        self.logout(accessToken: result.data.access_token)
-//                    case .cancel:
-//                        print("cancel")
-//
-//                    case .destructive:
-//                        print("destructive")
-//                    }}))
-//                self.present(alert, animated: true, completion: nil)
-//
-//                break
-//            case .failure(let errorResponse):
-//                print(errorResponse.errorMessage)
-//
-//                break
-//            }
-//        }
-        
-//        let gl = CidaasGoogle.shared
-//        gl.login(viewType: "login") {
-//            switch $0 {
-//            case .success(let successResponse):
-//                let alert = UIAlertController(title: "Alert", message: successResponse.data.access_token, preferredStyle: .alert)
-//                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
-//                    switch action.style{
-//                    case .default:
-//                        print("default")
-//
-//                    case .cancel:
-//                        print("cancel")
-//
-//                    case .destructive:
-//                        print("destructive")
-//                    }}))
-//                self.present(alert, animated: true, completion: nil)
-//                break
-//            case .failure(let errorResponse):
-//                print(errorResponse)
-//                break
-//            }
-//        }
     }
     
     func showLoader() {
@@ -136,7 +89,7 @@ class ViewController: UIViewController, WKNavigationDelegate, CidaasLoaderDelega
             switch $0 {
                 case .success(let requestIdSuccessResponse):
                     print(requestIdSuccessResponse.data.requestId)
-                    self.loginWithBrowser()
+//                    self.loginWithBrowser()
                     break
                 case .failure(let requestIdFailureResponse):
                     print(requestIdFailureResponse.errorMessage)

@@ -65,7 +65,12 @@ public class AccessTokenService {
         // call service
         Alamofire.request(urlString, method: .post, parameters: bodyParams, headers: headers).validate().responseString { response in
             switch response.result {
-            case .failure:
+            case .failure(let error):
+                if error._code == NSURLErrorTimedOut {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
                 // return failure
                 callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.ACCESSTOKEN_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.ACCESS_TOKEN_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
                 return
@@ -134,7 +139,12 @@ public class AccessTokenService {
         // call service
         Alamofire.request(urlString, method: .post, parameters: bodyParams, headers: headers).validate().responseString { response in
             switch response.result {
-            case .failure:
+            case .failure(let error):
+                if error._code == NSURLErrorTimedOut {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
                 // return failure
                 callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.REFRESH_TOKEN_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.REFRESH_TOKEN_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
                 return
@@ -205,7 +215,12 @@ public class AccessTokenService {
         // call service
         Alamofire.request(urlString, method: .get, headers: headers).validate(statusCode: 200..<308).responseString { response in
             switch response.result {
-            case .failure:
+            case .failure(let error):
+                if error._code == NSURLErrorTimedOut {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
                 // return failure
                 callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.SOCIAL_TOKEN_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.SOCIAL_TOKEN_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
                 return

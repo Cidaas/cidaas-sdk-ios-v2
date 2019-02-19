@@ -55,7 +55,12 @@ public class LocationService {
         
         Alamofire.request(urlString, method: .post, parameters: nil, headers: headers).validate().responseString { response in
             switch response.result {
-            case .failure:
+            case .failure(let error):
+                if error._code == NSURLErrorTimedOut {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
                 if (response.data != nil) {
                     let jsonString = String(decoding: response.data!, as: UTF8.self)
                     let decoder = JSONDecoder()
@@ -155,57 +160,62 @@ public class LocationService {
         urlString = baseURL + URLHelper.shared.getLocationEmissionURL()
         
         Alamofire.request(urlString, method: .post, parameters: bodyParams, encoding: JSONEncoding.default,
-            headers: headers).validate().responseString { response in
-            switch response.result {
-            case .failure:
-                if (response.data != nil) {
-                    let jsonString = String(decoding: response.data!, as: UTF8.self)
-                    let decoder = JSONDecoder()
-                    do {
-                        let data = jsonString.data(using: .utf8)!
-                        // decode the json data to object
-                        let errorResponseEntity = try decoder.decode(ErrorResponseEntity.self, from: data)
-                        
-                        // return failure
-                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.LOCATION_EMISSION_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error: errorResponseEntity)))
-                    }
-                    catch(let error) {
-                        // return failure
-                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.LOCATION_EMISSION_SERVICE_FAILURE.rawValue, errorMessage: error.localizedDescription, statusCode: 400)))
-                    }
-                }
-                else {
-                    // return failure
-                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.LOCATION_EMISSION_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.LOCATION_EMISSION_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
-                }
-                return
-            case .success:
-                if response.response?.statusCode == 200 {
-                    if let jsonString = response.result.value {
-                        let decoder = JSONDecoder()
-                        do {
-                            let data = jsonString.data(using: .utf8)!
-                            let locationSearch = try decoder.decode(EmissionResponse.self, from: data)
-                            // return success
-                            callback(Result.success(result: locationSearch))
-                        }
-                        catch {
-                            // return failure
-                            callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.ERROR_JSON_PARSING.rawValue, errorMessage: StringsHelper.shared.ERROR_JSON_PARSING, statusCode: HttpStatusCode.DEFAULT.rawValue)))
-                            return
-                        }
-                    }
-                    else {
-                        // return failure
-                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.LOCATION_EMISSION_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.LOCATION_EMISSION_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
-                    }
-                }
-                else {
-                    // return failure
-                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.LOCATION_EMISSION_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.LOCATION_EMISSION_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
-                    break
-                }
-            }
+                          headers: headers).validate().responseString { response in
+                            switch response.result {
+                            case .failure(let error):
+                                if error._code == NSURLErrorTimedOut {
+                                    // return failure
+                                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                                    return
+                                }
+                                if (response.data != nil) {
+                                    let jsonString = String(decoding: response.data!, as: UTF8.self)
+                                    let decoder = JSONDecoder()
+                                    do {
+                                        let data = jsonString.data(using: .utf8)!
+                                        // decode the json data to object
+                                        let errorResponseEntity = try decoder.decode(ErrorResponseEntity.self, from: data)
+                                        
+                                        // return failure
+                                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.LOCATION_EMISSION_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error: errorResponseEntity)))
+                                    }
+                                    catch(let error) {
+                                        // return failure
+                                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.LOCATION_EMISSION_SERVICE_FAILURE.rawValue, errorMessage: error.localizedDescription, statusCode: 400)))
+                                    }
+                                }
+                                else {
+                                    // return failure
+                                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.LOCATION_EMISSION_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.LOCATION_EMISSION_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
+                                }
+                                return
+                            case .success:
+                                if response.response?.statusCode == 200 {
+                                    if let jsonString = response.result.value {
+                                        let decoder = JSONDecoder()
+                                        do {
+                                            let data = jsonString.data(using: .utf8)!
+                                            let locationSearch = try decoder.decode(EmissionResponse.self, from: data)
+                                            // return success
+                                            callback(Result.success(result: locationSearch))
+                                        }
+                                        catch {
+                                            // return failure
+                                            callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.ERROR_JSON_PARSING.rawValue, errorMessage: StringsHelper.shared.ERROR_JSON_PARSING, statusCode: HttpStatusCode.DEFAULT.rawValue)))
+                                            return
+                                        }
+                                    }
+                                    else {
+                                        // return failure
+                                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.LOCATION_EMISSION_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.LOCATION_EMISSION_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
+                                    }
+                                }
+                                else {
+                                    // return failure
+                                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.LOCATION_EMISSION_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.LOCATION_EMISSION_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
+                                    break
+                                }
+                            }
         }
     }
     
@@ -244,7 +254,12 @@ public class LocationService {
         
         Alamofire.request(urlString, method: .get, parameters: nil, headers: headers).validate().responseString { response in
             switch response.result {
-            case .failure:
+            case .failure(let error):
+                if error._code == NSURLErrorTimedOut {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
                 if (response.data != nil) {
                     let jsonString = String(decoding: response.data!, as: UTF8.self)
                     let decoder = JSONDecoder()
@@ -346,7 +361,12 @@ public class LocationService {
         Alamofire.request(urlString, method: .post, parameters: bodyParams, encoding: JSONEncoding.default,
                           headers: headers).validate().responseString { response in
                             switch response.result {
-                            case .failure:
+                            case .failure(let error):
+                                if error._code == NSURLErrorTimedOut {
+                                    // return failure
+                                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                                    return
+                                }
                                 if (response.data != nil) {
                                     let jsonString = String(decoding: response.data!, as: UTF8.self)
                                     let decoder = JSONDecoder()
