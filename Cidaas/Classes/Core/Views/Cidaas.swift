@@ -431,6 +431,10 @@ public class Cidaas {
                         response.status = code_inner ?? 400
                         response.message = message_inner ?? "Authentication Failed"
                     }
+                    DispatchQueue.main.async {
+                        callback(response)
+                        return
+                    }
                 })
             }
             else {
@@ -438,6 +442,10 @@ public class Cidaas {
                 response.success = success_pass
                 response.status = code_pass ?? 400
                 response.message = message_pass ?? "Authentication Failed"
+            }
+            DispatchQueue.main.async {
+                callback(response)
+                return
             }
         })
     }
