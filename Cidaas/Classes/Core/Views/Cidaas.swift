@@ -1181,6 +1181,9 @@ public class Cidaas {
                             let error = WebAuthError.shared
                             error.errorMessage = res_errorMessage ?? WebAuthError.shared.errorMessage
                             error.errorCode = res_errorCode ?? WebAuthError.shared.errorCode
+                            let errorResponse = error.error
+                            errorResponse.error.code = res_errorCode ?? WebAuthError.shared.errorCode
+                            
                             
                             // return failure callback
                             DispatchQueue.main.async {
@@ -1194,6 +1197,8 @@ public class Cidaas {
                     let error = WebAuthError.shared
                     error.errorMessage = errorMessage ?? WebAuthError.shared.errorMessage
                     error.errorCode = errorCode ?? WebAuthError.shared.errorCode
+                    let errorResponse = error.error
+                    errorResponse.error.code = errorCode ?? WebAuthError.shared.errorCode
                     
                     // return failure callback
                     DispatchQueue.main.async {
@@ -1259,6 +1264,8 @@ public class Cidaas {
                             let error = WebAuthError.shared
                             error.errorMessage = res_errorMessage ?? WebAuthError.shared.errorMessage
                             error.errorCode = res_errorCode ?? WebAuthError.shared.errorCode
+                            let errorResponse = error.error
+                            errorResponse.error.code = res_errorCode ?? WebAuthError.shared.errorCode
                             
                             // return failure callback
                             DispatchQueue.main.async {
@@ -1272,6 +1279,8 @@ public class Cidaas {
                     let error = WebAuthError.shared
                     error.errorMessage = errorMessage ?? WebAuthError.shared.errorMessage
                     error.errorCode = errorCode ?? WebAuthError.shared.errorCode
+                    let errorResponse = error.error
+                    errorResponse.error.code = errorCode ?? WebAuthError.shared.errorCode
                     
                     // return failure callback
                     DispatchQueue.main.async {
@@ -2073,6 +2082,8 @@ public class Cidaas {
                             let error = WebAuthError.shared
                             error.errorMessage = res_errorMessage ?? WebAuthError.shared.errorMessage
                             error.errorCode = res_errorCode ?? WebAuthError.shared.errorCode
+                            let errorResponse = error.error
+                            errorResponse.error.code = res_errorCode ?? WebAuthError.shared.errorCode
                             
                             // return failure callback
                             DispatchQueue.main.async {
@@ -2086,6 +2097,8 @@ public class Cidaas {
                     let error = WebAuthError.shared
                     error.errorMessage = errorMessage ?? WebAuthError.shared.errorMessage
                     error.errorCode = errorCode ?? WebAuthError.shared.errorCode
+                    let errorResponse = error.error
+                    errorResponse.error.code = errorCode ?? WebAuthError.shared.errorCode
                     
                     // return failure callback
                     DispatchQueue.main.async {
