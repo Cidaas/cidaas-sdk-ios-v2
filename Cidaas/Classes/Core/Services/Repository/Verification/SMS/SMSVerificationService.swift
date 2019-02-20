@@ -99,7 +99,7 @@ public class SMSVerificationService {
                 }
                 break
             case .failure(let error):
-                if error._code == NSURLErrorTimedOut {
+                if error._domain == NSURLErrorDomain {
                     // return failure
                     callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
                     return
@@ -207,7 +207,7 @@ public class SMSVerificationService {
                 }
                 break
             case .failure(let error):
-                if error._code == NSURLErrorTimedOut {
+                if error._domain == NSURLErrorDomain {
                     // return failure
                     callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
                     return
@@ -313,7 +313,7 @@ public class SMSVerificationService {
                 }
                 break
             case .failure(let error):
-                if error._code == NSURLErrorTimedOut {
+                if error._domain == NSURLErrorDomain {
                     // return failure
                     callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
                     return
@@ -418,7 +418,7 @@ public class SMSVerificationService {
                 }
                 break
             case .failure(let error):
-                if error._code == NSURLErrorTimedOut {
+                if error._domain == NSURLErrorDomain {
                     // return failure
                     callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
                     return

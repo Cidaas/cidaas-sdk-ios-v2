@@ -56,7 +56,7 @@ public class LocationService {
         Alamofire.request(urlString, method: .post, parameters: nil, headers: headers).validate().responseString { response in
             switch response.result {
             case .failure(let error):
-                if error._code == NSURLErrorTimedOut {
+                if error._domain == NSURLErrorDomain {
                     // return failure
                     callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
                     return
@@ -163,7 +163,7 @@ public class LocationService {
                           headers: headers).validate().responseString { response in
                             switch response.result {
                             case .failure(let error):
-                                if error._code == NSURLErrorTimedOut {
+                                if error._domain == NSURLErrorDomain {
                                     // return failure
                                     callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
                                     return
@@ -255,7 +255,7 @@ public class LocationService {
         Alamofire.request(urlString, method: .get, parameters: nil, headers: headers).validate().responseString { response in
             switch response.result {
             case .failure(let error):
-                if error._code == NSURLErrorTimedOut {
+                if error._domain == NSURLErrorDomain {
                     // return failure
                     callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
                     return
@@ -362,7 +362,7 @@ public class LocationService {
                           headers: headers).validate().responseString { response in
                             switch response.result {
                             case .failure(let error):
-                                if error._code == NSURLErrorTimedOut {
+                                if error._domain == NSURLErrorDomain {
                                     // return failure
                                     callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
                                     return

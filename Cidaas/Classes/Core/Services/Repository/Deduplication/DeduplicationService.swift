@@ -56,7 +56,7 @@ public class DeduplicationService {
         Alamofire.request(urlString, headers: headers).validate().responseString { response in
             switch response.result {
             case .failure(let error):
-                if error._code == NSURLErrorTimedOut {
+                if error._domain == NSURLErrorDomain {
                     // return failure
                     callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
                     return
@@ -148,7 +148,7 @@ public class DeduplicationService {
         Alamofire.request(urlString, method: .post, parameters: nil, headers: headers).validate().responseString { response in
             switch response.result {
             case .failure(let error):
-                if error._code == NSURLErrorTimedOut {
+                if error._domain == NSURLErrorDomain {
                     // return failure
                     callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
                     return
@@ -255,7 +255,7 @@ public class DeduplicationService {
         Alamofire.request(urlString, method: .post, parameters: bodyParams, headers: headers).validate().responseString { response in
             switch response.result {
             case .failure(let error):
-                if error._code == NSURLErrorTimedOut {
+                if error._domain == NSURLErrorDomain {
                     // return failure
                     callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
                     return
