@@ -224,4 +224,6 @@ public class StringsHelper {
     public var UPDATE_FCM_SERVICE_FAILURE: String = "Update FCM token service failure"
     public var PENDING_NOTIFICATION_LIST_SERVICE_FAILURE: String = "Pending notification service failure"
     public var NETWORK_TIMEOUT: String = "Network Timeout"
+    
+    public var USER_LOGIN_INFO_SERVICE_FAILURE = "User login information service failure"
 }

@@ -228,4 +228,6 @@ public enum WebAuthErrorCode : Int32 {
     case TOUCHID_NOT_INTERACTIVE = 10188
     
     case NETWORK_TIMEOUT = 10189
+    
+    case USER_LOGIN_INFO_SERVICE_FAILURE = 10190
 }

@@ -2817,6 +2817,34 @@ public class Cidaas {
     
 // -------------------------------------------------------------------------------------------------- //
     
+    // get user login info from plist
+    // 1. Read properties from file
+    // 2. Call getUserActivity method
+    // 3. Maintain logs based on flags
+    
+    public func getUserLoginInformation(userInfo: UserLoginInfoEntity, callback: @escaping(Result<UserLoginInfoResponseEntity>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            UserActivityController.shared.getUserLoginInformation(userInfo: userInfo, properties: savedProp!, callback: callback)
+        }
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
     // update user from plist
     // 1. Read properties from file
     // 2. Call updateUser method

@@ -105,6 +105,7 @@ public class URLHelper {
     public var documentScanURL = "/access-control-srv/ocr/validate"
     
     public var userActivityURL = "/useractivity-srv/latestactivity"
+    public var userLoginInfoURL = "/verification-srv/verificationstatus/status/search/sdk"
     public var updateUserURL = "/users-srv/user/profile"
     public var imageUploadURL = "/image-srv/profile/upload"
     public var linkUserURL = "/users-srv/user/linkaccount"
@@ -439,6 +440,10 @@ public class URLHelper {
     
     public func getUserActivityURL() -> String {
         return userActivityURL
+    }
+    
+    public func getUserLoginInfoURL() -> String {
+        return userLoginInfoURL
     }
     
     public func getDeduplicationDetailsURL(track_id: String) -> String {

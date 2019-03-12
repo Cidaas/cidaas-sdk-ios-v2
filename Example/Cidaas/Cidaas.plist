@@ -3,10 +3,10 @@
 <plist version="1.0">
 <dict>
 	<key>DomainURL</key>
-	<string>https://nightlybuild.cidaas.de</string>
+	<string>{{baseurl}}</string>
 	<key>ClientId</key>
-	<string>f27c8ca3-257e-489d-b28e-5f9e1abbe94</string>
+	<string>{{client_id}}</string>
 	<key>RedirectURL</key>
-	<string>https://nightlybuild.cidaas.de/login-srv/social/callback/gothaer</string>
+	<string>{{redirect_uri}}</string>
 </dict>
 </plist>
