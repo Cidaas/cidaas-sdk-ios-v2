@@ -91,6 +91,11 @@ public class TouchID {
     public func checkIfPasscodeAvailable(invalidateAuthenticationContext: Bool, callback: @escaping (Bool, String?, Int32?)->()) {
         if invalidateAuthenticationContext == true {
             self.authenticatedContext.invalidate()
+            
+            DispatchQueue.main.async {
+                callback(false, "Invalid context", WebAuthErrorCode.TOUCHID_INVALID_CONTEXT.rawValue)
+                return
+            }
         }
         
         if authenticatedContext.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error) {
@@ -106,8 +111,10 @@ public class TouchID {
                 }
                 break
             case LAError.invalidContext.rawValue:
-                self.authenticatedContext = LAContext()
-                self.checkIfPasscodeAvailable(invalidateAuthenticationContext: false, callback: callback)
+                if (!invalidateAuthenticationContext) {
+                    self.authenticatedContext = LAContext()
+                    self.checkIfPasscodeAvailable(invalidateAuthenticationContext: false, callback: callback)
+                }
                 DispatchQueue.main.async {
                     callback(false, "Invalid context", WebAuthErrorCode.TOUCHID_INVALID_CONTEXT.rawValue)
                 }

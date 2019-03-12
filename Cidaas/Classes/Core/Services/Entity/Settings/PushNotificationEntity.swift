@@ -17,6 +17,12 @@ public class PushNotificationEntity : Codable {
     public var address : PushAddress = PushAddress()
     public var deviceInfo : PushDeviceInfo = PushDeviceInfo()
     
+    public var dataShareType: String = ""
+    public var baseurl: String = ""
+    public var client_id: String = ""
+    public var redirect_url: String = ""
+    public var user_device_id: String = ""
+    
     public init() {
         
     }
@@ -31,6 +37,12 @@ public class PushNotificationEntity : Codable {
         self.randomNumbers = try container.decodeIfPresent(String.self, forKey: .randomNumbers) ?? ""
         self.address = try container.decodeIfPresent(PushAddress.self, forKey: .address) ?? PushAddress()
         self.deviceInfo = try container.decodeIfPresent(PushDeviceInfo.self, forKey: .deviceInfo) ?? PushDeviceInfo()
+        
+        self.dataShareType = try container.decodeIfPresent(String.self, forKey: .dataShareType) ?? ""
+        self.baseurl = try container.decodeIfPresent(String.self, forKey: .baseurl) ?? ""
+        self.client_id = try container.decodeIfPresent(String.self, forKey: .client_id) ?? ""
+        self.user_device_id = try container.decodeIfPresent(String.self, forKey: .user_device_id) ?? ""
+        self.redirect_url = try container.decodeIfPresent(String.self, forKey: .redirect_url) ?? ""
     }
 }
 
