@@ -23,6 +23,7 @@ public class PushNotificationEntity : Codable {
     public var redirect_url: String = ""
     public var user_device_id: String = ""
     
+    
     public init() {
         
     }
