@@ -173,7 +173,7 @@ public class UserActivityService {
         // construct url
         urlString = baseURL + URLHelper.shared.getUserLoginInfoURL()
         
-        Alamofire.request(urlString, method: .post, parameters: bodyParams, headers: headers).validate().responseString { response in
+        Alamofire.request(urlString, method: .post, parameters: bodyParams, encoding: JSONEncoding.default, headers: headers).validate().responseString { response in
             switch response.result {
             case .failure(let error):
                 if error._domain == NSURLErrorDomain {
