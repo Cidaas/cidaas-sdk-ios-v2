@@ -11,7 +11,7 @@ public class UserLoginInfoResponseEntity : Codable {
     // properties
     public var success: Bool = false
     public var status: Int16 = 400
-    public var data: [UserLoginInfoResponseDataEntity] = []
+    public var data: UserLoginInfoResponseDataEntity = UserLoginInfoResponseDataEntity()
     
     // Constructors
     public init() {
@@ -22,11 +22,30 @@ public class UserLoginInfoResponseEntity : Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.success = try container.decodeIfPresent(Bool.self, forKey: .success) ?? false
         self.status = try container.decodeIfPresent(Int16.self, forKey: .status) ?? 400
-        self.data = try container.decodeIfPresent([UserLoginInfoResponseDataEntity].self, forKey: .data) ?? []
+        self.data = try container.decodeIfPresent(UserLoginInfoResponseDataEntity.self, forKey: .data) ?? UserLoginInfoResponseDataEntity()
     }
 }
 
 public class UserLoginInfoResponseDataEntity : Codable {
+    public var count: Int32 = 0
+    public var data: [UserLoginInfoResponse] = []
+    
+    // Constructors
+    public init() {
+        
+    }
+    
+    
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.count = try container.decodeIfPresent(Int32.self, forKey: .count) ?? 0
+        self.data = try container.decodeIfPresent([UserLoginInfoResponse].self, forKey: .data) ?? []
+        
+    }
+    
+}
+
+public class UserLoginInfoResponse : Codable {
     // properties
     public var _id: String = ""
     public var currentState: String = ""
