@@ -22,7 +22,7 @@ class FaceTests: QuickSpec {
                 
                 it("call configure FaceRecognition from public") {
                     
-                    cidaas.configureFaceRecognition(photo: UIImage(named: "conflictuser")!, sub: "87267324", logoUrl: "asdkashdjasd") {
+                    cidaas.configureFaceRecognition(photo: UIImage(named: "conflictuser")!, sub: "87267324", logoUrl: "asdkashdjasd", attempt: 1) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -36,7 +36,7 @@ class FaceTests: QuickSpec {
                     
                     DBHelper.shared.userDefaults.removeObject(forKey: "OAuthProperty")
                     
-                    cidaas.configureFaceRecognition(photo: UIImage(named: "conflictuser")!, sub: "87267324", logoUrl: "asdkashdjasd") {
+                    cidaas.configureFaceRecognition(photo: UIImage(named: "conflictuser")!, sub: "87267324", logoUrl: "asdkashdjasd", attempt: 1) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -162,7 +162,7 @@ class FaceTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configureFace(sub: "kajshjasd", photo: UIImage(named: "tick")!, logoUrl: "asdkashdjasd", intermediate_id: "asdasd", properties: properties!) {
+                    controller.configureFace(sub: "kajshjasd", photo: UIImage(named: "tick")!, logoUrl: "asdkashdjasd", attempt: 1, intermediate_id: "asdasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -230,7 +230,7 @@ class FaceTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configureFace(sub: "kajshjasd", photo: UIImage(named: "tick")!, logoUrl: "asdkashdjasd", properties: properties!) {
+                    controller.configureFace(sub: "kajshjasd", photo: UIImage(named: "tick")!, logoUrl: "asdkashdjasd", attempt: 1, properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -327,7 +327,7 @@ class FaceTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configureFace(sub: "kajshjasd", photo: UIImage(named: "tick")!, logoUrl: "asdkashdjasd", intermediate_id: "asdasd", properties: properties!) {
+                    controller.configureFace(sub: "kajshjasd", photo: UIImage(named: "tick")!, logoUrl: "asdkashdjasd", attempt: 1, intermediate_id: "asdasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -453,7 +453,7 @@ class FaceTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configureFace(sub: "kajshjasd", photo: UIImage(named: "tick")!, logoUrl: "asdkashdjasd", intermediate_id: "asdasd", properties: properties!) {
+                    controller.configureFace(sub: "kajshjasd", photo: UIImage(named: "tick")!, logoUrl: "asdkashdjasd", attempt: 1, intermediate_id: "asdasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -609,7 +609,7 @@ class FaceTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configureFace(sub: "kajshjasd", photo: UIImage(named: "tick")!, logoUrl: "asdkashdjasd", intermediate_id: "asdasd", properties: properties!) {
+                    controller.configureFace(sub: "kajshjasd", photo: UIImage(named: "tick")!, logoUrl: "asdkashdjasd", attempt: 1, intermediate_id: "asdasd", properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -669,7 +669,7 @@ class FaceTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configureFace(sub: "kajshjasd", photo: UIImage(named: "tick")!, logoUrl: "asdkashdjasd", properties: properties!) {
+                    controller.configureFace(sub: "kajshjasd", photo: UIImage(named: "tick")!, logoUrl: "asdkashdjasd", attempt: 1, properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -727,7 +727,7 @@ class FaceTests: QuickSpec {
                     
                     Cidaas.intermediate_verifiation_id = "asdasd"
                     
-                    controller.configureFace(sub: "kajshjasd", photo: UIImage(named: "tick")!, logoUrl: "asdkashdjasd", properties: properties!) {
+                    controller.configureFace(sub: "kajshjasd", photo: UIImage(named: "tick")!, logoUrl: "asdkashdjasd", attempt: 1, properties: properties!) {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)

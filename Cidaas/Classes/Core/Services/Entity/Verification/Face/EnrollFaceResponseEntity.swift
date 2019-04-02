@@ -33,6 +33,8 @@ public class EnrollFaceResponseDataEntity : Codable {
     public var trackingCode: String = ""
     public var verificationType: String = ""
     public var usageType: String = ""
+    public var enrolled: Bool?
+    public var meta: EnrollFaceResponseMetaData?
     
     // Constructors
     public init() {
@@ -46,5 +48,27 @@ public class EnrollFaceResponseDataEntity : Codable {
         self.trackingCode = try container.decodeIfPresent(String.self, forKey: .trackingCode) ?? ""
         self.verificationType = try container.decodeIfPresent(String.self, forKey: .verificationType) ?? ""
         self.usageType = try container.decodeIfPresent(String.self, forKey: .usageType) ?? ""
+        self.enrolled = try container.decodeIfPresent(Bool.self, forKey: .enrolled)
+        self.meta = try container.decodeIfPresent(EnrollFaceResponseMetaData.self, forKey: .meta)
+    }
+}
+
+public class EnrollFaceResponseMetaData : Codable {
+    
+    // properties
+    public var comment: String?
+    public var number_images_needed: Int32?
+    public var number_images_uploaded: Int32?
+    
+    // Constructors
+    public init() {
+        
+    }
+    
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.comment = try container.decodeIfPresent(String.self, forKey: .comment)
+        self.number_images_needed = try container.decodeIfPresent(Int32.self, forKey: .number_images_needed)
+        self.number_images_uploaded = try container.decodeIfPresent(Int32.self, forKey: .number_images_uploaded)
     }
 }

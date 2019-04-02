@@ -105,6 +105,7 @@ public class URLHelper {
     public var documentScanURL = "/access-control-srv/ocr/validate"
     
     public var userActivityURL = "/useractivity-srv/latestactivity"
+    public var userLoginInfoURL = "/verification-srv/verificationstatus/status/search/sdk"
     public var updateUserURL = "/users-srv/user/profile"
     public var imageUploadURL = "/image-srv/profile/upload"
     public var linkUserURL = "/users-srv/user/linkaccount"
@@ -169,8 +170,8 @@ public class URLHelper {
         return loginWithCredentialsURL
     }
     
-    public func getLogoutURL() -> String {
-        return logoutURL
+    public func getLogoutURL(accessToken: String) -> String {
+        return logoutURL + "?access_token_hint=" + accessToken
     }
     
     public func getConsentURL(consent_name: String, version: Int16) -> String {
@@ -439,6 +440,10 @@ public class URLHelper {
     
     public func getUserActivityURL() -> String {
         return userActivityURL
+    }
+    
+    public func getUserLoginInfoURL() -> String {
+        return userLoginInfoURL
     }
     
     public func getDeduplicationDetailsURL(track_id: String) -> String {

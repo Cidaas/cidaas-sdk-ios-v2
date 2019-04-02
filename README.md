@@ -67,7 +67,7 @@ A sample plist file would look like this :
 The following sections will help you to generate some of the information that is needed for plist.
 
 #### Getting Client Id and urls
-You can get this by creating your App in App settings section of cidaas Admin portal. Once you select the right scope and application type, and fill in all mandatory fields, you can use the generated Client ID and redirect URLs.
+When you are integrating your own Business App with, you may want to modularize the interactions and attributes. There are  like Scope, Roles, Grant-Types, re-direct URLs etc., that you may want to group into one configuration/settings. This can be done by creating  App or Client.
 
 
 #### Initialization

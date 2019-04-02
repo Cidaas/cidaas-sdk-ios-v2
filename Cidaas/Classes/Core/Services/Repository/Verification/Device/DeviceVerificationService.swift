@@ -13,6 +13,7 @@ public class DeviceVerificationService {
 
     // shared instance
     public static var shared : DeviceVerificationService = DeviceVerificationService()
+    let location = DBHelper.shared.getLocation()
     
     // constructor
     public init() {
@@ -36,6 +37,8 @@ public class DeviceVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1
         ]
         
         validateDeviceEntity.deviceInfo = deviceInfoEntity
@@ -95,7 +98,12 @@ public class DeviceVerificationService {
                     callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.VALIDATE_DEVICE_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.VALIDATE_DEVICE_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
                 }
                 break
-            case .failure:
+            case .failure(let error):
+                if error._domain == NSURLErrorDomain {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
                 if (response.data != nil) {
                     let jsonString = String(decoding: response.data!, as: UTF8.self)
                     let decoder = JSONDecoder()

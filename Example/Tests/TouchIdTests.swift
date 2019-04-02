@@ -20,7 +20,7 @@ class TouchIdTests: QuickSpec {
                 
                 it("call configure TouchIdRecognition from public") {
                     
-                    cidaas.configureTouchId(sub: "87267324", logoUrl: "askdjhas") {
+                    cidaas.configureTouchId(sub: "87267324", logoUrl: "askdjhas", localizedReason: "Place your finger on your fingerprint sensor") {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -34,7 +34,7 @@ class TouchIdTests: QuickSpec {
                     
                     DBHelper.shared.userDefaults.removeObject(forKey: "OAuthProperty")
                     
-                    cidaas.configureTouchId(sub: "87267324", logoUrl: "askdjhas") {
+                    cidaas.configureTouchId(sub: "87267324", logoUrl: "askdjhas", localizedReason: "Place your fingerprint on your fingerprint sensor") {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -56,7 +56,7 @@ class TouchIdTests: QuickSpec {
                     passwordlessEntity.usageType = UsageTypes.MFA.rawValue
                     passwordlessEntity.trackId = "873472873482"
                     
-                    cidaas.loginWithTouchId(passwordlessEntity: passwordlessEntity) {
+                    cidaas.loginWithTouchId(passwordlessEntity: passwordlessEntity, localizedReason: "verify touch") {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -78,7 +78,7 @@ class TouchIdTests: QuickSpec {
                     passwordlessEntity.usageType = UsageTypes.MFA.rawValue
                     passwordlessEntity.trackId = "873472873482"
                     
-                    cidaas.loginWithTouchId(passwordlessEntity: passwordlessEntity) {
+                    cidaas.loginWithTouchId(passwordlessEntity: passwordlessEntity, localizedReason: "verify touch") {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -92,7 +92,7 @@ class TouchIdTests: QuickSpec {
                 
                 it("call verify TouchId from public") {
                     
-                    cidaas.verifyTouchId(statusId: "382b6e72-3435-4724-8339-ea7907f253e9") {
+                    cidaas.verifyTouchId(statusId: "382b6e72-3435-4724-8339-ea7907f253e9", localizedReason: "Verify touch") {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
@@ -106,7 +106,7 @@ class TouchIdTests: QuickSpec {
                     
                     DBHelper.shared.userDefaults.removeObject(forKey: "OAuthProperty")
                     
-                    cidaas.verifyTouchId(statusId: "382b6e72-3435-4724-8339-ea7907f253e9") {
+                    cidaas.verifyTouchId(statusId: "382b6e72-3435-4724-8339-ea7907f253e9", localizedReason: "Verify touch") {
                         switch $0 {
                         case .failure(let error):
                             print(error.errorMessage)
