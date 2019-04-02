@@ -13,6 +13,7 @@ public class FaceVerificationService {
     
     // shared instance
     public static var shared : FaceVerificationService = FaceVerificationService()
+    let location = DBHelper.shared.getLocation()
     
     // constructor
     public init() {
@@ -35,6 +36,8 @@ public class FaceVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "verification_api_version" : "2",
             "access_token" : accessToken
         ]
@@ -95,7 +98,12 @@ public class FaceVerificationService {
                     callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.FACE_SETUP_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.FACE_SETUP_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
                 }
                 break
-            case .failure:
+            case .failure(let error):
+                if error._domain == NSURLErrorDomain {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
                 if (response.data != nil) {
                     let jsonString = String(decoding: response.data!, as: UTF8.self)
                     let decoder = JSONDecoder()
@@ -137,6 +145,8 @@ public class FaceVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "verification_api_version" : "2"
         ]
         
@@ -197,7 +207,12 @@ public class FaceVerificationService {
                     callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.FACE_SCANNED_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.FACE_SCANNED_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
                 }
                 break
-            case .failure:
+            case .failure(let error):
+                if error._domain == NSURLErrorDomain {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
                 if (response.data != nil) {
                     let jsonString = String(decoding: response.data!, as: UTF8.self)
                     let decoder = JSONDecoder()
@@ -239,6 +254,8 @@ public class FaceVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "verification_api_version" : "2",
             "access_token" : accessToken
         ]
@@ -257,6 +274,7 @@ public class FaceVerificationService {
         bodyParams["deviceId"] = deviceInfoEntity.deviceId
         bodyParams["client_id"] = enrollFaceEntity.client_id
         bodyParams["usage_pass"] = enrollFaceEntity.usage_pass
+        bodyParams["attempt"] = String(describing: enrollFaceEntity.attempt)
         
         // assign base url
         baseURL = (properties["DomainURL"]) ?? ""
@@ -336,6 +354,11 @@ public class FaceVerificationService {
                 }
                 break
             case .failure(let error):
+                if error._domain == NSURLErrorDomain {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
                 // return failure
                 callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.FACE_ENROLLED_SERVICE_FAILURE.rawValue, errorMessage: error.localizedDescription, statusCode: 400)))
                 break
@@ -359,6 +382,8 @@ public class FaceVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "verification_api_version" : "2"
         ]
         
@@ -419,7 +444,12 @@ public class FaceVerificationService {
                     callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.FACE_INITIATE_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.FACE_INITIATE_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
                 }
                 break
-            case .failure:
+            case .failure(let error):
+                if error._domain == NSURLErrorDomain {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
                 if (response.data != nil) {
                     let jsonString = String(decoding: response.data!, as: UTF8.self)
                     let decoder = JSONDecoder()
@@ -458,6 +488,8 @@ public class FaceVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "verification_api_version": "2"
         ]
         
@@ -554,6 +586,11 @@ public class FaceVerificationService {
                 }
                 break
             case .failure(let error):
+                if error._domain == NSURLErrorDomain {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
                 // return failure
                 callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.FACE_ENROLLED_SERVICE_FAILURE.rawValue, errorMessage: error.localizedDescription, statusCode: 400)))
                 break

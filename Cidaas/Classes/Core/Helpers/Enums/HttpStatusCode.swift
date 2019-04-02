@@ -26,4 +26,5 @@ public enum HttpStatusCode : Int {
     case DEFAULT = 501
     case BAD_GATEWAY = 502
     case SERVICE_UNAVAILABLE = 503
+    case GATEWAY_TIMEOUT = 504
 }

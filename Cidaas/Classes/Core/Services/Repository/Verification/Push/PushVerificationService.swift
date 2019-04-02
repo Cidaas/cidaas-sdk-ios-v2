@@ -13,6 +13,7 @@ public class PushVerificationService {
     
     // shared instance
     public static var shared : PushVerificationService = PushVerificationService()
+    let location = DBHelper.shared.getLocation()
     
     // constructor
     public init() {
@@ -35,6 +36,8 @@ public class PushVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "verification_api_version" : "2",
             "access_token" : accessToken
         ]
@@ -95,7 +98,12 @@ public class PushVerificationService {
                     callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.PUSH_SETUP_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.PUSH_SETUP_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
                 }
                 break
-            case .failure:
+            case .failure(let error):
+                if error._domain == NSURLErrorDomain {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
                 if (response.data != nil) {
                     let jsonString = String(decoding: response.data!, as: UTF8.self)
                     let decoder = JSONDecoder()
@@ -137,6 +145,8 @@ public class PushVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "verification_api_version" : "2"
         ]
         
@@ -197,7 +207,12 @@ public class PushVerificationService {
                     callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.PUSH_SCANNED_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.PUSH_SCANNED_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
                 }
                 break
-            case .failure:
+            case .failure(let error):
+                if error._domain == NSURLErrorDomain {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
                 if (response.data != nil) {
                     let jsonString = String(decoding: response.data!, as: UTF8.self)
                     let decoder = JSONDecoder()
@@ -239,6 +254,8 @@ public class PushVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "verification_api_version" : "2",
             "access_token" : accessToken
         ]
@@ -300,7 +317,12 @@ public class PushVerificationService {
                     callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.PUSH_ENROLLED_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.PUSH_ENROLLED_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
                 }
                 break
-            case .failure:
+            case .failure(let error):
+                if error._domain == NSURLErrorDomain {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
                 if (response.data != nil) {
                     let jsonString = String(decoding: response.data!, as: UTF8.self)
                     let decoder = JSONDecoder()
@@ -342,6 +364,8 @@ public class PushVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "verification_api_version" : "2"
         ]
         
@@ -402,7 +426,12 @@ public class PushVerificationService {
                     callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.PUSH_INITIATE_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.PUSH_INITIATE_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
                 }
                 break
-            case .failure:
+            case .failure(let error):
+                if error._domain == NSURLErrorDomain {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
                 if (response.data != nil) {
                     let jsonString = String(decoding: response.data!, as: UTF8.self)
                     let decoder = JSONDecoder()
@@ -441,6 +470,8 @@ public class PushVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "verification_api_version": "2"
         ]
         
@@ -501,7 +532,12 @@ public class PushVerificationService {
                     callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.PUSH_AUTHENTICATE_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.PUSH_AUTHENTICATE_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
                 }
                 break
-            case .failure:
+            case .failure(let error):
+                if error._domain == NSURLErrorDomain {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
                 if (response.data != nil) {
                     let jsonString = String(decoding: response.data!, as: UTF8.self)
                     let decoder = JSONDecoder()

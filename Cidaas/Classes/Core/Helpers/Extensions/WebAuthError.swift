@@ -43,6 +43,7 @@ public class WebAuthError : Error, OauthExceptionDelegate {
         WebAuthError.shared.errorMessage = StringsHelper.shared.NOTIFICATION_TIMEOUT
         WebAuthError.shared.statusCode = HttpStatusCode.EXPECTATION_FAILED.rawValue
         WebAuthError.shared.error = ErrorResponseEntity()
+        WebAuthError.shared.error.error.code = WebAuthErrorCode.NOTIFICATION_TIMEOUT.rawValue
         return WebAuthError.shared
     }
     
@@ -70,6 +71,16 @@ public class WebAuthError : Error, OauthExceptionDelegate {
         WebAuthError.shared.errorMessage = errorMessage
         WebAuthError.shared.statusCode = statusCode
         WebAuthError.shared.error = error
+        return WebAuthError.shared
+    }
+    
+    // login url missing exception
+    public func netWorkTimeoutException() -> WebAuthError {
+        WebAuthError.shared.errorCode = WebAuthErrorCode.NETWORK_TIMEOUT.rawValue
+        WebAuthError.shared.errorMessage = StringsHelper.shared.NETWORK_TIMEOUT
+        WebAuthError.shared.statusCode = HttpStatusCode.GATEWAY_TIMEOUT.rawValue
+        WebAuthError.shared.error = ErrorResponseEntity()
+        WebAuthError.shared.error.error.code = WebAuthErrorCode.NETWORK_TIMEOUT.rawValue
         return WebAuthError.shared
     }
     

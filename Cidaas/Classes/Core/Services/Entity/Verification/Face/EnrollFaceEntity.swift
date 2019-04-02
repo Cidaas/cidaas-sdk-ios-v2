@@ -14,6 +14,7 @@ public class EnrollFaceEntity : Codable {
     public var userDeviceId: String = ""
     public var usage_pass: String = ""
     public var client_id: String = ""
+    public var attempt: Int32 = 0
     public var deviceInfo: DeviceInfoModel = DeviceInfoModel()
     
     // Constructors

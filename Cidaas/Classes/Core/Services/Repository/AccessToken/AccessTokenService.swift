@@ -13,6 +13,7 @@ public class AccessTokenService {
     
     // shared instance
     public static var shared : AccessTokenService = AccessTokenService()
+    let location = DBHelper.shared.getLocation()
     
     // constructor
     public init() {
@@ -35,6 +36,8 @@ public class AccessTokenService {
             "deviceMake" : deviceInfoEntity.deviceMake,
             "deviceModel" : deviceInfoEntity.deviceModel,
             "deviceVersion" : deviceInfoEntity.deviceVersion,
+            "lat": location.0,
+            "lon": location.1,
             "Content-Type" : "application/x-www-form-urlencoded"
         ]
         
@@ -62,7 +65,12 @@ public class AccessTokenService {
         // call service
         Alamofire.request(urlString, method: .post, parameters: bodyParams, headers: headers).validate().responseString { response in
             switch response.result {
-            case .failure:
+            case .failure(let error):
+                if error._domain == NSURLErrorDomain {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
                 // return failure
                 callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.ACCESSTOKEN_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.ACCESS_TOKEN_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
                 return
@@ -112,6 +120,8 @@ public class AccessTokenService {
             "deviceMake" : deviceInfoEntity.deviceMake,
             "deviceModel" : deviceInfoEntity.deviceModel,
             "deviceVersion" : deviceInfoEntity.deviceVersion,
+            "lat": location.0,
+            "lon": location.1,
             "Content-Type" : "application/x-www-form-urlencoded"
         ]
         
@@ -129,7 +139,12 @@ public class AccessTokenService {
         // call service
         Alamofire.request(urlString, method: .post, parameters: bodyParams, headers: headers).validate().responseString { response in
             switch response.result {
-            case .failure:
+            case .failure(let error):
+                if error._domain == NSURLErrorDomain {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
                 // return failure
                 callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.REFRESH_TOKEN_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.REFRESH_TOKEN_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
                 return
@@ -179,6 +194,8 @@ public class AccessTokenService {
             "deviceMake" : deviceInfoEntity.deviceMake,
             "deviceModel" : deviceInfoEntity.deviceModel,
             "deviceVersion" : deviceInfoEntity.deviceVersion,
+            "lat": location.0,
+            "lon": location.1,
             "Content-Type" : "application/x-www-form-urlencoded"
         ]
         
@@ -198,7 +215,12 @@ public class AccessTokenService {
         // call service
         Alamofire.request(urlString, method: .get, headers: headers).validate(statusCode: 200..<308).responseString { response in
             switch response.result {
-            case .failure:
+            case .failure(let error):
+                if error._domain == NSURLErrorDomain {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
                 // return failure
                 callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.SOCIAL_TOKEN_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.SOCIAL_TOKEN_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
                 return

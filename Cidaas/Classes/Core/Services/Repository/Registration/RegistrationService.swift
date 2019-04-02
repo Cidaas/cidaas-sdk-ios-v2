@@ -13,6 +13,7 @@ public class RegistrationService {
     
     // shared instance
     public static var shared : RegistrationService = RegistrationService()
+    let location = DBHelper.shared.getLocation()
     
     // constructor
     public init() {
@@ -32,6 +33,8 @@ public class RegistrationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "deviceId" : deviceInfoEntity.deviceId,
             "deviceMake" : deviceInfoEntity.deviceMake,
             "deviceModel" : deviceInfoEntity.deviceModel,
@@ -79,7 +82,12 @@ public class RegistrationService {
                     callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.REGISTRATION_FIELDS_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.REGISTRATION_FIELDS_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
                 }
                 break
-            case .failure:
+            case .failure(let error):
+                if error._domain == NSURLErrorDomain {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
                 if (response.data != nil) {
                     let jsonString = String(decoding: response.data!, as: UTF8.self)
                     let decoder = JSONDecoder()
@@ -118,6 +126,8 @@ public class RegistrationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "requestId": requestId,
             "deviceId" : deviceInfoEntity.deviceId,
             "deviceMake" : deviceInfoEntity.deviceMake,
@@ -179,7 +189,12 @@ public class RegistrationService {
                     callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.REGISTRATION_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.REGISTRATION_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
                 }
                 break
-            case .failure:
+            case .failure(let error):
+                if error._domain == NSURLErrorDomain {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
                 if (response.data != nil) {
                     let jsonString = String(decoding: response.data!, as: UTF8.self)
                     let decoder = JSONDecoder()
@@ -218,6 +233,8 @@ public class RegistrationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "access_token": access_token,
             "deviceId" : deviceInfoEntity.deviceId,
             "deviceMake" : deviceInfoEntity.deviceMake,
@@ -279,7 +296,12 @@ public class RegistrationService {
                     callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.UPDATE_USER_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.UPDATE_USER_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
                 }
                 break
-            case .failure:
+            case .failure(let error):
+                if error._domain == NSURLErrorDomain {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
                 if (response.data != nil) {
                     let jsonString = String(decoding: response.data!, as: UTF8.self)
                     let decoder = JSONDecoder()

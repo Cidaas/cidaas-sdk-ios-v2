@@ -198,4 +198,23 @@ public class DBHelper : NSObject {
         }
         return value as? String ?? ""
     }
+    
+    // set location
+    public func setLocation(lat: String, lon: String, key: String = "OAuthLocation") {
+        userDefaults.set(lat + "-" + lon, forKey: key)
+        userDefaults.synchronize()
+    }
+    
+    // get location
+    public func getLocation(key: String = "OAuthLocation") -> (String, String) {
+        guard let value = userDefaults.object(forKey: key) else {
+            return ("", "")
+        }
+        // split by hyphen
+        var splittedLocation: [Substring] = (value as? String ?? "").split(separator: "-")
+        if splittedLocation.count  > 1 {
+            return (String(splittedLocation[0]), String(splittedLocation[1]))
+        }
+        return ("", "")
+    }
 }

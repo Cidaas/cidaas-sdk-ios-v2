@@ -13,6 +13,7 @@ public class ChangePasswordService {
     
     // shared instance
     public static var shared : ChangePasswordService = ChangePasswordService()
+    let location = DBHelper.shared.getLocation()
     
     // constructor
     public init() {
@@ -33,6 +34,8 @@ public class ChangePasswordService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "access_token": access_token,
             "deviceId" : deviceInfoEntity.deviceId,
             "deviceMake" : deviceInfoEntity.deviceMake,
@@ -68,7 +71,12 @@ public class ChangePasswordService {
         
         Alamofire.request(urlString, method: .post, parameters: bodyParams, headers: headers).validate().responseString { response in
             switch response.result {
-            case .failure:
+            case .failure(let error):
+                if error._domain == NSURLErrorDomain {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
                 if (response.data != nil) {
                     let jsonString = String(decoding: response.data!, as: UTF8.self)
                     let decoder = JSONDecoder()

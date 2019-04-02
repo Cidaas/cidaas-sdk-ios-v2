@@ -3,10 +3,10 @@
 <plist version="1.0">
 <dict>
 	<key>DomainURL</key>
-	<string>your_base_url</string>
+	<string>{{baseurl}}</string>
 	<key>ClientId</key>
-	<string>your_client_id</string>
+	<string>{{client_id}}</string>
 	<key>RedirectURL</key>
-	<string>your_redirect_url</string>
+	<string>{{redirect_uri}}</string>
 </dict>
 </plist>

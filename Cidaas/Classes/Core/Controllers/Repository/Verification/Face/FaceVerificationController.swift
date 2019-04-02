@@ -29,7 +29,7 @@ public class FaceVerificationController {
     }
     
     // configure Face from properties
-    public func configureFace(sub: String, photo: UIImage, logoUrl: String, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<EnrollFaceResponseEntity>) -> Void) {
+    public func configureFace(sub: String, photo: UIImage, logoUrl: String, attempt: Int32, intermediate_id: String = "", properties: Dictionary<String, String>, callback: @escaping(Result<EnrollFaceResponseEntity>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil || properties["ClientId"] == "" || properties["ClientId"] == nil {
             let error = WebAuthError.shared.propertyMissingException()
@@ -65,6 +65,19 @@ public class FaceVerificationController {
                 // log success
                 let loggerMessage = "Access Token success : " + "Access Token  - " + String(describing: tokenResponse.data.access_token)
                 logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                
+                
+                // if attempt > 1 call enroll
+                if attempt > 1 {
+                    let enrollFaceEntity = EnrollFaceEntity()
+                    enrollFaceEntity.statusId = self.statusId
+                    enrollFaceEntity.attempt = attempt
+                    
+                    // call enroll service
+                    FaceVerificationController.shared.enrollFaceRecognition(access_token: tokenResponse.data.access_token, photo: photo, enrollFaceEntity: enrollFaceEntity, properties: properties, callback: callback)
+                    return
+                }
+                
                 
                 // construct object
                 var setupFaceEntity = SetupFaceEntity()
@@ -130,22 +143,10 @@ public class FaceVerificationController {
                                         
                                         let enrollFaceEntity = EnrollFaceEntity()
                                         enrollFaceEntity.statusId = self.statusId
+                                        enrollFaceEntity.attempt = attempt
                                         
                                         // call enroll service
-                                        FaceVerificationController.shared.enrollFaceRecognition(access_token: tokenResponse.data.access_token, photo: photo, enrollFaceEntity: enrollFaceEntity, properties: properties) {
-                                            switch $0 {
-                                            case .failure(let error):
-                                                // return failure callback
-                                                DispatchQueue.main.async {
-                                                    callback(Result.failure(error: error))
-                                                }
-                                                return
-                                            case .success(let enrollResponse):
-                                                DispatchQueue.main.async {
-                                                    callback(Result.success(result: enrollResponse))
-                                                }
-                                            }
-                                        }
+                                        FaceVerificationController.shared.enrollFaceRecognition(access_token: tokenResponse.data.access_token, photo: photo, enrollFaceEntity: enrollFaceEntity, properties: properties, callback: callback)
                                         
                                         break
                                     case .failure(let error):
@@ -300,9 +301,9 @@ public class FaceVerificationController {
         }
         
         // validating fields
-        if (enrollFaceEntity.statusId == "" || enrollFaceEntity.userDeviceId == "") {
+        if (enrollFaceEntity.statusId == "" || enrollFaceEntity.userDeviceId == "" || enrollFaceEntity.attempt == 0) {
             let error = WebAuthError.shared.propertyMissingException()
-            error.errorMessage = "statusId or userDeviceId must not be empty"
+            error.errorMessage = "statusId or userDeviceId or attempt must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -387,11 +388,12 @@ public class FaceVerificationController {
                         timer.invalidate()
                         
                         // construct object
-                        let enrollFaceEntity = EnrollFaceEntity()
-                        enrollFaceEntity.usage_pass = Cidaas.intermediate_verifiation_id
+                        let enrollFaceUsageEntity = EnrollFaceEntity()
+                        enrollFaceUsageEntity.usage_pass = Cidaas.intermediate_verifiation_id
+                        enrollFaceUsageEntity.attempt = enrollFaceEntity.attempt
                         
                         // call enroll service
-                        FaceVerificationService.shared.enrollFace(accessToken:access_token, photo: photo, enrollFaceEntity: enrollFaceEntity, properties: properties) {
+                        FaceVerificationService.shared.enrollFace(accessToken:access_token, photo: photo, enrollFaceEntity: enrollFaceUsageEntity, properties: properties) {
                             switch $0 {
                             case .failure(let error):
                                 // log error

@@ -17,6 +17,13 @@ public class PushNotificationEntity : Codable {
     public var address : PushAddress = PushAddress()
     public var deviceInfo : PushDeviceInfo = PushDeviceInfo()
     
+    public var dataShareType: String = ""
+    public var baseurl: String = ""
+    public var client_id: String = ""
+    public var redirect_url: String = ""
+    public var user_device_id: String = ""
+    
+    
     public init() {
         
     }
@@ -31,6 +38,12 @@ public class PushNotificationEntity : Codable {
         self.randomNumbers = try container.decodeIfPresent(String.self, forKey: .randomNumbers) ?? ""
         self.address = try container.decodeIfPresent(PushAddress.self, forKey: .address) ?? PushAddress()
         self.deviceInfo = try container.decodeIfPresent(PushDeviceInfo.self, forKey: .deviceInfo) ?? PushDeviceInfo()
+        
+        self.dataShareType = try container.decodeIfPresent(String.self, forKey: .dataShareType) ?? ""
+        self.baseurl = try container.decodeIfPresent(String.self, forKey: .baseurl) ?? ""
+        self.client_id = try container.decodeIfPresent(String.self, forKey: .client_id) ?? ""
+        self.user_device_id = try container.decodeIfPresent(String.self, forKey: .user_device_id) ?? ""
+        self.redirect_url = try container.decodeIfPresent(String.self, forKey: .redirect_url) ?? ""
     }
 }
 
@@ -42,6 +55,10 @@ public class PushDeviceInfo : Codable {
     public var deviceMake : String = ""
     public var deviceModel : String = ""
     public var userAgent : String = ""
+    public var sub: String = ""
+    public var ipAddress: String = ""
+    public var pushNotificationId: String = ""
+    public var deviceId: String = ""
     
     public init() {
         
@@ -55,6 +72,9 @@ public class PushDeviceInfo : Codable {
         self.deviceMake = try container.decodeIfPresent(String.self, forKey: .deviceMake) ?? ""
         self.deviceModel = try container.decodeIfPresent(String.self, forKey: .deviceModel) ?? ""
         self.userAgent = try container.decodeIfPresent(String.self, forKey: .userAgent) ?? ""
+        self.sub = try container.decodeIfPresent(String.self, forKey: .sub) ?? ""
+        self.ipAddress = try container.decodeIfPresent(String.self, forKey: .ipAddress) ?? ""
+        self.pushNotificationId = try container.decodeIfPresent(String.self, forKey: .pushNotificationId) ?? ""
     }
 }
 
@@ -73,7 +93,7 @@ public class PushAddress : Codable {
     public var street: String = ""
     public var houseNo: String = ""
     public var resolver: String = ""
-    
+    public var elevation: Int32 = 0
     
     public init() {
         
@@ -95,6 +115,8 @@ public class PushAddress : Codable {
         self.street = try container.decodeIfPresent(String.self, forKey: .street) ?? ""
         self.houseNo = try container.decodeIfPresent(String.self, forKey: .houseNo) ?? ""
         self.resolver = try container.decodeIfPresent(String.self, forKey: .resolver) ?? ""
+        self.elevation = try container.decodeIfPresent(Int32.self, forKey: .elevation) ?? 0
+        
     }
 }
 

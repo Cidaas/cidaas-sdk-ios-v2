@@ -13,6 +13,7 @@ public class AccountVerificationService {
     
     // shared instance
     public static var shared : AccountVerificationService = AccountVerificationService()
+    let location = DBHelper.shared.getLocation()
     
     // constructor
     public init() {
@@ -36,6 +37,8 @@ public class AccountVerificationService {
             "deviceId" : deviceInfoEntity.deviceId,
             "deviceMake" : deviceInfoEntity.deviceMake,
             "deviceModel" : deviceInfoEntity.deviceModel,
+            "lat": location.0,
+            "lon": location.1,
             "deviceVersion" : deviceInfoEntity.deviceVersion
         ]
         
@@ -65,7 +68,12 @@ public class AccountVerificationService {
         
         Alamofire.request(urlString, method: .post, parameters: bodyParams, headers: headers).validate().responseString { response in
             switch response.result {
-            case .failure:
+            case .failure(let error):
+                if error._domain == NSURLErrorDomain {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
                 if (response.data != nil) {
                     let jsonString = String(decoding: response.data!, as: UTF8.self)
                     let decoder = JSONDecoder()
@@ -131,6 +139,8 @@ public class AccountVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "deviceId" : deviceInfoEntity.deviceId,
             "deviceMake" : deviceInfoEntity.deviceMake,
             "deviceModel" : deviceInfoEntity.deviceModel,
@@ -163,7 +173,12 @@ public class AccountVerificationService {
         
         Alamofire.request(urlString, method: .post, parameters: bodyParams, headers: headers).validate().responseString { response in
             switch response.result {
-            case .failure:
+            case .failure(let error):
+                if error._domain == NSURLErrorDomain {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
                 if (response.data != nil) {
                     let jsonString = String(decoding: response.data!, as: UTF8.self)
                     let decoder = JSONDecoder()
@@ -229,6 +244,8 @@ public class AccountVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "deviceId" : deviceInfoEntity.deviceId,
             "deviceMake" : deviceInfoEntity.deviceMake,
             "deviceModel" : deviceInfoEntity.deviceModel,
@@ -248,7 +265,12 @@ public class AccountVerificationService {
         
         Alamofire.request(urlString, method: .get, headers: headers).validate().responseString { response in
             switch response.result {
-            case .failure:
+            case .failure(let error):
+                if error._domain == NSURLErrorDomain {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
                 if (response.data != nil) {
                     let jsonString = String(decoding: response.data!, as: UTF8.self)
                     let decoder = JSONDecoder()

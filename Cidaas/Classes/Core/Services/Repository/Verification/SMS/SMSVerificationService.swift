@@ -13,6 +13,7 @@ public class SMSVerificationService {
     
     // shared instance
     public static var shared : SMSVerificationService = SMSVerificationService()
+    let location = DBHelper.shared.getLocation()
     
     // constructor
     public init() {
@@ -32,6 +33,8 @@ public class SMSVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
             "access_token": access_token
         ]
         
@@ -95,7 +98,12 @@ public class SMSVerificationService {
                     callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.SETUP_SMS_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.SETUP_SMS_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
                 }
                 break
-            case .failure:
+            case .failure(let error):
+                if error._domain == NSURLErrorDomain {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
                 if (response.data != nil) {
                     let jsonString = String(decoding: response.data!, as: UTF8.self)
                     let decoder = JSONDecoder()
@@ -137,6 +145,8 @@ public class SMSVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1
         ]
         
         // construct body params
@@ -196,7 +206,12 @@ public class SMSVerificationService {
                     callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.ENROLL_SMS_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.ENROLL_SMS_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
                 }
                 break
-            case .failure:
+            case .failure(let error):
+                if error._domain == NSURLErrorDomain {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
                 if (response.data != nil) {
                     let jsonString = String(decoding: response.data!, as: UTF8.self)
                     let decoder = JSONDecoder()
@@ -236,6 +251,8 @@ public class SMSVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1
         ]
         
         // construct body params
@@ -295,7 +312,12 @@ public class SMSVerificationService {
                     callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.INITIATE_SMS_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.INITIATE_SMS_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
                 }
                 break
-            case .failure:
+            case .failure(let error):
+                if error._domain == NSURLErrorDomain {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
                 if (response.data != nil) {
                     let jsonString = String(decoding: response.data!, as: UTF8.self)
                     let decoder = JSONDecoder()
@@ -334,6 +356,8 @@ public class SMSVerificationService {
         // construct headers
         headers = [
             "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1
         ]
         
         // construct body params
@@ -393,7 +417,12 @@ public class SMSVerificationService {
                     callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.AUTHENTICATE_SMS_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.AUTHENTICATE_SMS_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
                 }
                 break
-            case .failure:
+            case .failure(let error):
+                if error._domain == NSURLErrorDomain {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
                 if (response.data != nil) {
                     let jsonString = String(decoding: response.data!, as: UTF8.self)
                     let decoder = JSONDecoder()
