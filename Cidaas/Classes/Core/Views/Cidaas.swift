@@ -192,9 +192,35 @@ public class Cidaas {
     
     // login with browser
     public func loginWithBrowser(delegate: UIViewController, extraParams: Dictionary<String, String> = Dictionary<String, String>(), callback: @escaping (Result<LoginResponseEntity>) -> Void) {
-        let savedProp = DBHelper.shared.getPropertyFile()
+        var savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
             self.browserCallback = callback
+            savedProp!["view_type"] = "login"
+            LoginController.shared.loginWithBrowser(delegate: delegate, extraParams: extraParams, properties: savedProp!, callback: callback)
+        }
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // register with browser
+    public func registerWithBrowser(delegate: UIViewController, extraParams: Dictionary<String, String> = Dictionary<String, String>(), callback: @escaping (Result<LoginResponseEntity>) -> Void) {
+        var savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            self.browserCallback = callback
+            savedProp!["view_type"] = "register"
             LoginController.shared.loginWithBrowser(delegate: delegate, extraParams: extraParams, properties: savedProp!, callback: callback)
         }
         else {

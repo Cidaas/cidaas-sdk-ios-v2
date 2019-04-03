@@ -85,9 +85,9 @@ public class ConsentController {
         }
         
         // validating fields
-        if (consentData.client_id == "" || consentData.consent_id == "" || consentData.consent_version_id == "" || consentData.requestId == "" || consentData.sub == "" || consentData.track_id == "") {
+        if (consentData.consent_id == "" || consentData.consent_version_id == "" || consentData.requestId == "" || consentData.sub == "" || consentData.track_id == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.errorMessage = "consent_name must not be empty"
+            error.errorMessage = "consent_id or consent_version_id or requestId or sub or track_id must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }
@@ -241,9 +241,9 @@ public class ConsentController {
         }
         
         // validating fields
-        if (consentEntity.consent_version_id == "" || consentEntity.version == "" || consentEntity.sub == "" || consentEntity.accepted == false || consentEntity.track_id == "") {
+        if (consentEntity.consent_version_id == "" || consentEntity.consent_id == "" || consentEntity.version == "" || consentEntity.sub == "" || consentEntity.accepted == false || consentEntity.track_id == "") {
             let error = WebAuthError.shared.propertyMissingException()
-            error.errorMessage = "consent_version_id or version or sub or accepted or track_id must not be empty"
+            error.errorMessage = "consent_version_id or consent_id or version or sub or accepted or track_id must not be empty"
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
             }

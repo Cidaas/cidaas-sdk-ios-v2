@@ -236,6 +236,19 @@ public class ConsentService {
             "deviceVersion" : deviceInfoEntity.deviceVersion
         ]
         
+        // construct body params
+        var bodyParams = Dictionary<String, Any>()
+        do {
+            let encoder = JSONEncoder()
+            let data = try encoder.encode(consentData)
+            bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+            bodyParams["client_id"] = (properties["ClientId"]) ?? ""
+        }
+        catch(_) {
+            callback(Result.failure(error: WebAuthError.shared.conversionException()))
+            return
+        }
+        
         // assign base url
         baseURL = (properties["DomainURL"]) ?? ""
         
@@ -248,7 +261,7 @@ public class ConsentService {
         urlString = baseURL + URLHelper.shared.getConsentDetailsV2URL()
         
         // call service
-        Alamofire.request(urlString, method:.get, headers: headers).validate().responseString { response in
+        Alamofire.request(urlString, method:.post, parameters: bodyParams, headers: headers).validate().responseString { response in
             switch response.result {
             case .success:
                 if response.response?.statusCode == 200 {
