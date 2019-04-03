@@ -16,6 +16,10 @@ public class ConsentEntity : Codable {
     public var consent_name: String = ""
     public var track_id: String = ""
     
+    public var client_id: String = ""
+    public var consent_version_id: String = ""
+    public var consent_id: String = ""
+    
     // Constructors
     public init() {
         

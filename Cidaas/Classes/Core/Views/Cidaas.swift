@@ -597,6 +597,34 @@ public class Cidaas {
     
 // -------------------------------------------------------------------------------------------------- //
     
+    // get consent details v2 from plist
+    // 1. Read properties from file
+    // 2. Call getConsentDetails method
+    // 3. Maintain logs based on flags
+    
+    public func getConsentDetailsV2(consentRequest: ConsentDetailsV2RequestEntity, callback: @escaping(Result<ConsentDetailsV2ResponseEntity>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            ConsentController.shared.getConsentDetailsV2(consentData: consentRequest, properties: savedProp!, callback: callback)
+        }
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
     // login after consent from plist
     // 1. Read properties from file
     // 2. Call loginAfterConsent method
@@ -607,6 +635,34 @@ public class Cidaas {
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
             ConsentController.shared.loginAfterConsent(consentEntity: consentEntity, properties: savedProp!, callback: callback)
+        }
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+    }
+    
+// -------------------------------------------------------------------------------------------------- //
+    
+    // login after consent from plist
+    // 1. Read properties from file
+    // 2. Call loginAfterConsent method
+    // 3. Maintain logs based on flags
+    
+    public func loginAfterConsentV2(consentEntity: ConsentEntity, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            ConsentController.shared.loginAfterConsentV2(consentEntity: consentEntity, properties: savedProp!, callback: callback)
         }
         else {
             // log error

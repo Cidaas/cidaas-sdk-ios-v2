@@ -24,7 +24,9 @@ public class URLHelper {
     
     public var consentURL = "/consent-management-srv/tenant/version/pageurl"
     public var consentDetailsURL = "/consent-management-srv/settings/public"
+    public var consentDetailsV2URL = "/consent-management-srv/v2/consent/usage/public/info"
     public var acceptConsentURL = "/consent-management-srv/user/status"
+    public var acceptConsentV2URL = "/consent-management-srv/v2/consent/usage/accept"
     
     public var mfaListURL = "/verification-srv/settings/listbydeviceid"
     
@@ -122,6 +124,7 @@ public class URLHelper {
     public var pendingNotificationListURL = "/verification-srv/notification/initiated"
     public var socialLoginURL = "/login-srv/social/login/"
     
+    
     public func getRequestIdURL() -> String {
         return requestIdURL
     }
@@ -186,8 +189,16 @@ public class URLHelper {
         return consentDetailsURL + "?name=" + consent_name
     }
     
+    public func getConsentDetailsV2URL() -> String {
+        return consentDetailsV2URL
+    }
+    
     public func getAcceptConsentURL() -> String {
         return acceptConsentURL
+    }
+    
+    public func getAcceptConsentV2URL() -> String {
+        return acceptConsentV2URL
     }
     
     public func getMFAListURL(sub: String, userDeviceId: String, common_config: Bool) -> String {
