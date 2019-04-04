@@ -58,7 +58,7 @@ A sample plist file would look like this :
         <string>Your Domain URL</string>
         <key>RedirectURL</key>
         <string>Your redirect url</string>
-        <key>ClientID</key>
+        <key>ClientId</key>
         <string>Your client id</string>
     </dict>
 </plist>

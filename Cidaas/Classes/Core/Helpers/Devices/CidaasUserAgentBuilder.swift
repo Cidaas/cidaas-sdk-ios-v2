@@ -22,7 +22,7 @@ public class CidaasUserAgentBuilder {
     //eg. CFNetwork/808.3
     func CFNetworkVersion() -> String {
         let dictionary = Bundle(identifier: "com.apple.CFNetwork")?.infoDictionary!
-        let version = dictionary?["CFBundleShortVersionString"] as! String
+        let version = dictionary?["CFBundleShortVersionString"] as? String ?? "-"
         return "CFNetwork/\(version)"
     }
     
@@ -43,7 +43,7 @@ public class CidaasUserAgentBuilder {
     func appNameAndVersion() -> String {
         let dictionary = Bundle.main.infoDictionary!
         let version = dictionary["CFBundleShortVersionString"] as! String
-        var name = dictionary["CFBundleDisplayName"] as! String
+        var name = dictionary["CFBundleDisplayName"] as? String ?? "-"
         name = name.replacingOccurrences(of: " ", with: "_")
         return "\(name)/\(version)"
     }
