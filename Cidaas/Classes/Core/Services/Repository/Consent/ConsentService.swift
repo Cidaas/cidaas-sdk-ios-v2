@@ -215,6 +215,116 @@ public class ConsentService {
         }
     }
     
+    // get consent details v2
+    public func getConsentDetailsV2(consentData: ConsentDetailsV2RequestEntity, properties : Dictionary<String, String>, callback: @escaping(Result<ConsentDetailsV2ResponseEntity>) -> Void) {
+        // local variables
+        var headers : HTTPHeaders
+        var urlString : String
+        var baseURL : String
+        
+        // get device information
+        let deviceInfoEntity = DBHelper.shared.getDeviceInfo()
+        
+        // construct headers
+        headers = [
+            "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
+            "deviceId" : deviceInfoEntity.deviceId,
+            "deviceMake" : deviceInfoEntity.deviceMake,
+            "deviceModel" : deviceInfoEntity.deviceModel,
+            "deviceVersion" : deviceInfoEntity.deviceVersion
+        ]
+        
+        // construct body params
+        var bodyParams = Dictionary<String, Any>()
+        do {
+            let encoder = JSONEncoder()
+            let data = try encoder.encode(consentData)
+            bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+            bodyParams["client_id"] = (properties["ClientId"]) ?? ""
+        }
+        catch(_) {
+            callback(Result.failure(error: WebAuthError.shared.conversionException()))
+            return
+        }
+        
+        // assign base url
+        baseURL = (properties["DomainURL"]) ?? ""
+        
+        if (baseURL == "") {
+            callback(Result.failure(error: WebAuthError.shared.propertyMissingException()))
+            return
+        }
+        
+        // construct url
+        urlString = baseURL + URLHelper.shared.getConsentDetailsV2URL()
+        
+        // call service
+        Alamofire.request(urlString, method:.post, parameters: bodyParams, headers: headers).validate().responseString { response in
+            switch response.result {
+            case .success:
+                if response.response?.statusCode == 200 {
+                    if let jsonString = response.result.value {
+                        let decoder = JSONDecoder()
+                        do {
+                            let data = jsonString.data(using: .utf8)!
+                            // decode the json data to object
+                            let consentDetailsResponseEntity = try decoder.decode(ConsentDetailsV2ResponseEntity.self, from: data)
+                            
+                            // return success
+                            callback(Result.success(result: consentDetailsResponseEntity))
+                        }
+                        catch(let error) {
+                            // return failure
+                            callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.EMPTY_CONSENT_DETAILS_SERVICE.rawValue, errorMessage: error.localizedDescription, statusCode: 400)))
+                        }
+                    }
+                    else {
+                        // return failure
+                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.EMPTY_CONSENT_DETAILS_SERVICE.rawValue, errorMessage: StringsHelper.shared.EMPTY_CONSENT_DETAILS_SERVICE, statusCode: response.response?.statusCode ?? 400)))
+                    }
+                }
+                else if response.response?.statusCode == 204 {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.EMPTY_CONSENT_DETAILS_SERVICE.rawValue, errorMessage: StringsHelper.shared.EMPTY_CONSENT_DETAILS_SERVICE, statusCode: response.response?.statusCode ?? 400)))
+                }
+                else {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.CONSENT_DETAILS_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.CONSENT_DETAILS_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
+                }
+                break
+            case .failure(let error):
+                if error._domain == NSURLErrorDomain {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
+                if (response.data != nil) {
+                    let jsonString = String(decoding: response.data!, as: UTF8.self)
+                    let decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        let errorResponseEntity = try decoder.decode(ErrorResponseEntity.self, from: data)
+                        
+                        // return failure
+                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.CONSENT_DETAILS_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error: errorResponseEntity)))
+                    }
+                    catch(let error) {
+                        // return failure
+                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.CONSENT_DETAILS_SERVICE_FAILURE.rawValue, errorMessage: error.localizedDescription, statusCode: 400)))
+                    }
+                }
+                else {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.CONSENT_DETAILS_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.CONSENT_DETAILS_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
+                }
+                break
+            }
+        }
+    }
+    
     // accept consent
     public func acceptConsent(acceptConsentEntity: AcceptConsentEntity, properties : Dictionary<String, String>, callback: @escaping(Result<AcceptConsentResponseEntity>) -> Void) {
         // local variables
@@ -271,6 +381,116 @@ public class ConsentService {
                             let data = jsonString.data(using: .utf8)!
                             // decode the json data to object
                             let acceptConsentResponseEntity = try decoder.decode(AcceptConsentResponseEntity.self, from: data)
+                            
+                            // return success
+                            callback(Result.success(result: acceptConsentResponseEntity))
+                        }
+                        catch(let error) {
+                            // return failure
+                            callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.EMPTY_ACCEPT_CONSENT_SERVICE.rawValue, errorMessage: error.localizedDescription, statusCode: 400)))
+                        }
+                    }
+                    else {
+                        // return failure
+                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.EMPTY_ACCEPT_CONSENT_SERVICE.rawValue, errorMessage: StringsHelper.shared.EMPTY_ACCEPT_CONSENT_SERVICE, statusCode: response.response?.statusCode ?? 400)))
+                    }
+                }
+                else if response.response?.statusCode == 204 {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.EMPTY_ACCEPT_CONSENT_SERVICE.rawValue, errorMessage: StringsHelper.shared.EMPTY_ACCEPT_CONSENT_SERVICE, statusCode: response.response?.statusCode ?? 400)))
+                }
+                else {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.ACCEPT_CONSENT_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.ACCEPT_CONSENT_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
+                }
+                break
+            case .failure(let error):
+                if error._domain == NSURLErrorDomain {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.netWorkTimeoutException()))
+                    return
+                }
+                if (response.data != nil) {
+                    let jsonString = String(decoding: response.data!, as: UTF8.self)
+                    let decoder = JSONDecoder()
+                    do {
+                        let data = jsonString.data(using: .utf8)!
+                        // decode the json data to object
+                        let errorResponseEntity = try decoder.decode(ErrorResponseEntity.self, from: data)
+                        
+                        // return failure
+                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.ACCEPT_CONSENT_SERVICE_FAILURE.rawValue, errorMessage: errorResponseEntity.error.error, statusCode: Int(errorResponseEntity.status), error: errorResponseEntity)))
+                    }
+                    catch(let error) {
+                        // return failure
+                        callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.ACCEPT_CONSENT_SERVICE_FAILURE.rawValue, errorMessage: error.localizedDescription, statusCode: 400)))
+                    }
+                }
+                else {
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: WebAuthErrorCode.ACCEPT_CONSENT_SERVICE_FAILURE.rawValue, errorMessage: StringsHelper.shared.ACCEPT_CONSENT_SERVICE_FAILURE, statusCode: response.response?.statusCode ?? 400)))
+                }
+                break
+            }
+        }
+    }
+    
+    // accept consent
+    public func acceptConsentV2(acceptConsentEntity: AcceptConsentV2Entity, properties : Dictionary<String, String>, callback: @escaping(Result<AcceptConsentResponseV2Entity>) -> Void) {
+        // local variables
+        var headers : HTTPHeaders
+        var urlString : String
+        var baseURL : String
+        
+        // get device information
+        let deviceInfoEntity = DBHelper.shared.getDeviceInfo()
+        
+        // construct headers
+        headers = [
+            "User-Agent": CidaasUserAgentBuilder.shared.UAString(),
+            "lat": location.0,
+            "lon": location.1,
+            "deviceId" : deviceInfoEntity.deviceId,
+            "deviceMake" : deviceInfoEntity.deviceMake,
+            "deviceModel" : deviceInfoEntity.deviceModel,
+            "deviceVersion" : deviceInfoEntity.deviceVersion
+        ]
+        
+        // construct body params
+        var bodyParams = Dictionary<String, Any>()
+        do {
+            let encoder = JSONEncoder()
+            let data = try encoder.encode(acceptConsentEntity)
+            bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+            bodyParams["client_id"] = (properties["ClientId"]) ?? ""
+        }
+        catch(_) {
+            callback(Result.failure(error: WebAuthError.shared.conversionException()))
+            return
+        }
+        
+        // assign base url
+        baseURL = (properties["DomainURL"]) ?? ""
+        
+        if (baseURL == "") {
+            callback(Result.failure(error: WebAuthError.shared.propertyMissingException()))
+            return
+        }
+        
+        // construct url
+        urlString = baseURL + URLHelper.shared.getAcceptConsentV2URL()
+        
+        // call service
+        Alamofire.request(urlString, method:.post, parameters: bodyParams, headers: headers).validate().responseString { response in
+            switch response.result {
+            case .success:
+                if response.response?.statusCode == 200 {
+                    if let jsonString = response.result.value {
+                        let decoder = JSONDecoder()
+                        do {
+                            let data = jsonString.data(using: .utf8)!
+                            // decode the json data to object
+                            let acceptConsentResponseEntity = try decoder.decode(AcceptConsentResponseV2Entity.self, from: data)
                             
                             // return success
                             callback(Result.success(result: acceptConsentResponseEntity))
