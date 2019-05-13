@@ -35,6 +35,8 @@ public class ErrorResponseDataEntity : Codable {
     public var requestId: String = ""
     public var client_id: String = ""
     public var consent_name: String = ""
+    public var consent_id: String = ""
+    public var consent_version_id: String = ""
     public var suggested_url: String = ""
     
     
@@ -59,6 +61,8 @@ public class ErrorResponseDataEntity : Codable {
         self.suggested_url = try container.decodeIfPresent(String.self, forKey: .suggested_url) ?? ""
         self.client_id = try container.decodeIfPresent(String.self, forKey: .client_id) ?? ""
         self.consent_name = try container.decodeIfPresent(String.self, forKey: .consent_name) ?? ""
+        self.consent_id = try container.decodeIfPresent(String.self, forKey: .consent_id) ?? ""
+        self.consent_version_id = try container.decodeIfPresent(String.self, forKey: .consent_version_id) ?? ""
         self.code = try container.decodeIfPresent(Int32.self, forKey: .code) ?? 0
         self.moreInfo = try container.decodeIfPresent(String.self, forKey: .moreInfo) ?? ""
         self.type = try container.decodeIfPresent(String.self, forKey: .type) ?? ""

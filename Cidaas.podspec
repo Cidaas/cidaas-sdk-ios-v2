@@ -35,4 +35,8 @@ Pod::Spec.new do |s|
       fb.dependency 'FacebookLogin', '~> 0.4'
       fb.dependency 'Cidaas/Core'
   end
+  
+  s.subspec 'V2_Verification' do |verification|
+      verification.source_files = 'Cidaas/Classes/V2/Verification/**/*'
+  end
 end

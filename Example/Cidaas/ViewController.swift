@@ -29,10 +29,91 @@ class ViewController: UIViewController, WKNavigationDelegate, CidaasLoaderDelega
         cidaasView.setBackButtonAttributes(title: "BACK", textColor: UIColor.white, backgroundColor: UIColor.orange)
         CidaasFacebook.shared.delegate = self
         CidaasGoogle.shared.delegate = self
+        cidaasView.loginWithEmbeddedBrowser(delegate: self) {
+            switch $0 {
+                case .success(let result):
+                    break
+                case .failure(let error):
+                    break
+            }
+        }
+//        getRequestId()
         
-        getRequestId()
+//        getTotp()
+        
+//    pushAcknowledge(exchange_id: "461c0dae-a11c-4e4c-adbb-250128295933")
+        
+//        scannedVerification(exchange_id: "f35354ba-bd75-4ba2-8965-e1947955c92e")
         
     }
+    
+    func getTotp() {
+        var url="otpauth://totp/Cidaas%20Developers:Ganesh%20Kumar?issuer=test&secret=KNJC6SSXHBXVGUSDMY2CMYJEJRZWMJDJ"
+        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (timer) in
+            var totp = TOTPVerificationController.shared.gettingTOTPCode(url: URL(string: url)!)
+            print(totp.totp_string + " - " + totp.timer_count)
+        }
+    }
+    
+    
+    func scannedVerification(exchange_id: String) {
+        let incomingData = ScannedRequest()
+        incomingData.client_id = "938c570e-7728-4fa3-b62f-5167f722c788"
+        incomingData.exchange_id = exchange_id
+        incomingData.sub = "93f68178-0d42-4f4e-896d-c758c71ccffa"
+        
+        Cidaas.shared.setFCMToken(fcmToken: "cS7fVZg5hFs:APA91bFKbzKiS18c46YLA8XNq71gVZQ2mWGGnkkwAFRp3kJshvhMaITLpc4Oa-jWJueU-r64J47l-6jwWS2zDIF97u1uUxOBqv7EwBsyxkror_sxSSthIMYc_9ClJdmjpoL6PzIxs1wL")
+        
+        VerificationViewController.shared.scanned(verificationType: VerificationTypes.PATTERN.rawValue, incomingData: incomingData) {
+            switch $0 {
+            case .success(let result):
+                print(result)
+                self.enrollVerification(exchange_id: result.data.exchange_id.exchange_id)
+                break
+            case .failure(let error):
+                print(error)
+                break
+            }
+        }
+    }
+    
+    func enrollVerification(exchange_id: String) {
+        let incomingData = EnrollRequest()
+        incomingData.client_id = "938c570e-7728-4fa3-b62f-5167f722c788"
+        incomingData.exchange_id = exchange_id
+        incomingData.pass_code = "RED-1234"
+        
+        VerificationViewController.shared.enroll(verificationType: VerificationTypes.PATTERN.rawValue, incomingData: incomingData) {
+            switch $0 {
+            case .success(let result):
+                print(result)
+                break
+            case .failure(let error):
+                print(error)
+                break
+            }
+        }
+    }
+    
+    func pushAcknowledge(exchange_id: String) {
+        let incomingData = PushAcknowledgeRequest()
+        incomingData.client_id = "938c570e-7728-4fa3-b62f-5167f722c788"
+        incomingData.exchange_id = exchange_id
+        
+        Cidaas.shared.setFCMToken(fcmToken: "cS7fVZg5hFs:APA91bFKbzKiS18c46YLA8XNq71gVZQ2mWGGnkkwAFRp3kJshvhMaITLpc4Oa-jWJueU-r64J47l-6jwWS2zDIF97u1uUxOBqv7EwBsyxkror_sxSSthIMYc_9ClJdmjpoL6PzIxs1wL")
+        
+        VerificationViewController.shared.pushAcknowledge(verificationType: VerificationTypes.PATTERN.rawValue, incomingData: incomingData) {
+            switch $0 {
+            case .success(let result):
+                print(result)
+                break
+            case .failure(let error):
+                print(error)
+                break
+            }
+        }
+    }
+    
     
     func showLoader() {
         CustomLoader.shared.showLoader(self.view, using: nil) { (hud) in
