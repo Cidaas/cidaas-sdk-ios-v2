@@ -30,12 +30,14 @@ public class ScannedResponseData: Codable {
     public var exchange_id: ExchangeIdResponse = ExchangeIdResponse()
     public var sub: String = ""
     public var status_id: String = ""
+    public var push_random_numbers: [String] = []
     
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.exchange_id = try container.decodeIfPresent(ExchangeIdResponse.self, forKey: .exchange_id) ?? ExchangeIdResponse()
         self.sub = try container.decodeIfPresent(String.self, forKey: .sub) ?? ""
         self.status_id = try container.decodeIfPresent(String.self, forKey: .status_id) ?? ""
+        self.push_random_numbers = try container.decodeIfPresent([String].self, forKey: .push_random_numbers) ?? []
     }
 }
 

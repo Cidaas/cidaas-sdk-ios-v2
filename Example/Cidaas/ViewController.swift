@@ -29,21 +29,23 @@ class ViewController: UIViewController, WKNavigationDelegate, CidaasLoaderDelega
         cidaasView.setBackButtonAttributes(title: "BACK", textColor: UIColor.white, backgroundColor: UIColor.orange)
         CidaasFacebook.shared.delegate = self
         CidaasGoogle.shared.delegate = self
-        cidaasView.loginWithEmbeddedBrowser(delegate: self) {
-            switch $0 {
-                case .success(let result):
-                    break
-                case .failure(let error):
-                    break
-            }
-        }
+//        cidaasView.loginWithEmbeddedBrowser(delegate: self) {
+//            switch $0 {
+//                case .success(let result):
+//                    break
+//                case .failure(let error):
+//                    break
+//            }
+//        }
 //        getRequestId()
         
 //        getTotp()
         
 //    pushAcknowledge(exchange_id: "461c0dae-a11c-4e4c-adbb-250128295933")
         
-//        scannedVerification(exchange_id: "f35354ba-bd75-4ba2-8965-e1947955c92e")
+        scanned(exchange_id: "41cac32f-bf5e-4199-90da-a1794c62f5fa")
+//     enroll(exchange_id: "dd54df80-bd28-4eda-99fb-d66dbeed8208")
+//        pushAcknowledge(exchange_id: "0cd6caec-24d0-4930-b282-7686f1c7f9cf")
         
     }
     
@@ -56,7 +58,7 @@ class ViewController: UIViewController, WKNavigationDelegate, CidaasLoaderDelega
     }
     
     
-    func scannedVerification(exchange_id: String) {
+    func scanned(exchange_id: String) {
         let incomingData = ScannedRequest()
         incomingData.client_id = "938c570e-7728-4fa3-b62f-5167f722c788"
         incomingData.exchange_id = exchange_id
@@ -64,11 +66,11 @@ class ViewController: UIViewController, WKNavigationDelegate, CidaasLoaderDelega
         
         Cidaas.shared.setFCMToken(fcmToken: "cS7fVZg5hFs:APA91bFKbzKiS18c46YLA8XNq71gVZQ2mWGGnkkwAFRp3kJshvhMaITLpc4Oa-jWJueU-r64J47l-6jwWS2zDIF97u1uUxOBqv7EwBsyxkror_sxSSthIMYc_9ClJdmjpoL6PzIxs1wL")
         
-        VerificationViewController.shared.scanned(verificationType: VerificationTypes.PATTERN.rawValue, incomingData: incomingData) {
+        Cidaas.verification.scanned(verificationType: VerificationTypes.PATTERN.rawValue, scannedRequest: incomingData) {
             switch $0 {
             case .success(let result):
-                print(result)
-                self.enrollVerification(exchange_id: result.data.exchange_id.exchange_id)
+                print(result.data.exchange_id.exchange_id)
+//                self.enroll(exchange_id: result.data.exchange_id.exchange_id)
                 break
             case .failure(let error):
                 print(error)
@@ -77,16 +79,16 @@ class ViewController: UIViewController, WKNavigationDelegate, CidaasLoaderDelega
         }
     }
     
-    func enrollVerification(exchange_id: String) {
+    func enroll(exchange_id: String) {
         let incomingData = EnrollRequest()
         incomingData.client_id = "938c570e-7728-4fa3-b62f-5167f722c788"
         incomingData.exchange_id = exchange_id
         incomingData.pass_code = "RED-1234"
         
-        VerificationViewController.shared.enroll(verificationType: VerificationTypes.PATTERN.rawValue, incomingData: incomingData) {
+        Cidaas.verification.enroll(verificationType: VerificationTypes.PATTERN.rawValue, enrollRequest: incomingData) {
             switch $0 {
             case .success(let result):
-                print(result)
+                print(result.data.exchange_id.exchange_id)
                 break
             case .failure(let error):
                 print(error)
@@ -102,7 +104,48 @@ class ViewController: UIViewController, WKNavigationDelegate, CidaasLoaderDelega
         
         Cidaas.shared.setFCMToken(fcmToken: "cS7fVZg5hFs:APA91bFKbzKiS18c46YLA8XNq71gVZQ2mWGGnkkwAFRp3kJshvhMaITLpc4Oa-jWJueU-r64J47l-6jwWS2zDIF97u1uUxOBqv7EwBsyxkror_sxSSthIMYc_9ClJdmjpoL6PzIxs1wL")
         
-        VerificationViewController.shared.pushAcknowledge(verificationType: VerificationTypes.PATTERN.rawValue, incomingData: incomingData) {
+        Cidaas.verification.pushAcknowledge(verificationType: VerificationTypes.PATTERN.rawValue, pushAckRequest: incomingData) {
+            switch $0 {
+            case .success(let result):
+                self.pushAllow(exchange_id: result.data.exchange_id.exchange_id)
+                print(result)
+                break
+            case .failure(let error):
+                print(error)
+                break
+            }
+        }
+    }
+    
+    func pushAllow(exchange_id: String) {
+        let incomingData = PushAllowRequest()
+        incomingData.client_id = "938c570e-7728-4fa3-b62f-5167f722c788"
+        incomingData.exchange_id = exchange_id
+        
+        Cidaas.shared.setFCMToken(fcmToken: "cS7fVZg5hFs:APA91bFKbzKiS18c46YLA8XNq71gVZQ2mWGGnkkwAFRp3kJshvhMaITLpc4Oa-jWJueU-r64J47l-6jwWS2zDIF97u1uUxOBqv7EwBsyxkror_sxSSthIMYc_9ClJdmjpoL6PzIxs1wL")
+        
+        Cidaas.verification.pushAllow(verificationType: VerificationTypes.PATTERN.rawValue, pushAllowRequest: incomingData) {
+            switch $0 {
+            case .success(let result):
+                self.authenticate(exchange_id: result.data.exchange_id.exchange_id)
+                print(result)
+                break
+            case .failure(let error):
+                print(error)
+                break
+            }
+        }
+    }
+    
+    func authenticate(exchange_id: String) {
+        let incomingData = AuthenticateRequest()
+        incomingData.client_id = "938c570e-7728-4fa3-b62f-5167f722c788"
+        incomingData.exchange_id = exchange_id
+        incomingData.pass_code = "RED-1234"
+        
+        Cidaas.shared.setFCMToken(fcmToken: "cS7fVZg5hFs:APA91bFKbzKiS18c46YLA8XNq71gVZQ2mWGGnkkwAFRp3kJshvhMaITLpc4Oa-jWJueU-r64J47l-6jwWS2zDIF97u1uUxOBqv7EwBsyxkror_sxSSthIMYc_9ClJdmjpoL6PzIxs1wL")
+        
+        Cidaas.verification.authenticate(verificationType: VerificationTypes.PATTERN.rawValue, authenticateRequest: incomingData) {
             switch $0 {
             case .success(let result):
                 print(result)
