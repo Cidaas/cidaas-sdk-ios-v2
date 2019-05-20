@@ -15,8 +15,13 @@ public class VerificationViewController {
         VerificationInteractor.shared.scanned(verificationType: verificationType, incomingData: incomingData, callback: callback)
     }
     
-    public func enroll(verificationType: String, incomingData: EnrollRequest, callback: @escaping (Result<EnrollResponse>) -> Void) {
-        VerificationInteractor.shared.enroll(verificationType: verificationType, incomingData: incomingData, callback: callback)
+    public func enroll(verificationType: String, photo: UIImage, voice: Data, incomingData: EnrollRequest, callback: @escaping (Result<EnrollResponse>) -> Void) {
+        if (verificationType == VerificationTypes.TOUCH.rawValue) {
+            VerificationInteractor.shared.askForTouchorFaceId(incomingData: incomingData, callback: callback)
+        }
+        else {
+            VerificationInteractor.shared.enroll(verificationType: verificationType, photo: photo, voice: voice, incomingData: incomingData, callback: callback)
+        }
     }
     
     public func initiate(verificationType: String, incomingData: InitiateRequest, callback: @escaping (Result<InitiateResponse>) -> Void) {
@@ -37,5 +42,9 @@ public class VerificationViewController {
     
     public func authenticate(verificationType: String, incomingData: AuthenticateRequest, callback: @escaping (Result<AuthenticateResponse>) -> Void) {
         VerificationInteractor.shared.authenticate(verificationType: verificationType, incomingData: incomingData, callback: callback)
+    }
+    
+    public func deleteAll(incomingData: DeleteAllRequest, callback: @escaping (Result<DeleteAllResponse>) -> Void) {
+        VerificationInteractor.shared.deleteAll(incomingData: incomingData, callback: callback)
     }
 }

@@ -58,7 +58,7 @@ public class VerificationServiceWorker {
         }
     }
     
-    public func enroll(verificationType: String, incomingData: EnrollRequest, properties: Dictionary<String, String>, callback: @escaping (String?, WebAuthError?) -> Void) {
+    public func enroll(verificationType: String, photo: UIImage, voice: Data, incomingData: EnrollRequest, properties: Dictionary<String, String>, callback: @escaping (String?, WebAuthError?) -> Void) {
         var urlString : String
         
         // assign base url
@@ -74,19 +74,75 @@ public class VerificationServiceWorker {
         incomingData.push_id = push_id
         
         // construct body params
-        var bodyParams = Dictionary<String, Any>()
+        var bodyParamsDefault = Dictionary<String, Any>()
         do {
             let encoder = JSONEncoder()
             let data = try encoder.encode(incomingData)
-            bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+            bodyParamsDefault = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
         }
         catch(_) {
             callback(nil, WebAuthError.shared.conversionException())
             return
         }
         
-        sessionManager.request(urlString, method: .post, parameters: bodyParams, encoding: JSONEncoding.default).validate().responseString { response in
-            self.responseRedirect(response: response, callback: callback)
+        // construct body params for FACE & VOICE
+        var bodyParams = Dictionary<String, String>()
+        bodyParams["push_id"] = incomingData.push_id
+        bodyParams["device_id"] = incomingData.device_id
+        bodyParams["exchange_id"] = incomingData.exchange_id
+        bodyParams["client_id"] = incomingData.client_id
+        bodyParams["attempt"] = String(describing: incomingData.attempt)
+        
+        var enrolledURL = try! URLRequest(url: URL(string: urlString)!, method: .post, headers: headers)
+        
+        switch verificationType {
+        case VerificationTypes.FACE.rawValue:
+            sessionManager.upload(multipartFormData: { multipartFormData in
+                for (key, value) in bodyParams {
+                    multipartFormData.append(value.data(using: .utf8)!, withName: key)
+                }
+                
+                let uploadImage = UIImageJPEGRepresentation(photo, 0.01)
+                multipartFormData.append(uploadImage!, withName: "photo", fileName: "photo.jpg", mimeType: "image/jpeg")
+                enrolledURL.addValue(multipartFormData.contentType, forHTTPHeaderField: "Content-Type")
+            }, with: enrolledURL,
+               encodingCompletion: { encodingResult in
+                switch encodingResult {
+                case .success(let upload, _, _):
+                    upload.responseString { response in
+                        self.responseRedirect(response: response, callback: callback)
+                    }
+                case .failure(let error):
+                    callback(nil, WebAuthError.shared.serviceFailureException(errorCode: 500, errorMessage: error.localizedDescription, statusCode: 500))
+                    break
+                }
+            })
+            break
+        case VerificationTypes.VOICE.rawValue:
+            sessionManager.upload(multipartFormData: { multipartFormData in
+                for (key, value) in bodyParams {
+                    multipartFormData.append(value.data(using: .utf8)!, withName: key)
+                }
+                multipartFormData.append(voice, withName: "voice", fileName: "voice.wav", mimeType: "audio/mpeg")
+                enrolledURL.addValue(multipartFormData.contentType, forHTTPHeaderField: "Content-Type")
+            }, with: enrolledURL,
+               encodingCompletion: { encodingResult in
+                switch encodingResult {
+                case .success(let upload, _, _):
+                    upload.responseString { response in
+                        self.responseRedirect(response: response, callback: callback)
+                    }
+                case .failure(let error):
+                    callback(nil, WebAuthError.shared.serviceFailureException(errorCode: 500, errorMessage: error.localizedDescription, statusCode: 500))
+                    break
+                }
+            })
+            break
+        default:
+            sessionManager.request(urlString, method: .post, parameters: bodyParamsDefault, encoding: JSONEncoding.default).validate().responseString { response in
+                self.responseRedirect(response: response, callback: callback)
+            }
+            break
         }
     }
     
@@ -278,6 +334,39 @@ public class VerificationServiceWorker {
                 callback(nil, WebAuthError.shared.serviceFailureException(errorCode: 500, errorMessage: error.localizedDescription, statusCode: 500))
             }
             break
+        }
+    }
+    
+    public func deleteAll(incomingData: DeleteAllRequest, properties: Dictionary<String, String>, callback: @escaping (String?, WebAuthError?) -> Void) {
+        var urlString : String
+        
+        // assign base url
+        let baseURL = (properties["DomainURL"])!
+        
+        // construct scanned url
+        urlString = baseURL + VerificationURLHelper.shared.getDeleteAllURL(sub: incomingData.sub)
+        
+        // construct device details
+        let deviceInfo = DBHelper.shared.getDeviceInfo()
+        let push_id = DBHelper.shared.getFCM()
+        
+        incomingData.device_id = deviceInfo.deviceId
+        incomingData.push_id = push_id
+        
+        // construct body params
+        var bodyParams = Dictionary<String, Any>()
+        do {
+            let encoder = JSONEncoder()
+            let data = try encoder.encode(incomingData)
+            bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+        }
+        catch(_) {
+            callback(nil, WebAuthError.shared.conversionException())
+            return
+        }
+        
+        sessionManager.request(urlString, method: .delete, parameters: bodyParams, encoding: JSONEncoding.default).validate().responseString { response in
+            self.responseRedirect(response: response, callback: callback)
         }
     }
 }

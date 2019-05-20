@@ -15,8 +15,8 @@ public class Verification {
         VerificationViewController.shared.scanned(verificationType: verificationType, incomingData: scannedRequest, callback: callback)
     }
     
-    public func enroll(verificationType: String, enrollRequest: EnrollRequest, callback:@escaping (Result<EnrollResponse>) -> Void) {
-        VerificationViewController.shared.enroll(verificationType: verificationType, incomingData: enrollRequest, callback: callback)
+    public func enroll(verificationType: String, photo: UIImage = UIImage(), voice: Data = Data(), enrollRequest: EnrollRequest, callback:@escaping (Result<EnrollResponse>) -> Void) {
+        VerificationViewController.shared.enroll(verificationType: verificationType, photo: photo, voice: voice, incomingData: enrollRequest, callback: callback)
     }
     
     public func pushAcknowledge(verificationType: String, pushAckRequest: PushAcknowledgeRequest, callback:@escaping (Result<PushAcknowledgeResponse>) -> Void) {
@@ -33,5 +33,9 @@ public class Verification {
     
     public func authenticate(verificationType: String, authenticateRequest: AuthenticateRequest, callback:@escaping (Result<AuthenticateResponse>) -> Void) {
         VerificationViewController.shared.authenticate(verificationType: verificationType, incomingData: authenticateRequest, callback: callback)
+    }
+    
+    public func deleteAll(deleteRequest: DeleteAllRequest, callback:@escaping (Result<DeleteAllResponse>) -> Void) {
+        VerificationViewController.shared.deleteAll(incomingData: deleteRequest, callback: callback)
     }
 }

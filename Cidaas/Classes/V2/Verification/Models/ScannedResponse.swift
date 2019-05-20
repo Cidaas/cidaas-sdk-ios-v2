@@ -30,6 +30,10 @@ public class ScannedResponseData: Codable {
     public var exchange_id: ExchangeIdResponse = ExchangeIdResponse()
     public var sub: String = ""
     public var status_id: String = ""
+    public var email: String = ""
+    public var given_name: String = ""
+    public var family_name: String = ""
+    public var mobile_number: String = ""
     public var push_random_numbers: [String] = []
     
     public required init(from decoder: Decoder) throws {
@@ -37,6 +41,10 @@ public class ScannedResponseData: Codable {
         self.exchange_id = try container.decodeIfPresent(ExchangeIdResponse.self, forKey: .exchange_id) ?? ExchangeIdResponse()
         self.sub = try container.decodeIfPresent(String.self, forKey: .sub) ?? ""
         self.status_id = try container.decodeIfPresent(String.self, forKey: .status_id) ?? ""
+        self.email = try container.decodeIfPresent(String.self, forKey: .email) ?? ""
+        self.given_name = try container.decodeIfPresent(String.self, forKey: .given_name) ?? ""
+        self.family_name = try container.decodeIfPresent(String.self, forKey: .family_name) ?? ""
+        self.mobile_number = try container.decodeIfPresent(String.self, forKey: .mobile_number) ?? ""
         self.push_random_numbers = try container.decodeIfPresent([String].self, forKey: .push_random_numbers) ?? []
     }
 }

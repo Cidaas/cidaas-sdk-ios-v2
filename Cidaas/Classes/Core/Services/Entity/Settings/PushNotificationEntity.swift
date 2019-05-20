@@ -23,6 +23,11 @@ public class PushNotificationEntity : Codable {
     public var redirect_url: String = ""
     public var user_device_id: String = ""
     
+    //
+    public var exchange_id : String = ""
+    public var tenant_key : String = ""
+    public var tenant_name : String = ""
+    public var requested_types : [String] = []
     
     public init() {
         
@@ -44,6 +49,12 @@ public class PushNotificationEntity : Codable {
         self.client_id = try container.decodeIfPresent(String.self, forKey: .client_id) ?? ""
         self.user_device_id = try container.decodeIfPresent(String.self, forKey: .user_device_id) ?? ""
         self.redirect_url = try container.decodeIfPresent(String.self, forKey: .redirect_url) ?? ""
+        
+        //
+        self.exchange_id = try container.decodeIfPresent(String.self, forKey: .exchange_id) ?? ""
+        self.tenant_key = try container.decodeIfPresent(String.self, forKey: .tenant_key) ?? ""
+        self.tenant_name = try container.decodeIfPresent(String.self, forKey: .tenant_name) ?? ""
+        self.requested_types = try container.decodeIfPresent([String].self, forKey: .requested_types) ?? []
     }
 }
 

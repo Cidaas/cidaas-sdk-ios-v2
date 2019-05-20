@@ -16,4 +16,6 @@ public class EnrollRequest: Codable {
     public var client_id: String = ""
     public var push_id: String = ""
     public var pass_code: String = ""
+    public var attempt: Int = 0
+    public var localizedReason: String = ""
 }

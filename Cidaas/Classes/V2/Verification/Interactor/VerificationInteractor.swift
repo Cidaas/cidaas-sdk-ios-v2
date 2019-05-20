@@ -35,7 +35,7 @@ public class VerificationInteractor {
         }
     }
     
-    public func enroll(verificationType: String, incomingData: EnrollRequest, callback: @escaping (Result<EnrollResponse>) -> Void) {
+    public func enroll(verificationType: String, photo: UIImage = UIImage(), voice: Data = Data(), incomingData: EnrollRequest, callback: @escaping (Result<EnrollResponse>) -> Void) {
         // validation
         if (verificationType == "" || incomingData.client_id == "" || incomingData.exchange_id == "" || incomingData.pass_code == "") {
             // send response to presenter
@@ -52,7 +52,7 @@ public class VerificationInteractor {
         }
         
         // call worker
-        VerificationServiceWorker.shared.enroll(verificationType: verificationType, incomingData: incomingData, properties: savedProp!) { response, error in
+        VerificationServiceWorker.shared.enroll(verificationType: verificationType, photo: photo, voice: voice, incomingData: incomingData, properties: savedProp!) { response, error in
             VerificationPresenter.shared.enroll(enrollResponse: response, errorResponse: error, callback: callback)
         }
     }
@@ -167,11 +167,70 @@ public class VerificationInteractor {
         }
     }
     
+    public func deleteAll(incomingData: DeleteAllRequest, callback: @escaping (Result<DeleteAllResponse>) -> Void) {
+        // validation
+        if (incomingData.sub == "") {
+            // send response to presenter
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "sub cannot be empty", statusCode: 417)
+            VerificationPresenter.shared.deleteAll(deleteResponse: nil, errorResponse: error, callback: callback)
+        }
+        
+        // get saved properties
+        let savedProp = getProperties()
+        if (savedProp == nil) {
+            // send response to presenter
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
+            VerificationPresenter.shared.deleteAll(deleteResponse: nil, errorResponse: error, callback: callback)
+        }
+        
+        // call worker
+        VerificationServiceWorker.shared.deleteAll(incomingData: incomingData, properties: savedProp!) { response, error in
+            VerificationPresenter.shared.deleteAll(deleteResponse: response, errorResponse: error, callback: callback)
+        }
+    }
+    
     func getProperties() -> Dictionary<String, String>? {
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
             return savedProp!
         }
         return nil
+    }
+    
+    public func askForTouchorFaceId(incomingData: EnrollRequest, callback: @escaping (Result<EnrollResponse>) -> Void) {
+        // ask for touch id or face id
+        let touchId = TouchID()
+        touchId.checkIfTouchIdAvailable { (success, errorMessage, errorCode) in
+            if success == true {
+                touchId.checkTouchIDMatching(localizedReason: incomingData.localizedReason, callback: { (res_success, res_errorMessage, res_errorCode) in
+                    if res_success == true {
+                        self.enroll(verificationType: VerificationTypes.TOUCH.rawValue, incomingData: incomingData, callback: callback)
+                    }
+                    else {
+                        // send response to presenter
+                        let error = WebAuthError.shared
+                        error.errorMessage = res_errorMessage ?? WebAuthError.shared.errorMessage
+                        error.errorCode = res_errorCode ?? WebAuthError.shared.errorCode
+                        let errorResponse = error.error
+                        errorResponse.error.code = res_errorCode ?? WebAuthError.shared.errorCode
+                        
+                        VerificationPresenter.shared.enroll(enrollResponse: nil, errorResponse: error, callback: callback)
+                        
+                        return
+                    }
+                })
+            }
+            else {
+                // send response to presenter
+                let error = WebAuthError.shared
+                error.errorMessage = errorMessage ?? WebAuthError.shared.errorMessage
+                error.errorCode = errorCode ?? WebAuthError.shared.errorCode
+                let errorResponse = error.error
+                errorResponse.error.code = errorCode ?? WebAuthError.shared.errorCode
+                
+                VerificationPresenter.shared.enroll(enrollResponse: nil, errorResponse: error, callback: callback)
+                return
+            }
+        }
     }
 }

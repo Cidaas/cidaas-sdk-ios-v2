@@ -46,7 +46,6 @@ class ViewController: UIViewController, WKNavigationDelegate, CidaasLoaderDelega
         scanned(exchange_id: "41cac32f-bf5e-4199-90da-a1794c62f5fa")
 //     enroll(exchange_id: "dd54df80-bd28-4eda-99fb-d66dbeed8208")
 //        pushAcknowledge(exchange_id: "0cd6caec-24d0-4930-b282-7686f1c7f9cf")
-        
     }
     
     func getTotp() {
