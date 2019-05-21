@@ -314,10 +314,10 @@ public class VerificationServiceWorker {
             }
             else if response.data != nil {
                 let dataResponse = String(decoding: response.data!, as: UTF8.self)
-                callback(dataResponse, nil)
+                callback(nil, WebAuthError.shared.serviceFailureException(errorCode: 400, errorMessage: dataResponse, statusCode: 400, error: string2error(string: dataResponse)))
             }
             else {
-                callback(response.description, nil)
+                callback(nil, WebAuthError.shared.serviceFailureException(errorCode: 400, errorMessage: response.description, statusCode: 400))
             }
             break
         case .failure(let error):
@@ -328,7 +328,7 @@ public class VerificationServiceWorker {
             }
             else if response.data != nil {
                 let dataResponse = String(decoding: response.data!, as: UTF8.self)
-                callback(nil, WebAuthError.shared.serviceFailureException(errorCode: 400, errorMessage: dataResponse, statusCode: 400))
+                callback(nil, WebAuthError.shared.serviceFailureException(errorCode: 400, errorMessage: dataResponse, statusCode: 400, error: string2error(string: dataResponse)))
             }
             else {
                 callback(nil, WebAuthError.shared.serviceFailureException(errorCode: 500, errorMessage: error.localizedDescription, statusCode: 500))
@@ -367,6 +367,25 @@ public class VerificationServiceWorker {
         
         sessionManager.request(urlString, method: .delete, parameters: bodyParams, encoding: JSONEncoding.default).validate().responseString { response in
             self.responseRedirect(response: response, callback: callback)
+        }
+    }
+    
+    public func string2error(string: String) -> ErrorResponseEntity {
+        let decoder = JSONDecoder()
+        do {
+            let data = string.data(using: .utf8)!
+            // decode the json data to object
+            let errorResponseEntity = try decoder.decode(ErrorResponseEntity.self, from: data)
+            
+            // return failure
+            return errorResponseEntity
+        }
+        catch( _) {
+            // return failure
+            let errorResponseEntity = ErrorResponseEntity()
+            errorResponseEntity.success = false
+            errorResponseEntity.status = 400
+            return errorResponseEntity
         }
     }
 }

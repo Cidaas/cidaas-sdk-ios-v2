@@ -37,7 +37,7 @@ public class VerificationInteractor {
     
     public func enroll(verificationType: String, photo: UIImage = UIImage(), voice: Data = Data(), incomingData: EnrollRequest, callback: @escaping (Result<EnrollResponse>) -> Void) {
         // validation
-        if (verificationType == "" || incomingData.client_id == "" || incomingData.exchange_id == "" || incomingData.pass_code == "") {
+        if (verificationType == "" || incomingData.client_id == "" || incomingData.exchange_id == "") {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "verificationType or client_id or exchange_id or pass_code cannot be empty", statusCode: 417)
             VerificationPresenter.shared.enroll(enrollResponse: nil, errorResponse: error, callback: callback)
