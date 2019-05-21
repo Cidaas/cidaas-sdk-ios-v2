@@ -17,7 +17,7 @@ public class VerificationViewController {
     
     public func enroll(verificationType: String, photo: UIImage, voice: Data, incomingData: EnrollRequest, callback: @escaping (Result<EnrollResponse>) -> Void) {
         if (verificationType == VerificationTypes.TOUCH.rawValue) {
-            VerificationInteractor.shared.askForTouchorFaceId(incomingData: incomingData, callback: callback)
+            VerificationInteractor.shared.askForTouchorFaceIdForEnroll(incomingData: incomingData, callback: callback)
         }
         else {
             VerificationInteractor.shared.enroll(verificationType: verificationType, photo: photo, voice: voice, incomingData: incomingData, callback: callback)
@@ -41,10 +41,19 @@ public class VerificationViewController {
     }
     
     public func authenticate(verificationType: String, incomingData: AuthenticateRequest, callback: @escaping (Result<AuthenticateResponse>) -> Void) {
-        VerificationInteractor.shared.authenticate(verificationType: verificationType, incomingData: incomingData, callback: callback)
+        if (verificationType == VerificationTypes.TOUCH.rawValue) {
+            VerificationInteractor.shared.askForTouchorFaceIdForAuthenticate(incomingData: incomingData, callback: callback)
+        }
+        else {
+            VerificationInteractor.shared.authenticate(verificationType: verificationType, incomingData: incomingData, callback: callback)
+        }
     }
     
-    public func deleteAll(incomingData: DeleteAllRequest, callback: @escaping (Result<DeleteAllResponse>) -> Void) {
-        VerificationInteractor.shared.deleteAll(incomingData: incomingData, callback: callback)
+    public func deleteAll(callback: @escaping (Result<DeleteResponse>) -> Void) {
+        VerificationInteractor.shared.deleteAll(callback: callback)
+    }
+    
+    public func delete(incomingData: DeleteRequest, callback: @escaping (Result<DeleteResponse>) -> Void) {
+        VerificationInteractor.shared.delete(incomingData: incomingData, callback: callback)
     }
 }

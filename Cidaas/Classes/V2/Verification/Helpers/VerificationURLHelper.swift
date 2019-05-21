@@ -18,7 +18,8 @@ public class VerificationURLHelper {
     public var pushAllowURL: String = "/verification-srv/v2/authenticate/allow/"
     public var pushRejectURL: String = "/verification-srv/v2/authenticate/reject/"
     public var authenticateURL: String = "/verification-srv/v2/authenticate/authenticate/"
-    public var deleteAllURL: String = "/verification-srv/v2/setup/remove/bysub/"
+    public var deleteAllURL: String = "/verification-srv/v2/setup/remove/bydeviceid/"
+    public var deleteURL: String = "/verification-srv/v2/setup/remove/bydeviceid/"
     
     public func getScannedURL(verificationType: String) -> String {
         return scannedURL + verificationType
@@ -48,7 +49,11 @@ public class VerificationURLHelper {
         return authenticateURL + verificationType
     }
     
-    public func getDeleteAllURL(sub: String) -> String {
-        return deleteAllURL + sub
+    public func getDeleteAllURL(deviceId: String) -> String {
+        return deleteAllURL + deviceId
+    }
+    
+    public func getDeleteURL(verificationType: String, sub: String) -> String {
+        return deleteURL + verificationType + "/" + sub
     }
 }

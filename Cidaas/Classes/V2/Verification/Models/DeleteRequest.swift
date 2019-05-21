@@ -7,11 +7,12 @@
 
 import Foundation
 
-public class DeleteAllRequest: Codable {
+public class DeleteRequest: Codable {
     
     public init() {}
     
     public var device_id: String = ""
     public var push_id: String = ""
     public var sub: String = ""
+    public var verificationType: String = ""
 }

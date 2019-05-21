@@ -306,6 +306,57 @@ public class VerificationServiceWorker {
         }
     }
     
+    public func deleteAll(properties: Dictionary<String, String>, callback: @escaping (String?, WebAuthError?) -> Void) {
+        var urlString : String
+        
+        // assign base url
+        let baseURL = (properties["DomainURL"])!
+        
+        // construct device details
+        let deviceInfo = DBHelper.shared.getDeviceInfo()
+        let push_id = DBHelper.shared.getFCM()
+        
+        // construct scanned url
+        urlString = baseURL + VerificationURLHelper.shared.getDeleteAllURL(deviceId: deviceInfo.deviceId)
+        
+        sessionManager.request(urlString, method: .delete, parameters: nil, encoding: JSONEncoding.default).validate().responseString { response in
+            self.responseRedirect(response: response, callback: callback)
+        }
+    }
+    
+    public func delete(incomingData: DeleteRequest, properties: Dictionary<String, String>, callback: @escaping (String?, WebAuthError?) -> Void) {
+        var urlString : String
+        
+        // assign base url
+        let baseURL = (properties["DomainURL"])!
+        
+        // construct device details
+        let deviceInfo = DBHelper.shared.getDeviceInfo()
+        let push_id = DBHelper.shared.getFCM()
+        
+        // construct scanned url
+        urlString = baseURL + VerificationURLHelper.shared.getDeleteURL(verificationType: incomingData.verificationType, sub: incomingData.sub)
+        
+        incomingData.device_id = deviceInfo.deviceId
+        incomingData.push_id = push_id
+        
+        // construct body params
+        var bodyParams = Dictionary<String, Any>()
+        do {
+            let encoder = JSONEncoder()
+            let data = try encoder.encode(incomingData)
+            bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+        }
+        catch(_) {
+            callback(nil, WebAuthError.shared.conversionException())
+            return
+        }
+        
+        sessionManager.request(urlString, method: .delete, parameters: bodyParams, encoding: JSONEncoding.default).validate().responseString { response in
+            self.responseRedirect(response: response, callback: callback)
+        }
+    }
+    
     public func responseRedirect(response: DataResponse<String>, callback: @escaping (String?, WebAuthError?) -> Void) {
         switch response.result {
         case .success:
@@ -334,39 +385,6 @@ public class VerificationServiceWorker {
                 callback(nil, WebAuthError.shared.serviceFailureException(errorCode: 500, errorMessage: error.localizedDescription, statusCode: 500))
             }
             break
-        }
-    }
-    
-    public func deleteAll(incomingData: DeleteAllRequest, properties: Dictionary<String, String>, callback: @escaping (String?, WebAuthError?) -> Void) {
-        var urlString : String
-        
-        // assign base url
-        let baseURL = (properties["DomainURL"])!
-        
-        // construct scanned url
-        urlString = baseURL + VerificationURLHelper.shared.getDeleteAllURL(sub: incomingData.sub)
-        
-        // construct device details
-        let deviceInfo = DBHelper.shared.getDeviceInfo()
-        let push_id = DBHelper.shared.getFCM()
-        
-        incomingData.device_id = deviceInfo.deviceId
-        incomingData.push_id = push_id
-        
-        // construct body params
-        var bodyParams = Dictionary<String, Any>()
-        do {
-            let encoder = JSONEncoder()
-            let data = try encoder.encode(incomingData)
-            bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
-        }
-        catch(_) {
-            callback(nil, WebAuthError.shared.conversionException())
-            return
-        }
-        
-        sessionManager.request(urlString, method: .delete, parameters: bodyParams, encoding: JSONEncoding.default).validate().responseString { response in
-            self.responseRedirect(response: response, callback: callback)
         }
     }
     

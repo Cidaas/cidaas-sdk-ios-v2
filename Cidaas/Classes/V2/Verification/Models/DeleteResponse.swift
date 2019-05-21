@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class DeleteAllResponse: Codable {
+public class DeleteResponse: Codable {
     
     public init() {}
     

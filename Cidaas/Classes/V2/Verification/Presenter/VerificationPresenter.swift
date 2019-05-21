@@ -158,7 +158,7 @@ public class VerificationPresenter {
         }
     }
     
-    public func deleteAll(deleteResponse: String?, errorResponse: WebAuthError?, callback: @escaping (Result<DeleteAllResponse>) -> Void) {
+    public func deleteAll(deleteResponse: String?, errorResponse: WebAuthError?, callback: @escaping (Result<DeleteResponse>) -> Void) {
         if errorResponse != nil {
             callback(Result.failure(error: errorResponse!))
         }
@@ -167,7 +167,28 @@ public class VerificationPresenter {
             do {
                 let data = deleteResponse!.data(using: .utf8)!
                 // decode the json data to object
-                let deleteResp = try decoder.decode(DeleteAllResponse.self, from: data)
+                let deleteResp = try decoder.decode(DeleteResponse.self, from: data)
+                
+                // return success
+                callback(Result.success(result: deleteResp))
+            }
+            catch(let error) {
+                // return failure
+                callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: 400, errorMessage: error.localizedDescription, statusCode: 400)))
+            }
+        }
+    }
+    
+    public func delete(deleteResponse: String?, errorResponse: WebAuthError?, callback: @escaping (Result<DeleteResponse>) -> Void) {
+        if errorResponse != nil {
+            callback(Result.failure(error: errorResponse!))
+        }
+        else {
+            let decoder = JSONDecoder()
+            do {
+                let data = deleteResponse!.data(using: .utf8)!
+                // decode the json data to object
+                let deleteResp = try decoder.decode(DeleteResponse.self, from: data)
                 
                 // return success
                 callback(Result.success(result: deleteResp))
