@@ -145,7 +145,7 @@ public class VerificationInteractor {
         }
     }
     
-    public func authenticate(verificationType: String, incomingData: AuthenticateRequest, callback: @escaping (Result<AuthenticateResponse>) -> Void) {
+    public func authenticate(verificationType: String, photo: UIImage = UIImage(), voice: Data = Data(), incomingData: AuthenticateRequest, callback: @escaping (Result<AuthenticateResponse>) -> Void) {
         // validation
         if (verificationType == "" || incomingData.client_id == "" || incomingData.exchange_id == "" || incomingData.pass_code == "") {
             // send response to presenter
@@ -162,7 +162,7 @@ public class VerificationInteractor {
         }
         
         // call worker
-        VerificationServiceWorker.shared.authenticate(verificationType: verificationType, incomingData: incomingData, properties: savedProp!) { response, error in
+        VerificationServiceWorker.shared.authenticate(verificationType: verificationType, photo: photo, voice: voice, incomingData: incomingData, properties: savedProp!) { response, error in
             VerificationPresenter.shared.authenticate(authenticateResponse: response, errorResponse: error, callback: callback)
         }
     }

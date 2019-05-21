@@ -40,12 +40,12 @@ public class VerificationViewController {
         VerificationInteractor.shared.pushReject(verificationType: verificationType, incomingData: incomingData, callback: callback)
     }
     
-    public func authenticate(verificationType: String, incomingData: AuthenticateRequest, callback: @escaping (Result<AuthenticateResponse>) -> Void) {
+    public func authenticate(verificationType: String, photo: UIImage, voice: Data, incomingData: AuthenticateRequest, callback: @escaping (Result<AuthenticateResponse>) -> Void) {
         if (verificationType == VerificationTypes.TOUCH.rawValue) {
             VerificationInteractor.shared.askForTouchorFaceIdForAuthenticate(incomingData: incomingData, callback: callback)
         }
         else {
-            VerificationInteractor.shared.authenticate(verificationType: verificationType, incomingData: incomingData, callback: callback)
+            VerificationInteractor.shared.authenticate(verificationType: verificationType, photo: photo, voice: voice, incomingData: incomingData, callback: callback)
         }
     }
     

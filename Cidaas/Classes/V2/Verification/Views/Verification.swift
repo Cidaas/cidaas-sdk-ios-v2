@@ -31,8 +31,8 @@ public class Verification {
         VerificationViewController.shared.pushReject(verificationType: verificationType, incomingData: pushRejectRequest, callback: callback)
     }
     
-    public func authenticate(verificationType: String, authenticateRequest: AuthenticateRequest, callback:@escaping (Result<AuthenticateResponse>) -> Void) {
-        VerificationViewController.shared.authenticate(verificationType: verificationType, incomingData: authenticateRequest, callback: callback)
+    public func authenticate(verificationType: String, photo: UIImage = UIImage(), voice: Data = Data(), authenticateRequest: AuthenticateRequest, callback:@escaping (Result<AuthenticateResponse>) -> Void) {
+        VerificationViewController.shared.authenticate(verificationType: verificationType, photo: photo, voice: voice, incomingData: authenticateRequest, callback: callback)
     }
     
     public func deleteAll(callback:@escaping (Result<DeleteResponse>) -> Void) {
