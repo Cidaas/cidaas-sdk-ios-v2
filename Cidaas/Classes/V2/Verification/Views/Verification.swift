@@ -42,4 +42,8 @@ public class Verification {
     public func delete(deleteRequest: DeleteRequest, callback:@escaping (Result<DeleteResponse>) -> Void) {
         VerificationViewController.shared.delete(incomingData: deleteRequest, callback: callback)
     }
+    
+    public func getConfiguredList(deleteRequest: MFAListRequest, callback:@escaping (Result<MFAListResponse>) -> Void) {
+        VerificationViewController.shared.getConfiguredList(incomingData: deleteRequest, callback: callback)
+    }
 }
