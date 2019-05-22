@@ -49,8 +49,8 @@ public class VerificationViewController {
         }
     }
     
-    public func deleteAll(callback: @escaping (Result<DeleteResponse>) -> Void) {
-        VerificationInteractor.shared.deleteAll(callback: callback)
+    public func deleteAll(incomingData: DeleteRequest, callback: @escaping (Result<DeleteResponse>) -> Void) {
+        VerificationInteractor.shared.deleteAll(incomingData: incomingData, callback: callback)
     }
     
     public func delete(incomingData: DeleteRequest, callback: @escaping (Result<DeleteResponse>) -> Void) {

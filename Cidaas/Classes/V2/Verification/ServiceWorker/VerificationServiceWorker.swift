@@ -361,7 +361,7 @@ public class VerificationServiceWorker {
         }
     }
     
-    public func deleteAll(properties: Dictionary<String, String>, callback: @escaping (String?, WebAuthError?) -> Void) {
+    public func deleteAll(incomingData: DeleteRequest, properties: Dictionary<String, String>, callback: @escaping (String?, WebAuthError?) -> Void) {
         var urlString : String
         
         // assign base url
@@ -370,11 +370,25 @@ public class VerificationServiceWorker {
         // construct device details
         let deviceInfo = DBHelper.shared.getDeviceInfo()
         let push_id = DBHelper.shared.getFCM()
+        incomingData.device_id = deviceInfo.deviceId
+        incomingData.push_id = push_id
+        
+        // construct body params
+        var bodyParams = Dictionary<String, Any>()
+        do {
+            let encoder = JSONEncoder()
+            let data = try encoder.encode(incomingData)
+            bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+        }
+        catch(_) {
+            callback(nil, WebAuthError.shared.conversionException())
+            return
+        }
         
         // construct scanned url
         urlString = baseURL + VerificationURLHelper.shared.getDeleteAllURL(deviceId: deviceInfo.deviceId)
         
-        sessionManager.request(urlString, method: .delete, parameters: nil, encoding: JSONEncoding.default).validate().responseString { response in
+        sessionManager.request(urlString, method: .delete, parameters: bodyParams, encoding: JSONEncoding.default).validate().responseString { response in
             self.responseRedirect(response: response, callback: callback)
         }
     }
@@ -408,6 +422,38 @@ public class VerificationServiceWorker {
         }
         
         sessionManager.request(urlString, method: .delete, parameters: bodyParams, encoding: JSONEncoding.default).validate().responseString { response in
+            self.responseRedirect(response: response, callback: callback)
+        }
+    }
+    
+    public func getConfiguredList(incomingData: MFAListRequest, properties: Dictionary<String, String>, callback: @escaping (String?, WebAuthError?) -> Void) {
+        var urlString : String
+        
+        // assign base url
+        let baseURL = (properties["DomainURL"])!
+        
+        // construct scanned url
+        urlString = baseURL + VerificationURLHelper.shared.getConfiguredListURL()
+        
+        // construct device details
+        let deviceInfo = DBHelper.shared.getDeviceInfo()
+        let push_id = DBHelper.shared.getFCM()
+        incomingData.device_id = deviceInfo.deviceId
+        incomingData.push_id = push_id
+        
+        // construct body params
+        var bodyParams = Dictionary<String, Any>()
+        do {
+            let encoder = JSONEncoder()
+            let data = try encoder.encode(incomingData)
+            bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+        }
+        catch(_) {
+            callback(nil, WebAuthError.shared.conversionException())
+            return
+        }
+        
+        sessionManager.request(urlString, method: .post, parameters: bodyParams, encoding: JSONEncoding.default).validate().responseString { response in
             self.responseRedirect(response: response, callback: callback)
         }
     }

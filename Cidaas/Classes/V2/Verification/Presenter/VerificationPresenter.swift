@@ -199,4 +199,25 @@ public class VerificationPresenter {
             }
         }
     }
+    
+    public func getConfiguredList(mfaListResponse: String?, errorResponse: WebAuthError?, callback: @escaping (Result<MFAListResponse>) -> Void) {
+        if errorResponse != nil {
+            callback(Result.failure(error: errorResponse!))
+        }
+        else {
+            let decoder = JSONDecoder()
+            do {
+                let data = mfaListResponse!.data(using: .utf8)!
+                // decode the json data to object
+                let mfaResp = try decoder.decode(MFAListResponse.self, from: data)
+                
+                // return success
+                callback(Result.success(result: mfaResp))
+            }
+            catch(let error) {
+                // return failure
+                callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: 400, errorMessage: error.localizedDescription, statusCode: 400)))
+            }
+        }
+    }
 }

@@ -168,6 +168,13 @@ public class VerificationInteractor {
     }
     
     public func delete(incomingData: DeleteRequest, callback: @escaping (Result<DeleteResponse>) -> Void) {
+        // validation
+        if (incomingData.client_id == "" || incomingData.sub == "" || incomingData.verificationType == "") {
+            // send response to presenter
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "client_id or sub or exchange_id or verificationType cannot be empty", statusCode: 417)
+            VerificationPresenter.shared.delete(deleteResponse: nil, errorResponse: error, callback: callback)
+        }
+        
         // get saved properties
         let savedProp = getProperties()
         if (savedProp == nil) {
@@ -182,7 +189,14 @@ public class VerificationInteractor {
         }
     }
     
-    public func deleteAll(callback: @escaping (Result<DeleteResponse>) -> Void) {
+    public func deleteAll(incomingData: DeleteRequest, callback: @escaping (Result<DeleteResponse>) -> Void) {
+        // validation
+        if (incomingData.client_id == "") {
+            // send response to presenter
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "client_id cannot be empty", statusCode: 417)
+            VerificationPresenter.shared.deleteAll(deleteResponse: nil, errorResponse: error, callback: callback)
+        }
+        
         // get saved properties
         let savedProp = getProperties()
         if (savedProp == nil) {
@@ -192,8 +206,30 @@ public class VerificationInteractor {
         }
         
         // call worker
-        VerificationServiceWorker.shared.deleteAll(properties: savedProp!) { response, error in
+        VerificationServiceWorker.shared.deleteAll(incomingData: incomingData, properties: savedProp!) { response, error in
             VerificationPresenter.shared.deleteAll(deleteResponse: response, errorResponse: error, callback: callback)
+        }
+    }
+    
+    public func getConfiguredList(incomingData: MFAListRequest, callback: @escaping (Result<MFAListResponse>) -> Void) {
+        // validation
+        if (incomingData.client_id == "") {
+            // send response to presenter
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "client_id cannot be empty", statusCode: 417)
+            VerificationPresenter.shared.getConfiguredList(mfaListResponse: nil, errorResponse: error, callback: callback)
+        }
+        
+        // get saved properties
+        let savedProp = getProperties()
+        if (savedProp == nil) {
+            // send response to presenter
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
+            VerificationPresenter.shared.getConfiguredList(mfaListResponse: nil, errorResponse: error, callback: callback)
+        }
+        
+        // call worker
+        VerificationServiceWorker.shared.getConfiguredList(incomingData: incomingData, properties: savedProp!) { response, error in
+            VerificationPresenter.shared.getConfiguredList(mfaListResponse: response, errorResponse: error, callback: callback)
         }
     }
     

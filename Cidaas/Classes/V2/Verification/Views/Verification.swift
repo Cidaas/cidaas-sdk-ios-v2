@@ -35,8 +35,8 @@ public class Verification {
         VerificationViewController.shared.authenticate(verificationType: verificationType, photo: photo, voice: voice, incomingData: authenticateRequest, callback: callback)
     }
     
-    public func deleteAll(callback:@escaping (Result<DeleteResponse>) -> Void) {
-        VerificationViewController.shared.deleteAll(callback: callback)
+    public func deleteAll(deleteRequest: DeleteRequest, callback:@escaping (Result<DeleteResponse>) -> Void) {
+        VerificationViewController.shared.deleteAll(incomingData: deleteRequest, callback: callback)
     }
     
     public func delete(deleteRequest: DeleteRequest, callback:@escaping (Result<DeleteResponse>) -> Void) {

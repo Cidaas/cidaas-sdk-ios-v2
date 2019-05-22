@@ -15,4 +15,5 @@ public class DeleteRequest: Codable {
     public var push_id: String = ""
     public var sub: String = ""
     public var verificationType: String = ""
+    public var client_id: String = ""
 }
