@@ -213,9 +213,9 @@ public class VerificationInteractor {
     
     public func getConfiguredList(incomingData: MFAListRequest, callback: @escaping (Result<MFAListResponse>) -> Void) {
         // validation
-        if (incomingData.client_id == "") {
+        if (incomingData.client_id == "" || incomingData.sub == "") {
             // send response to presenter
-            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "client_id cannot be empty", statusCode: 417)
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "sub cannot be empty", statusCode: 417)
             VerificationPresenter.shared.getConfiguredList(mfaListResponse: nil, errorResponse: error, callback: callback)
         }
         

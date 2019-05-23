@@ -24,9 +24,11 @@ public class MFAListResponse: Codable {
 }
 
 public class MFAListResponseData : Codable {
-    public var _id : String = ""
-    public var configured_at: String = ""
-    public var verification_type : String = ""
+    
+    public var user_infos: [UserInformation] = []
+    public var tenant_name: String = ""
+    public var tenant_key: String = ""
+    public var configured_list: [MFAConfiguredList] = []
     
     public init() {
         
@@ -34,7 +36,26 @@ public class MFAListResponseData : Codable {
     
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self._id = try container.decodeIfPresent(String.self, forKey: ._id) ?? ""
+        self.user_infos = try container.decodeIfPresent([UserInformation].self, forKey: .user_infos) ?? []
+        self.tenant_name = try container.decodeIfPresent(String.self, forKey: .tenant_name) ?? ""
+        self.tenant_key = try container.decodeIfPresent(String.self, forKey: .tenant_key) ?? ""
+        self.configured_list = try container.decodeIfPresent([MFAConfiguredList].self, forKey: .configured_list) ?? []
+    }
+}
+
+public class MFAConfiguredList: Codable {
+    
+    public var configured_at: String = ""
+    public var verification_type : String = ""
+    public var sub: String = ""
+    public var totp_secret: String = ""
+    
+    public init() {
+        
+    }
+    
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
         self.configured_at = try container.decodeIfPresent(String.self, forKey: .configured_at) ?? ""
         self.verification_type = try container.decodeIfPresent(String.self, forKey: .verification_type) ?? ""
     }
