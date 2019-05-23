@@ -19,6 +19,7 @@ public class VerificationInteractor {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "verificationType or client_id or exchange_id or sub cannot be empty", statusCode: 417)
             VerificationPresenter.shared.scanned(scannedResponse: nil, errorResponse: error, callback: callback)
+            return
         }
         
         // get saved properties
@@ -27,6 +28,7 @@ public class VerificationInteractor {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
             VerificationPresenter.shared.scanned(scannedResponse: nil, errorResponse: error, callback: callback)
+            return
         }
         
         // call worker
@@ -41,6 +43,7 @@ public class VerificationInteractor {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "verificationType or client_id or exchange_id or pass_code cannot be empty", statusCode: 417)
             VerificationPresenter.shared.enroll(enrollResponse: nil, errorResponse: error, callback: callback)
+            return
         }
         
         // get saved properties
@@ -49,6 +52,7 @@ public class VerificationInteractor {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
             VerificationPresenter.shared.enroll(enrollResponse: nil, errorResponse: error, callback: callback)
+            return
         }
         
         // call worker
@@ -63,6 +67,7 @@ public class VerificationInteractor {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "verificationType or sub or request_id or medium_id or usage_type cannot be empty", statusCode: 417)
             VerificationPresenter.shared.initiate(initiateResponse: nil, errorResponse: error, callback: callback)
+            return
         }
         
         // get saved properties
@@ -71,6 +76,7 @@ public class VerificationInteractor {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
             VerificationPresenter.shared.initiate(initiateResponse: nil, errorResponse: error, callback: callback)
+            return
         }
         
         // call worker
@@ -85,6 +91,7 @@ public class VerificationInteractor {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "verificationType or exchange_id or client_id cannot be empty", statusCode: 417)
             VerificationPresenter.shared.pushAcknowledge(pushAcknowledgeResponse: nil, errorResponse: error, callback: callback)
+            return
         }
         
         // get saved properties
@@ -93,6 +100,7 @@ public class VerificationInteractor {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
             VerificationPresenter.shared.pushAcknowledge(pushAcknowledgeResponse: nil, errorResponse: error, callback: callback)
+            return
         }
         
         // call worker
@@ -107,6 +115,7 @@ public class VerificationInteractor {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "verificationType or exchange_id or client_id cannot be empty", statusCode: 417)
             VerificationPresenter.shared.pushAllow(pushAllowResponse: nil, errorResponse: error, callback: callback)
+            return
         }
         
         // get saved properties
@@ -115,6 +124,7 @@ public class VerificationInteractor {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
             VerificationPresenter.shared.pushAllow(pushAllowResponse: nil, errorResponse: error, callback: callback)
+            return
         }
         
         // call worker
@@ -129,6 +139,7 @@ public class VerificationInteractor {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "verificationType or exchange_id or client_id cannot be empty", statusCode: 417)
             VerificationPresenter.shared.pushReject(pushRejectResponse: nil, errorResponse: error, callback: callback)
+            return
         }
         
         // get saved properties
@@ -137,6 +148,7 @@ public class VerificationInteractor {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
             VerificationPresenter.shared.pushReject(pushRejectResponse: nil, errorResponse: error, callback: callback)
+            return
         }
         
         // call worker
@@ -151,6 +163,7 @@ public class VerificationInteractor {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "verificationType or client_id or exchange_id cannot be empty", statusCode: 417)
             VerificationPresenter.shared.authenticate(authenticateResponse: nil, errorResponse: error, callback: callback)
+            return
         }
         
         // get saved properties
@@ -159,6 +172,7 @@ public class VerificationInteractor {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
             VerificationPresenter.shared.authenticate(authenticateResponse: nil, errorResponse: error, callback: callback)
+            return
         }
         
         // call worker
@@ -173,6 +187,7 @@ public class VerificationInteractor {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "client_id or sub or exchange_id or verificationType cannot be empty", statusCode: 417)
             VerificationPresenter.shared.delete(deleteResponse: nil, errorResponse: error, callback: callback)
+            return
         }
         
         // get saved properties
@@ -181,6 +196,7 @@ public class VerificationInteractor {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
             VerificationPresenter.shared.deleteAll(deleteResponse: nil, errorResponse: error, callback: callback)
+            return
         }
         
         // call worker
@@ -195,6 +211,7 @@ public class VerificationInteractor {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "client_id cannot be empty", statusCode: 417)
             VerificationPresenter.shared.deleteAll(deleteResponse: nil, errorResponse: error, callback: callback)
+            return
         }
         
         // get saved properties
@@ -203,6 +220,7 @@ public class VerificationInteractor {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
             VerificationPresenter.shared.deleteAll(deleteResponse: nil, errorResponse: error, callback: callback)
+            return
         }
         
         // call worker
@@ -217,6 +235,7 @@ public class VerificationInteractor {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "sub cannot be empty", statusCode: 417)
             VerificationPresenter.shared.getConfiguredList(mfaListResponse: nil, errorResponse: error, callback: callback)
+            return
         }
         
         // get saved properties
@@ -225,6 +244,7 @@ public class VerificationInteractor {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
             VerificationPresenter.shared.getConfiguredList(mfaListResponse: nil, errorResponse: error, callback: callback)
+            return
         }
         
         // call worker
@@ -239,6 +259,7 @@ public class VerificationInteractor {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "client_id or sub cannot be empty", statusCode: 417)
             VerificationPresenter.shared.getPendingNotificationList(pendingNotificationListResponse: nil, errorResponse: error, callback: callback)
+            return
         }
         
         // get saved properties
@@ -247,6 +268,7 @@ public class VerificationInteractor {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
             VerificationPresenter.shared.getPendingNotificationList(pendingNotificationListResponse: nil, errorResponse: error, callback: callback)
+            return
         }
         
         // call worker
@@ -261,6 +283,7 @@ public class VerificationInteractor {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "client_id or sub cannot be empty", statusCode: 417)
             VerificationPresenter.shared.getAuthenticatedHistoryList(authenticatedHistoryListResponse: nil, errorResponse: error, callback: callback)
+            return
         }
         
         // get saved properties
@@ -269,11 +292,45 @@ public class VerificationInteractor {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
             VerificationPresenter.shared.getAuthenticatedHistoryList(authenticatedHistoryListResponse: nil, errorResponse: error, callback: callback)
+            return
         }
         
         // call worker
         VerificationServiceWorker.shared.getAuthenticatedHistoryList(incomingData: incomingData, properties: savedProp!) { response, error in
             VerificationPresenter.shared.getAuthenticatedHistoryList(authenticatedHistoryListResponse: response, errorResponse: error, callback: callback)
+        }
+    }
+    
+    public func updateFCM(incomingData: UpdateFCMRequest) {
+        // check if first time
+        let old_push_id = DBHelper.shared.getFCM()
+        
+        if (old_push_id == "") {
+            DBHelper.shared.setFCM(fcmToken: old_push_id)
+            // send response to presenter
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 200, errorMessage: "FCMToken successfully updated", statusCode: 200)
+            VerificationPresenter.shared.updateFCM(updateFCMResponse: nil, errorResponse: error)
+            return
+        }
+        if (old_push_id == incomingData.push_id) {
+            // send response to presenter
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 200, errorMessage: "No change in FCM", statusCode: 200)
+            VerificationPresenter.shared.updateFCM(updateFCMResponse: nil, errorResponse: error)
+            return
+        }
+        
+        // get saved properties
+        let savedProp = getProperties()
+        if (savedProp == nil) {
+            // send response to presenter
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
+            VerificationPresenter.shared.updateFCM(updateFCMResponse: nil, errorResponse: error)
+            return
+        }
+        
+        // call worker
+        VerificationServiceWorker.shared.updateFCM(incomingData: incomingData, properties: savedProp!) { response, error in
+            VerificationPresenter.shared.updateFCM(updateFCMResponse: response, errorResponse: error)
         }
     }
     

@@ -68,4 +68,10 @@ public class VerificationViewController {
     public func getAuthenticatedHistoryList(incomingData: AuthenticatedHistoryRequest, callback: @escaping (Result<AuthenticatedHistoryResponse>) -> Void) {
         VerificationInteractor.shared.getAuthenticatedHistoryList(incomingData: incomingData, callback: callback)
     }
+    
+    public func updateFCM(push_id: String) {
+        let incomingData = UpdateFCMRequest()
+        incomingData.push_id = push_id
+        VerificationInteractor.shared.updateFCM(incomingData: incomingData)
+    }
 }

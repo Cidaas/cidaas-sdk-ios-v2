@@ -299,4 +299,27 @@ public class VerificationPresenter {
         }
     }
     
+    public func updateFCM(updateFCMResponse: String?, errorResponse: WebAuthError?) {
+        if errorResponse != nil {
+            if (errorResponse?.statusCode == 200) {
+                logw(errorResponse!.errorMessage, cname: "cidaas-sdk-verification-success-log")
+            }
+            else {
+                logw(errorResponse!.errorMessage, cname: "cidaas-sdk-verification-error-log")
+            }
+        }
+        else {
+            let decoder = JSONDecoder()
+            do {
+                let data = updateFCMResponse!.data(using: .utf8)!
+                // decode the json data to object
+                _ = try decoder.decode(UpdateFCMResponse.self, from: data)
+                
+                logw(updateFCMResponse ?? "Empty response string", cname: "cidaas-sdk-verification-success-log")
+            }
+            catch(let error) {
+                logw("\(String(describing: error)) JSON parsing issue, Response: \(String(describing: updateFCMResponse))", cname: "cidaas-sdk-verification-error-log")
+            }
+        }
+    }
 }

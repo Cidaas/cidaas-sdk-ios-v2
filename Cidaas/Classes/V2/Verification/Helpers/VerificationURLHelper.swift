@@ -23,6 +23,7 @@ public class VerificationURLHelper {
     public var configuredListURL: String = "/verification-srv/v2/setup/device/configured/list"
     public var pendingNotificationListURL: String = "/verification-srv/v2/setup/device/pending/auth/list"
     public var authenticatedHistoryURL: String = "/verification-srv/v2/setup/device/authenticated/list"
+    public var fcmURL: String = "/verification-srv/v2/setup/device/update/pushid"
     
     public func getScannedURL(verificationType: String) -> String {
         return scannedURL + verificationType
@@ -70,5 +71,9 @@ public class VerificationURLHelper {
     
     public func getAuthenticatedHistoryListURL() -> String {
         return authenticatedHistoryURL
+    }
+    
+    public func getUpdateFCMURL() -> String {
+        return fcmURL
     }
 }
