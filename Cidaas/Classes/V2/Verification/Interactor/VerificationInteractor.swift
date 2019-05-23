@@ -306,7 +306,7 @@ public class VerificationInteractor {
         let old_push_id = DBHelper.shared.getFCM()
         
         if (old_push_id == "") {
-            DBHelper.shared.setFCM(fcmToken: old_push_id)
+            DBHelper.shared.setFCM(fcmToken: incomingData.push_id)
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 200, errorMessage: "FCMToken successfully updated", statusCode: 200)
             VerificationPresenter.shared.updateFCM(updateFCMResponse: nil, errorResponse: error)
@@ -327,6 +327,8 @@ public class VerificationInteractor {
             VerificationPresenter.shared.updateFCM(updateFCMResponse: nil, errorResponse: error)
             return
         }
+        
+        incomingData.old_push_id = old_push_id
         
         // call worker
         VerificationServiceWorker.shared.updateFCM(incomingData: incomingData, properties: savedProp!) { response, error in

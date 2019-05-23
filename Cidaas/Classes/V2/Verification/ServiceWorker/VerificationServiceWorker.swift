@@ -533,9 +533,7 @@ public class VerificationServiceWorker {
         
         // construct device details
         let deviceInfo = DBHelper.shared.getDeviceInfo()
-        let push_id = DBHelper.shared.getFCM()
         incomingData.device_id = deviceInfo.deviceId
-        incomingData.push_id = push_id
         incomingData.client_id = properties["ClientId"] ?? ""
         
         DBHelper.shared.setFCM(fcmToken: incomingData.push_id)
