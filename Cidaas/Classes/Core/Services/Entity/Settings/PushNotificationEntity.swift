@@ -25,6 +25,7 @@ public class PushNotificationEntity : Codable {
     
     //
     public var exchange_id : String = ""
+    public var expires_at : String = ""
     public var tenant_key : String = ""
     public var tenant_name : String = ""
     public var requested_types : [String] = []
@@ -52,6 +53,7 @@ public class PushNotificationEntity : Codable {
         
         //
         self.exchange_id = try container.decodeIfPresent(String.self, forKey: .exchange_id) ?? ""
+        self.expires_at = try container.decodeIfPresent(String.self, forKey: .expires_at) ?? ""
         self.tenant_key = try container.decodeIfPresent(String.self, forKey: .tenant_key) ?? ""
         self.tenant_name = try container.decodeIfPresent(String.self, forKey: .tenant_name) ?? ""
         self.requested_types = try container.decodeIfPresent([String].self, forKey: .requested_types) ?? []

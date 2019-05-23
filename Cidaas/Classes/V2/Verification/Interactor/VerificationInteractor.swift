@@ -147,9 +147,9 @@ public class VerificationInteractor {
     
     public func authenticate(verificationType: String, photo: UIImage = UIImage(), voice: Data = Data(), incomingData: AuthenticateRequest, callback: @escaping (Result<AuthenticateResponse>) -> Void) {
         // validation
-        if (verificationType == "" || incomingData.client_id == "" || incomingData.exchange_id == "" || incomingData.pass_code == "") {
+        if (verificationType == "" || incomingData.client_id == "" || incomingData.exchange_id == "") {
             // send response to presenter
-            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "verificationType or client_id or exchange_id or pass_code cannot be empty", statusCode: 417)
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "verificationType or client_id or exchange_id cannot be empty", statusCode: 417)
             VerificationPresenter.shared.authenticate(authenticateResponse: nil, errorResponse: error, callback: callback)
         }
         

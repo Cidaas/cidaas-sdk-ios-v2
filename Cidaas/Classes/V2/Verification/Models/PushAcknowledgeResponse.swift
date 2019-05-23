@@ -31,7 +31,7 @@ public class PushAcknowledgeResponseData : Codable {
     public var device_id: String = ""
     public var client_id: String = ""
     public var address: PushAddress = PushAddress()
-    public var deviceInfo: PushDeviceInfo = PushDeviceInfo()
+    public var device_info: PushDeviceInformation = PushDeviceInformation()
     
     public init() {
         
@@ -46,6 +46,21 @@ public class PushAcknowledgeResponseData : Codable {
         self.device_id = try container.decodeIfPresent(String.self, forKey: .device_id) ?? ""
         self.client_id = try container.decodeIfPresent(String.self, forKey: .client_id) ?? ""
         self.address = try container.decodeIfPresent(PushAddress.self, forKey: .address) ?? PushAddress()
-        self.deviceInfo = try container.decodeIfPresent(PushDeviceInfo.self, forKey: .deviceInfo) ?? PushDeviceInfo()
+        self.device_info = try container.decodeIfPresent(PushDeviceInformation.self, forKey: .device_info) ?? PushDeviceInformation()
+    }
+}
+
+public class PushDeviceInformation : Codable {
+    public var device_info: PushDeviceInfo = PushDeviceInfo()
+    public var user_device_id: String = ""
+    
+    public init() {
+        
+    }
+                    
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.device_info = try container.decodeIfPresent(PushDeviceInfo.self, forKey: .device_info) ?? PushDeviceInfo()
+        self.user_device_id = try container.decodeIfPresent(String.self, forKey: .user_device_id) ?? ""
     }
 }
