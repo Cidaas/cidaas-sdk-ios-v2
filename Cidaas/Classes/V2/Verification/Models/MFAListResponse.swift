@@ -25,7 +25,7 @@ public class MFAListResponse: Codable {
 
 public class MFAListResponseData : Codable {
     
-    public var user_infos: [UserInformation] = []
+    public var user_info: UserInformation = UserInformation()
     public var tenant_name: String = ""
     public var tenant_key: String = ""
     public var configured_list: [MFAConfiguredList] = []
@@ -36,7 +36,7 @@ public class MFAListResponseData : Codable {
     
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.user_infos = try container.decodeIfPresent([UserInformation].self, forKey: .user_infos) ?? []
+        self.user_info = try container.decodeIfPresent(UserInformation.self, forKey: .user_info) ?? UserInformation()
         self.tenant_name = try container.decodeIfPresent(String.self, forKey: .tenant_name) ?? ""
         self.tenant_key = try container.decodeIfPresent(String.self, forKey: .tenant_key) ?? ""
         self.configured_list = try container.decodeIfPresent([MFAConfiguredList].self, forKey: .configured_list) ?? []
