@@ -60,4 +60,8 @@ public class VerificationViewController {
     public func getConfiguredList(incomingData: MFAListRequest, callback: @escaping (Result<MFAListResponse>) -> Void) {
         VerificationInteractor.shared.getConfiguredList(incomingData: incomingData, callback: callback)
     }
+    
+    public func getPendingNotificationList(incomingData: PendingNotificationRequest, callback: @escaping (Result<PendingNotificationResponse>) -> Void) {
+        VerificationInteractor.shared.getPendingNotificationList(incomingData: incomingData, callback: callback)
+    }
 }

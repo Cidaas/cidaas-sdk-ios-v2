@@ -43,7 +43,11 @@ public class Verification {
         VerificationViewController.shared.delete(incomingData: deleteRequest, callback: callback)
     }
     
-    public func getConfiguredList(deleteRequest: MFAListRequest, callback:@escaping (Result<MFAListResponse>) -> Void) {
-        VerificationViewController.shared.getConfiguredList(incomingData: deleteRequest, callback: callback)
+    public func getConfiguredList(mfaListRequest: MFAListRequest, callback:@escaping (Result<MFAListResponse>) -> Void) {
+        VerificationViewController.shared.getConfiguredList(incomingData: mfaListRequest, callback: callback)
+    }
+    
+    public func getPendingNotificationList(pendingNotificationRequest: PendingNotificationRequest, callback:@escaping (Result<PendingNotificationResponse>) -> Void) {
+        VerificationViewController.shared.getPendingNotificationList(incomingData: pendingNotificationRequest, callback: callback)
     }
 }

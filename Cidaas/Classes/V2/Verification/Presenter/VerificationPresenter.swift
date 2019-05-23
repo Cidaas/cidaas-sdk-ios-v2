@@ -250,4 +250,28 @@ public class VerificationPresenter {
             }
         }
     }
+    
+    public func getPendingNotificationList(pendingNotificationListResponse: String?, errorResponse: WebAuthError?, callback: @escaping (Result<PendingNotificationResponse>) -> Void) {
+        if errorResponse != nil {
+            logw(errorResponse!.errorMessage, cname: "cidaas-sdk-verification-error-log")
+            callback(Result.failure(error: errorResponse!))
+        }
+        else {
+            let decoder = JSONDecoder()
+            do {
+                let data = pendingNotificationListResponse!.data(using: .utf8)!
+                // decode the json data to object
+                let pendingNotificationResp = try decoder.decode(PendingNotificationResponse.self, from: data)
+                
+                logw(pendingNotificationListResponse ?? "Empty response string", cname: "cidaas-sdk-verification-success-log")
+                // return success
+                callback(Result.success(result: pendingNotificationResp))
+            }
+            catch(let error) {
+                // return failure
+                logw("\(String(describing: error)) JSON parsing issue, Response: \(String(describing: pendingNotificationListResponse))", cname: "cidaas-sdk-verification-error-log")
+                callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: 400, errorMessage: error.localizedDescription, statusCode: 400)))
+            }
+        }
+    }
 }

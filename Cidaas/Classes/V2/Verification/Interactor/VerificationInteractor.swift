@@ -233,6 +233,28 @@ public class VerificationInteractor {
         }
     }
     
+    public func getPendingNotificationList(incomingData: PendingNotificationRequest, callback: @escaping (Result<PendingNotificationResponse>) -> Void) {
+        // validation
+        if (incomingData.client_id == "" || incomingData.sub == "") {
+            // send response to presenter
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "client_id or sub cannot be empty", statusCode: 417)
+            VerificationPresenter.shared.getPendingNotificationList(pendingNotificationListResponse: nil, errorResponse: error, callback: callback)
+        }
+        
+        // get saved properties
+        let savedProp = getProperties()
+        if (savedProp == nil) {
+            // send response to presenter
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
+            VerificationPresenter.shared.getPendingNotificationList(pendingNotificationListResponse: nil, errorResponse: error, callback: callback)
+        }
+        
+        // call worker
+        VerificationServiceWorker.shared.getPendingNotificationList(incomingData: incomingData, properties: savedProp!) { response, error in
+            VerificationPresenter.shared.getPendingNotificationList(pendingNotificationListResponse: response, errorResponse: error, callback: callback)
+        }
+    }
+    
     func getProperties() -> Dictionary<String, String>? {
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
