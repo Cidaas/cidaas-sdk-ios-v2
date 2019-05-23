@@ -22,6 +22,7 @@ public class VerificationURLHelper {
     public var deleteURL: String = "/verification-srv/v2/setup/device/configured/remove/"
     public var configuredListURL: String = "/verification-srv/v2/setup/device/configured/list"
     public var pendingNotificationListURL: String = "/verification-srv/v2/setup/device/pending/auth/list"
+    public var authenticatedHistoryURL: String = "/verification-srv/v2/setup/device/authenticated/list"
     
     public func getScannedURL(verificationType: String) -> String {
         return scannedURL + verificationType
@@ -65,5 +66,9 @@ public class VerificationURLHelper {
     
     public func getPendingNotificationListURL() -> String {
         return pendingNotificationListURL
+    }
+    
+    public func getAuthenticatedHistoryListURL() -> String {
+        return authenticatedHistoryURL
     }
 }

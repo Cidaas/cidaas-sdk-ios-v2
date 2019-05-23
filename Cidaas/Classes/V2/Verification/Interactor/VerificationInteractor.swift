@@ -255,6 +255,28 @@ public class VerificationInteractor {
         }
     }
     
+    public func getAuthenticatedHistoryList(incomingData: AuthenticatedHistoryRequest, callback: @escaping (Result<AuthenticatedHistoryResponse>) -> Void) {
+        // validation
+        if (incomingData.client_id == "" || incomingData.sub == "") {
+            // send response to presenter
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "client_id or sub cannot be empty", statusCode: 417)
+            VerificationPresenter.shared.getAuthenticatedHistoryList(authenticatedHistoryListResponse: nil, errorResponse: error, callback: callback)
+        }
+        
+        // get saved properties
+        let savedProp = getProperties()
+        if (savedProp == nil) {
+            // send response to presenter
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
+            VerificationPresenter.shared.getAuthenticatedHistoryList(authenticatedHistoryListResponse: nil, errorResponse: error, callback: callback)
+        }
+        
+        // call worker
+        VerificationServiceWorker.shared.getAuthenticatedHistoryList(incomingData: incomingData, properties: savedProp!) { response, error in
+            VerificationPresenter.shared.getAuthenticatedHistoryList(authenticatedHistoryListResponse: response, errorResponse: error, callback: callback)
+        }
+    }
+    
     func getProperties() -> Dictionary<String, String>? {
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {

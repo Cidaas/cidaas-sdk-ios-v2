@@ -28,6 +28,7 @@ public class PushNotificationEntity : Codable {
     public var expires_at : String = ""
     public var tenant_key : String = ""
     public var tenant_name : String = ""
+    public var request_time: Int64 = 0
     public var requested_types : [String] = []
     
     public init() {
@@ -57,6 +58,7 @@ public class PushNotificationEntity : Codable {
         self.tenant_key = try container.decodeIfPresent(String.self, forKey: .tenant_key) ?? ""
         self.tenant_name = try container.decodeIfPresent(String.self, forKey: .tenant_name) ?? ""
         self.requested_types = try container.decodeIfPresent([String].self, forKey: .requested_types) ?? []
+        self.request_time = try container.decodeIfPresent(Int64.self, forKey: .request_time) ?? 0
     }
 }
 
@@ -73,6 +75,10 @@ public class PushDeviceInfo : Codable {
     public var pushNotificationId: String = ""
     public var deviceId: String = ""
     
+    public var lat: String = ""
+    public var lon: String = ""
+    public var purpose: String = ""
+    
     public init() {
         
     }
@@ -88,6 +94,10 @@ public class PushDeviceInfo : Codable {
         self.sub = try container.decodeIfPresent(String.self, forKey: .sub) ?? ""
         self.ipAddress = try container.decodeIfPresent(String.self, forKey: .ipAddress) ?? ""
         self.pushNotificationId = try container.decodeIfPresent(String.self, forKey: .pushNotificationId) ?? ""
+        
+        self.lat = try container.decodeIfPresent(String.self, forKey: .lat) ?? ""
+        self.lon = try container.decodeIfPresent(String.self, forKey: .lon) ?? ""
+        self.purpose = try container.decodeIfPresent(String.self, forKey: .purpose) ?? ""
     }
 }
 

@@ -274,4 +274,29 @@ public class VerificationPresenter {
             }
         }
     }
+    
+    public func getAuthenticatedHistoryList(authenticatedHistoryListResponse: String?, errorResponse: WebAuthError?, callback: @escaping (Result<AuthenticatedHistoryResponse>) -> Void) {
+        if errorResponse != nil {
+            logw(errorResponse!.errorMessage, cname: "cidaas-sdk-verification-error-log")
+            callback(Result.failure(error: errorResponse!))
+        }
+        else {
+            let decoder = JSONDecoder()
+            do {
+                let data = authenticatedHistoryListResponse!.data(using: .utf8)!
+                // decode the json data to object
+                let authResp = try decoder.decode(AuthenticatedHistoryResponse.self, from: data)
+                
+                logw(authenticatedHistoryListResponse ?? "Empty response string", cname: "cidaas-sdk-verification-success-log")
+                // return success
+                callback(Result.success(result: authResp))
+            }
+            catch(let error) {
+                // return failure
+                logw("\(String(describing: error)) JSON parsing issue, Response: \(String(describing: authenticatedHistoryListResponse))", cname: "cidaas-sdk-verification-error-log")
+                callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: 400, errorMessage: error.localizedDescription, statusCode: 400)))
+            }
+        }
+    }
+    
 }

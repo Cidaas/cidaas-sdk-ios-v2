@@ -490,6 +490,38 @@ public class VerificationServiceWorker {
         }
     }
     
+    public func getAuthenticatedHistoryList(incomingData: AuthenticatedHistoryRequest, properties: Dictionary<String, String>, callback: @escaping (String?, WebAuthError?) -> Void) {
+        var urlString : String
+        
+        // assign base url
+        let baseURL = (properties["DomainURL"])!
+        
+        // construct scanned url
+        urlString = baseURL + VerificationURLHelper.shared.getAuthenticatedHistoryListURL()
+        
+        // construct device details
+        let deviceInfo = DBHelper.shared.getDeviceInfo()
+        let push_id = DBHelper.shared.getFCM()
+        incomingData.device_id = deviceInfo.deviceId
+        incomingData.push_id = push_id
+        
+        // construct body params
+        var bodyParams = Dictionary<String, Any>()
+        do {
+            let encoder = JSONEncoder()
+            let data = try encoder.encode(incomingData)
+            bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+        }
+        catch(_) {
+            callback(nil, WebAuthError.shared.conversionException())
+            return
+        }
+        
+        sessionManager.request(urlString, method: .post, parameters: bodyParams, encoding: JSONEncoding.default).validate().responseString { response in
+            self.responseRedirect(response: response, callback: callback)
+        }
+    }
+    
     public func responseRedirect(response: DataResponse<String>, callback: @escaping (String?, WebAuthError?) -> Void) {
         switch response.result {
         case .success:

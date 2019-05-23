@@ -64,4 +64,8 @@ public class VerificationViewController {
     public func getPendingNotificationList(incomingData: PendingNotificationRequest, callback: @escaping (Result<PendingNotificationResponse>) -> Void) {
         VerificationInteractor.shared.getPendingNotificationList(incomingData: incomingData, callback: callback)
     }
+    
+    public func getAuthenticatedHistoryList(incomingData: AuthenticatedHistoryRequest, callback: @escaping (Result<AuthenticatedHistoryResponse>) -> Void) {
+        VerificationInteractor.shared.getAuthenticatedHistoryList(incomingData: incomingData, callback: callback)
+    }
 }
