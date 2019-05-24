@@ -58,6 +58,8 @@ public class MFAConfiguredList: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.configured_at = try container.decodeIfPresent(String.self, forKey: .configured_at) ?? ""
         self.verification_type = try container.decodeIfPresent(String.self, forKey: .verification_type) ?? ""
+        self.sub = try container.decodeIfPresent(String.self, forKey: .sub) ?? ""
+        self.totp_secret = try container.decodeIfPresent(String.self, forKey: .totp_secret) ?? ""
     }
 }
 
