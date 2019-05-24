@@ -13,13 +13,13 @@ public class MFAListResponse: Codable {
     
     public var success: Bool = false
     public var status: Int32 = 0
-    public var data: [MFAListResponseData] = []
+    public var data: MFAListResponseData = MFAListResponseData()
     
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.success = try container.decodeIfPresent(Bool.self, forKey: .success) ?? false
         self.status = try container.decodeIfPresent(Int32.self, forKey: .status) ?? 0
-        self.data = try container.decodeIfPresent([MFAListResponseData].self, forKey: .data) ?? []
+        self.data = try container.decodeIfPresent(MFAListResponseData.self, forKey: .data) ?? MFAListResponseData()
     }
 }
 
