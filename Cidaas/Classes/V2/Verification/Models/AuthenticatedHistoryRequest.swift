@@ -17,7 +17,7 @@ public class AuthenticatedHistoryRequest: Codable {
     public var sub: String = ""
     public var skip: Int16 = 0
     public var take: Int16 = 0
-    public var verificationType: String = ""
+    public var verification_type: String = ""
     public var start_time: String = ""
     public var end_time: String = ""
 }
