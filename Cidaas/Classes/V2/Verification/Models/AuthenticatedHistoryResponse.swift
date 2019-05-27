@@ -26,10 +26,10 @@ public class AuthenticatedHistoryResponse: Codable {
 
 public class AuthenticatedHistoryResponseData: Codable {
     public var sub : String = ""
-    public var status_id: String = ""
-    public var device_info: PushDeviceInfo = PushDeviceInfo()
-    public var address: PushAddress = PushAddress()
-    public var auth_time: Date = Date()
+    public var _id: String = ""
+    public var device_info: PushDeviceInformation = PushDeviceInformation()
+    public var location_details: LocationDetails = LocationDetails()
+    public var auth_time: String = ""
     
     public init() {
         
@@ -38,9 +38,61 @@ public class AuthenticatedHistoryResponseData: Codable {
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.sub = try container.decodeIfPresent(String.self, forKey: .sub) ?? ""
-        self.status_id = try container.decodeIfPresent(String.self, forKey: .status_id) ?? ""
-        self.device_info = try container.decodeIfPresent(PushDeviceInfo.self, forKey: .device_info) ?? PushDeviceInfo()
+        self._id = try container.decodeIfPresent(String.self, forKey: ._id) ?? ""
+        self.device_info = try container.decodeIfPresent(PushDeviceInformation.self, forKey: .device_info) ?? PushDeviceInformation()
+        self.auth_time = try container.decodeIfPresent(String.self, forKey: .auth_time) ?? ""
+        self.location_details = try container.decodeIfPresent(LocationDetails.self, forKey: .location_details) ?? LocationDetails()
+    }
+}
+
+public class LocationDetails: Codable {
+    
+    public var ipaddress_info: IPAddressDetails = IPAddressDetails()
+    public var _id: String = ""
+    public var createdTime: String = ""
+    public var updatedTime: String = ""
+    
+    public init() {
+        
+    }
+    
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.ipaddress_info = try container.decodeIfPresent(IPAddressDetails.self, forKey: .ipaddress_info) ?? IPAddressDetails()
+        self._id = try container.decodeIfPresent(String.self, forKey: ._id) ?? ""
+        self.createdTime = try container.decodeIfPresent(String.self, forKey: .createdTime) ?? ""
+        self.updatedTime = try container.decodeIfPresent(String.self, forKey: .updatedTime) ?? ""
+    }
+}
+
+public class IPAddressDetails: Codable {
+    public var ipAddress: String = ""
+    public var location: Location = Location()
+    
+    public init() {
+        
+    }
+    
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.ipAddress = try container.decodeIfPresent(String.self, forKey: .ipAddress) ?? ""
+        self.location = try container.decodeIfPresent(Location.self, forKey: .location) ?? Location()
+    }
+}
+
+public class Location: Codable {
+    public var address: PushAddress = PushAddress()
+    public var lat: String = ""
+    public var lon: String = ""
+    
+    public init() {
+        
+    }
+    
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
         self.address = try container.decodeIfPresent(PushAddress.self, forKey: .address) ?? PushAddress()
-        self.auth_time = try container.decodeIfPresent(Date.self, forKey: .auth_time) ?? Date()
+        self.lat = try container.decodeIfPresent(String.self, forKey: .lat) ?? ""
+        self.lon = try container.decodeIfPresent(String.self, forKey: .lon) ?? ""
     }
 }

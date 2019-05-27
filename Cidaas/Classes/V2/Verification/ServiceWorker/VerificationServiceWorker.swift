@@ -17,6 +17,7 @@ public class VerificationServiceWorker {
     public init() {
         // custom headers
         headers = Alamofire.SessionManager.defaultHTTPHeaders
+        headers["User-Agent"] = CidaasUserAgentBuilder.shared.UAString()
         
         // configuration
         let configuration = URLSessionConfiguration.default
