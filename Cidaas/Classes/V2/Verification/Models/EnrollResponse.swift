@@ -32,7 +32,7 @@ public class EnrollResponseData: Codable {
     public var status_id: String = ""
     
     public var enrolled: Bool?
-    public var meta: EnrollResponseMetaData?
+    
     
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -40,7 +40,6 @@ public class EnrollResponseData: Codable {
         self.sub = try container.decodeIfPresent(String.self, forKey: .sub) ?? ""
         self.status_id = try container.decodeIfPresent(String.self, forKey: .status_id) ?? ""
         self.enrolled = try container.decodeIfPresent(Bool.self, forKey: .enrolled) ?? false
-        self.meta = try container.decodeIfPresent(EnrollResponseMetaData.self, forKey: .meta) ?? EnrollResponseMetaData()
     }
 }
 

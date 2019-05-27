@@ -46,6 +46,7 @@ public class ErrorResponseDataEntity : Codable {
     public var status: Int16 = 400
     public var referenceNumber: String = ""
     public var error: String = ""
+    public var metadata: MetadataInfo = MetadataInfo()
     
     
     // Constructors
@@ -69,5 +70,19 @@ public class ErrorResponseDataEntity : Codable {
         self.status = try container.decodeIfPresent(Int16.self, forKey: .status) ?? 400
         self.referenceNumber = try container.decodeIfPresent(String.self, forKey: .referenceNumber) ?? ""
         self.error = try container.decodeIfPresent(String.self, forKey: .error) ?? ""
+    }
+}
+
+public class MetadataInfo:Codable {
+    
+    public var meta: EnrollResponseMetaData = EnrollResponseMetaData()
+    
+    public init() {
+        
+    }
+    
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.meta = try container.decodeIfPresent(EnrollResponseMetaData.self, forKey: .meta) ?? EnrollResponseMetaData()
     }
 }
