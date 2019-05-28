@@ -70,6 +70,7 @@ public class ErrorResponseDataEntity : Codable {
         self.status = try container.decodeIfPresent(Int16.self, forKey: .status) ?? 400
         self.referenceNumber = try container.decodeIfPresent(String.self, forKey: .referenceNumber) ?? ""
         self.error = try container.decodeIfPresent(String.self, forKey: .error) ?? ""
+        self.metadata = try container.decodeIfPresent(MetadataInfo.self, forKey: .metadata) ?? MetadataInfo()
     }
 }
 
