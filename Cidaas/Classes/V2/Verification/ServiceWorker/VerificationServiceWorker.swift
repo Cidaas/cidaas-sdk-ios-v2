@@ -562,12 +562,15 @@ public class VerificationServiceWorker {
             if response.response?.statusCode == 200 && response.result.value != nil {
                 callback(response.result.value, nil)
             }
+            else if response.response?.statusCode == 204 {
+                callback(nil, WebAuthError.shared.serviceFailureException(errorCode: 204, errorMessage: "No data found", statusCode: response.response?.statusCode ?? 400))
+            }
             else if response.data != nil {
                 let dataResponse = String(decoding: response.data!, as: UTF8.self)
-                callback(nil, WebAuthError.shared.serviceFailureException(errorCode: 400, errorMessage: dataResponse, statusCode: 400, error: string2error(string: dataResponse)))
+                callback(nil, WebAuthError.shared.serviceFailureException(errorCode: 400, errorMessage: dataResponse, statusCode: response.response?.statusCode ?? 400, error: string2error(string: dataResponse)))
             }
             else {
-                callback(nil, WebAuthError.shared.serviceFailureException(errorCode: 400, errorMessage: response.description, statusCode: 400))
+                callback(nil, WebAuthError.shared.serviceFailureException(errorCode: 400, errorMessage: response.description, statusCode: response.response?.statusCode ?? 400))
             }
             break
         case .failure(let error):
@@ -578,10 +581,10 @@ public class VerificationServiceWorker {
             }
             else if response.data != nil {
                 let dataResponse = String(decoding: response.data!, as: UTF8.self)
-                callback(nil, WebAuthError.shared.serviceFailureException(errorCode: 400, errorMessage: dataResponse, statusCode: 400, error: string2error(string: dataResponse)))
+                callback(nil, WebAuthError.shared.serviceFailureException(errorCode: 400, errorMessage: dataResponse, statusCode: response.response?.statusCode ?? 400, error: string2error(string: dataResponse)))
             }
             else {
-                callback(nil, WebAuthError.shared.serviceFailureException(errorCode: 500, errorMessage: error.localizedDescription, statusCode: 500))
+                callback(nil, WebAuthError.shared.serviceFailureException(errorCode: 500, errorMessage: error.localizedDescription, statusCode: response.response?.statusCode ?? 400))
             }
             break
         }

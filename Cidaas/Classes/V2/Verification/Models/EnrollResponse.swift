@@ -50,6 +50,15 @@ public class EnrollResponseMetaData : Codable {
     public var number_images_needed: Int32?
     public var number_images_uploaded: Int32?
     
+    public var number_voices_needed: Int32?
+    public var number_voices_uploaded: Int32?
+    public var score: Int32?
+    public var status_code: Int32?
+    
+    public var voice_found: Bool?
+    public var more_than_one_voice_found: Bool?
+    public var error: String?
+    
     // Constructors
     public init() {
         
@@ -60,5 +69,12 @@ public class EnrollResponseMetaData : Codable {
         self.comment = try container.decodeIfPresent(String.self, forKey: .comment)
         self.number_images_needed = try container.decodeIfPresent(Int32.self, forKey: .number_images_needed)
         self.number_images_uploaded = try container.decodeIfPresent(Int32.self, forKey: .number_images_uploaded)
+        self.number_voices_needed = try container.decodeIfPresent(Int32.self, forKey: .number_voices_needed)
+        self.number_voices_uploaded = try container.decodeIfPresent(Int32.self, forKey: .number_voices_uploaded)
+        self.score = try container.decodeIfPresent(Int32.self, forKey: .score)
+        self.status_code = try container.decodeIfPresent(Int32.self, forKey: .status_code)
+        self.voice_found = try container.decodeIfPresent(Bool.self, forKey: .voice_found)
+        self.more_than_one_voice_found = try container.decodeIfPresent(Bool.self, forKey: .more_than_one_voice_found)
+        self.error = try container.decodeIfPresent(String.self, forKey: .error)
     }
 }
