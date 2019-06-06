@@ -15,9 +15,14 @@ public class VerificationServiceWorker {
     public var sessionManager: SessionManager
     
     public init() {
+        
+        let location = DBHelper.shared.getLocation()
+        
         // custom headers
         headers = Alamofire.SessionManager.defaultHTTPHeaders
         headers["User-Agent"] = CidaasUserAgentBuilder.shared.UAString()
+        headers["lat"] = location.0
+        headers["lon"] = location.1
         
         // configuration
         let configuration = URLSessionConfiguration.default
