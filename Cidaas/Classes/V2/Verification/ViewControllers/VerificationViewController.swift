@@ -11,6 +11,10 @@ public class VerificationViewController {
 
     public static var shared: VerificationViewController = VerificationViewController()
     
+    public func setup(verificationType: String, incomingData: SetupRequest, callback: @escaping (Result<SetupResponse>) -> Void) {
+        VerificationInteractor.shared.setup(verificationType: verificationType, incomingData: incomingData, callback: callback)
+    }
+    
     public func scanned(verificationType: String, incomingData: ScannedRequest, callback: @escaping (Result<ScannedResponse>) -> Void) {
         VerificationInteractor.shared.scanned(verificationType: verificationType, incomingData: incomingData, callback: callback)
     }
@@ -73,5 +77,9 @@ public class VerificationViewController {
         let incomingData = UpdateFCMRequest()
         incomingData.push_id = push_id
         VerificationInteractor.shared.updateFCM(incomingData: incomingData)
+    }
+    
+    public func configure(incomingData: ConfigureRequest, callback: @escaping (Result<EnrollResponse>) -> Void) {
+        VerificationInteractor.shared.configure(incomingData: incomingData, callback: callback)
     }
 }

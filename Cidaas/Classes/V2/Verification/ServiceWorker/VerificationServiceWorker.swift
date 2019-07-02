@@ -32,11 +32,46 @@ public class VerificationServiceWorker {
         sessionManager = Alamofire.SessionManager(configuration: configuration)
     }
     
+    public func setup(verificationType: String, incomingData: SetupRequest, properties: Dictionary<String, String>, callback: @escaping (String?, WebAuthError?) -> Void) {
+        var urlString : String
+        
+        // assign base url
+        let baseURL = (properties["DomainURL"])!
+        
+        // construct scanned url
+        urlString = baseURL + VerificationURLHelper.shared.getSetupURL(verificationType: verificationType)
+        
+        // construct device details
+        let deviceInfo = DBHelper.shared.getDeviceInfo()
+        let push_id = DBHelper.shared.getFCM()
+        incomingData.device_id = deviceInfo.deviceId
+        incomingData.push_id = push_id
+        
+        // construct body params
+        var bodyParams = Dictionary<String, Any>()
+        do {
+            let encoder = JSONEncoder()
+            let data = try encoder.encode(incomingData)
+            bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+        }
+        catch(_) {
+            callback(nil, WebAuthError.shared.conversionException())
+            return
+        }
+        
+        headers["access_token"] = incomingData.access_token
+        
+        sessionManager.request(urlString, method: .post, parameters: bodyParams, encoding: JSONEncoding.default, headers: headers).validate().responseString { response in
+            self.responseRedirect(response: response, callback: callback)
+        }
+    }
+    
     public func scanned(verificationType: String, incomingData: ScannedRequest, properties: Dictionary<String, String>, callback: @escaping (String?, WebAuthError?) -> Void) {
         var urlString : String
         
         // assign base url
         let baseURL = (properties["DomainURL"])!
+        incomingData.client_id = (properties["ClientId"])!
         
         // construct scanned url
         urlString = baseURL + VerificationURLHelper.shared.getScannedURL(verificationType: verificationType)
@@ -69,6 +104,7 @@ public class VerificationServiceWorker {
         
         // assign base url
         let baseURL = (properties["DomainURL"])!
+        incomingData.client_id = (properties["ClientId"])!
         
         // construct scanned url
         urlString = baseURL + VerificationURLHelper.shared.getEnrolledURL(verificationType: verificationType)
@@ -189,6 +225,7 @@ public class VerificationServiceWorker {
         
         // assign base url
         let baseURL = (properties["DomainURL"])!
+        incomingData.client_id = (properties["ClientId"])!
         
         // construct scanned url
         urlString = baseURL + VerificationURLHelper.shared.getPushAcknowledgeURL(verificationType: verificationType)
@@ -221,6 +258,7 @@ public class VerificationServiceWorker {
         
         // assign base url
         let baseURL = (properties["DomainURL"])!
+        incomingData.client_id = (properties["ClientId"])!
         
         // construct scanned url
         urlString = baseURL + VerificationURLHelper.shared.getPushAllowURL(verificationType: verificationType)
@@ -253,6 +291,7 @@ public class VerificationServiceWorker {
         
         // assign base url
         let baseURL = (properties["DomainURL"])!
+        incomingData.client_id = (properties["ClientId"])!
         
         // construct scanned url
         urlString = baseURL + VerificationURLHelper.shared.getPushRejectURL(verificationType: verificationType)
@@ -285,6 +324,7 @@ public class VerificationServiceWorker {
         
         // assign base url
         let baseURL = (properties["DomainURL"])!
+        incomingData.client_id = (properties["ClientId"])!
         
         // construct scanned url
         urlString = baseURL + VerificationURLHelper.shared.getAuthenticateURL(verificationType: verificationType)
@@ -372,6 +412,7 @@ public class VerificationServiceWorker {
         
         // assign base url
         let baseURL = (properties["DomainURL"])!
+        incomingData.client_id = (properties["ClientId"])!
         
         // construct device details
         let deviceInfo = DBHelper.shared.getDeviceInfo()
@@ -404,6 +445,7 @@ public class VerificationServiceWorker {
         
         // assign base url
         let baseURL = (properties["DomainURL"])!
+        incomingData.client_id = (properties["ClientId"])!
         
         // construct device details
         let deviceInfo = DBHelper.shared.getDeviceInfo()
@@ -437,6 +479,7 @@ public class VerificationServiceWorker {
         
         // assign base url
         let baseURL = (properties["DomainURL"])!
+        incomingData.client_id = (properties["ClientId"])!
         
         // construct scanned url
         urlString = baseURL + VerificationURLHelper.shared.getConfiguredListURL()
@@ -469,6 +512,7 @@ public class VerificationServiceWorker {
         
         // assign base url
         let baseURL = (properties["DomainURL"])!
+        incomingData.client_id = (properties["ClientId"])!
         
         // construct scanned url
         urlString = baseURL + VerificationURLHelper.shared.getPendingNotificationListURL()
@@ -501,6 +545,7 @@ public class VerificationServiceWorker {
         
         // assign base url
         let baseURL = (properties["DomainURL"])!
+        incomingData.client_id = (properties["ClientId"])!
         
         // construct scanned url
         urlString = baseURL + VerificationURLHelper.shared.getAuthenticatedHistoryListURL()
@@ -533,6 +578,7 @@ public class VerificationServiceWorker {
         
         // assign base url
         let baseURL = (properties["DomainURL"])!
+        incomingData.client_id = (properties["ClientId"])!
         
         // construct scanned url
         urlString = baseURL + VerificationURLHelper.shared.getUpdateFCMURL()

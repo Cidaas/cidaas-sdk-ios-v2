@@ -43,114 +43,29 @@ class ViewController: UIViewController, WKNavigationDelegate, CidaasLoaderDelega
         
 //    pushAcknowledge(exchange_id: "461c0dae-a11c-4e4c-adbb-250128295933")
         
-        scanned(exchange_id: "41cac32f-bf5e-4199-90da-a1794c62f5fa")
+        setup()
+        
+        
+//        scanned(exchange_id: "41cac32f-bf5e-4199-90da-a1794c62f5fa")
 //     enroll(exchange_id: "dd54df80-bd28-4eda-99fb-d66dbeed8208")
 //        pushAcknowledge(exchange_id: "0cd6caec-24d0-4930-b282-7686f1c7f9cf")
     }
     
-    func getTotp() {
-        var url="otpauth://totp/Cidaas%20Developers:Ganesh%20Kumar?issuer=test&secret=KNJC6SSXHBXVGUSDMY2CMYJEJRZWMJDJ"
-        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (timer) in
-            var totp = TOTPVerificationController.shared.gettingTOTPCode(url: URL(string: url)!)
-            print(totp.totp_string + " - " + totp.timer_count)
-        }
-    }
-    
-    
-    func scanned(exchange_id: String) {
-        let incomingData = ScannedRequest()
-        incomingData.client_id = "938c570e-7728-4fa3-b62f-5167f722c788"
-        incomingData.exchange_id = exchange_id
-        incomingData.sub = "93f68178-0d42-4f4e-896d-c758c71ccffa"
+    func setup() {
+        let setupRequest = ConfigureRequest()
+        setupRequest.verificationType = "PATTERN"
+        setupRequest.pass_code = "RED123"
+        setupRequest.access_token = "eyJhbGciOiJSUzI1NiIsImtpZCI6ImQ2M2ExOGU0LWI1NzMtNGJlNy1iYzM2LTNiM2RiMTUzNWExMiJ9.eyJzaWQiOiJhMmI4ZTlkZi00YzQ3LTRhYWQtYjRiNy00ZGU5NjYzNDcyYmEiLCJzdWIiOiI0OWViNTBlOS1jZjBhLTQxNDgtYjc0NC03YzNiZjBmYzkyNDciLCJpc3ViIjoiMTc5MjYwMzAtMzRlZC00MTQ2LWFkYzktZDhkODUwZWIyZmVlIiwiYXVkIjoiYzE3YzZmMmEtNDcyOS00Y2YzLTg5NjMtNzZmYjNmYzBjYzQ5IiwiaWF0IjoxNTYxOTYzMjg1LCJhdXRoX3RpbWUiOjE1NjE5NjMyODUsImlzcyI6Imh0dHBzOi8vbmlnaHRseWJ1aWxkLmNpZGFhcy5kZSIsImp0aSI6IjViOTk1ZGM2LWE0Y2YtNDJmMy1iODVkLTYxZDc1OTRkYzM5NyIsInNjb3BlcyI6W10sInJvbGVzIjpbIlVTRVIiXSwiZ3JvdXBzIjpbeyJyb2xlcyI6WyJTRUNPTkRBUllfQURNSU4iXSwiX2lkIjoiODdlMzczYzUtYWI0NS00MDc1LTk2NmItMTdkM2JkYTM1M2RlIiwiZ3JvdXBJZCI6IkNJREFBU19BRE1JTlMiLCJpZCI6Ijg3ZTM3M2M1LWFiNDUtNDA3NS05NjZiLTE3ZDNiZGEzNTNkZSJ9XSwiZXhwIjoxNTYyMDQ5Njg1fQ.gs9U6c5GwrdyCMSbdzW7BRJdDQjmf0ipM_DiZV2ws7UBs_OcAWVviYv_hh0NDYElTyunfO7fKgEmnRL5JsrD2_doqZBwC20MsXBvEQTUbVvXEnXcrl51Ib0m-EobqSbTzJ0F_hI3GCRjexIvJoMjGs60ZCrxk0QleqJR5J4FAsU"
         
-        Cidaas.shared.setFCMToken(fcmToken: "cS7fVZg5hFs:APA91bFKbzKiS18c46YLA8XNq71gVZQ2mWGGnkkwAFRp3kJshvhMaITLpc4Oa-jWJueU-r64J47l-6jwWS2zDIF97u1uUxOBqv7EwBsyxkror_sxSSthIMYc_9ClJdmjpoL6PzIxs1wL")
+        cidaas.setFCMToken(sub: "", fcmToken: "eoR95tONqJQ:APA91bFRxFaVD1ZXUw_ThJ_3YoFxw97fgoYhlU0fXBP5arZ7IZ6-FNVPogbTw_-mEK8abV8Pl50-fcIitYwZAK8JN9IHdd8yL-pWpIV-C9l3MY-jHlZ9ITocjO3Z220NaqoY3twt2WU7")
         
-        Cidaas.verification.scanned(verificationType: VerificationTypes.PATTERN.rawValue, scannedRequest: incomingData) {
+        Cidaas.verification.configure(configureRequest: setupRequest) {
             switch $0 {
-            case .success(let result):
-                print(result.data.exchange_id.exchange_id)
-//                self.enroll(exchange_id: result.data.exchange_id.exchange_id)
+            case .success(let successResponse):
+                print(successResponse.data.sub)
                 break
-            case .failure(let error):
-                print(error)
-                break
-            }
-        }
-    }
-    
-    func enroll(exchange_id: String) {
-        let incomingData = EnrollRequest()
-        incomingData.client_id = "938c570e-7728-4fa3-b62f-5167f722c788"
-        incomingData.exchange_id = exchange_id
-        incomingData.pass_code = "RED-1234"
-        
-        Cidaas.verification.enroll(verificationType: VerificationTypes.PATTERN.rawValue, enrollRequest: incomingData) {
-            switch $0 {
-            case .success(let result):
-                print(result.data.exchange_id.exchange_id)
-                break
-            case .failure(let error):
-                print(error)
-                break
-            }
-        }
-    }
-    
-    func pushAcknowledge(exchange_id: String) {
-        let incomingData = PushAcknowledgeRequest()
-        incomingData.client_id = "938c570e-7728-4fa3-b62f-5167f722c788"
-        incomingData.exchange_id = exchange_id
-        
-        Cidaas.shared.setFCMToken(fcmToken: "cS7fVZg5hFs:APA91bFKbzKiS18c46YLA8XNq71gVZQ2mWGGnkkwAFRp3kJshvhMaITLpc4Oa-jWJueU-r64J47l-6jwWS2zDIF97u1uUxOBqv7EwBsyxkror_sxSSthIMYc_9ClJdmjpoL6PzIxs1wL")
-        
-        Cidaas.verification.pushAcknowledge(verificationType: VerificationTypes.PATTERN.rawValue, pushAckRequest: incomingData) {
-            switch $0 {
-            case .success(let result):
-                self.pushAllow(exchange_id: result.data.exchange_id.exchange_id)
-                print(result)
-                break
-            case .failure(let error):
-                print(error)
-                break
-            }
-        }
-    }
-    
-    func pushAllow(exchange_id: String) {
-        let incomingData = PushAllowRequest()
-        incomingData.client_id = "938c570e-7728-4fa3-b62f-5167f722c788"
-        incomingData.exchange_id = exchange_id
-        
-        Cidaas.shared.setFCMToken(fcmToken: "cS7fVZg5hFs:APA91bFKbzKiS18c46YLA8XNq71gVZQ2mWGGnkkwAFRp3kJshvhMaITLpc4Oa-jWJueU-r64J47l-6jwWS2zDIF97u1uUxOBqv7EwBsyxkror_sxSSthIMYc_9ClJdmjpoL6PzIxs1wL")
-        
-        Cidaas.verification.pushAllow(verificationType: VerificationTypes.PATTERN.rawValue, pushAllowRequest: incomingData) {
-            switch $0 {
-            case .success(let result):
-                self.authenticate(exchange_id: result.data.exchange_id.exchange_id)
-                print(result)
-                break
-            case .failure(let error):
-                print(error)
-                break
-            }
-        }
-    }
-    
-    func authenticate(exchange_id: String) {
-        let incomingData = AuthenticateRequest()
-        incomingData.client_id = "938c570e-7728-4fa3-b62f-5167f722c788"
-        incomingData.exchange_id = exchange_id
-        incomingData.pass_code = "RED-1234"
-        
-        Cidaas.shared.setFCMToken(fcmToken: "cS7fVZg5hFs:APA91bFKbzKiS18c46YLA8XNq71gVZQ2mWGGnkkwAFRp3kJshvhMaITLpc4Oa-jWJueU-r64J47l-6jwWS2zDIF97u1uUxOBqv7EwBsyxkror_sxSSthIMYc_9ClJdmjpoL6PzIxs1wL")
-        
-        Cidaas.verification.authenticate(verificationType: VerificationTypes.PATTERN.rawValue, authenticateRequest: incomingData) {
-            switch $0 {
-            case .success(let result):
-                print(result)
-                break
-            case .failure(let error):
-                print(error)
+            case .failure(let errorResponse):
+                print(errorResponse.errorMessage)
                 break
             }
         }

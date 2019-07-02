@@ -11,6 +11,7 @@ public class VerificationURLHelper {
     
     public static var shared : VerificationURLHelper = VerificationURLHelper()
     
+    public var setupURL: String = "/verification-srv/v2/setup/initiate/"
     public var scannedURL: String = "/verification-srv/v2/setup/scan/"
     public var enrolledURL: String = "/verification-srv/v2/setup/enroll/"
     public var initiateURL: String = "/verification-srv/v2/authenticate/initiate/"
@@ -24,6 +25,10 @@ public class VerificationURLHelper {
     public var pendingNotificationListURL: String = "/verification-srv/v2/setup/device/pending/auth/list"
     public var authenticatedHistoryURL: String = "/verification-srv/v2/setup/device/authenticated/list"
     public var fcmURL: String = "/verification-srv/v2/setup/device/update/pushid"
+    
+    public func getSetupURL(verificationType: String) -> String {
+        return setupURL + verificationType
+    }
     
     public func getScannedURL(verificationType: String) -> String {
         return scannedURL + verificationType

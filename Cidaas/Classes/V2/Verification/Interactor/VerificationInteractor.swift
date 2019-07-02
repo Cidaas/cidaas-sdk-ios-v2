@@ -13,11 +13,35 @@ public class VerificationInteractor {
     
     public static var shared: VerificationInteractor = VerificationInteractor()
     
+    public func setup(verificationType: String, incomingData: SetupRequest, callback: @escaping (Result<SetupResponse>) -> Void) {
+        // validation
+        if (verificationType == "" || (incomingData.access_token == "" && incomingData.sub == "")) {
+            // send response to presenter
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "verificationType or access_token or sub cannot be empty", statusCode: 417)
+            VerificationPresenter.shared.setup(setupResponse: nil, errorResponse: error, callback: callback)
+            return
+        }
+        
+        // get saved properties
+        let savedProp = getProperties()
+        if (savedProp == nil) {
+            // send response to presenter
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
+            VerificationPresenter.shared.setup(setupResponse: nil, errorResponse: error, callback: callback)
+            return
+        }
+        
+        // call worker
+        VerificationServiceWorker.shared.setup(verificationType: verificationType, incomingData: incomingData, properties: savedProp!) { response, error in
+            VerificationPresenter.shared.setup(setupResponse: response, errorResponse: error, callback: callback)
+        }
+    }
+    
     public func scanned(verificationType: String, incomingData: ScannedRequest, callback: @escaping (Result<ScannedResponse>) -> Void) {
         // validation
-        if (verificationType == "" || incomingData.client_id == "" || incomingData.exchange_id == "" || incomingData.sub == "") {
+        if (verificationType == "" || incomingData.exchange_id == "" || incomingData.sub == "") {
             // send response to presenter
-            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "verificationType or client_id or exchange_id or sub cannot be empty", statusCode: 417)
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "verificationType or exchange_id or sub cannot be empty", statusCode: 417)
             VerificationPresenter.shared.scanned(scannedResponse: nil, errorResponse: error, callback: callback)
             return
         }
@@ -39,9 +63,9 @@ public class VerificationInteractor {
     
     public func enroll(verificationType: String, photo: UIImage = UIImage(), voice: Data = Data(), incomingData: EnrollRequest, callback: @escaping (Result<EnrollResponse>) -> Void) {
         // validation
-        if (verificationType == "" || incomingData.client_id == "" || incomingData.exchange_id == "") {
+        if (verificationType == "" || incomingData.exchange_id == "") {
             // send response to presenter
-            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "verificationType or client_id or exchange_id or pass_code cannot be empty", statusCode: 417)
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "verificationType or exchange_id or pass_code cannot be empty", statusCode: 417)
             VerificationPresenter.shared.enroll(enrollResponse: nil, errorResponse: error, callback: callback)
             return
         }
@@ -63,9 +87,9 @@ public class VerificationInteractor {
     
     public func initiate(verificationType: String, incomingData: InitiateRequest, callback: @escaping (Result<InitiateResponse>) -> Void) {
         // validation
-        if (verificationType == "" || incomingData.sub == "" || incomingData.request_id == "" || incomingData.medium_id == "" || incomingData.usage_type == "") {
+        if (verificationType == "" || incomingData.sub == "" || incomingData.request_id == "" || incomingData.usage_type == "") {
             // send response to presenter
-            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "verificationType or sub or request_id or medium_id or usage_type cannot be empty", statusCode: 417)
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "verificationType or sub or request_id or usage_type cannot be empty", statusCode: 417)
             VerificationPresenter.shared.initiate(initiateResponse: nil, errorResponse: error, callback: callback)
             return
         }
@@ -87,9 +111,9 @@ public class VerificationInteractor {
     
     public func pushAcknowledge(verificationType: String, incomingData: PushAcknowledgeRequest, callback: @escaping (Result<PushAcknowledgeResponse>) -> Void) {
         // validation
-        if (verificationType == "" || incomingData.exchange_id == "" || incomingData.client_id == "") {
+        if (verificationType == "" || incomingData.exchange_id == "") {
             // send response to presenter
-            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "verificationType or exchange_id or client_id cannot be empty", statusCode: 417)
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "verificationType or exchange_id cannot be empty", statusCode: 417)
             VerificationPresenter.shared.pushAcknowledge(pushAcknowledgeResponse: nil, errorResponse: error, callback: callback)
             return
         }
@@ -111,9 +135,9 @@ public class VerificationInteractor {
     
     public func pushAllow(verificationType: String, incomingData: PushAllowRequest, callback: @escaping (Result<PushAllowResponse>) -> Void) {
         // validation
-        if (verificationType == "" || incomingData.exchange_id == "" || incomingData.client_id == "") {
+        if (verificationType == "" || incomingData.exchange_id == "") {
             // send response to presenter
-            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "verificationType or exchange_id or client_id cannot be empty", statusCode: 417)
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "verificationType or exchange_id cannot be empty", statusCode: 417)
             VerificationPresenter.shared.pushAllow(pushAllowResponse: nil, errorResponse: error, callback: callback)
             return
         }
@@ -135,9 +159,9 @@ public class VerificationInteractor {
     
     public func pushReject(verificationType: String, incomingData: PushRejectRequest, callback: @escaping (Result<PushRejectResponse>) -> Void) {
         // validation
-        if (verificationType == "" || incomingData.exchange_id == "" || incomingData.client_id == "") {
+        if (verificationType == "" || incomingData.exchange_id == "") {
             // send response to presenter
-            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "verificationType or exchange_id or client_id cannot be empty", statusCode: 417)
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "verificationType or exchange_id cannot be empty", statusCode: 417)
             VerificationPresenter.shared.pushReject(pushRejectResponse: nil, errorResponse: error, callback: callback)
             return
         }
@@ -159,9 +183,9 @@ public class VerificationInteractor {
     
     public func authenticate(verificationType: String, photo: UIImage = UIImage(), voice: Data = Data(), incomingData: AuthenticateRequest, callback: @escaping (Result<AuthenticateResponse>) -> Void) {
         // validation
-        if (verificationType == "" || incomingData.client_id == "" || incomingData.exchange_id == "") {
+        if (verificationType == "" || incomingData.exchange_id == "") {
             // send response to presenter
-            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "verificationType or client_id or exchange_id cannot be empty", statusCode: 417)
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "verificationType or exchange_id cannot be empty", statusCode: 417)
             VerificationPresenter.shared.authenticate(authenticateResponse: nil, errorResponse: error, callback: callback)
             return
         }
@@ -183,9 +207,9 @@ public class VerificationInteractor {
     
     public func delete(incomingData: DeleteRequest, callback: @escaping (Result<DeleteResponse>) -> Void) {
         // validation
-        if (incomingData.client_id == "" || incomingData.sub == "" || incomingData.verificationType == "") {
+        if (incomingData.sub == "" || incomingData.verificationType == "") {
             // send response to presenter
-            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "client_id or sub or exchange_id or verificationType cannot be empty", statusCode: 417)
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "sub or exchange_id or verificationType cannot be empty", statusCode: 417)
             VerificationPresenter.shared.delete(deleteResponse: nil, errorResponse: error, callback: callback)
             return
         }
@@ -207,12 +231,7 @@ public class VerificationInteractor {
     
     public func deleteAll(incomingData: DeleteRequest, callback: @escaping (Result<DeleteResponse>) -> Void) {
         // validation
-        if (incomingData.client_id == "") {
-            // send response to presenter
-            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "client_id cannot be empty", statusCode: 417)
-            VerificationPresenter.shared.deleteAll(deleteResponse: nil, errorResponse: error, callback: callback)
-            return
-        }
+        // no validation
         
         // get saved properties
         let savedProp = getProperties()
@@ -231,7 +250,7 @@ public class VerificationInteractor {
     
     public func getConfiguredList(incomingData: MFAListRequest, callback: @escaping (Result<MFAListResponse>) -> Void) {
         // validation
-        if (incomingData.client_id == "" || incomingData.sub == "") {
+        if (incomingData.sub == "") {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "sub cannot be empty", statusCode: 417)
             VerificationPresenter.shared.getConfiguredList(mfaListResponse: nil, errorResponse: error, callback: callback)
@@ -255,9 +274,9 @@ public class VerificationInteractor {
     
     public func getPendingNotificationList(incomingData: PendingNotificationRequest, callback: @escaping (Result<PendingNotificationResponse>) -> Void) {
         // validation
-        if (incomingData.client_id == "" || incomingData.sub == "") {
+        if (incomingData.sub == "") {
             // send response to presenter
-            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "client_id or sub cannot be empty", statusCode: 417)
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "sub cannot be empty", statusCode: 417)
             VerificationPresenter.shared.getPendingNotificationList(pendingNotificationListResponse: nil, errorResponse: error, callback: callback)
             return
         }
@@ -279,9 +298,9 @@ public class VerificationInteractor {
     
     public func getAuthenticatedHistoryList(incomingData: AuthenticatedHistoryRequest, callback: @escaping (Result<AuthenticatedHistoryResponse>) -> Void) {
         // validation
-        if (incomingData.client_id == "" || incomingData.sub == "") {
+        if (incomingData.sub == "") {
             // send response to presenter
-            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "client_id or sub cannot be empty", statusCode: 417)
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "sub cannot be empty", statusCode: 417)
             VerificationPresenter.shared.getAuthenticatedHistoryList(authenticatedHistoryListResponse: nil, errorResponse: error, callback: callback)
             return
         }
@@ -333,6 +352,109 @@ public class VerificationInteractor {
         // call worker
         VerificationServiceWorker.shared.updateFCM(incomingData: incomingData, properties: savedProp!) { response, error in
             VerificationPresenter.shared.updateFCM(updateFCMResponse: response, errorResponse: error)
+        }
+    }
+    
+    public func configure(incomingData: ConfigureRequest, callback: @escaping (Result<EnrollResponse>) -> Void) {
+        
+        let setupRequest = SetupRequest()
+        setupRequest.access_token = incomingData.access_token
+        
+        self.setup(verificationType: incomingData.verificationType, incomingData: setupRequest) {
+            switch $0 {
+            case .success(let setupSuccessResponse):
+                
+                let scannedRequest = ScannedRequest()
+                scannedRequest.sub = setupSuccessResponse.data.sub
+                scannedRequest.exchange_id = setupSuccessResponse.data.exchange_id.exchange_id
+                
+                self.scanned(verificationType: incomingData.verificationType, incomingData: scannedRequest) {
+                    switch $0 {
+                    case .success(let scannedSuccessResponse):
+                        
+                        let enrollRequest = EnrollRequest()
+                        enrollRequest.pass_code = incomingData.pass_code
+                        enrollRequest.exchange_id = scannedSuccessResponse.data.exchange_id.exchange_id
+                        enrollRequest.attempt = incomingData.attempt
+                        enrollRequest.localizedReason = incomingData.localizedReason
+                        
+                        if (incomingData.verificationType == VerificationTypes.TOUCH.rawValue) {
+                            self.askForTouchorFaceIdForEnroll(incomingData: enrollRequest, callback: callback)
+                        }
+                        else {
+                            self.enroll(verificationType: incomingData.verificationType, incomingData: enrollRequest, callback: callback)
+                        }
+                        
+                        break
+                    case .failure(let scannedErrorResponse):
+                        DispatchQueue.main.async {
+                            callback(Result.failure(error: scannedErrorResponse))
+                        }
+                        break
+                    }
+                }
+                break
+            case .failure(let setupErrorResponse):
+                DispatchQueue.main.async {
+                    callback(Result.failure(error: setupErrorResponse))
+                }
+                break
+            }
+        }
+    }
+    
+    public func loginWithVerification(incomingData: LoginRequest, photo: UIImage, voice: Data, callback: @escaping (Result<LoginResponse>) -> Void) {
+        
+        let initiateRequest = InitiateRequest()
+        initiateRequest.sub = incomingData.sub
+        initiateRequest.request_id = incomingData.request_id
+        initiateRequest.usage_type = incomingData.usage_type
+    
+        self.initiate(verificationType: incomingData.verificationType, incomingData: initiateRequest) {
+            switch $0 {
+            case .success(let initiateSuccessResponse):
+                
+                let authenticateRequest = AuthenticateRequest()
+                authenticateRequest.sub = initiateSuccessResponse.sub
+                authenticateRequest.exchange_id = initiateSuccessResponse.exchange_id.exchange_id
+                authenticateRequest.pass_code = incomingData.pass_code
+                authenticateRequest.localizedReason = incomingData.localizedReason
+                
+                if (incomingData.verificationType == VerificationTypes.TOUCH.rawValue) {
+                    self.askForTouchorFaceIdForAuthenticate(incomingData: authenticateRequest) {
+                        switch $0 {
+                        case .success(let authenticateSuccessResponse):
+                            
+                            break
+                        case .failure(let scannedErrorResponse):
+                            DispatchQueue.main.async {
+                                callback(Result.failure(error: scannedErrorResponse))
+                            }
+                            break
+                        }
+                    }
+                }
+                else {
+                    self.authenticate(verificationType: incomingData.verificationType, photo: photo, voice: voice, incomingData: authenticateRequest) {
+                        switch $0 {
+                        case .success(let authenticateSuccessResponse):
+                            
+                            break
+                        case .failure(let scannedErrorResponse):
+                            DispatchQueue.main.async {
+                                callback(Result.failure(error: scannedErrorResponse))
+                            }
+                            break
+                        }
+                    }
+                }
+                break
+            case .failure(let setupErrorResponse):
+                DispatchQueue.main.async {
+                    callback(Result.failure(error: setupErrorResponse))
+                }
+                break
+            }
         }
     }
     

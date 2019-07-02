@@ -11,6 +11,10 @@ public class Verification {
     
     public init() {}
     
+    public func setup(verificationType: String, setupRequest: SetupRequest, callback:@escaping (Result<SetupResponse>) -> Void) {
+        VerificationViewController.shared.setup(verificationType: verificationType, incomingData: setupRequest, callback: callback)
+    }
+    
     public func scanned(verificationType: String, scannedRequest: ScannedRequest, callback:@escaping (Result<ScannedResponse>) -> Void) {
         VerificationViewController.shared.scanned(verificationType: verificationType, incomingData: scannedRequest, callback: callback)
     }
@@ -57,5 +61,9 @@ public class Verification {
     
     public func updateFCM(push_id: String) {
         VerificationViewController.shared.updateFCM(push_id: push_id)
+    }
+    
+    public func configure(configureRequest: ConfigureRequest, callback: @escaping(Result<EnrollResponse>) -> Void) {
+        VerificationViewController.shared.configure(incomingData: configureRequest, callback: callback)
     }
 }
