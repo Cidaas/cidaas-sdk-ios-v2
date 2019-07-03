@@ -364,33 +364,45 @@ public class VerificationInteractor {
             switch $0 {
             case .success(let setupSuccessResponse):
                 
-                let scannedRequest = ScannedRequest()
-                scannedRequest.sub = setupSuccessResponse.data.sub
-                scannedRequest.exchange_id = setupSuccessResponse.data.exchange_id.exchange_id
-                
-                self.scanned(verificationType: incomingData.verificationType, incomingData: scannedRequest) {
-                    switch $0 {
-                    case .success(let scannedSuccessResponse):
-                        
-                        let enrollRequest = EnrollRequest()
-                        enrollRequest.pass_code = incomingData.pass_code
-                        enrollRequest.exchange_id = scannedSuccessResponse.data.exchange_id.exchange_id
-                        enrollRequest.attempt = incomingData.attempt
-                        enrollRequest.localizedReason = incomingData.localizedReason
-                        
-                        if (incomingData.verificationType == VerificationTypes.TOUCH.rawValue) {
-                            self.askForTouchorFaceIdForEnroll(incomingData: enrollRequest, callback: callback)
+                if (incomingData.verificationType == VerificationTypes.TOTP.rawValue) {
+                    
+                    let enrollRequest = EnrollRequest()
+                    enrollRequest.pass_code = incomingData.pass_code
+                    enrollRequest.exchange_id = setupSuccessResponse.data.exchange_id.exchange_id
+                    enrollRequest.attempt = incomingData.attempt
+                    enrollRequest.localizedReason = incomingData.localizedReason
+                    
+                    self.enroll(verificationType: incomingData.verificationType, incomingData: enrollRequest, callback: callback)
+                }
+                else {
+                    let scannedRequest = ScannedRequest()
+                    scannedRequest.sub = setupSuccessResponse.data.sub
+                    scannedRequest.exchange_id = setupSuccessResponse.data.exchange_id.exchange_id
+                    
+                    self.scanned(verificationType: incomingData.verificationType, incomingData: scannedRequest) {
+                        switch $0 {
+                        case .success(let scannedSuccessResponse):
+                            
+                            let enrollRequest = EnrollRequest()
+                            enrollRequest.pass_code = incomingData.pass_code
+                            enrollRequest.exchange_id = scannedSuccessResponse.data.exchange_id.exchange_id
+                            enrollRequest.attempt = incomingData.attempt
+                            enrollRequest.localizedReason = incomingData.localizedReason
+                            
+                            if (incomingData.verificationType == VerificationTypes.TOUCH.rawValue) {
+                                self.askForTouchorFaceIdForEnroll(incomingData: enrollRequest, callback: callback)
+                            }
+                            else {
+                                self.enroll(verificationType: incomingData.verificationType, incomingData: enrollRequest, callback: callback)
+                            }
+                            
+                            break
+                        case .failure(let scannedErrorResponse):
+                            DispatchQueue.main.async {
+                                callback(Result.failure(error: scannedErrorResponse))
+                            }
+                            break
                         }
-                        else {
-                            self.enroll(verificationType: incomingData.verificationType, incomingData: enrollRequest, callback: callback)
-                        }
-                        
-                        break
-                    case .failure(let scannedErrorResponse):
-                        DispatchQueue.main.async {
-                            callback(Result.failure(error: scannedErrorResponse))
-                        }
-                        break
                     }
                 }
                 break
