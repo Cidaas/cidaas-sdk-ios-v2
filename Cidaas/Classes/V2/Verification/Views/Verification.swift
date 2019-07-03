@@ -66,4 +66,8 @@ public class Verification {
     public func configure(configureRequest: ConfigureRequest, callback: @escaping(Result<EnrollResponse>) -> Void) {
         VerificationViewController.shared.configure(incomingData: configureRequest, callback: callback)
     }
+    
+    public func login(loginRequest: LoginRequest, photo: UIImage = UIImage(), voice: Data = Data(), callback: @escaping(Result<LoginResponse>) -> Void) {
+        VerificationViewController.shared.login(incomingData: loginRequest, photo: photo, voice: voice, callback: callback)
+    }
 }

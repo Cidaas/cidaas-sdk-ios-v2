@@ -25,6 +25,7 @@ public class VerificationURLHelper {
     public var pendingNotificationListURL: String = "/verification-srv/v2/setup/device/pending/auth/list"
     public var authenticatedHistoryURL: String = "/verification-srv/v2/setup/device/authenticated/list"
     public var fcmURL: String = "/verification-srv/v2/setup/device/update/pushid"
+    public var passwordlessContinueURL: String = "/login-srv/verification/sdk/login"
     
     public func getSetupURL(verificationType: String) -> String {
         return setupURL + verificationType
@@ -76,6 +77,10 @@ public class VerificationURLHelper {
     
     public func getAuthenticatedHistoryListURL() -> String {
         return authenticatedHistoryURL
+    }
+    
+    public func getPasswordlessContinueURL() -> String {
+        return passwordlessContinueURL
     }
     
     public func getUpdateFCMURL() -> String {

@@ -403,7 +403,16 @@ public class VerificationInteractor {
         }
     }
     
-    public func loginWithVerification(incomingData: LoginRequest, photo: UIImage, voice: Data, callback: @escaping (Result<LoginResponse>) -> Void) {
+    public func login(incomingData: LoginRequest, photo: UIImage, voice: Data, callback: @escaping (Result<LoginResponse>) -> Void) {
+        
+        // get saved properties
+        let savedProp = getProperties()
+        if (savedProp == nil) {
+            // send response to presenter
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
+            VerificationPresenter.shared.login(loginResponse: nil, errorResponse: error, callback: callback)
+            return
+        }
         
         let initiateRequest = InitiateRequest()
         initiateRequest.sub = incomingData.sub
@@ -415,8 +424,8 @@ public class VerificationInteractor {
             case .success(let initiateSuccessResponse):
                 
                 let authenticateRequest = AuthenticateRequest()
-                authenticateRequest.sub = initiateSuccessResponse.sub
-                authenticateRequest.exchange_id = initiateSuccessResponse.exchange_id.exchange_id
+                authenticateRequest.sub = initiateSuccessResponse.data.sub
+                authenticateRequest.exchange_id = initiateSuccessResponse.data.exchange_id.exchange_id
                 authenticateRequest.pass_code = incomingData.pass_code
                 authenticateRequest.localizedReason = incomingData.localizedReason
                 
@@ -424,12 +433,10 @@ public class VerificationInteractor {
                     self.askForTouchorFaceIdForAuthenticate(incomingData: authenticateRequest) {
                         switch $0 {
                         case .success(let authenticateSuccessResponse):
-                            
+                            print(authenticateSuccessResponse)
                             break
-                        case .failure(let scannedErrorResponse):
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: scannedErrorResponse))
-                            }
+                        case .failure(let authenticateErrorResponse):
+                            VerificationPresenter.shared.login(loginResponse: nil, errorResponse: authenticateErrorResponse, callback: callback)
                             break
                         }
                     }
@@ -438,23 +445,87 @@ public class VerificationInteractor {
                     self.authenticate(verificationType: incomingData.verificationType, photo: photo, voice: voice, incomingData: authenticateRequest) {
                         switch $0 {
                         case .success(let authenticateSuccessResponse):
-                            
-                            break
-                        case .failure(let scannedErrorResponse):
-                            DispatchQueue.main.async {
-                                callback(Result.failure(error: scannedErrorResponse))
+                            if (incomingData.usage_type == UsageTypes.PASSWORDLESS.rawValue) {
+                                let passwordlessRequest = PasswordlessRequest()
+                                passwordlessRequest.requestId = incomingData.request_id
+                                passwordlessRequest.status_id = authenticateSuccessResponse.data.status_id
+                                passwordlessRequest.sub = incomingData.sub
+                                passwordlessRequest.verificationType = incomingData.verificationType
+                                self.passwordlessContinue(incomingData: passwordlessRequest) {
+                                    switch $0 {
+                                    case .success(let passwordlessContinueSuccessResponse):
+                                        
+                                        AccessTokenService.shared.getAccessToken(code: passwordlessContinueSuccessResponse.data.code, properties: savedProp!) {
+                                            switch $0 {
+                                            case .success(let tokenSuccessResponse):
+                                                let loginResp = LoginResponse()
+                                                loginResp.success = true
+                                                loginResp.status = 200
+                                                loginResp.data = tokenSuccessResponse
+                                                let encoder = JSONEncoder()
+                                                do {
+                                                    let data = try encoder.encode(loginResp)
+                                                    let loginResponseString = String(data: data, encoding: .utf8)
+                                                    VerificationPresenter.shared.login(loginResponse: loginResponseString, errorResponse: nil, callback: callback)
+                                                }
+                                                catch(let err) {
+                                                    let error_resp = WebAuthError.shared
+                                                    error_resp.errorCode = 500
+                                                    error_resp.errorMessage = "JSON parsing error: \(err.localizedDescription)"
+                                                    error_resp.statusCode = 500
+                                                    
+                                                    VerificationPresenter.shared.login(loginResponse: nil, errorResponse: error_resp, callback: callback)
+                                                }
+                                                break
+                                            case .failure(let tokenFailureResponse):
+                                                VerificationPresenter.shared.login(loginResponse: nil, errorResponse: tokenFailureResponse, callback: callback)
+                                                break
+                                            }
+                                        }
+                                        break
+                                    case .failure(let passwordlessContinueFailureResponse):
+                                        VerificationPresenter.shared.login(loginResponse: nil, errorResponse: passwordlessContinueFailureResponse, callback: callback)
+                                        break
+                                    }
+                                }
                             }
+                            break
+                        case .failure(let authenticateErrorResponse):
+                            VerificationPresenter.shared.login(loginResponse: nil, errorResponse: authenticateErrorResponse, callback: callback)
                             break
                         }
                     }
                 }
                 break
-            case .failure(let setupErrorResponse):
-                DispatchQueue.main.async {
-                    callback(Result.failure(error: setupErrorResponse))
-                }
+            case .failure(let initiateErrorResponse):
+                VerificationPresenter.shared.login(loginResponse: nil, errorResponse: initiateErrorResponse, callback: callback)
                 break
             }
+        }
+    }
+    
+    public func passwordlessContinue(incomingData: PasswordlessRequest, callback: @escaping (Result<AuthzCodeResponse>) -> Void) {
+        
+        // validation
+        if (incomingData.sub == "" || incomingData.requestId == "" || incomingData.status_id == "" || incomingData.verificationType == "") {
+            // send response to presenter
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "sub cannot be empty", statusCode: 417)
+            VerificationPresenter.shared.passwordlessContinue(passwordlessContinueResponse: nil, errorResponse: error, callback: callback)
+            return
+        }
+        
+        // get saved properties
+        let savedProp = getProperties()
+        if (savedProp == nil) {
+            // send response to presenter
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
+            VerificationPresenter.shared.passwordlessContinue(passwordlessContinueResponse: nil, errorResponse: error, callback: callback)
+            return
+        }
+        
+        // call worker
+        VerificationServiceWorker.shared.passwordlessContinue(incomingData: incomingData, properties: savedProp!) { response, error in
+            VerificationPresenter.shared.passwordlessContinue(passwordlessContinueResponse: response, errorResponse: error, callback: callback)
         }
     }
     

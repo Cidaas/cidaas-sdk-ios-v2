@@ -346,4 +346,52 @@ public class VerificationPresenter {
             }
         }
     }
+    
+    public func passwordlessContinue(passwordlessContinueResponse: String?, errorResponse: WebAuthError?, callback: @escaping (Result<AuthzCodeResponse>) -> Void) {
+        if errorResponse != nil {
+            logw(errorResponse!.errorMessage, cname: "cidaas-sdk-verification-error-log")
+            callback(Result.failure(error: errorResponse!))
+        }
+        else {
+            let decoder = JSONDecoder()
+            do {
+                let data = passwordlessContinueResponse!.data(using: .utf8)!
+                // decode the json data to object
+                let passwordlessResp = try decoder.decode(AuthzCodeResponse.self, from: data)
+                
+                logw(passwordlessContinueResponse ?? "Empty response string", cname: "cidaas-sdk-verification-success-log")
+                // return success
+                callback(Result.success(result: passwordlessResp))
+            }
+            catch(let error) {
+                // return failure
+                logw("\(String(describing: error)) JSON parsing issue, Response: \(String(describing: passwordlessContinueResponse))", cname: "cidaas-sdk-verification-error-log")
+                callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: 400, errorMessage: error.localizedDescription, statusCode: 400)))
+            }
+        }
+    }
+    
+    public func login(loginResponse: String?, errorResponse: WebAuthError?, callback: @escaping (Result<LoginResponse>) -> Void) {
+        if errorResponse != nil {
+            logw(errorResponse!.errorMessage, cname: "cidaas-sdk-verification-error-log")
+            callback(Result.failure(error: errorResponse!))
+        }
+        else {
+            let decoder = JSONDecoder()
+            do {
+                let data = loginResponse!.data(using: .utf8)!
+                // decode the json data to object
+                let loginResp = try decoder.decode(LoginResponse.self, from: data)
+                
+                logw(loginResponse ?? "Empty response string", cname: "cidaas-sdk-verification-success-log")
+                // return success
+                callback(Result.success(result: loginResp))
+            }
+            catch(let error) {
+                // return failure
+                logw("\(String(describing: error)) JSON parsing issue, Response: \(String(describing: loginResponse))", cname: "cidaas-sdk-verification-error-log")
+                callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: 400, errorMessage: error.localizedDescription, statusCode: 400)))
+            }
+        }
+    }
 }

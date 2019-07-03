@@ -43,7 +43,7 @@ class ViewController: UIViewController, WKNavigationDelegate, CidaasLoaderDelega
         
 //    pushAcknowledge(exchange_id: "461c0dae-a11c-4e4c-adbb-250128295933")
         
-        setup()
+        getRequestId()
         
         
 //        scanned(exchange_id: "41cac32f-bf5e-4199-90da-a1794c62f5fa")
@@ -70,7 +70,28 @@ class ViewController: UIViewController, WKNavigationDelegate, CidaasLoaderDelega
             }
         }
     }
-    
+
+    func authenticate(_ requestId: String) {
+        let loginRequest = LoginRequest()
+        loginRequest.request_id = requestId
+        loginRequest.sub = "49eb50e9-cf0a-4148-b744-7c3bf0fc9247"
+        loginRequest.usage_type = "PASSWORDLESS_AUTHENTICATION"
+        loginRequest.verificationType = "PATTERN"
+        loginRequest.pass_code = "RED123"
+        
+        cidaas.setFCMToken(sub: "", fcmToken: "eoR95tONqJQ:APA91bFRxFaVD1ZXUw_ThJ_3YoFxw97fgoYhlU0fXBP5arZ7IZ6-FNVPogbTw_-mEK8abV8Pl50-fcIitYwZAK8JN9IHdd8yL-pWpIV-C9l3MY-jHlZ9ITocjO3Z220NaqoY3twt2WU7")
+        
+        Cidaas.verification.login(loginRequest: loginRequest) {
+            switch $0 {
+            case .success(let successResponse):
+                print(successResponse.data.sub)
+                break
+            case .failure(let errorResponse):
+                print(errorResponse.errorMessage)
+                break
+            }
+        }
+    }
     
     func showLoader() {
         CustomLoader.shared.showLoader(self.view, using: nil) { (hud) in
@@ -128,6 +149,7 @@ class ViewController: UIViewController, WKNavigationDelegate, CidaasLoaderDelega
                 case .success(let requestIdSuccessResponse):
                     print(requestIdSuccessResponse.data.requestId)
 //                    self.loginWithBrowser()
+                    self.authenticate(requestIdSuccessResponse.data.requestId)
                     break
                 case .failure(let requestIdFailureResponse):
                     print(requestIdFailureResponse.errorMessage)

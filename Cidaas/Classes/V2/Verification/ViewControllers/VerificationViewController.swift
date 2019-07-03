@@ -82,4 +82,8 @@ public class VerificationViewController {
     public func configure(incomingData: ConfigureRequest, callback: @escaping (Result<EnrollResponse>) -> Void) {
         VerificationInteractor.shared.configure(incomingData: incomingData, callback: callback)
     }
+    
+    public func login(incomingData: LoginRequest, photo: UIImage, voice: Data, callback: @escaping(Result<LoginResponse>) -> Void) {
+        VerificationInteractor.shared.login(incomingData: incomingData, photo: photo, voice: voice, callback: callback)
+    }
 }
