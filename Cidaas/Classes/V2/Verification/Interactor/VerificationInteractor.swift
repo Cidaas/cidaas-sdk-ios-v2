@@ -358,7 +358,7 @@ public class VerificationInteractor {
     public func configure(incomingData: ConfigureRequest, callback: @escaping (Result<EnrollResponse>) -> Void) {
         
         let setupRequest = SetupRequest()
-//        setupRequest.access_token = incomingData.access_token
+        setupRequest.access_token = incomingData.access_token
         
         self.setup(verificationType: incomingData.verificationType, incomingData: setupRequest) {
             switch $0 {
