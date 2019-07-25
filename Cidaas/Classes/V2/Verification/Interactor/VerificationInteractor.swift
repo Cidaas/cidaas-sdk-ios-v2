@@ -358,13 +358,16 @@ public class VerificationInteractor {
     public func configure(incomingData: ConfigureRequest, callback: @escaping (Result<EnrollResponse>) -> Void) {
         
         let setupRequest = SetupRequest()
-        setupRequest.access_token = incomingData.access_token
+//        setupRequest.access_token = incomingData.access_token
         
         self.setup(verificationType: incomingData.verificationType, incomingData: setupRequest) {
             switch $0 {
             case .success(let setupSuccessResponse):
-                
                 if (incomingData.verificationType == VerificationTypes.TOTP.rawValue) {
+                    
+                }
+                    
+                else if (incomingData.verificationType == VerificationTypes.TOTP.rawValue) {
                     
                     let enrollRequest = EnrollRequest()
                     enrollRequest.pass_code = incomingData.pass_code
