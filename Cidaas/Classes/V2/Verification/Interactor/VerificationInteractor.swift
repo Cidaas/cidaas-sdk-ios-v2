@@ -367,12 +367,12 @@ public class VerificationInteractor {
             case .success(let setupSuccessResponse):
                 if (incomingData.verificationType == VerificationTypes.TOTP.rawValue) {
                     
+                    // save qrcode
+                    DBHelper.shared.setTOTPSecret(secret: setupSuccessResponse.data.totp_secret, name: setupSuccessResponse.data.totp_secret, issuer: setupSuccessResponse.data.totp_secret, key: setupSuccessResponse.data.sub)
+                    let secret = DBHelper.shared.getTOTPSecret(key: setupSuccessResponse.data.sub)
                     let enrollRequest = EnrollRequest()
-                    enrollRequest.pass_code = incomingData.pass_code
+                    enrollRequest.pass_code = TOTPVerificationController.shared.gettingTOTPCode(url: URL(string: secret.addingPercentEncoding(withAllowedCharacters:NSCharacterSet.urlQueryAllowed)!)!).totp_string
                     enrollRequest.exchange_id = setupSuccessResponse.data.exchange_id.exchange_id
-                    enrollRequest.attempt = incomingData.attempt
-                    enrollRequest.localizedReason = incomingData.localizedReason
-                    
                     self.enroll(verificationType: incomingData.verificationType, incomingData: enrollRequest, callback: callback)
                 }
                 else {
