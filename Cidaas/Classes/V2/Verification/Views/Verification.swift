@@ -63,8 +63,8 @@ public class Verification {
         VerificationViewController.shared.updateFCM(push_id: push_id)
     }
     
-    public func configure(configureRequest: ConfigureRequest, callback: @escaping(Result<EnrollResponse>) -> Void) {
-        VerificationViewController.shared.configure(incomingData: configureRequest, callback: callback)
+    public func configure(configureRequest: ConfigureRequest, photo: UIImage = UIImage(), voice: Data = Data(), callback: @escaping(Result<EnrollResponse>) -> Void) {
+        VerificationViewController.shared.configure(incomingData: configureRequest, photo: photo, voice: voice, callback: callback)
     }
     
     public func login(loginRequest: LoginRequest, photo: UIImage = UIImage(), voice: Data = Data(), callback: @escaping(Result<LoginResponse>) -> Void) {

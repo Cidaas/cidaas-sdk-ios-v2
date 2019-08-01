@@ -357,7 +357,7 @@ public class VerificationInteractor {
         }
     }
     
-    public func configure(incomingData: ConfigureRequest, callback: @escaping (Result<EnrollResponse>) -> Void) {
+    public func configure(incomingData: ConfigureRequest, photo: UIImage = UIImage(), voice: Data = Data(), callback: @escaping (Result<EnrollResponse>) -> Void) {
         
         let setupRequest = SetupRequest()
         setupRequest.access_token = incomingData.access_token
@@ -399,7 +399,7 @@ public class VerificationInteractor {
                                 self.askForTouchorFaceIdForEnroll(incomingData: enrollRequest, callback: callback)
                             }
                             else {
-                                self.enroll(verificationType: incomingData.verificationType, incomingData: enrollRequest, callback: callback)
+                                self.enroll(verificationType: incomingData.verificationType, photo: photo, voice: voice, incomingData: enrollRequest, callback: callback)
                             }
                             
                             break
