@@ -70,4 +70,8 @@ public class Verification {
     public func login(loginRequest: LoginRequest, photo: UIImage = UIImage(), voice: Data = Data(), callback: @escaping(Result<LoginResponse>) -> Void) {
         VerificationViewController.shared.login(incomingData: loginRequest, photo: photo, voice: voice, callback: callback)
     }
+    
+    public func initiate(verificationType: String, initiateRequest: InitiateRequest, callback:@escaping (Result<InitiateResponse>) -> Void) {
+        VerificationViewController.shared.initiate(verificationType: verificationType, incomingData: initiateRequest, callback: callback)
+    }
 }

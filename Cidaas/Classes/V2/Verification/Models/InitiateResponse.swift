@@ -26,6 +26,7 @@ public class InitiateResponseData: Codable {
     public var sub : String = ""
     public var status_id: String = ""
     public var exchange_id : ExchangeIdResponse = ExchangeIdResponse()
+    public var push_selected_number: String = ""
     
     public init() {
         
@@ -36,5 +37,6 @@ public class InitiateResponseData: Codable {
         self.sub = try container.decodeIfPresent(String.self, forKey: .sub) ?? ""
         self.status_id = try container.decodeIfPresent(String.self, forKey: .status_id) ?? ""
         self.exchange_id = try container.decodeIfPresent(ExchangeIdResponse.self, forKey: .exchange_id) ?? ExchangeIdResponse()
+        self.push_selected_number = try container.decodeIfPresent(String.self, forKey: .push_selected_number) ?? ""
     }
 }

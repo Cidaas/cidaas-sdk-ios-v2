@@ -447,6 +447,8 @@ public class VerificationInteractor {
                 authenticateRequest.pass_code = incomingData.pass_code
                 authenticateRequest.localizedReason = incomingData.localizedReason
                 
+                self.push_selected_number = initiateSuccessResponse.data.push_selected_number
+                
                 if (incomingData.verificationType == VerificationTypes.TOUCH.rawValue) {
                     self.askForTouchorFaceIdForAuthenticate(incomingData: authenticateRequest) {
                         switch $0 {
@@ -457,43 +459,28 @@ public class VerificationInteractor {
                                 passwordlessRequest.status_id = authenticateSuccessResponse.data.status_id
                                 passwordlessRequest.sub = incomingData.sub
                                 passwordlessRequest.verificationType = incomingData.verificationType
-                                self.passwordlessContinue(incomingData: passwordlessRequest) {
-                                    switch $0 {
-                                    case .success(let passwordlessContinueSuccessResponse):
-                                        
-                                        AccessTokenService.shared.getAccessToken(code: passwordlessContinueSuccessResponse.data.code, properties: savedProp!) {
-                                            switch $0 {
-                                            case .success(let tokenSuccessResponse):
-                                                let loginResp = LoginResponse()
-                                                loginResp.success = true
-                                                loginResp.status = 200
-                                                loginResp.data = tokenSuccessResponse
-                                                let encoder = JSONEncoder()
-                                                do {
-                                                    let data = try encoder.encode(loginResp)
-                                                    let loginResponseString = String(data: data, encoding: .utf8)
-                                                    VerificationPresenter.shared.login(loginResponse: loginResponseString, errorResponse: nil, callback: callback)
-                                                }
-                                                catch(let err) {
-                                                    let error_resp = WebAuthError.shared
-                                                    error_resp.errorCode = 500
-                                                    error_resp.errorMessage = "JSON parsing error: \(err.localizedDescription)"
-                                                    error_resp.statusCode = 500
-                                                    
-                                                    VerificationPresenter.shared.login(loginResponse: nil, errorResponse: error_resp, callback: callback)
-                                                }
-                                                break
-                                            case .failure(let tokenFailureResponse):
-                                                VerificationPresenter.shared.login(loginResponse: nil, errorResponse: tokenFailureResponse, callback: callback)
-                                                break
-                                            }
-                                        }
-                                        break
-                                    case .failure(let passwordlessContinueFailureResponse):
-                                        VerificationPresenter.shared.login(loginResponse: nil, errorResponse: passwordlessContinueFailureResponse, callback: callback)
-                                        break
-                                    }
-                                }
+                                self.continueMFA(passwordlessRequest: passwordlessRequest, properties: savedProp!, callback: callback)
+                            }
+                            break
+                        case .failure(let authenticateErrorResponse):
+                            VerificationPresenter.shared.login(loginResponse: nil, errorResponse: authenticateErrorResponse, callback: callback)
+                            break
+                        }
+                    }
+                }
+                else if (incomingData.verificationType == VerificationTypes.PUSH.rawValue) {
+                    authenticateRequest.pass_code = self.push_selected_number
+                    self.authenticate(verificationType: incomingData.verificationType, incomingData: authenticateRequest) {
+                        switch $0 {
+                        case .success(let authenticateSuccessResponse):
+                            if (incomingData.usage_type == UsageTypes.PASSWORDLESS.rawValue) {
+                                let passwordlessRequest = PasswordlessRequest()
+                                passwordlessRequest.requestId = incomingData.request_id
+                                passwordlessRequest.status_id = authenticateSuccessResponse.data.status_id
+                                passwordlessRequest.sub = incomingData.sub
+                                passwordlessRequest.verificationType = incomingData.verificationType
+
+                                self.continueMFA(passwordlessRequest: passwordlessRequest, properties: savedProp!, callback: callback)
                             }
                             break
                         case .failure(let authenticateErrorResponse):
@@ -512,43 +499,7 @@ public class VerificationInteractor {
                                 passwordlessRequest.status_id = authenticateSuccessResponse.data.status_id
                                 passwordlessRequest.sub = incomingData.sub
                                 passwordlessRequest.verificationType = incomingData.verificationType
-                                self.passwordlessContinue(incomingData: passwordlessRequest) {
-                                    switch $0 {
-                                    case .success(let passwordlessContinueSuccessResponse):
-                                        
-                                        AccessTokenService.shared.getAccessToken(code: passwordlessContinueSuccessResponse.data.code, properties: savedProp!) {
-                                            switch $0 {
-                                            case .success(let tokenSuccessResponse):
-                                                let loginResp = LoginResponse()
-                                                loginResp.success = true
-                                                loginResp.status = 200
-                                                loginResp.data = tokenSuccessResponse
-                                                let encoder = JSONEncoder()
-                                                do {
-                                                    let data = try encoder.encode(loginResp)
-                                                    let loginResponseString = String(data: data, encoding: .utf8)
-                                                    VerificationPresenter.shared.login(loginResponse: loginResponseString, errorResponse: nil, callback: callback)
-                                                }
-                                                catch(let err) {
-                                                    let error_resp = WebAuthError.shared
-                                                    error_resp.errorCode = 500
-                                                    error_resp.errorMessage = "JSON parsing error: \(err.localizedDescription)"
-                                                    error_resp.statusCode = 500
-                                                    
-                                                    VerificationPresenter.shared.login(loginResponse: nil, errorResponse: error_resp, callback: callback)
-                                                }
-                                                break
-                                            case .failure(let tokenFailureResponse):
-                                                VerificationPresenter.shared.login(loginResponse: nil, errorResponse: tokenFailureResponse, callback: callback)
-                                                break
-                                            }
-                                        }
-                                        break
-                                    case .failure(let passwordlessContinueFailureResponse):
-                                        VerificationPresenter.shared.login(loginResponse: nil, errorResponse: passwordlessContinueFailureResponse, callback: callback)
-                                        break
-                                    }
-                                }
+                                self.continueMFA(passwordlessRequest: passwordlessRequest, properties: savedProp!, callback: callback)
                             }
                             break
                         case .failure(let authenticateErrorResponse):
@@ -668,6 +619,46 @@ public class VerificationInteractor {
                 
                 VerificationPresenter.shared.authenticate(authenticateResponse: nil, errorResponse: error, callback: callback)
                 return
+            }
+        }
+    }
+    
+    public func continueMFA(passwordlessRequest: PasswordlessRequest, properties: Dictionary<String, String>, callback: @escaping (Result<LoginResponse>) -> Void) {
+        self.passwordlessContinue(incomingData: passwordlessRequest) {
+            switch $0 {
+            case .success(let passwordlessContinueSuccessResponse):
+                
+                AccessTokenService.shared.getAccessToken(code: passwordlessContinueSuccessResponse.data.code, properties: properties) {
+                    switch $0 {
+                    case .success(let tokenSuccessResponse):
+                        let loginResp = LoginResponse()
+                        loginResp.success = true
+                        loginResp.status = 200
+                        loginResp.data = tokenSuccessResponse
+                        let encoder = JSONEncoder()
+                        do {
+                            let data = try encoder.encode(loginResp)
+                            let loginResponseString = String(data: data, encoding: .utf8)
+                            VerificationPresenter.shared.login(loginResponse: loginResponseString, errorResponse: nil, callback: callback)
+                        }
+                        catch(let err) {
+                            let error_resp = WebAuthError.shared
+                            error_resp.errorCode = 500
+                            error_resp.errorMessage = "JSON parsing error: \(err.localizedDescription)"
+                            error_resp.statusCode = 500
+                            
+                            VerificationPresenter.shared.login(loginResponse: nil, errorResponse: error_resp, callback: callback)
+                        }
+                        break
+                    case .failure(let tokenFailureResponse):
+                        VerificationPresenter.shared.login(loginResponse: nil, errorResponse: tokenFailureResponse, callback: callback)
+                        break
+                    }
+                }
+                break
+            case .failure(let passwordlessContinueFailureResponse):
+                VerificationPresenter.shared.login(loginResponse: nil, errorResponse: passwordlessContinueFailureResponse, callback: callback)
+                break
             }
         }
     }
