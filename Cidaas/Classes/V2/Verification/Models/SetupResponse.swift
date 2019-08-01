@@ -31,6 +31,7 @@ public class SetupResponseData: Codable {
     public var sub: String = ""
     public var status_id: String = ""
     public var authenticator_client_id: String = ""
+    public var push_selected_number: String = ""
     
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -38,5 +39,6 @@ public class SetupResponseData: Codable {
         self.sub = try container.decodeIfPresent(String.self, forKey: .sub) ?? ""
         self.status_id = try container.decodeIfPresent(String.self, forKey: .status_id) ?? ""
         self.authenticator_client_id = try container.decodeIfPresent(String.self, forKey: .authenticator_client_id) ?? ""
+        self.push_selected_number = try container.decodeIfPresent(String.self, forKey: .push_selected_number) ?? ""
     }
 }

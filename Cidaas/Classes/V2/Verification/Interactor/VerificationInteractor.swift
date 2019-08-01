@@ -11,6 +11,8 @@ public class VerificationInteractor {
     
     public init() {}
     
+    var push_selected_number: String = ""
+    
     public static var shared: VerificationInteractor = VerificationInteractor()
     
     public func setup(verificationType: String, incomingData: SetupRequest, callback: @escaping (Result<SetupResponse>) -> Void) {
@@ -365,10 +367,6 @@ public class VerificationInteractor {
             case .success(let setupSuccessResponse):
                 if (incomingData.verificationType == VerificationTypes.TOTP.rawValue) {
                     
-                }
-                    
-                else if (incomingData.verificationType == VerificationTypes.TOTP.rawValue) {
-                    
                     let enrollRequest = EnrollRequest()
                     enrollRequest.pass_code = incomingData.pass_code
                     enrollRequest.exchange_id = setupSuccessResponse.data.exchange_id.exchange_id
@@ -381,6 +379,7 @@ public class VerificationInteractor {
                     let scannedRequest = ScannedRequest()
                     scannedRequest.sub = setupSuccessResponse.data.sub
                     scannedRequest.exchange_id = setupSuccessResponse.data.exchange_id.exchange_id
+                    self.push_selected_number = setupSuccessResponse.data.push_selected_number
                     
                     self.scanned(verificationType: incomingData.verificationType, incomingData: scannedRequest) {
                         switch $0 {
@@ -391,6 +390,10 @@ public class VerificationInteractor {
                             enrollRequest.exchange_id = scannedSuccessResponse.data.exchange_id.exchange_id
                             enrollRequest.attempt = incomingData.attempt
                             enrollRequest.localizedReason = incomingData.localizedReason
+                            
+                            if (incomingData.verificationType == VerificationTypes.PUSH.rawValue) {
+                                enrollRequest.pass_code = self.push_selected_number
+                            }
                             
                             if (incomingData.verificationType == VerificationTypes.TOUCH.rawValue) {
                                 self.askForTouchorFaceIdForEnroll(incomingData: enrollRequest, callback: callback)
