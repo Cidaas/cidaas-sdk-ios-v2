@@ -12,6 +12,7 @@ public class VerificationInteractor {
     public init() {}
     
     var push_selected_number: String = ""
+    var secret: String = ""
     
     public static var shared: VerificationInteractor = VerificationInteractor()
     
@@ -480,6 +481,30 @@ public class VerificationInteractor {
                                 passwordlessRequest.sub = incomingData.sub
                                 passwordlessRequest.verificationType = incomingData.verificationType
 
+                                self.continueMFA(passwordlessRequest: passwordlessRequest, properties: savedProp!, callback: callback)
+                            }
+                            break
+                        case .failure(let authenticateErrorResponse):
+                            VerificationPresenter.shared.login(loginResponse: nil, errorResponse: authenticateErrorResponse, callback: callback)
+                            break
+                        }
+                    }
+                }
+                else if (incomingData.verificationType == VerificationTypes.TOTP.rawValue) {
+                    // getting secret
+                    self.secret = DBHelper.shared.getTOTPSecret(key: incomingData.sub)
+                    authenticateRequest.pass_code = TOTPVerificationController.shared.gettingTOTPCode(url: URL(string: self.secret.addingPercentEncoding(withAllowedCharacters:NSCharacterSet.urlQueryAllowed)!)!).totp_string
+                    
+                    self.authenticate(verificationType: incomingData.verificationType, incomingData: authenticateRequest) {
+                        switch $0 {
+                        case .success(let authenticateSuccessResponse):
+                            if (incomingData.usage_type == UsageTypes.PASSWORDLESS.rawValue) {
+                                let passwordlessRequest = PasswordlessRequest()
+                                passwordlessRequest.requestId = incomingData.request_id
+                                passwordlessRequest.status_id = authenticateSuccessResponse.data.status_id
+                                passwordlessRequest.sub = incomingData.sub
+                                passwordlessRequest.verificationType = incomingData.verificationType
+                                
                                 self.continueMFA(passwordlessRequest: passwordlessRequest, properties: savedProp!, callback: callback)
                             }
                             break
