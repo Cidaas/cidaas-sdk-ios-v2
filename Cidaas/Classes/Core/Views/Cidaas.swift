@@ -16,8 +16,6 @@ public class Cidaas {
     // shared instance
     public static var shared : Cidaas = Cidaas()
     
-    public static var verification: Verification = Verification()
-    
     // private local variables
     var requestId : String = ""
     var loginURLString : String = ""

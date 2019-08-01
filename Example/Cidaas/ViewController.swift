@@ -59,7 +59,7 @@ class ViewController: UIViewController, WKNavigationDelegate, CidaasLoaderDelega
         
         cidaas.setFCMToken(sub: "", fcmToken: "eoR95tONqJQ:APA91bFRxFaVD1ZXUw_ThJ_3YoFxw97fgoYhlU0fXBP5arZ7IZ6-FNVPogbTw_-mEK8abV8Pl50-fcIitYwZAK8JN9IHdd8yL-pWpIV-C9l3MY-jHlZ9ITocjO3Z220NaqoY3twt2WU7")
         
-        Cidaas.verification.configure(configureRequest: setupRequest) {
+        CidaasVerification.shared.configure(configureRequest: setupRequest) {
             switch $0 {
             case .success(let successResponse):
                 print(successResponse.data.sub)
@@ -81,7 +81,7 @@ class ViewController: UIViewController, WKNavigationDelegate, CidaasLoaderDelega
         
         cidaas.setFCMToken(sub: "", fcmToken: "eoR95tONqJQ:APA91bFRxFaVD1ZXUw_ThJ_3YoFxw97fgoYhlU0fXBP5arZ7IZ6-FNVPogbTw_-mEK8abV8Pl50-fcIitYwZAK8JN9IHdd8yL-pWpIV-C9l3MY-jHlZ9ITocjO3Z220NaqoY3twt2WU7")
         
-        Cidaas.verification.login(loginRequest: loginRequest) {
+        CidaasVerification.shared.login(loginRequest: loginRequest) {
             switch $0 {
             case .success(let successResponse):
                 print(successResponse.data.sub)

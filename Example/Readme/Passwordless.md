@@ -54,15 +54,13 @@ cidaas provides numerous options to ensure safe and diverse mechanisms for login
     * [Configuration](#configure-backupcode)
     * [Usage](#login-via-backupcode)
     <!--te--> 
-    
-#### Device Verification
-    
-For TOTP, Pattern, Touch ID, Smart Push, Face and Voice verification, you need to verify the device to provide more security. For that call **validateDevice()** from your AppDelegate's didReceiveRemoteNotification method.
-    
+
+### Verification 
+
+For MFA verification, you need to initiate the verification's instance 
+
 ```swift
-func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
-    Cidaas.shared.validateDevice(userInfo: userInfo)
-}
+var verification = CidaasVerification.shared
 ```
 
 #### Face Recognition
@@ -71,10 +69,16 @@ Biometrics plays an important role in the modern world. cidaas can register a us
 
 #### Configure Face Recognition
 
-To configure Face Recognition, call **configureFaceRecognition()**.
+To configure Face Recognition, call **configure()**.
 
 ```swift
-cidaas.configureFaceRecognition(photo: photo, sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
+let configureRequest: ConfigureRequest = ConfigureRequest()
+configureRequest.sub = "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d"
+configureRequest.verificationType = VerificationTypes.FACE.rawValue
+configureRequest.access_token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxMGE5LTV"
+configureRequest.attempt = 1
+
+verification.configure(configureRequest: configureRequest, photo: photo) {
     switch $0 {
         case .success(let configureSuccess):
             // your success code here
@@ -93,21 +97,24 @@ cidaas.configureFaceRecognition(photo: photo, sub: "7dfb2122-fa5e-4f7a-8494-dada
     "success": true,
     "status": 200,
     "data": {
-        "statusId": "5f5cbb84-4ceb-4975-b347-4bfac61e9248"
+        "enrolled": true,
+        "sub": "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d"
     }
 }
 ```
 
 #### Login via Face Recognition
 
-Once you configure Face Recognition, you can login with Face Recognition for Passwordless authentication. To login, call **loginWithFaceRecognition()**.
+Once you configure Face Recognition, you can login with Face Recognition for Passwordless authentication. To login, call **login()**.
 
 ```swift
-let passwordlessEntity = PasswordlessEntity()
-passwordlessEntity.email = "xxx@gmail.com"
-passwordlessEntity.usageType = UsageTypes.PASSWORDLESS.rawValue
+let loginRequest: LoginRequest = LoginRequest()
+loginRequest.usage_type = "PASSWORDLESS_AUTHENTICATION"
+loginRequest.sub = "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d"
+loginRequest.verificationType = VerificationTypes.FACE.rawValue
+loginRequest.request_id = "6kjasg-kjasdjasd-dwewer23f-adsfdsfsdf"
 
-cidaas.loginWithFaceRecognition(photo: photo, passwordlessEntity: passwordlessEntity) {
+verification.login(loginRequest: loginRequest, photo: photo) {
     switch $0 {
         case .success(let loginWithSuccess):
             // your success code here
@@ -142,10 +149,16 @@ Biometric plays an important role in the modern world. cidaas can record your us
 
 #### Configure Voice Recognition
 
-To configure Voice Recognition, call **configureVoiceRecognition()**.
+To configure Voice Recognition, call **configure()**.
 
 ```swift
-cidaas.configureVoiceRecognition(voice: audioData, sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
+let configureRequest: ConfigureRequest = ConfigureRequest()
+configureRequest.sub = "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d"
+configureRequest.verificationType = VerificationTypes.VOICE.rawValue
+configureRequest.access_token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxMGE5LTV"
+configureRequest.attempt = 1
+
+verification.configure(configureRequest: configureRequest, voice: voice) {
     switch $0 {
         case .success(let configureSuccess):
             // your success code here
@@ -159,26 +172,30 @@ cidaas.configureVoiceRecognition(voice: audioData, sub: "7dfb2122-fa5e-4f7a-8494
 
 **Response:**
 
+
 ```swift
 {
     "success": true,
     "status": 200,
     "data": {
-        "statusId": "5f5cbb84-4ceb-4975-b347-4bfac61e9248"
+        "enrolled": true,
+        "sub": "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d"
     }
 }
 ```
 
 #### Login via Voice Recognition
 
-Once you configure Voice Recognition, you can login with Voice Recognition as Passwordless authentication. To login, call **loginWithVoiceRecognition()**.
+Once you configure Voice Recognition, you can login with Voice Recognition as Passwordless authentication. To login, call **login()**.
 
 ```swift
-let passwordlessEntity = PasswordlessEntity()
-passwordlessEntity.email = "xxx@gmail.com"
-passwordlessEntity.usageType = UsageTypes.PASSWORDLESS.rawValue
+let loginRequest: LoginRequest = LoginRequest()
+loginRequest.usage_type = "PASSWORDLESS_AUTHENTICATION"
+loginRequest.sub = "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d"
+loginRequest.verificationType = VerificationTypes.VOICE.rawValue
+loginRequest.request_id = "6kjasg-kjasdjasd-dwewer23f-adsfdsfsdf"
 
-cidaas.loginWithVoiceRecognition(voice: audioData, passwordlessEntity: passwordlessEntity) {
+verification.login(loginRequest: loginRequest, voice: voice) {
     switch $0 {
         case .success(let loginWithSuccess):
             // your success code here
@@ -212,10 +229,15 @@ You may want to allow users to use their touchId on their mobile devices or comp
 
 #### Configure TouchId Verification
 
-To configure TouchId Verification, call **configureTouchId()**.
+To configure TouchId Verification, call **configure()**.
 
 ```swift
-cidaas.configureTouchId(sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
+let configureRequest: ConfigureRequest = ConfigureRequest()
+configureRequest.sub = "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d"
+configureRequest.verificationType = VerificationTypes.TOUCHID.rawValue
+configureRequest.access_token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxMGE5LTV"
+
+verification.configure(configureRequest: configureRequest) {
     switch $0 {
         case .success(let configureSuccess):
             // your success code here
@@ -229,26 +251,30 @@ cidaas.configureTouchId(sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
 
 **Response:**
 
+
 ```swift
 {
     "success": true,
     "status": 200,
     "data": {
-        "statusId": "5f5cbb84-4ceb-4975-b347-4bfac61e9248"
+        "enrolled": true,
+        "sub": "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d"
     }
 }
 ```
 
 #### Login via Touch Id Verification
 
-Once you have configured Touch Id Verification, you can also login with Touch Id Verification for Passwordless authentication. To login, call **loginWithTouchId()**.
+Once you have configured Touch Id Verification, you can also login with Touch Id Verification for Passwordless authentication. To login, call **login()**.
 
 ```swift
-let passwordlessEntity = PasswordlessEntity()
-passwordlessEntity.email = "xxx@gmail.com"
-passwordlessEntity.usageType = UsageTypes.PASSWORDLESS.rawValue
+let loginRequest: LoginRequest = LoginRequest()
+loginRequest.usage_type = "PASSWORDLESS_AUTHENTICATION"
+loginRequest.sub = "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d"
+loginRequest.verificationType = VerificationTypes.TOUCHID.rawValue
+loginRequest.request_id = "6kjasg-kjasdjasd-dwewer23f-adsfdsfsdf"
 
-cidaas.loginWithTouchId(passwordlessEntity: passwordlessEntity) {
+verification.login(loginRequest: loginRequest) {
     switch $0 {
         case .success(let loginWithSuccess):
             // your success code here
@@ -282,10 +308,15 @@ If you want to offer a passwordless login after securing it with the secure patt
 
 #### Configure Pattern Recognition
 
-To configure Pattern Recognition, call **configurePatternRecognition()**.
+To configure Pattern Recognition, call **configure()**.
 
 ```swift
-cidaas.configurePatternRecognition(pattern: "RED[1,2,3]", sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
+let configureRequest: ConfigureRequest = ConfigureRequest()
+configureRequest.sub = "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d"
+configureRequest.verificationType = VerificationTypes.PATTERN.rawValue
+configureRequest.access_token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxMGE5LTV"
+
+verification.configure(configureRequest: configureRequest) {
     switch $0 {
         case .success(let configureSuccess):
             // your success code here
@@ -299,26 +330,30 @@ cidaas.configurePatternRecognition(pattern: "RED[1,2,3]", sub: "7dfb2122-fa5e-4f
 
 **Response:**
 
+
 ```swift
 {
     "success": true,
     "status": 200,
     "data": {
-        "statusId": "5f5cbb84-4ceb-4975-b347-4bfac61e9248"
+        "enrolled": true,   
+        "sub": "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d"
     }
 }
 ```
 
 #### Login via Pattern Recognition
 
-Once you have configured Pattern Recognition, you can also login with Pattern Recognition for Passwordless authentication. To login, call **loginWithPatternRecognition()**.
+Once you have configured Pattern Recognition, you can also login with Pattern Recognition for Passwordless authentication. To login, call **login()**.
 
 ```swift
-let passwordlessEntity = PasswordlessEntity()
-passwordlessEntity.email = "xxx@gmail.com"
-passwordlessEntity.usageType = UsageTypes.PASSWORDLESS.rawValue
+let loginRequest: LoginRequest = LoginRequest()
+loginRequest.usage_type = "PASSWORDLESS_AUTHENTICATION"
+loginRequest.sub = "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d"
+loginRequest.verificationType = VerificationTypes.PATTERN.rawValue
+loginRequest.request_id = "6kjasg-kjasdjasd-dwewer23f-adsfdsfsdf"
 
-cidaas.loginWithPatternRecognition(pattern: "RED[1,2,3], passwordlessEntity: passwordlessEntity) {
+verification.login(loginRequest: loginRequest) {
     switch $0 {
         case .success(let loginWithSuccess):
             // your success code here
@@ -352,10 +387,15 @@ SmartPush notification can be used when you would like users to receive a number
 
 #### Configure SmartPush Notification
 
-To configure SmartPush Notification, call **configureSmartPush()**.
+To configure SmartPush Notification, call **configure()**.
 
 ```swift
-cidaas.configureSmartPush(sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
+let configureRequest: ConfigureRequest = ConfigureRequest()
+configureRequest.sub = "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d"
+configureRequest.verificationType = VerificationTypes.PUSH.rawValue
+configureRequest.access_token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxMGE5LTV"
+
+verification.configure(configureRequest: configureRequest) {
     switch $0 {
         case .success(let configureSuccess):
             // your success code here
@@ -369,26 +409,30 @@ cidaas.configureSmartPush(sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
 
 **Response:**
 
+
 ```swift
 {
     "success": true,
     "status": 200,
     "data": {
-        "statusId": "5f5cbb84-4ceb-4975-b347-4bfac61e9248"
+        "enrolled": true,
+        "sub": "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d"
     }
 }
 ```
 
 #### Login via SmartPush Notification
 
-Once you configure SmartPush Notification, you can also login with SmartPush Notification for Passwordless authentication. To login, call **loginWithSmartPush()**.
+Once you configure SmartPush Notification, you can also login with SmartPush Notification for Passwordless authentication. To login, call **login()**.
 
 ```swift
-let passwordlessEntity = PasswordlessEntity()
-passwordlessEntity.email = "xxx@gmail.com"
-passwordlessEntity.usageType = UsageTypes.PASSWORDLESS.rawValue
+let loginRequest: LoginRequest = LoginRequest()
+loginRequest.usage_type = "PASSWORDLESS_AUTHENTICATION"
+loginRequest.sub = "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d"
+loginRequest.verificationType = VerificationTypes.PUSH.rawValue
+loginRequest.request_id = "6kjasg-kjasdjasd-dwewer23f-adsfdsfsdf"
 
-cidaas.loginWithSmartPush(passwordlessEntity: passwordlessEntity) {
+verification.login(loginRequest: loginRequest) {
     switch $0 {
         case .success(let loginWithSuccess):
             // your success code here
@@ -421,44 +465,53 @@ You can configure passwordless login with an OTP that has to be valid only for a
 
 #### Configure TOTP
 
-To configure TOTP verification, call **configureTOTP()**.
+To configure TOTP verification, call **configure()**.
 
 ```swift
-cidaas.configureTOTP(sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
+let configureRequest: ConfigureRequest = ConfigureRequest()
+configureRequest.sub = "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d"
+configureRequest.verificationType = VerificationTypes.TOTP.rawValue
+configureRequest.access_token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxMGE5LTV"
+
+verification.configure(configureRequest: configureRequest) {
     switch $0 {
         case .success(let configureSuccess):
             // your success code here
         break
         case .failure(let error):
             // your failure code here
-        break 
+        break
     }
 }
 ```
 
 **Response:**
 
+
 ```swift
 {
     "success": true,
     "status": 200,
     "data": {
-        "statusId": "5f5cbb84-4ceb-4975-b347-4bfac61e9248"
+        "enrolled": true,
+        "sub": "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d"
     }
 }
 ```
 
 #### Login via TOTP
 
-Once you configure TOTP, you can login with TOTP for Passwordless authentication. To login, call **loginWithTOTP()**.
+Once you configure TOTP, you can login with TOTP for Passwordless authentication. To login, call **login()**.
 
 ```swift
-let passwordlessEntity = PasswordlessEntity()
-passwordlessEntity.email = "xxx@gmail.com"
-passwordlessEntity.usageType = UsageTypes.PASSWORDLESS.rawValue
+let loginRequest: LoginRequest = LoginRequest()
+loginRequest.usage_type = "PASSWORDLESS_AUTHENTICATION"
+loginRequest.sub = "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d"
+loginRequest.verificationType = VerificationTypes.TOTP.rawValue
+loginRequest.request_id = "6kjasg-kjasdjasd-dwewer23f-adsfdsfsdf"
 
-cidaas.loginWithTOTP(passwordlessEntity: passwordlessEntity) {
-    switch $0 { 
+verification.login(loginRequest: loginRequest) {
+    switch $0 {
         case .success(let loginWithSuccess):
             // your success code here
         break
@@ -492,10 +545,14 @@ To setup a passwordless login, where user types only an Email, you need to confi
 
 #### Configure Email
 
-To receive a verification code via Email, call **configureEmail()**.
+To receive a verification code via Email, call **setup()**.
 
 ```swift
-cidaas.configureEmail(sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
+let setupRequest:SetupRequest = SetupRequest()
+setupRequest.sub = "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d"
+setupRequest.access_token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxMGE5LTV"
+
+verification.setup(verificationType: VerificationTypes.EMAIL.rawValue, setupRequest: setupRequest) {
     switch $0 {
         case .success(let configureSuccess):
             // your success code here
@@ -514,17 +571,23 @@ cidaas.configureEmail(sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
     "success": true,
     "status": 200,
     "data": {
-        "statusId": "5f5cbb84-4ceb-4975-b347-4bfac61e9248"
+        "exchange_id": {
+            "exchange_id": "jahsg87y833-nbvasda-nasa"
+        }
     }
 }
 ```
 
 #### Enroll Email
 
-Once you receive your verification code via Email, you need to verify that code. For that verification, call **enrollEmail()**.
+Once you receive your verification code via Email, you need to verify that code. For that verification, call **enroll()**.
 
 ```swift
-cidaas.enrollEmail(code: "658144") {
+let enrollRequest:EnrollRequest = EnrollRequest()
+enrollRequest.exchange_id = "jahsg87y833-nbvasda-nasa"
+enrollRequest.pass_code = "785234"
+
+verification.enroll(verificationType: VerificationTypes.EMAIL.rawValue, enrollRequest: enrollRequest){
     switch $0 {
         case .success(let configureSuccess):
             // your success code here
@@ -535,7 +598,7 @@ cidaas.enrollEmail(code: "658144") {
     }
 }
 ```
-Here, **code** is the key you would get from the Email
+Here, **pass_code** is the key you would get from the Email
 
 **Response:**
 
@@ -544,22 +607,23 @@ Here, **code** is the key you would get from the Email
     "success": true,
     "status": 200,
     "data": {
-        "sub": "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d",
-        "trackingCode":"5f5cbb84-4ceb-4975-b347-4bfac61e9248"
+        "sub": "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d"
     }
 }
 ```
 
 #### Login via Email
 
-Once you have configured for Email login, you can also login with your Email for Passwordless authentication. To receive a verification code via Email, call **loginWithEmail()**.
+Once you have configured for Email login, you can also login with your Email for Passwordless authentication. To receive a verification code via Email, call **initiate()**.
 
 ```swift
-let passwordlessEntity = PasswordlessEntity()
-passwordlessEntity.email = "xxx@gmail.com"
-passwordlessEntity.usageType = UsageTypes.PASSWORDLESS.rawValue
 
-cidaas.loginWithEmail(passwordlessEntity: passwordlessEntity) {
+let initiateRequest = InitiateRequest()
+initiateRequest.sub = "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d"
+initiateRequest.request_id = "6f7e672c-1e69-4108-92c4-3556f13eda74"
+initiateRequest.usage_type = "PASSWORDLESS_AUTHENTICATION"
+
+verification.initiate(verificationType: VerificationTypes.EMAIL.rawValue, initiateRequest: initiateRequest){
     switch $0 {
         case .success(let loginWithSuccess):
             // your success code here
@@ -578,19 +642,28 @@ cidaas.loginWithEmail(passwordlessEntity: passwordlessEntity) {
     "success": true,
     "status": 200,
     "data": {
-        "statusId": "6f7e672c-1e69-4108-92c4-3556f13eda74"
+        "exchange_id": {
+            "exchange_id": "jahsg87y833-nbvasda-nasa"
+        }
     }
 }
 ```
 
 #### Verify Email
 
-Once you receive your verification code via Email, you need to verify the code. For that verification, call **verifyEmail()**.
+Once you receive your verification code via Email, you need to verify the code. For that verification, call **verify()**.
 
 ```swift
-cidaas.verifyEmail(code: "123123") {
+let authenticateRequest: AuthenticateRequest = AuthenticateRequest()
+authenticateRequest.sub = "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d"
+authenticateRequest.exchange_id = "jahsg87y833-nbvasda-nasa"
+authenticateRequest.request_id = "4jhgassdfgfweew-3453sdfsdfwf-3dfe4sdfsdf"
+authenticateRequest.usage_type = "PASSWORDLESS_AUTHENTICATION"
+authenticateRequest.pass_code = "758456"
+
+verification.verify(verificationType: VerificationTypes.EMAIL.rawValue, authenticateRequest: authenticateRequest){
     switch $0 {
-        case .success(let verifySuccess):
+        case .success(let loginWithSuccess):
             // your success code here
         break
         case .failure(let error):
@@ -599,7 +672,7 @@ cidaas.verifyEmail(code: "123123") {
     }
 }
 ```
-Here, **code** is the key you would get from the Email
+Here, **pass_code** is the key you would get from the Email
 
 **Response:**
 ```json
@@ -623,10 +696,14 @@ To use SMS as a passwordless login, you need to configure SMS physical verificat
 
 #### Configure SMS
 
-To receive a verification code via SMS, call **configureSMS()**.
+To receive a verification code via SMS, call **setup()**.
 
 ```swift
-cidaas.configureSMS(sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
+let setupRequest:SetupRequest = SetupRequest()
+setupRequest.sub = "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d"
+setupRequest.access_token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxMGE5LTV"
+
+verification.setup(verificationType: VerificationTypes.SMS.rawValue, setupRequest: setupRequest) {
     switch $0 {
         case .success(let configureSuccess):
             // your success code here
@@ -635,7 +712,7 @@ cidaas.configureSMS(sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
             // your failure code here
         break
     }
-} 
+}
 ```
 
 **Response:**
@@ -645,17 +722,23 @@ cidaas.configureSMS(sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
     "success": true,
     "status": 200,
     "data": {
-        "statusId": "5f5cbb84-4ceb-4975-b347-4bfac61e9248"
+        "exchange_id": {
+            "exchange_id": "jahsg87y833-nbvasda-nasa"
+        }
     }
 }
 ```
 
 #### Enroll SMS
 
-Once you receive your verification code via SMS, you need to verify the code. For that verification, call **enrollSMS()**.
+Once you receive your verification code via SMS, you need to verify the code. For that verification, call **enroll()**.
 
 ```swift
-cidaas.enrollSMS(code: "123123") {
+let enrollRequest:EnrollRequest = EnrollRequest()
+enrollRequest.exchange_id = "jahsg87y833-nbvasda-nasa"
+enrollRequest.pass_code = "785234"
+
+verification.enroll(verificationType: VerificationTypes.SMS.rawValue, enrollRequest: enrollRequest){
     switch $0 {
         case .success(let configureSuccess):
             // your success code here
@@ -666,7 +749,7 @@ cidaas.enrollSMS(code: "123123") {
     }
 }
 ```
-Here, **code** is the key you would get from the SMS
+Here, **pass_code** is the key you would get from the SMS
 
 **Response:**
 
@@ -675,22 +758,23 @@ Here, **code** is the key you would get from the SMS
     "success": true,
     "status": 200,
     "data": {
-        "sub": "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d",
-        "trackingCode":"5f5cbb84-4ceb-4975-b347-4bfac61e9248"
+        "sub": "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d"
     }
 }
 ```
 
 #### Login via SMS
 
-Once you configure SMS, you can also login with SMS for Passwordless authentication. To receive a verification code via SMS, call **loginWithSMS()**.
+Once you configure SMS, you can also login with SMS for Passwordless authentication. To receive a verification code via SMS, call **initiate()**.
 
 ```swift
-let passwordlessEntity = PasswordlessEntity()
-passwordlessEntity.mobile = "+919876543210" // must starts with country code
-passwordlessEntity.usageType = UsageTypes.PASSWORDLESS.rawValue
 
-cidaas.loginWithSMS(passwordlessEntity: passwordlessEntity) {
+let initiateRequest = InitiateRequest()
+initiateRequest.sub = "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d"
+initiateRequest.request_id = "6f7e672c-1e69-4108-92c4-3556f13eda74"
+initiateRequest.usage_type = "PASSWORDLESS_AUTHENTICATION"
+
+verification.initiate(verificationType: VerificationTypes.SMS.rawValue, initiateRequest: initiateRequest){
     switch $0 {
         case .success(let loginWithSuccess):
             // your success code here
@@ -709,19 +793,28 @@ cidaas.loginWithSMS(passwordlessEntity: passwordlessEntity) {
     "success": true,
     "status": 200,
     "data": {
-        "statusId": "6f7e672c-1e69-4108-92c4-3556f13eda74"
+        "exchange_id": {
+            "exchange_id": "jahsg87y833-nbvasda-nasa"
+        }
     }
 }
 ```
 
 #### Verify SMS
 
-Once you receive your verification code via SMS, you need to verify the code. For that verification, call **verifySMS()**.
+Once you receive your verification code via SMS, you need to verify the code. For that verification, call **verify()**.
 
 ```swift
-cidaas.verifySMS(code: "123123") {
+let authenticateRequest: AuthenticateRequest = AuthenticateRequest()
+authenticateRequest.sub = "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d"
+authenticateRequest.exchange_id = "jahsg87y833-nbvasda-nasa"
+authenticateRequest.request_id = "4jhgassdfgfweew-3453sdfsdfwf-3dfe4sdfsdf"
+authenticateRequest.usage_type = "PASSWORDLESS_AUTHENTICATION"
+authenticateRequest.pass_code = "758456"
+
+verification.verify(verificationType: VerificationTypes.SMS.rawValue, authenticateRequest: authenticateRequest){
     switch $0 {
-        case .success(let configureSuccess):
+        case .success(let loginWithSuccess):
             // your success code here
         break
         case .failure(let error):
@@ -730,10 +823,9 @@ cidaas.verifySMS(code: "123123") {
     }
 }
 ```
-Here, **code** is the key you would get from the SMS
+Here, **pass_code** is the key you would get from the Email
 
 **Response:**
-
 ```json
 {
     "success": true,
@@ -755,10 +847,14 @@ To use IVR as a passwordless login, you need to configure IVR physical verificat
 
 #### Configure IVR
 
-To receive a verification code via IVR, call **configureIVR()**.
+To receive a verification code via IVR, call **setup()**.
 
 ```swift
-cidaas.configureIVR(sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
+let setupRequest:SetupRequest = SetupRequest()
+setupRequest.sub = "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d"
+setupRequest.access_token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxMGE5LTV"
+
+verification.setup(verificationType: VerificationTypes.IVR.rawValue, setupRequest: setupRequest) {
     switch $0 {
         case .success(let configureSuccess):
             // your success code here
@@ -777,17 +873,23 @@ cidaas.configureIVR(sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
     "success": true,
     "status": 200,
     "data": {
-        "statusId": "5f5cbb84-4ceb-4975-b347-4bfac61e9248"
+        "exchange_id": {
+            "exchange_id": "jahsg87y833-nbvasda-nasa"
+        }
     }
 }
 ```
 
 #### Enroll IVR
 
-Once you receive your verification code for IVR verification call, you need to verify the code. For that verification, call **enrollIVR()**.
+Once you receive your verification code for IVR verification call, you need to verify the code. For that verification, call **enroll()**.
 
 ```swift
-cidaas.enrollIVR(code: "123123") {
+let enrollRequest:EnrollRequest = EnrollRequest()
+enrollRequest.exchange_id = "jahsg87y833-nbvasda-nasa"
+enrollRequest.pass_code = "785234"
+
+verification.enroll(verificationType: VerificationTypes.IVR.rawValue, enrollRequest: enrollRequest){
     switch $0 {
         case .success(let configureSuccess):
             // your success code here
@@ -798,7 +900,7 @@ cidaas.enrollIVR(code: "123123") {
     }
 }
 ```
-Here, **code** is the key you would get from the IVR verification call
+Here, **pass_code** is the key you would get from the Email
 
 **Response:**
 
@@ -807,22 +909,23 @@ Here, **code** is the key you would get from the IVR verification call
     "success": true,
     "status": 200,
     "data": {
-        "sub": "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d",
-        "trackingCode":"5f5cbb84-4ceb-4975-b347-4bfac61e9248"
+        "sub": "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d"
     }
 }
 ```
 
 #### Login via IVR
 
-Once you configure IVR, you can also login with IVR for Passwordless authentication. To receive a verification code via IVR verification call, call **loginWithIVR()**.
+Once you configure IVR, you can also login with IVR for Passwordless authentication. To receive a verification code via IVR verification call, call **initiate()**.
 
 ```swift
-let passwordlessEntity = PasswordlessEntity()
-passwordlessEntity.mobile = "+919876543210" // must starts with country code
-passwordlessEntity.usageType = UsageTypes.PASSWORDLESS.rawValue
 
-cidaas.loginWithIVR(passwordlessEntity: passwordlessEntity){
+let initiateRequest = InitiateRequest()
+initiateRequest.sub = "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d"
+initiateRequest.request_id = "6f7e672c-1e69-4108-92c4-3556f13eda74"
+initiateRequest.usage_type = "PASSWORDLESS_AUTHENTICATION"
+
+verification.initiate(verificationType: VerificationTypes.IVR.rawValue, initiateRequest: initiateRequest){
     switch $0 {
         case .success(let loginWithSuccess):
             // your success code here
@@ -841,19 +944,28 @@ cidaas.loginWithIVR(passwordlessEntity: passwordlessEntity){
     "success": true,
     "status": 200,
     "data": {
-        "statusId": "6f7e672c-1e69-4108-92c4-3556f13eda74"
+        "exchange_id": {
+            "exchange_id": "jahsg87y833-nbvasda-nasa"
+        }
     }
 }
 ```
 
 #### Verify IVR
 
-Once you receive your verification code via IVR, you need to verify the code. For that verification, call **verifyIVR()**.
+Once you receive your verification code via IVR, you need to verify the code. For that verification, call **verify()**.
 
 ```swift
-cidaas.verifyIVR(code: "123123") {
+let authenticateRequest: AuthenticateRequest = AuthenticateRequest()
+authenticateRequest.sub = "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d"
+authenticateRequest.exchange_id = "jahsg87y833-nbvasda-nasa"
+authenticateRequest.request_id = "4jhgassdfgfweew-3453sdfsdfwf-3dfe4sdfsdf"
+authenticateRequest.usage_type = "PASSWORDLESS_AUTHENTICATION"
+authenticateRequest.pass_code = "758456"
+
+verification.verify(verificationType: VerificationTypes.IVR.rawValue, authenticateRequest: authenticateRequest){
     switch $0 {
-        case .success(let verifySuccess):
+        case .success(let loginWithSuccess):
             // your success code here
         break
         case .failure(let error):
@@ -862,10 +974,9 @@ cidaas.verifyIVR(code: "123123") {
     }
 }
 ```
-Here, **code** is the key you would get from the IVR verification call
+Here, **pass_code** is the key you would get from the Email
 
 **Response:**
-
 ```json
 {
     "success": true,
@@ -887,10 +998,14 @@ To use Backupcode for passwordless login, you need to configure Backupcode physi
 
 #### Configure BackupCode
 
-To configure or view the Backupcode, call **configureBackupcode()**.
+To configure or view the Backupcode, call **setup()**.
 
 ```swift
-cidaas.configureBackupcode(sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
+let setupRequest:SetupRequest = SetupRequest()
+setupRequest.sub = "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d"
+setupRequest.access_token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxMGE5LTV"
+
+verification.setup(verificationType: VerificationTypes.BACKUPCODE.rawValue, setupRequest: setupRequest) {
     switch $0 {
         case .success(let configureSuccess):
             // your success code here
@@ -903,34 +1018,31 @@ cidaas.configureBackupcode(sub: "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
 ```
 
 **Response:**
+
 ```json
 {
-    "success": true,
+    "success": true,    
     "status": 200,
     "data": {
-        "statusId": "6f7e672c-1e69-4108-92c4-3556f13eda74",
-        "backupCodes": [{
-            "code": "63537876",
-            "used": false,
-        },
-        {
-            "code": "76482357",
-            "used": false,        
-        }]
+        "exchange_id": {
+            "exchange_id": "jahsg87y833-nbvasda-nasa"
+        }
     }
 }
 ```
 
 #### Login via Backupcode
 
-Once you configure Backupcode, you can also login with Backupcode for Passwordless authentication. To login with Backupcode, call **loginWithBackupcode()**.
+Once you configure Backupcode, you can also login with Backupcode for Passwordless authentication. To login with Backupcode, call **initiate()**.
 
 ```swift
-let passwordlessEntity = PasswordlessEntity()
-passwordlessEntity.email = "xxx@gmail.com"
-passwordlessEntity.usageType = UsageTypes.PASSWORDLESS.rawValue
 
-cidaas.loginWithBackupcode(code: "63537876", passwordlessEntity: passwordlessEntity){
+let initiateRequest = InitiateRequest()
+initiateRequest.sub = "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d"
+initiateRequest.request_id = "6f7e672c-1e69-4108-92c4-3556f13eda74"
+initiateRequest.usage_type = "PASSWORDLESS_AUTHENTICATION"
+
+verification.initiate(verificationType: VerificationTypes.BACKUPCODE.rawValue, initiateRequest: initiateRequest){
     switch $0 {
         case .success(let loginWithSuccess):
             // your success code here
@@ -941,10 +1053,45 @@ cidaas.loginWithBackupcode(code: "63537876", passwordlessEntity: passwordlessEnt
     }
 }
 ```
-Here, **code** is the key you would get from your saved Backup codes
 
 **Response:**
 
+```json
+{
+    "success": true,
+    "status": 200,
+    "data": {
+        "exchange_id": {
+            "exchange_id": "jahsg87y833-nbvasda-nasa"
+        }
+    }
+}
+```
+
+#### Verify Backupcode
+
+
+```swift
+let authenticateRequest: AuthenticateRequest = AuthenticateRequest()
+authenticateRequest.sub = "7dfb2122-fa5e-4f7a-8494-dadac9b43f9d"
+authenticateRequest.exchange_id = "jahsg87y833-nbvasda-nasa"
+authenticateRequest.request_id = "4jhgassdfgfweew-3453sdfsdfwf-3dfe4sdfsdf"
+authenticateRequest.usage_type = "PASSWORDLESS_AUTHENTICATION"
+authenticateRequest.pass_code = "758456"
+
+verification.verify(verificationType: VerificationTypes.BACKUPCODE.rawValue, authenticateRequest: authenticateRequest){
+    switch $0 {
+        case .success(let loginWithSuccess):
+            // your success code here
+        break
+        case .failure(let error):
+            // your failure code here
+        break
+    }
+}
+```
+
+**Response:**
 ```json
 {
     "success": true,

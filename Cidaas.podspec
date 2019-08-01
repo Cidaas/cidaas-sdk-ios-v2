@@ -38,5 +38,6 @@ Pod::Spec.new do |s|
   
   s.subspec 'V2_Verification' do |verification|
       verification.source_files = 'Cidaas/Classes/V2/Verification/**/*'
+      verification.dependency 'Cidaas/Core'
   end
 end
