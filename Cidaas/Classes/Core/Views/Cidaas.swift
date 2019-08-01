@@ -16,6 +16,8 @@ public class Cidaas {
     // shared instance
     public static var shared : Cidaas = Cidaas()
     
+    public static var verification: Verification = Verification()
+    
     // private local variables
     var requestId : String = ""
     var loginURLString : String = ""
@@ -91,7 +93,7 @@ public class Cidaas {
         DBHelper.shared.setDeviceInfo(deviceInfo: deviceInfo)
         
         locationDetector = LocationDetector()
-        locationDetector.startTracking()
+//        locationDetector.startTracking()
         
         // set storage in local
         self.storage = storage
@@ -3475,6 +3477,7 @@ public class Cidaas {
             callback(Result.success(result: true))
         }
     }
+    
 }
 
 extension Notification.Name {

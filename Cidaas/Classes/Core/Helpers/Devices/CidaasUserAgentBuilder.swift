@@ -45,7 +45,7 @@ public class CidaasUserAgentBuilder {
         let version = dictionary["CFBundleShortVersionString"] as! String
         var name = dictionary["CFBundleDisplayName"] as? String ?? "-"
         name = name.replacingOccurrences(of: " ", with: "_")
-        return "\(name)/\(version)"
+        return "Cidaas-\(name)/\(version)"
     }
     
     public func UAString() -> String {
@@ -55,7 +55,7 @@ public class CidaasUserAgentBuilder {
     
     func getFrameworkVersion(framework:AnyClass) -> String {
         if let sdkVersion = Bundle(for: framework.self).infoDictionary?["CFBundleShortVersionString"] {
-            return "(\(sdkVersion))"
+            return "_\(sdkVersion)"
         }else{
             return ""
         }

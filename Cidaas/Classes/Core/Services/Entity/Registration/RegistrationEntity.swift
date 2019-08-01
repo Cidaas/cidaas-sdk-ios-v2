@@ -20,6 +20,7 @@ public class RegistrationEntity : Codable {
     public var provider: String = ""
     public var mobile_number: String = ""
     public var birthdate: String = ""
+    public var identityId: String = ""
     public var customFields: Dictionary<String, RegistrationCustomFieldsEntity> = Dictionary<String, RegistrationCustomFieldsEntity>()
     
     public init() {

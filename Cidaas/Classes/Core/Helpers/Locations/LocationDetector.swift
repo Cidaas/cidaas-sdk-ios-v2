@@ -28,6 +28,12 @@ public class LocationDetector: NSObject, CLLocationManagerDelegate {
         longitude = String(format: "%.6f", lastLocation.coordinate.longitude)
         updateLocation()
     }
+    
+    public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        latitude = ""
+        longitude = ""
+        updateLocation()
+    }
  
     public func updateLocation() {
         DBHelper.shared.setLocation(lat: latitude, lon: longitude)

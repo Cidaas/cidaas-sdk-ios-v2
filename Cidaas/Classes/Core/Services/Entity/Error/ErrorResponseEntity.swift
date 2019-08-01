@@ -35,6 +35,8 @@ public class ErrorResponseDataEntity : Codable {
     public var requestId: String = ""
     public var client_id: String = ""
     public var consent_name: String = ""
+    public var consent_id: String = ""
+    public var consent_version_id: String = ""
     public var suggested_url: String = ""
     
     
@@ -44,6 +46,7 @@ public class ErrorResponseDataEntity : Codable {
     public var status: Int16 = 400
     public var referenceNumber: String = ""
     public var error: String = ""
+    public var metadata: MetadataInfo = MetadataInfo()
     
     
     // Constructors
@@ -59,11 +62,28 @@ public class ErrorResponseDataEntity : Codable {
         self.suggested_url = try container.decodeIfPresent(String.self, forKey: .suggested_url) ?? ""
         self.client_id = try container.decodeIfPresent(String.self, forKey: .client_id) ?? ""
         self.consent_name = try container.decodeIfPresent(String.self, forKey: .consent_name) ?? ""
+        self.consent_id = try container.decodeIfPresent(String.self, forKey: .consent_id) ?? ""
+        self.consent_version_id = try container.decodeIfPresent(String.self, forKey: .consent_version_id) ?? ""
         self.code = try container.decodeIfPresent(Int32.self, forKey: .code) ?? 0
         self.moreInfo = try container.decodeIfPresent(String.self, forKey: .moreInfo) ?? ""
         self.type = try container.decodeIfPresent(String.self, forKey: .type) ?? ""
         self.status = try container.decodeIfPresent(Int16.self, forKey: .status) ?? 400
         self.referenceNumber = try container.decodeIfPresent(String.self, forKey: .referenceNumber) ?? ""
         self.error = try container.decodeIfPresent(String.self, forKey: .error) ?? ""
+        self.metadata = try container.decodeIfPresent(MetadataInfo.self, forKey: .metadata) ?? MetadataInfo()
+    }
+}
+
+public class MetadataInfo:Codable {
+    
+    public var meta: EnrollResponseMetaData = EnrollResponseMetaData()
+    
+    public init() {
+        
+    }
+    
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.meta = try container.decodeIfPresent(EnrollResponseMetaData.self, forKey: .meta) ?? EnrollResponseMetaData()
     }
 }
