@@ -687,4 +687,36 @@ public class VerificationInteractor {
             }
         }
     }
+    
+    public func verify(verificationType: String, incomingData: AuthenticateRequest, callback: @escaping(Result<LoginResponse>) -> Void) {
+        
+        // get saved properties
+        let savedProp = getProperties()
+        if (savedProp == nil) {
+            // send response to presenter
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
+            VerificationPresenter.shared.login(loginResponse: nil, errorResponse: error, callback: callback)
+            return
+        }
+        
+        self.authenticate(verificationType: verificationType, incomingData: incomingData) {
+            switch $0 {
+            case .success(let authenticateSuccessResponse):
+                if (incomingData.usage_type == UsageTypes.PASSWORDLESS.rawValue) {
+                    let passwordlessRequest = PasswordlessRequest()
+                    passwordlessRequest.requestId = incomingData.request_id
+                    passwordlessRequest.status_id = authenticateSuccessResponse.data.status_id
+                    passwordlessRequest.sub = incomingData.sub
+                    passwordlessRequest.verificationType = verificationType
+                    
+                    self.continueMFA(passwordlessRequest: passwordlessRequest, properties: savedProp!, callback: callback)
+                }
+                break
+            case .failure(let authenticateErrorResponse):
+                VerificationPresenter.shared.login(loginResponse: nil, errorResponse: authenticateErrorResponse, callback: callback)
+                break
+            }
+
+        }
+    }
 }

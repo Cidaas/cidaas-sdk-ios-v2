@@ -19,4 +19,6 @@ public class AuthenticateRequest: Codable {
     public var pass_code: String = ""
     public var attempt: Int = 0
     public var localizedReason: String = ""
+    public var usage_type: String = ""
+    public var request_id: String = ""
 }

@@ -74,4 +74,8 @@ public class Verification {
     public func initiate(verificationType: String, initiateRequest: InitiateRequest, callback:@escaping (Result<InitiateResponse>) -> Void) {
         VerificationViewController.shared.initiate(verificationType: verificationType, incomingData: initiateRequest, callback: callback)
     }
+    
+    public func verify(verificationType: String, authenticateRequest: AuthenticateRequest, callback:@escaping (Result<LoginResponse>) -> Void) {
+        VerificationViewController.shared.verify(verificationType: verificationType, incomingData: authenticateRequest, callback: callback)
+    }
 }
