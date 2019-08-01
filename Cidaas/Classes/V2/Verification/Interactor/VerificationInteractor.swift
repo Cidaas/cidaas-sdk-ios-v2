@@ -451,7 +451,50 @@ public class VerificationInteractor {
                     self.askForTouchorFaceIdForAuthenticate(incomingData: authenticateRequest) {
                         switch $0 {
                         case .success(let authenticateSuccessResponse):
-                            print(authenticateSuccessResponse)
+                            if (incomingData.usage_type == UsageTypes.PASSWORDLESS.rawValue) {
+                                let passwordlessRequest = PasswordlessRequest()
+                                passwordlessRequest.requestId = incomingData.request_id
+                                passwordlessRequest.status_id = authenticateSuccessResponse.data.status_id
+                                passwordlessRequest.sub = incomingData.sub
+                                passwordlessRequest.verificationType = incomingData.verificationType
+                                self.passwordlessContinue(incomingData: passwordlessRequest) {
+                                    switch $0 {
+                                    case .success(let passwordlessContinueSuccessResponse):
+                                        
+                                        AccessTokenService.shared.getAccessToken(code: passwordlessContinueSuccessResponse.data.code, properties: savedProp!) {
+                                            switch $0 {
+                                            case .success(let tokenSuccessResponse):
+                                                let loginResp = LoginResponse()
+                                                loginResp.success = true
+                                                loginResp.status = 200
+                                                loginResp.data = tokenSuccessResponse
+                                                let encoder = JSONEncoder()
+                                                do {
+                                                    let data = try encoder.encode(loginResp)
+                                                    let loginResponseString = String(data: data, encoding: .utf8)
+                                                    VerificationPresenter.shared.login(loginResponse: loginResponseString, errorResponse: nil, callback: callback)
+                                                }
+                                                catch(let err) {
+                                                    let error_resp = WebAuthError.shared
+                                                    error_resp.errorCode = 500
+                                                    error_resp.errorMessage = "JSON parsing error: \(err.localizedDescription)"
+                                                    error_resp.statusCode = 500
+                                                    
+                                                    VerificationPresenter.shared.login(loginResponse: nil, errorResponse: error_resp, callback: callback)
+                                                }
+                                                break
+                                            case .failure(let tokenFailureResponse):
+                                                VerificationPresenter.shared.login(loginResponse: nil, errorResponse: tokenFailureResponse, callback: callback)
+                                                break
+                                            }
+                                        }
+                                        break
+                                    case .failure(let passwordlessContinueFailureResponse):
+                                        VerificationPresenter.shared.login(loginResponse: nil, errorResponse: passwordlessContinueFailureResponse, callback: callback)
+                                        break
+                                    }
+                                }
+                            }
                             break
                         case .failure(let authenticateErrorResponse):
                             VerificationPresenter.shared.login(loginResponse: nil, errorResponse: authenticateErrorResponse, callback: callback)
