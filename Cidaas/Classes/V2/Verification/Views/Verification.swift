@@ -7,7 +7,9 @@
 
 import Foundation
 
-public class Verification {
+public class CidaasVerification {
+    
+    public static var shared: CidaasVerification = CidaasVerification()
     
     public init() {}
     

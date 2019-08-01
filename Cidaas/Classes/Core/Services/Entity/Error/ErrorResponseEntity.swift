@@ -74,6 +74,31 @@ public class ErrorResponseDataEntity : Codable {
     }
 }
 
+public class EnrollResponseMetaData : Codable {
+    
+    // properties
+    public var comment: String = ""
+    public var number_images_needed: Int32 = 0
+    public var number_images_uploaded: Int32 = 0
+    
+    public var number_voices_needed: Int32 = 0
+    public var number_voices_uploaded: Int32 = 0
+    
+    // Constructors
+    public init() {
+        
+    }
+    
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.comment = try container.decodeIfPresent(String.self, forKey: .comment) ?? ""
+        self.number_images_needed = try container.decodeIfPresent(Int32.self, forKey: .number_images_needed) ?? 0
+        self.number_images_uploaded = try container.decodeIfPresent(Int32.self, forKey: .number_images_uploaded) ?? 0
+        self.number_voices_needed = try container.decodeIfPresent(Int32.self, forKey: .number_voices_needed) ?? 0
+        self.number_voices_uploaded = try container.decodeIfPresent(Int32.self, forKey: .number_voices_uploaded) ?? 0
+    }
+}
+
 public class MetadataInfo:Codable {
     
     public var meta: EnrollResponseMetaData = EnrollResponseMetaData()
