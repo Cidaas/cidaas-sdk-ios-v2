@@ -29,7 +29,7 @@ public class CidaasFacebook: CidaasFacebookDelegate {
     
     public func login(viewType: String, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         
-        loginManager.logIn(readPermissions: [.email], viewController: delegate) { (loginResult) in
+        loginManager.logIn(permissions: [.email], viewController: delegate) { (loginResult) in
             switch loginResult {
             case .cancelled:
                 callback(Result.failure(error: WebAuthError.shared.userCancelledException()))
@@ -37,9 +37,9 @@ public class CidaasFacebook: CidaasFacebookDelegate {
             case .failed:
                 callback(Result.failure(error: WebAuthError.shared.userCancelledException()))
                 break
-            case .success(grantedPermissions: _, declinedPermissions: _, token: _):
+            case .success(granted: _, declined: _, token: _):
                 if AccessToken.current != nil {
-                    Cidaas.shared.getAccessToken(socialToken: AccessToken.current?.authenticationToken ?? "", provider: "facebook", viewType: viewType, callback: callback)
+                    Cidaas.shared.getAccessToken(socialToken: AccessToken.current?.tokenString ?? "", provider: "facebook", viewType: viewType, callback: callback)
                 }
                 else {
                     callback(Result.failure(error: WebAuthError.shared.userCancelledException()))

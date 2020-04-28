@@ -1,66 +1,67 @@
 PODS:
   - Alamofire (4.7.3)
+  - AppAuth (1.3.0):
+    - AppAuth/Core (= 1.3.0)
+    - AppAuth/ExternalUserAgent (= 1.3.0)
+  - AppAuth/Core (1.3.0)
+  - AppAuth/ExternalUserAgent (1.3.0)
   - Base32 (1.1.2)
-  - Bolts (1.9.0):
-    - Bolts/AppLinks (= 1.9.0)
-    - Bolts/Tasks (= 1.9.0)
-  - Bolts/AppLinks (1.9.0):
-    - Bolts/Tasks
-  - Bolts/Tasks (1.9.0)
-  - Cidaas (1.1.4):
+  - Cidaas (1.1.7):
     - Alamofire (~> 4.7.3)
-    - Cidaas/Core (= 1.1.4)
-    - Cidaas/Facebook (= 1.1.4)
-    - Cidaas/V2_Verification (= 1.1.4)
+    - Cidaas/Core (= 1.1.7)
+    - Cidaas/Facebook (= 1.1.7)
+    - Cidaas/V2_Verification (= 1.1.7)
     - CryptoSwift (~> 0.12)
     - OneTimePassword (~> 3.1.4)
     - SwiftKeychainWrapper (~> 3.0)
-  - Cidaas/Core (1.1.4):
+  - Cidaas/Core (1.1.7):
     - Alamofire (~> 4.7.3)
     - CryptoSwift (~> 0.12)
     - OneTimePassword (~> 3.1.4)
     - SwiftKeychainWrapper (~> 3.0)
-  - Cidaas/Facebook (1.1.4):
+  - Cidaas/Facebook (1.1.7):
     - Alamofire (~> 4.7.3)
     - Cidaas/Core
     - CryptoSwift (~> 0.12)
-    - FacebookCore (~> 0.4)
-    - FacebookLogin (~> 0.4)
-    - FBSDKCoreKit (~> 4.38.0)
-    - FBSDKLoginKit (~> 4.38.0)
+    - FacebookCore (= 0.8)
+    - FacebookLogin (= 0.8)
+    - FBSDKCoreKit (= 5.5.0)
+    - FBSDKLoginKit (= 5.5.0)
     - OneTimePassword (~> 3.1.4)
     - SwiftKeychainWrapper (~> 3.0)
-  - Cidaas/V2_Verification (1.1.4):
+  - Cidaas/V2_Verification (1.1.7):
     - Alamofire (~> 4.7.3)
+    - Cidaas/Core
     - CryptoSwift (~> 0.12)
     - OneTimePassword (~> 3.1.4)
     - SwiftKeychainWrapper (~> 3.0)
   - CryptoSwift (0.15.0)
-  - FacebookCore (0.5.0):
-    - Bolts (~> 1.9)
-    - FBSDKCoreKit (~> 4.37)
-  - FacebookLogin (0.5.0):
-    - Bolts (~> 1.9)
-    - FacebookCore (~> 0.5)
-    - FBSDKCoreKit (~> 4.37)
-    - FBSDKLoginKit (~> 4.37)
-  - FBSDKCoreKit (4.38.1):
-    - Bolts (~> 1.9)
-  - FBSDKLoginKit (4.38.1):
-    - FBSDKCoreKit
-  - GoogleSignIn (4.4.0):
-    - "GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)"
-    - "GoogleToolboxForMac/NSString+URLArguments (~> 2.1)"
+  - FacebookCore (0.8.0):
+    - FBSDKCoreKit (~> 5.0)
+  - FacebookLogin (0.8.0):
+    - FacebookCore (~> 0.8.0)
+    - FBSDKCoreKit (~> 5.0)
+    - FBSDKLoginKit (~> 5.0)
+  - FBSDKCoreKit (5.5.0):
+    - FBSDKCoreKit/Basics (= 5.5.0)
+    - FBSDKCoreKit/Core (= 5.5.0)
+  - FBSDKCoreKit/Basics (5.5.0)
+  - FBSDKCoreKit/Core (5.5.0):
+    - FBSDKCoreKit/Basics
+  - FBSDKLoginKit (5.5.0):
+    - FBSDKCoreKit (~> 5.0)
+  - GoogleSignIn (5.0.2):
+    - AppAuth (~> 1.2)
+    - GTMAppAuth (~> 1.0)
     - GTMSessionFetcher/Core (~> 1.1)
-  - GoogleToolboxForMac/DebugUtils (2.2.1):
-    - GoogleToolboxForMac/Defines (= 2.2.1)
-  - GoogleToolboxForMac/Defines (2.2.1)
-  - "GoogleToolboxForMac/NSDictionary+URLArguments (2.2.1)":
-    - GoogleToolboxForMac/DebugUtils (= 2.2.1)
-    - GoogleToolboxForMac/Defines (= 2.2.1)
-    - "GoogleToolboxForMac/NSString+URLArguments (= 2.2.1)"
-  - "GoogleToolboxForMac/NSString+URLArguments (2.2.1)"
-  - GTMSessionFetcher/Core (1.2.2)
+  - GTMAppAuth (1.0.0):
+    - AppAuth/Core (~> 1.0)
+    - GTMSessionFetcher (~> 1.1)
+  - GTMSessionFetcher (1.3.1):
+    - GTMSessionFetcher/Full (= 1.3.1)
+  - GTMSessionFetcher/Core (1.3.1)
+  - GTMSessionFetcher/Full (1.3.1):
+    - GTMSessionFetcher/Core (= 1.3.1)
   - Mockingjay (2.0.1):
     - Mockingjay/Core (= 2.0.1)
     - Mockingjay/XCTest (= 2.0.1)
@@ -81,17 +82,17 @@ DEPENDENCIES:
   - Quick (~> 1.2.0)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  trunk:
     - Alamofire
+    - AppAuth
     - Base32
-    - Bolts
     - CryptoSwift
     - FacebookCore
     - FacebookLogin
     - FBSDKCoreKit
     - FBSDKLoginKit
     - GoogleSignIn
-    - GoogleToolboxForMac
+    - GTMAppAuth
     - GTMSessionFetcher
     - Mockingjay
     - OneTimePassword
@@ -105,17 +106,17 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
+  AppAuth: 73574f3013a1e65b9601a3ddc8b3158cce68c09d
   Base32: 163c298644d184e89ca4e00a996bad6bf5166390
-  Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
-  Cidaas: 592758ff39e423030c0fbecaf9edfdfb5ceda87c
+  Cidaas: f84382589d98c31c53f1e29fc66a7bf108105654
   CryptoSwift: 769f58a9e89f64e8796c2e59ce5f002dc81a2438
-  FacebookCore: 74288d0add931d361b1596beae787ab72c438249
-  FacebookLogin: ebcf34714a1cb9f0759d9f071cfb01ed500996cf
-  FBSDKCoreKit: 8d47857400e2f5bdea697a80daff882e91c84ef6
-  FBSDKLoginKit: 4621c690d9dd8628031a4791497062183ea34b0d
-  GoogleSignIn: 7ff245e1a7b26d379099d3243a562f5747e23d39
-  GoogleToolboxForMac: b3553629623a3b1bff17f555e736cd5a6d95ad55
-  GTMSessionFetcher: 61bb0f61a4cb560030f1222021178008a5727a23
+  FacebookCore: 563bb4cbcd7dd86cf89f3729252140bf256aacaa
+  FacebookLogin: 8b966ae661e95e7dba837d7cc49cc464ce003dba
+  FBSDKCoreKit: 7ade9cfea30eef2f6cf105a1aa904f89ea68fb7d
+  FBSDKLoginKit: bb28062f24e79590c44ba03297ca9bea4b6436d2
+  GoogleSignIn: 7137d297ddc022a7e0aa4619c86d72c909fa7213
+  GTMAppAuth: 4deac854479704f348309e7b66189e604cf5e01e
+  GTMSessionFetcher: cea130bbfe5a7edc8d06d3f0d17288c32ffe9925
   Mockingjay: 11a621880d2887f1775bdcf824341eb68f218450
   OneTimePassword: 247500f67ab074f10501bb1c46bd1596c57bdb2a
   Quick: 58d203b1c5e27fff7229c4c1ae445ad7069a7a08
@@ -124,4 +125,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 426406034f82c6a0242097a2de0f4bff0279e043
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.9.1

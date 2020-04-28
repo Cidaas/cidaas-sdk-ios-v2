@@ -10,7 +10,7 @@ import Foundation
 import GoogleSignIn
 import Cidaas
 
-public class CidaasGoogle : UIViewController, GIDSignInUIDelegate, CidaasGoogleDelegate {
+public class CidaasGoogle : UIViewController, GIDSignInDelegate, CidaasGoogleDelegate {
     
     public static var shared : CidaasGoogle = CidaasGoogle()
     var googleCallback: ((Result<LoginResponseEntity>) -> ())!
@@ -30,7 +30,7 @@ public class CidaasGoogle : UIViewController, GIDSignInUIDelegate, CidaasGoogleD
     var googleViewController: UIViewController!
     
     public func login(viewType: String, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
-        GIDSignIn.sharedInstance().uiDelegate = self
+        GIDSignIn.sharedInstance()?.delegate = self
         GIDSignIn.sharedInstance().signIn()
         
         self.viewType = viewType
@@ -56,7 +56,7 @@ public class CidaasGoogle : UIViewController, GIDSignInUIDelegate, CidaasGoogleD
         googleViewController.dismiss(animated: true, completion: nil)
     }
     
-    public func didSignIn(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
+    public func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
         if user != nil {
             Cidaas.shared.getAccessToken(socialToken: user.authentication.accessToken ?? "", provider: "google", viewType: self.viewType, callback: googleCallback)
         }
@@ -73,7 +73,7 @@ public class CidaasGoogle : UIViewController, GIDSignInUIDelegate, CidaasGoogleD
             
             if let clientID = dict?.object(forKey: "CLIENT_ID") {
                 GIDSignIn.sharedInstance().clientID = clientID as? String ?? ""
-                GIDSignIn.sharedInstance().delegate = appDelegate
+//                GIDSignIn.sharedInstance().delegate = appDelegate
             }
         }
     }
