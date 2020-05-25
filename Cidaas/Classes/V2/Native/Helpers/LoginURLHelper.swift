@@ -6,3 +6,14 @@
 //
 
 import Foundation
+
+public class LoginURLHelper {
+    
+    public static var shared : LoginURLHelper = LoginURLHelper()
+    
+    public var loginWithCredentialsURL = "/login-srv/login/sdk"
+    
+    public func getLoginWithCredentialsURL() -> String {
+        return loginWithCredentialsURL
+    }
+}

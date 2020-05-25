@@ -2,10 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSLocationUsageDescription</key>
-	<string>Location</string>
-	<key>NSFaceIDUsageDescription</key>
-	<string>Face Id</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -33,17 +29,7 @@
 			<string>com.cidaas.sdk.demo</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.271883286261-s4tk5qq9onltdquqp5g1dbur9pan6kgp</string>
-				<string>com.cidaas.sdk.demo</string>
-				<string>fb1889502804712451</string>
-			</array>
-		</dict>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>prefs</string>
+				<string>com.cidaas.sdk</string>
 			</array>
 		</dict>
 	</array>
@@ -64,8 +50,12 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Face Id</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Location always ask</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Location</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Location in foreground</string>
 	<key>UIBackgroundModes</key>

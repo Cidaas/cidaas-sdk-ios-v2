@@ -11,7 +11,7 @@ public class VerificationPresenter {
     
     public static var shared: VerificationPresenter = VerificationPresenter()
     
-    public func setup(setupResponse: String?, errorResponse: WebAuthError?, callback: @escaping (Result<SetupResponse>) -> Void) {
+    public func setup(response: String?, errorResponse: WebAuthError?, callback: @escaping (Result<SetupResponse>) -> Void) {
         if errorResponse != nil {
             logw(errorResponse!.errorMessage, cname: "cidaas-sdk-verification-error-log")
             callback(Result.failure(error: errorResponse!))
@@ -19,17 +19,17 @@ public class VerificationPresenter {
         else {
             let decoder = JSONDecoder()
             do {
-                let data = setupResponse!.data(using: .utf8)!
+                let data = response!.data(using: .utf8)!
                 // decode the json data to object
                 let setupResp = try decoder.decode(SetupResponse.self, from: data)
                 
-                logw(setupResponse ?? "Empty response string", cname: "cidaas-sdk-verification-success-log")
+                logw(response ?? "Empty response string", cname: "cidaas-sdk-verification-success-log")
                 // return success
                 callback(Result.success(result: setupResp))
             }
             catch(let error) {
                 // return failure
-                logw("\(String(describing: error)) JSON parsing issue, Response: \(String(describing: setupResponse))", cname: "cidaas-sdk-verification-error-log")
+                logw("\(String(describing: error)) JSON parsing issue, Response: \(String(describing: response))", cname: "cidaas-sdk-verification-error-log")
                 callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: 400, errorMessage: error.localizedDescription, statusCode: 400)))
             }
         }

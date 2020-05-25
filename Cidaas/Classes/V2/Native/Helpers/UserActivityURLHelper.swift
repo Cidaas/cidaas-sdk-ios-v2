@@ -6,3 +6,14 @@
 //
 
 import Foundation
+
+public class UserActivityURLHelper {
+    
+    public static var shared : UserActivityURLHelper = UserActivityURLHelper()
+    
+    public var userActivityURL = "/useractivity-srv/latestactivity"
+    
+    public func getUserActivityURL() -> String {
+        return userActivityURL
+    }
+}

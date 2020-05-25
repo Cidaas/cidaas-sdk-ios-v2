@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1010"
+   LastUpgradeVersion = "1130"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "AD2814555D80141E6A1DC7067C441E95"
+               BlueprintIdentifier = "E4F4AD4DD02E171950BCF291936DAB63"
                BuildableName = "Cidaas.framework"
                BlueprintName = "Cidaas"
                ReferencedContainer = "container:Pods/Pods.xcodeproj">
@@ -26,8 +26,17 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      codeCoverageEnabled = "YES"
-      shouldUseLaunchSchemeArgsEnv = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      codeCoverageEnabled = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "E4F4AD4DD02E171950BCF291936DAB63"
+            BuildableName = "Cidaas.framework"
+            BlueprintName = "Cidaas"
+            ReferencedContainer = "container:Pods/Pods.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -40,17 +49,6 @@
             </BuildableReference>
          </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "AD2814555D80141E6A1DC7067C441E95"
-            BuildableName = "Cidaas.framework"
-            BlueprintName = "Cidaas"
-            ReferencedContainer = "container:Pods/Pods.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -65,14 +63,12 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "AD2814555D80141E6A1DC7067C441E95"
+            BlueprintIdentifier = "E4F4AD4DD02E171950BCF291936DAB63"
             BuildableName = "Cidaas.framework"
             BlueprintName = "Cidaas"
             ReferencedContainer = "container:Pods/Pods.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -83,7 +79,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "AD2814555D80141E6A1DC7067C441E95"
+            BlueprintIdentifier = "E4F4AD4DD02E171950BCF291936DAB63"
             BuildableName = "Cidaas.framework"
             BlueprintName = "Cidaas"
             ReferencedContainer = "container:Pods/Pods.xcodeproj">

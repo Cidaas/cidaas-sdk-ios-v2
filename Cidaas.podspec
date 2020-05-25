@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'Cidaas'
-  s.version          = '1.1.7'
+  s.version          = '2.0.0'
   s.summary          = 'Native SDK for iOS providing login, registration and verification functionalities'
   s.homepage         = 'https://github.com/Cidaas/cidaas-sdk-ios-v2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
@@ -16,11 +16,11 @@ Pod::Spec.new do |s|
   s.source       = { :git => 'https://github.com/Cidaas/cidaas-sdk-ios-v2.git', :tag => s.version }
   s.ios.deployment_target = '10.0'
   s.source_files = 'Cidaas/Classes/**/*'
-  s.dependency 'Alamofire', '~> 4.7.3'
-  s.dependency 'OneTimePassword', '~> 3.1.4'
-  s.dependency 'CryptoSwift', '~> 0.12'
-  s.dependency 'SwiftKeychainWrapper', '~> 3.0'
-  s.swift_version = '4.0'
+  s.dependency 'Alamofire', '5.1.0'
+  s.dependency 'OneTimePassword', '3.2.0'
+  s.dependency 'CryptoSwift', '1.3.1'
+  s.dependency 'SwiftKeychainWrapper', '3.4.0'
+  s.swift_version = '5.0'
   
   s.subspec 'Core' do |core|
       core.source_files = 'Cidaas/Classes/Core/**/*'
@@ -36,8 +36,18 @@ Pod::Spec.new do |s|
       fb.dependency 'Cidaas/Core'
   end
   
-  s.subspec 'V2_Verification' do |verification|
+  s.subspec 'Verification' do |verification|
       verification.source_files = 'Cidaas/Classes/V2/Verification/**/*'
       verification.dependency 'Cidaas/Core'
+  end
+  
+  s.subspec 'Native' do |native|
+      native.source_files = 'Cidaas/Classes/V2/Native/**/*'
+      native.dependency 'Cidaas/Core'
+  end
+  
+  s.subspec 'Consent' do |consent|
+      consent.source_files = 'Cidaas/Classes/V2/Consent/**/*'
+      consent.dependency 'Cidaas/Core'
   end
 end

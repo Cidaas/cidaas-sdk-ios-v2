@@ -7,11 +7,11 @@
 
 import Foundation
 
-public class AcceptConsentResponseV2Entity : Codable {
+public class AcceptConsentResponseEntity : Codable {
     // properties
     public var success: Bool = false
     public var status: Int16 = 400
-    public var data: AcceptConsentResponseDataV2Entity = AcceptConsentResponseDataV2Entity()
+    public var data: AcceptConsentResponseDataEntity = AcceptConsentResponseDataEntity()
     
     // Constructors
     public init() {
@@ -22,11 +22,11 @@ public class AcceptConsentResponseV2Entity : Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.success = try container.decodeIfPresent(Bool.self, forKey: .success) ?? false
         self.status = try container.decodeIfPresent(Int16.self, forKey: .status) ?? 400
-        self.data = try container.decodeIfPresent(AcceptConsentResponseDataV2Entity.self, forKey: .data) ?? AcceptConsentResponseDataV2Entity()
+        self.data = try container.decodeIfPresent(AcceptConsentResponseDataEntity.self, forKey: .data) ?? AcceptConsentResponseDataEntity()
     }
 }
 
-public class AcceptConsentResponseDataV2Entity : Codable {
+public class AcceptConsentResponseDataEntity : Codable {
     
     public var accepted: Bool = false
     public var consent_id: String = ""

@@ -1,9 +1,5 @@
 # cidaas-sdk-ios-v2
 [![Build Status](https://travis-ci.org/Cidaas/cidaas-sdk-ios-v2.svg?branch=master)](https://travis-ci.org/Cidaas/cidaas-sdk-ios-v2) 
-[![codecov.io](https://codecov.io/gh/Cidaas/cidaas-sdk-ios-v2/branch/master/graphs/badge.svg)](https://codecov.io/gh/Cidaas/cidaas-sdk-ios-v2/branch/master)
-[![Swift support](https://img.shields.io/badge/Swift-3.3%20%7C%204.0%20%7C%204.1-lightgrey.svg?colorA=28a745&colorB=4E4E4E)](#swift-versions-support)
-[![XCode support](https://img.shields.io/badge/Xcode-9.4-lightgrey.svg?colorA=28a745&colorB=4E4E4E)](#swift-versions-support)
-[![CocoaPods Compatible](https://img.shields.io/cocoapods/v/Cidaas.svg?style=flat&label=CocoaPods&colorA=28a745&&colorB=4E4E4E)](https://cocoapods.org/pods/Cidaas)
 [![Platform](https://img.shields.io/badge/Platforms-iOS-4E4E4E.svg?colorA=28a745)](#installation)
 
 The steps here will guide you through setting up and managing authentication and authorization in your apps using cidaas SDK.
@@ -25,6 +21,8 @@ The steps here will guide you through setting up and managing authentication and
         <!--te-->
     * [Embedded Browser Integration](#wkwebview-integration)
     * [Native UI Integration](/Example/Readme/PureNativeLogin.md)
+    * [Verification Integration](/Example/Readme/Verification.md)
+    * [Consent Management Integration](/Example/Readme/ConsentManagement.md)
     <!--te-->
 
 
@@ -124,26 +122,6 @@ where social provider may be either facebook, google, linkedin or any other prov
 Use [customScheme](https://developer.apple.com/documentation/uikit/core_app/communicating_with_other_apps_using_custom_urls#2928963) or [universalLinks](https://developer.apple.com/library/content/documentation/General/Conceptual/AppSearch/UniversalLinks.html) to return back the control from browser to App.
 
     Note : Don't forget to add the custom scheme url in your App's redirect url section
-
-
-If you use custom scheme, configure your URL types and resume the SDK from AppDelegate's **open url** method
-
-```swift
-func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
-    Cidaas.shared.handleToken(url: url)
-    return true
-}
-```
-
-If you use universal links, configure your Domain setup and resume the SDK from AppDelegate's **userActivity** method
-
-```swift
-func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
-    let url = userActivity.webpageURL!
-    Cidaas.shared.handleToken(url: url)
-    return true
-}
-```
 
 ## WKWebview integration
 

@@ -59,6 +59,12 @@ cidaas provides numerous options to ensure safe and diverse mechanisms for login
 
 For MFA verification, you need to initiate the verification's instance 
 
+#### Installation
+
+```
+pod 'Cidaas/Verification'
+```
+
 ```swift
 var verification = CidaasVerification.shared
 ```

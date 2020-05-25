@@ -6,3 +6,14 @@
 //
 
 import Foundation
+
+public class AuthzURLHelper {
+    
+    public static var shared : AuthzURLHelper = AuthzURLHelper()
+    
+    public var authzURL = "/authz-srv/authrequest/authz/generate"
+    
+    public func getAuthzURL() -> String {
+        return authzURL
+    }
+}

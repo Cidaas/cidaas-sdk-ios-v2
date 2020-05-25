@@ -18,6 +18,7 @@ public class CidaasView: UIView, WKNavigationDelegate {
     public static var facebookDelegate: CidaasFacebookDelegate!
     public static var googleDelegate: CidaasGoogleDelegate!
     public var viewType: String = "login"
+    public var requestId: String = ""
     
     var browserCallback: ((Result<LoginResponseEntity>) -> ())!
     // instance of webview
@@ -69,10 +70,10 @@ public class CidaasView: UIView, WKNavigationDelegate {
             view.addSubview(wkWebView)
             wkWebView.translatesAutoresizingMaskIntoConstraints = false
             showWebview()
-            webViewTopConstraint = NSLayoutConstraint(item: wkWebView, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1, constant: 0)
-            webViewBottomConstraint = NSLayoutConstraint(item: wkWebView, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: 0)
-            webViewTrailConstraint = NSLayoutConstraint(item: wkWebView, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .trailing, multiplier: 1, constant: 0)
-            webViewLeadConstraint = NSLayoutConstraint(item: wkWebView, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1, constant: 0)
+            webViewTopConstraint = NSLayoutConstraint(item: wkWebView!, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1, constant: 0)
+            webViewBottomConstraint = NSLayoutConstraint(item: wkWebView!, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: 0)
+            webViewTrailConstraint = NSLayoutConstraint(item: wkWebView!, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .trailing, multiplier: 1, constant: 0)
+            webViewLeadConstraint = NSLayoutConstraint(item: wkWebView!, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1, constant: 0)
             view.addConstraints([webViewTopConstraint, webViewBottomConstraint, webViewTrailConstraint, webViewLeadConstraint])
         }
     }
@@ -117,6 +118,9 @@ public class CidaasView: UIView, WKNavigationDelegate {
             if extraParams["view_type"] != nil {
                 savedProp!["ViewType"] = extraParams["view_type"]
                 self.viewType = extraParams["view_type"]!
+            }
+            if extraParams["requestId"] != nil {
+                self.requestId = extraParams["requestId"]!
             }
             loginWithEmbeddedBrowser(delegate: delegate, extraParams: extraParams, properties: savedProp!, callback: callback)
         }
@@ -293,7 +297,7 @@ public class CidaasView: UIView, WKNavigationDelegate {
         hideWebview()
         hideBackButton()
         
-        CidaasView.facebookDelegate.login(viewType: self.viewType, callback: self.browserCallback)
+        CidaasView.facebookDelegate.login(viewType: self.viewType, requestId: self.requestId, callback: self.browserCallback)
     }
     
     func googleSDKFlow() {

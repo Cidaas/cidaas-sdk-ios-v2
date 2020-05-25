@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class AcceptConsentV2Entity : Codable {
+public class AcceptConsentEntity : Codable {
     // properties
     public var consent_id: String = ""
     public var client_id: String = ""

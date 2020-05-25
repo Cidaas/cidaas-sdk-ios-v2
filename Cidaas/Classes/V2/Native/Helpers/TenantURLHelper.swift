@@ -6,3 +6,14 @@
 //
 
 import Foundation
+
+public class TenantURLHelper {
+    
+    public static var shared : TenantURLHelper = TenantURLHelper()
+    
+    public var tenantInfoURL = "/public-srv/tenantinfo/basic"
+    
+    public func getTenantInfoURL() -> String {
+        return tenantInfoURL
+    }
+}

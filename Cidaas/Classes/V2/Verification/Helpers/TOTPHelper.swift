@@ -11,6 +11,10 @@ import OneTimePassword
 
 public class TOTPHelper {
     
+    public static var shared: TOTPHelper = TOTPHelper()
+    
+    public init() {}
+    
     public func gettingTOTPCode(url: URL) -> TOTP {
         let totp = TOTP()
         if let token = Token(url: url) {

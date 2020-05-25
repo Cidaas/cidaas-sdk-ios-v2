@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol CidaasFacebookDelegate {
-    func login(viewType: String, callback: @escaping(Result<LoginResponseEntity>) -> Void)
+    func login(viewType: String, requestId: String, callback: @escaping(Result<LoginResponseEntity>) -> Void)
     func logout()
 }
 

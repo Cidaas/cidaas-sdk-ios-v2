@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class ConsentDetailsV2ResponseEntity : Codable {
+public class ConsentDetailsResponseEntity : Codable {
     // properties
     public var success: Bool = false
     public var status: Int16 = 400
@@ -34,6 +34,7 @@ public class IConsentResponseData : Codable {
     public var content: String = ""
     public var scopes: [IConsentResponseScopes] = []
     public var sub: String = ""
+    public var url: String = ""
     
     // Constructors
     public init() {
@@ -48,6 +49,7 @@ public class IConsentResponseData : Codable {
         self.content = try container.decodeIfPresent(String.self, forKey: .content) ?? ""
         self.scopes = try container.decodeIfPresent([IConsentResponseScopes].self, forKey: .scopes) ?? []
         self.sub = try container.decodeIfPresent(String.self, forKey: .sub) ?? ""
+        self.url = try container.decodeIfPresent(String.self, forKey: .url) ?? ""
     }
 }
 

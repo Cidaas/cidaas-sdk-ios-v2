@@ -6,3 +6,24 @@
 //
 
 import Foundation
+
+public class ResetpasswordURLHelper {
+    
+    public static var shared : ResetpasswordURLHelper = ResetpasswordURLHelper()
+    
+    public var initiateResetPasswordURL = "/users-srv/resetpassword/initiate"
+    public var handleResetPasswordURL = "/users-srv/resetpassword/validatecode"
+    public var resetPasswordURL = "/users-srv/resetpassword/accept"
+    
+    public func getInitiateResetPasswordURL() -> String {
+        return initiateResetPasswordURL
+    }
+    
+    public func getHandleResetPasswordURL() -> String {
+        return handleResetPasswordURL
+    }
+    
+    public func getResetPasswordURL() -> String {
+        return resetPasswordURL
+    }
+}
