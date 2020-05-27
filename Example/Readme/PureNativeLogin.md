@@ -40,6 +40,12 @@ This document will guide to link the appropriate cidaas methods and services to 
 
 #### Native UI Integration
 
+#### Installation
+
+```
+pod 'Cidaas/Native'
+```
+
 #### Getting Tenant Info
 Sometimes you may want to lookup different types of login available ('Email', 'Mobile', 'Username') for a particular tenant. 
 To get the tenant information, call ****getTenantInfo()****.
@@ -604,79 +610,6 @@ cidaas.restPassword(password:"test#123",confirmPassword:"test#123") {
     "status": 200,
     "data": {
         "reseted":true
-    }
-}
-```
-
-#### Consent Management
-
-Once the user has successfully logged in, you may want your users to accept the terms and conditions. You can configure different consent forms during setup and present that to the user after login.
-
-#### Getting Consent Details 
-
-To get the consent details call **getConsentDetails()**.
-
-```swift
-cidaas.getConsentDetails(consent_name:"default", consent_version:1, track_Id: "45a921cf-ee26-46b0-9bf4-58636dced99f") {
-    switch $0 {
-        case .success(let configureSuccess):
-            // your success code here
-        break
-        case .failure(let error):
-            // your failure code here
-        break
-    }
-} 
-```
-Here, **consent_name, consent_version, track_Id** is the key you would get from the error response of Login
-
-**Response:**
-
-```json
-{
-    "success": true,
-    "status": 200,
-    "data": {
-        "_id":"3543trr",
-        "decription":"test consent",
-        "title":"test",
-        "userAgreeText":"term and condition",
-        "url":"https://acb.com"
-    }
-}
-```
-
-#### Login After Consent
-
-After accepting the consent you need to continue further by calling ****loginAfterConsent()****
-
-```swift
-cidaas.loginAfterConsent(sub:"7dfb2122-fa5e-4f7a-8494-dadac9b43f9d", accepted:true) {
-    switch $0 {
-        case .success(let configureSuccess):
-            // your success code here
-        break
-        case .failure(let error):
-            // your failure code here
-        break
-    }
-} 
-```
-Here, **sub** is the key you would get from the error response of Login
-
-**Response:**
-
-```json
-{
-    "success": true,
-    "status": 200,
-    "data": {
-        "token_type": "Bearer",
-        "expires_in": 86400,
-        "access_token": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYS04MGNlLTZmYTkzMzk2YjI4NyJ9*****",
-        "session_state": "CNT7GGALeoKyTF6Og-cZHAuHUJBQ20M0jLL35oh3UGk.vcNxCNq4Y68",
-        "viewtype": "login",
-        "grant_type": "login"
     }
 }
 ```

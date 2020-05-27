@@ -13,20 +13,11 @@ public class URLHelper {
     // shared instance
     public static var shared : URLHelper = URLHelper()
     
-    public var requestIdURL = "/authz-srv/authrequest/authz/generate"
     
-    public var tenantInfoURL = "/public-srv/tenantinfo/basic"
-    
-    public var clientInfoURL = "/public-srv/public"
-    
-    public var loginWithCredentialsURL = "/login-srv/login/sdk"
     public var logoutURL = "/session/end_session"
     
     public var consentURL = "/consent-management-srv/tenant/version/pageurl"
     public var consentDetailsURL = "/consent-management-srv/settings/public"
-    public var consentDetailsV2URL = "/consent-management-srv/v2/consent/usage/public/info"
-    public var acceptConsentURL = "/consent-management-srv/user/status"
-    public var acceptConsentV2URL = "/consent-management-srv/v2/consent/usage/accept"
     
     public var mfaListURL = "/verification-srv/settings/listbydeviceid"
     
@@ -58,9 +49,7 @@ public class URLHelper {
     public var authenticateBackupcodeURL = "/verification-srv/backupcode/authenticate"
     public var authenticateTOTPURL = "/verification-srv/totp/authenticate"
     public var mfaContinueURL = "/login-srv/precheck/continue/sdk"
-    public var consentContinueURL = "/login-srv/precheck/continue/sdk"
-    public var registrationFieldsURL = "/registration-setup-srv/public/list"
-    public var registrationURL = "/users-srv/register"
+    
     public var validateDeviceURL = "/verification-srv/device/validate"
     public var setupPatternURL = "/verification-srv/pattern/setup"
     public var scannedPatternURL = "/verification-srv/pattern/scanned"
@@ -88,31 +77,15 @@ public class URLHelper {
     public var initiateVoiceURL = "/verification-srv/voice/initiate"
     public var authenticateVoiceURL = "/verification-srv/voice/authenticate"
     
-    public var initiateAccountVerificationURL = "/verification-srv/account/initiate"
-    public var verifyAccountURL = "/verification-srv/account/verify"
-    public var verifyAccountListURL = "/users-srv/user/communication/status"
-    
-    public var initiateResetPasswordURL = "/users-srv/resetpassword/initiate"
-    public var handleResetPasswordURL = "/users-srv/resetpassword/validatecode"
-    public var resetPasswordURL = "/users-srv/resetpassword/accept"
     
     public var passwordlessContinueURL = "/login-srv/verification/sdk/login"
     public var userInfoURL = "/users-srv/userinfo"
     
-    public var deduplicationDetails = "/users-srv/deduplication/info"
-    public var registerDeduplicationURL = "/users-srv/deduplication/register"
-    public var loginDeduplicationURL = "/login-srv/login/sdk"
-    
-    public var changePasswordURL = "/users-srv/changepassword"
     public var documentScanURL = "/access-control-srv/ocr/validate"
     
-    public var userActivityURL = "/useractivity-srv/latestactivity"
     public var userLoginInfoURL = "/verification-srv/verificationstatus/status/search/sdk"
-    public var updateUserURL = "/users-srv/user/profile"
     public var imageUploadURL = "/image-srv/profile/upload"
-    public var linkUserURL = "/users-srv/user/linkaccount"
-    public var linkedUsersURL = "/users-srv/userinfo/social"
-    public var unlinkUserURL = "/users-srv/user/unlinkaccount"
+    
     public var locationListURL = "/access-control-srv/location/list"
     public var locationEmissionURL = "/access-control-srv/notification/locationchange"
     public var beaconListURL = "/access-control-srv/devices/beacons/configs"
@@ -124,10 +97,6 @@ public class URLHelper {
     public var pendingNotificationListURL = "/verification-srv/notification/initiated"
     public var socialLoginURL = "/login-srv/social/login/"
     
-    
-    public func getRequestIdURL() -> String {
-        return requestIdURL
-    }
     
     public func getEndpointsURL() -> String {
         return endpointsURL
@@ -161,17 +130,7 @@ public class URLHelper {
         return beaconEmissionURL
     }
     
-    public func getTenantInfoURL() -> String {
-        return tenantInfoURL
-    }
     
-    public func getClientInfoURL(requestId: String) -> String {
-        return clientInfoURL + "/" + requestId
-    }
-    
-    public func getLoginWithCredentialsURL() -> String {
-        return loginWithCredentialsURL
-    }
     
     public func getLogoutURL(accessToken: String) -> String {
         return logoutURL + "?access_token_hint=" + accessToken
@@ -183,22 +142,6 @@ public class URLHelper {
     
     public func getSocialLoginURL(provider: String, requestId: String) -> String {
         return socialLoginURL + provider + "/" + requestId
-    }
-    
-    public func getConsentDetailsURL(consent_name: String) -> String {
-        return consentDetailsURL + "?name=" + consent_name
-    }
-    
-    public func getConsentDetailsV2URL() -> String {
-        return consentDetailsV2URL
-    }
-    
-    public func getAcceptConsentURL() -> String {
-        return acceptConsentURL
-    }
-    
-    public func getAcceptConsentV2URL() -> String {
-        return acceptConsentV2URL
     }
     
     public func getMFAListURL(sub: String, userDeviceId: String, common_config: Bool) -> String {
@@ -305,21 +248,6 @@ public class URLHelper {
         return passwordlessContinueURL
     }
     
-    public func getConsentContinueURL(trackId: String) -> String {
-        return consentContinueURL + "/" + trackId
-    }
-    
-    public func getRegistrationFieldsURL(acceptlanguage: String, requestId: String) -> String {
-        return registrationFieldsURL + "?acceptlanguage=" + acceptlanguage + "&requestId=" + requestId
-    }
-    
-    public func getRegistrationURL() -> String {
-        return registrationURL
-    }
-    
-    public func getUpdateUserURL(sub: String) -> String {
-        return updateUserURL + "/" + sub
-    }
     
     public func getSetupPatternURL() -> String {
         return setupPatternURL
@@ -419,59 +347,18 @@ public class URLHelper {
     
     public func getAuthenticateVoiceURL() -> String {
         return authenticateVoiceURL
-    }
+    }    
     
-    public func getInitiateAccountVerificationURL() -> String {
-        return initiateAccountVerificationURL
-    }
-    
-    public func getVerifyAccountURL() -> String {
-        return verifyAccountURL
-    }
-    
-    public func getVerifyAccountListURL(sub: String) -> String {
-        return verifyAccountListURL + "/" + sub
-    }
-    
-    public func getInitiateResetPasswordURL() -> String {
-        return initiateResetPasswordURL
-    }
-    
-    public func getHandleResetPasswordURL() -> String {
-        return handleResetPasswordURL
-    }
-    
-    public func getResetPasswordURL() -> String {
-        return resetPasswordURL
-    }
     
     public func getUserInfoURL() -> String {
         return userInfoURL
     }
-    
-    public func getUserActivityURL() -> String {
-        return userActivityURL
-    }
+
     
     public func getUserLoginInfoURL() -> String {
         return userLoginInfoURL
     }
     
-    public func getDeduplicationDetailsURL(track_id: String) -> String {
-        return deduplicationDetails + "/" + track_id
-    }
-    
-    public func getRegisterDeduplicationURL(track_id: String) -> String {
-        return registerDeduplicationURL + "/" + track_id
-    }
-    
-    public func getLoginDeduplicationURL() -> String {
-        return loginDeduplicationURL
-    }
-    
-    public func getChangePasswordURL() -> String {
-        return changePasswordURL
-    }
     
     public func getDocumentScanURL() -> String {
         return documentScanURL
@@ -481,17 +368,6 @@ public class URLHelper {
         return imageUploadURL
     }
     
-    public func getLinkUserURL() -> String {
-        return linkUserURL
-    }
-    
-    public func getUnlinkUserURL(identityId: String) -> String {
-        return unlinkUserURL + "/" + identityId
-    }
-    
-    public func getLinkedUsersListURL(sub: String) -> String {
-        return linkedUsersURL + "/" + sub
-    }
     
     public func getSocialURL(requestId: String, socialToken: String, provider: String, clientId: String, redirectURL: String, viewType: String) -> String {
         return "\(socialURL)?codeOrToken=\(socialToken)&provider=\(provider)&clientId=\(clientId)&givenType=token&responseType=code&redirectUrl=\(redirectURL)&viewtype=\(viewType)&preAuthCode=\(requestId)"

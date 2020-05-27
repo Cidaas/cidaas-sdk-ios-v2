@@ -10,17 +10,15 @@ import Foundation
 public class AuthSession: NSObject, OAuthTransactionDelegate {
     
     public var state: String?
-    var redirectURL : URL
     let callback : (Result<LoginResponseEntity>) -> ()
     
-    public init(redirectURL: URL, state: String? = nil, callback: @escaping (Result<LoginResponseEntity>) -> ()) {
+    public init(state: String? = nil, callback: @escaping (Result<LoginResponseEntity>) -> ()) {
         self.state = state
-        self.redirectURL = redirectURL
         self.callback = callback
         super.init()
     }
     
-    public func resume(_ url: URL, options: [UIApplicationOpenURLOptionsKey: Any] = [:]) -> Bool {
+    public func resume(_ url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
         Cidaas.shared.handleToken(url: url)
         return true
     }

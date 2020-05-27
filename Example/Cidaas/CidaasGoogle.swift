@@ -58,7 +58,7 @@ public class CidaasGoogle : UIViewController, GIDSignInDelegate, CidaasGoogleDel
     
     public func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
         if user != nil {
-            Cidaas.shared.getAccessToken(socialToken: user.authentication.accessToken ?? "", provider: "google", viewType: self.viewType, callback: googleCallback)
+//            Cidaas.shared.getAccessToken(socialToken: user.authentication.accessToken ?? "", provider: "google", viewType: self.viewType, callback: googleCallback)
         }
         else {
            googleCallback(Result.failure(error: WebAuthError.shared.noUserFoundException()))

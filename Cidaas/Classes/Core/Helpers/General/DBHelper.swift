@@ -121,19 +121,19 @@ public class DBHelper : NSObject {
     }
     
     // set user info
-    public func setUserInfo(userInfoModel : UserInfoModel) {
-        let encoder = JSONEncoder()
-        do {
-            let userId = userInfoModel.userId
-            let data = try encoder.encode(userInfoModel)
-            let user_info_string = String(data : data, encoding : .utf8)
-            userDefaults.set(user_info_string, forKey: "cidaas_user_info_details_\(userId)")
-            userDefaults.synchronize()
-        }
-        catch {
-            userDefaults.synchronize()
-        }
-    }
+//    public func setUserInfo(userInfoModel : UserInfoModel) {
+//        let encoder = JSONEncoder()
+//        do {
+//            let userId = userInfoModel.userId
+//            let data = try encoder.encode(userInfoModel)
+//            let user_info_string = String(data : data, encoding : .utf8)
+//            userDefaults.set(user_info_string, forKey: "cidaas_user_info_details_\(userId)")
+//            userDefaults.synchronize()
+//        }
+//        catch {
+//            userDefaults.synchronize()
+//        }
+//    }
     
     // get access token
     public func getAccessToken(key : String) -> AccessTokenModel {
@@ -154,22 +154,22 @@ public class DBHelper : NSObject {
     }
     
     // get user info
-    public func getUserInfo(key : String) -> UserInfoModel? {
-        let userId = key
-        guard let value = userDefaults.object(forKey: "cidaas_user_info_details_\(userId)") else {
-            return nil
-        }
-        let user_info_string = value as? String ?? ""
-        let decoder = JSONDecoder()
-        do {
-            let data = user_info_string.data(using: .utf8)!
-            let userInfoModel = try decoder.decode(UserInfoModel.self, from: data)
-            return userInfoModel
-        }
-        catch {
-            return nil
-        }
-    }
+//    public func getUserInfo(key : String) -> UserInfoModel? {
+//        let userId = key
+//        guard let value = userDefaults.object(forKey: "cidaas_user_info_details_\(userId)") else {
+//            return nil
+//        }
+//        let user_info_string = value as? String ?? ""
+//        let decoder = JSONDecoder()
+//        do {
+//            let data = user_info_string.data(using: .utf8)!
+//            let userInfoModel = try decoder.decode(UserInfoModel.self, from: data)
+//            return userInfoModel
+//        }
+//        catch {
+//            return nil
+//        }
+//    }
     
     // set user deviceId
     public func setUserDeviceId(userDeviceId : String, key : String = "OAuthUserDeviceId") {
@@ -211,7 +211,7 @@ public class DBHelper : NSObject {
             return ("", "")
         }
         // split by hyphen
-        var splittedLocation: [Substring] = (value as? String ?? "").split(separator: "-")
+        let splittedLocation: [Substring] = (value as? String ?? "").split(separator: "-")
         if splittedLocation.count  > 1 {
             return (String(splittedLocation[0]), String(splittedLocation[1]))
         }

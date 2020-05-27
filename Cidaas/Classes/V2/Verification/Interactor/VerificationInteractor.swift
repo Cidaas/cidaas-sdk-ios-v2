@@ -9,19 +9,26 @@ import Foundation
 
 public class VerificationInteractor {
     
-    public init() {}
-    
     var push_selected_number: String = ""
     var secret: String = ""
     
     public static var shared: VerificationInteractor = VerificationInteractor()
+    var sharedPresenter: VerificationPresenter
+    var sharedService: VerificationServiceWorker
+    var sharedTOTP: TOTPHelper
+    
+    public init() {
+        sharedPresenter = VerificationPresenter.shared
+        sharedService = VerificationServiceWorker.shared
+        sharedTOTP = TOTPHelper.shared
+    }
     
     public func setup(verificationType: String, incomingData: SetupRequest, callback: @escaping (Result<SetupResponse>) -> Void) {
         // validation
         if (verificationType == "" || (incomingData.access_token == "" && incomingData.sub == "")) {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "verificationType or access_token or sub cannot be empty", statusCode: 417)
-            VerificationPresenter.shared.setup(setupResponse: nil, errorResponse: error, callback: callback)
+            sharedPresenter.setup(response: nil, errorResponse: error, callback: callback)
             return
         }
         
@@ -30,13 +37,13 @@ public class VerificationInteractor {
         if (savedProp == nil) {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
-            VerificationPresenter.shared.setup(setupResponse: nil, errorResponse: error, callback: callback)
+            sharedPresenter.setup(response: nil, errorResponse: error, callback: callback)
             return
         }
         
         // call worker
-        VerificationServiceWorker.shared.setup(verificationType: verificationType, incomingData: incomingData, properties: savedProp!) { response, error in
-            VerificationPresenter.shared.setup(setupResponse: response, errorResponse: error, callback: callback)
+        sharedService.setup(verificationType: verificationType, incomingData: incomingData, properties: savedProp!) { response, error in
+            self.sharedPresenter.setup(response: response, errorResponse: error, callback: callback)
         }
     }
     
@@ -45,7 +52,7 @@ public class VerificationInteractor {
         if (verificationType == "" || incomingData.exchange_id == "" || incomingData.sub == "") {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "verificationType or exchange_id or sub cannot be empty", statusCode: 417)
-            VerificationPresenter.shared.scanned(scannedResponse: nil, errorResponse: error, callback: callback)
+            sharedPresenter.scanned(scannedResponse: nil, errorResponse: error, callback: callback)
             return
         }
         
@@ -54,13 +61,13 @@ public class VerificationInteractor {
         if (savedProp == nil) {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
-            VerificationPresenter.shared.scanned(scannedResponse: nil, errorResponse: error, callback: callback)
+            sharedPresenter.scanned(scannedResponse: nil, errorResponse: error, callback: callback)
             return
         }
         
         // call worker
-        VerificationServiceWorker.shared.scanned(verificationType: verificationType, incomingData: incomingData, properties: savedProp!) { response, error in
-            VerificationPresenter.shared.scanned(scannedResponse: response, errorResponse: error, callback: callback)
+        sharedService.scanned(verificationType: verificationType, incomingData: incomingData, properties: savedProp!) { response, error in
+            self.sharedPresenter.scanned(scannedResponse: response, errorResponse: error, callback: callback)
         }
     }
     
@@ -69,7 +76,7 @@ public class VerificationInteractor {
         if (verificationType == "" || incomingData.exchange_id == "") {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "verificationType or exchange_id or pass_code cannot be empty", statusCode: 417)
-            VerificationPresenter.shared.enroll(enrollResponse: nil, errorResponse: error, callback: callback)
+            sharedPresenter.enroll(enrollResponse: nil, errorResponse: error, callback: callback)
             return
         }
         
@@ -78,13 +85,13 @@ public class VerificationInteractor {
         if (savedProp == nil) {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
-            VerificationPresenter.shared.enroll(enrollResponse: nil, errorResponse: error, callback: callback)
+            sharedPresenter.enroll(enrollResponse: nil, errorResponse: error, callback: callback)
             return
         }
         
         // call worker
-        VerificationServiceWorker.shared.enroll(verificationType: verificationType, photo: photo, voice: voice, incomingData: incomingData, properties: savedProp!) { response, error in
-            VerificationPresenter.shared.enroll(enrollResponse: response, errorResponse: error, callback: callback)
+        sharedService.enroll(verificationType: verificationType, photo: photo, voice: voice, incomingData: incomingData, properties: savedProp!) { response, error in
+            self.sharedPresenter.enroll(enrollResponse: response, errorResponse: error, callback: callback)
         }
     }
     
@@ -93,7 +100,7 @@ public class VerificationInteractor {
         if (verificationType == "" || incomingData.sub == "" || incomingData.request_id == "" || incomingData.usage_type == "") {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "verificationType or sub or request_id or usage_type cannot be empty", statusCode: 417)
-            VerificationPresenter.shared.initiate(initiateResponse: nil, errorResponse: error, callback: callback)
+            sharedPresenter.initiate(initiateResponse: nil, errorResponse: error, callback: callback)
             return
         }
         
@@ -102,13 +109,13 @@ public class VerificationInteractor {
         if (savedProp == nil) {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
-            VerificationPresenter.shared.initiate(initiateResponse: nil, errorResponse: error, callback: callback)
+            sharedPresenter.initiate(initiateResponse: nil, errorResponse: error, callback: callback)
             return
         }
         
         // call worker
-        VerificationServiceWorker.shared.initiate(verificationType: verificationType, incomingData: incomingData, properties: savedProp!) { response, error in
-            VerificationPresenter.shared.initiate(initiateResponse: response, errorResponse: error, callback: callback)
+        sharedService.initiate(verificationType: verificationType, incomingData: incomingData, properties: savedProp!) { response, error in
+            self.sharedPresenter.initiate(initiateResponse: response, errorResponse: error, callback: callback)
         }
     }
     
@@ -117,7 +124,7 @@ public class VerificationInteractor {
         if (verificationType == "" || incomingData.exchange_id == "") {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "verificationType or exchange_id cannot be empty", statusCode: 417)
-            VerificationPresenter.shared.pushAcknowledge(pushAcknowledgeResponse: nil, errorResponse: error, callback: callback)
+            sharedPresenter.pushAcknowledge(pushAcknowledgeResponse: nil, errorResponse: error, callback: callback)
             return
         }
         
@@ -126,13 +133,13 @@ public class VerificationInteractor {
         if (savedProp == nil) {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
-            VerificationPresenter.shared.pushAcknowledge(pushAcknowledgeResponse: nil, errorResponse: error, callback: callback)
+            sharedPresenter.pushAcknowledge(pushAcknowledgeResponse: nil, errorResponse: error, callback: callback)
             return
         }
         
         // call worker
-        VerificationServiceWorker.shared.pushAcknowledge(verificationType: verificationType, incomingData: incomingData, properties: savedProp!) { response, error in
-            VerificationPresenter.shared.pushAcknowledge(pushAcknowledgeResponse: response, errorResponse: error, callback: callback)
+        sharedService.pushAcknowledge(verificationType: verificationType, incomingData: incomingData, properties: savedProp!) { response, error in
+            self.sharedPresenter.pushAcknowledge(pushAcknowledgeResponse: response, errorResponse: error, callback: callback)
         }
     }
     
@@ -141,7 +148,7 @@ public class VerificationInteractor {
         if (verificationType == "" || incomingData.exchange_id == "") {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "verificationType or exchange_id cannot be empty", statusCode: 417)
-            VerificationPresenter.shared.pushAllow(pushAllowResponse: nil, errorResponse: error, callback: callback)
+            sharedPresenter.pushAllow(pushAllowResponse: nil, errorResponse: error, callback: callback)
             return
         }
         
@@ -150,13 +157,13 @@ public class VerificationInteractor {
         if (savedProp == nil) {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
-            VerificationPresenter.shared.pushAllow(pushAllowResponse: nil, errorResponse: error, callback: callback)
+            sharedPresenter.pushAllow(pushAllowResponse: nil, errorResponse: error, callback: callback)
             return
         }
         
         // call worker
-        VerificationServiceWorker.shared.pushAllow(verificationType: verificationType, incomingData: incomingData, properties: savedProp!) { response, error in
-            VerificationPresenter.shared.pushAllow(pushAllowResponse: response, errorResponse: error, callback: callback)
+        sharedService.pushAllow(verificationType: verificationType, incomingData: incomingData, properties: savedProp!) { response, error in
+            self.sharedPresenter.pushAllow(pushAllowResponse: response, errorResponse: error, callback: callback)
         }
     }
     
@@ -165,7 +172,7 @@ public class VerificationInteractor {
         if (verificationType == "" || incomingData.exchange_id == "") {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "verificationType or exchange_id cannot be empty", statusCode: 417)
-            VerificationPresenter.shared.pushReject(pushRejectResponse: nil, errorResponse: error, callback: callback)
+            sharedPresenter.pushReject(pushRejectResponse: nil, errorResponse: error, callback: callback)
             return
         }
         
@@ -174,13 +181,13 @@ public class VerificationInteractor {
         if (savedProp == nil) {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
-            VerificationPresenter.shared.pushReject(pushRejectResponse: nil, errorResponse: error, callback: callback)
+            sharedPresenter.pushReject(pushRejectResponse: nil, errorResponse: error, callback: callback)
             return
         }
         
         // call worker
-        VerificationServiceWorker.shared.pushReject(verificationType: verificationType, incomingData: incomingData, properties: savedProp!) { response, error in
-            VerificationPresenter.shared.pushReject(pushRejectResponse: response, errorResponse: error, callback: callback)
+        sharedService.pushReject(verificationType: verificationType, incomingData: incomingData, properties: savedProp!) { response, error in
+            self.sharedPresenter.pushReject(pushRejectResponse: response, errorResponse: error, callback: callback)
         }
     }
     
@@ -189,7 +196,7 @@ public class VerificationInteractor {
         if (verificationType == "" || incomingData.exchange_id == "") {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "verificationType or exchange_id cannot be empty", statusCode: 417)
-            VerificationPresenter.shared.authenticate(authenticateResponse: nil, errorResponse: error, callback: callback)
+            sharedPresenter.authenticate(authenticateResponse: nil, errorResponse: error, callback: callback)
             return
         }
         
@@ -198,13 +205,13 @@ public class VerificationInteractor {
         if (savedProp == nil) {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
-            VerificationPresenter.shared.authenticate(authenticateResponse: nil, errorResponse: error, callback: callback)
+            sharedPresenter.authenticate(authenticateResponse: nil, errorResponse: error, callback: callback)
             return
         }
         
         // call worker
-        VerificationServiceWorker.shared.authenticate(verificationType: verificationType, photo: photo, voice: voice, incomingData: incomingData, properties: savedProp!) { response, error in
-            VerificationPresenter.shared.authenticate(authenticateResponse: response, errorResponse: error, callback: callback)
+        sharedService.authenticate(verificationType: verificationType, photo: photo, voice: voice, incomingData: incomingData, properties: savedProp!) { response, error in
+            self.sharedPresenter.authenticate(authenticateResponse: response, errorResponse: error, callback: callback)
         }
     }
     
@@ -213,7 +220,7 @@ public class VerificationInteractor {
         if (incomingData.sub == "" || incomingData.verificationType == "") {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "sub or exchange_id or verificationType cannot be empty", statusCode: 417)
-            VerificationPresenter.shared.delete(deleteResponse: nil, errorResponse: error, callback: callback)
+            sharedPresenter.delete(deleteResponse: nil, errorResponse: error, callback: callback)
             return
         }
         
@@ -222,13 +229,13 @@ public class VerificationInteractor {
         if (savedProp == nil) {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
-            VerificationPresenter.shared.deleteAll(deleteResponse: nil, errorResponse: error, callback: callback)
+            sharedPresenter.deleteAll(deleteResponse: nil, errorResponse: error, callback: callback)
             return
         }
         
         // call worker
-        VerificationServiceWorker.shared.delete(incomingData: incomingData, properties: savedProp!) { response, error in
-            VerificationPresenter.shared.delete(deleteResponse: response, errorResponse: error, callback: callback)
+        sharedService.delete(incomingData: incomingData, properties: savedProp!) { response, error in
+            self.sharedPresenter.delete(deleteResponse: response, errorResponse: error, callback: callback)
         }
     }
     
@@ -241,13 +248,13 @@ public class VerificationInteractor {
         if (savedProp == nil) {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
-            VerificationPresenter.shared.deleteAll(deleteResponse: nil, errorResponse: error, callback: callback)
+            sharedPresenter.deleteAll(deleteResponse: nil, errorResponse: error, callback: callback)
             return
         }
         
         // call worker
-        VerificationServiceWorker.shared.deleteAll(incomingData: incomingData, properties: savedProp!) { response, error in
-            VerificationPresenter.shared.deleteAll(deleteResponse: response, errorResponse: error, callback: callback)
+        sharedService.deleteAll(incomingData: incomingData, properties: savedProp!) { response, error in
+            self.sharedPresenter.deleteAll(deleteResponse: response, errorResponse: error, callback: callback)
         }
     }
     
@@ -256,7 +263,7 @@ public class VerificationInteractor {
         if (incomingData.sub == "") {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "sub cannot be empty", statusCode: 417)
-            VerificationPresenter.shared.getConfiguredList(mfaListResponse: nil, errorResponse: error, callback: callback)
+            sharedPresenter.getConfiguredList(mfaListResponse: nil, errorResponse: error, callback: callback)
             return
         }
         
@@ -265,13 +272,13 @@ public class VerificationInteractor {
         if (savedProp == nil) {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
-            VerificationPresenter.shared.getConfiguredList(mfaListResponse: nil, errorResponse: error, callback: callback)
+            sharedPresenter.getConfiguredList(mfaListResponse: nil, errorResponse: error, callback: callback)
             return
         }
         
         // call worker
-        VerificationServiceWorker.shared.getConfiguredList(incomingData: incomingData, properties: savedProp!) { response, error in
-            VerificationPresenter.shared.getConfiguredList(mfaListResponse: response, errorResponse: error, callback: callback)
+        sharedService.getConfiguredList(incomingData: incomingData, properties: savedProp!) { response, error in
+            self.sharedPresenter.getConfiguredList(mfaListResponse: response, errorResponse: error, callback: callback)
         }
     }
     
@@ -280,7 +287,7 @@ public class VerificationInteractor {
         if (incomingData.sub == "") {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "sub cannot be empty", statusCode: 417)
-            VerificationPresenter.shared.getPendingNotificationList(pendingNotificationListResponse: nil, errorResponse: error, callback: callback)
+            sharedPresenter.getPendingNotificationList(pendingNotificationListResponse: nil, errorResponse: error, callback: callback)
             return
         }
         
@@ -289,13 +296,13 @@ public class VerificationInteractor {
         if (savedProp == nil) {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
-            VerificationPresenter.shared.getPendingNotificationList(pendingNotificationListResponse: nil, errorResponse: error, callback: callback)
+            sharedPresenter.getPendingNotificationList(pendingNotificationListResponse: nil, errorResponse: error, callback: callback)
             return
         }
         
         // call worker
-        VerificationServiceWorker.shared.getPendingNotificationList(incomingData: incomingData, properties: savedProp!) { response, error in
-            VerificationPresenter.shared.getPendingNotificationList(pendingNotificationListResponse: response, errorResponse: error, callback: callback)
+        sharedService.getPendingNotificationList(incomingData: incomingData, properties: savedProp!) { response, error in
+            self.sharedPresenter.getPendingNotificationList(pendingNotificationListResponse: response, errorResponse: error, callback: callback)
         }
     }
     
@@ -304,7 +311,7 @@ public class VerificationInteractor {
         if (incomingData.sub == "") {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "sub cannot be empty", statusCode: 417)
-            VerificationPresenter.shared.getAuthenticatedHistoryList(authenticatedHistoryListResponse: nil, errorResponse: error, callback: callback)
+            sharedPresenter.getAuthenticatedHistoryList(authenticatedHistoryListResponse: nil, errorResponse: error, callback: callback)
             return
         }
         
@@ -313,13 +320,13 @@ public class VerificationInteractor {
         if (savedProp == nil) {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
-            VerificationPresenter.shared.getAuthenticatedHistoryList(authenticatedHistoryListResponse: nil, errorResponse: error, callback: callback)
+            sharedPresenter.getAuthenticatedHistoryList(authenticatedHistoryListResponse: nil, errorResponse: error, callback: callback)
             return
         }
         
         // call worker
-        VerificationServiceWorker.shared.getAuthenticatedHistoryList(incomingData: incomingData, properties: savedProp!) { response, error in
-            VerificationPresenter.shared.getAuthenticatedHistoryList(authenticatedHistoryListResponse: response, errorResponse: error, callback: callback)
+        sharedService.getAuthenticatedHistoryList(incomingData: incomingData, properties: savedProp!) { response, error in
+            self.sharedPresenter.getAuthenticatedHistoryList(authenticatedHistoryListResponse: response, errorResponse: error, callback: callback)
         }
     }
     
@@ -331,13 +338,13 @@ public class VerificationInteractor {
             DBHelper.shared.setFCM(fcmToken: incomingData.push_id)
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 200, errorMessage: "FCMToken successfully updated", statusCode: 200)
-            VerificationPresenter.shared.updateFCM(updateFCMResponse: nil, errorResponse: error)
+            sharedPresenter.updateFCM(updateFCMResponse: nil, errorResponse: error)
             return
         }
         if (old_push_id == incomingData.push_id) {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 200, errorMessage: "No change in FCM", statusCode: 200)
-            VerificationPresenter.shared.updateFCM(updateFCMResponse: nil, errorResponse: error)
+            sharedPresenter.updateFCM(updateFCMResponse: nil, errorResponse: error)
             return
         }
         
@@ -346,15 +353,15 @@ public class VerificationInteractor {
         if (savedProp == nil) {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
-            VerificationPresenter.shared.updateFCM(updateFCMResponse: nil, errorResponse: error)
+            sharedPresenter.updateFCM(updateFCMResponse: nil, errorResponse: error)
             return
         }
         
         incomingData.old_push_id = old_push_id
         
         // call worker
-        VerificationServiceWorker.shared.updateFCM(incomingData: incomingData, properties: savedProp!) { response, error in
-            VerificationPresenter.shared.updateFCM(updateFCMResponse: response, errorResponse: error)
+        sharedService.updateFCM(incomingData: incomingData, properties: savedProp!) { response, error in
+            self.sharedPresenter.updateFCM(updateFCMResponse: response, errorResponse: error)
         }
     }
     
@@ -372,7 +379,7 @@ public class VerificationInteractor {
                     DBHelper.shared.setTOTPSecret(secret: setupSuccessResponse.data.totp_secret, name: setupSuccessResponse.data.totp_secret, issuer: setupSuccessResponse.data.totp_secret, key: setupSuccessResponse.data.sub)
                     let secret = DBHelper.shared.getTOTPSecret(key: setupSuccessResponse.data.sub)
                     let enrollRequest = EnrollRequest()
-                    enrollRequest.pass_code = TOTPVerificationController.shared.gettingTOTPCode(url: URL(string: secret.addingPercentEncoding(withAllowedCharacters:NSCharacterSet.urlQueryAllowed)!)!).totp_string
+                    enrollRequest.pass_code = self.sharedTOTP.gettingTOTPCode(url: URL(string: secret.addingPercentEncoding(withAllowedCharacters:NSCharacterSet.urlQueryAllowed)!)!).totp_string
                     enrollRequest.exchange_id = setupSuccessResponse.data.exchange_id.exchange_id
                     self.enroll(verificationType: incomingData.verificationType, incomingData: enrollRequest, callback: callback)
                 }
@@ -429,7 +436,7 @@ public class VerificationInteractor {
         if (savedProp == nil) {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
-            VerificationPresenter.shared.login(loginResponse: nil, errorResponse: error, callback: callback)
+            sharedPresenter.login(loginResponse: nil, errorResponse: error, callback: callback)
             return
         }
         
@@ -464,7 +471,7 @@ public class VerificationInteractor {
                             }
                             break
                         case .failure(let authenticateErrorResponse):
-                            VerificationPresenter.shared.login(loginResponse: nil, errorResponse: authenticateErrorResponse, callback: callback)
+                            self.sharedPresenter.login(loginResponse: nil, errorResponse: authenticateErrorResponse, callback: callback)
                             break
                         }
                     }
@@ -485,7 +492,7 @@ public class VerificationInteractor {
                             }
                             break
                         case .failure(let authenticateErrorResponse):
-                            VerificationPresenter.shared.login(loginResponse: nil, errorResponse: authenticateErrorResponse, callback: callback)
+                            self.sharedPresenter.login(loginResponse: nil, errorResponse: authenticateErrorResponse, callback: callback)
                             break
                         }
                     }
@@ -493,7 +500,7 @@ public class VerificationInteractor {
                 else if (incomingData.verificationType == VerificationTypes.TOTP.rawValue) {
                     // getting secret
                     self.secret = DBHelper.shared.getTOTPSecret(key: incomingData.sub)
-                    authenticateRequest.pass_code = TOTPVerificationController.shared.gettingTOTPCode(url: URL(string: self.secret.addingPercentEncoding(withAllowedCharacters:NSCharacterSet.urlQueryAllowed)!)!).totp_string
+                    authenticateRequest.pass_code = self.sharedTOTP.gettingTOTPCode(url: URL(string: self.secret.addingPercentEncoding(withAllowedCharacters:NSCharacterSet.urlQueryAllowed)!)!).totp_string
                     
                     self.authenticate(verificationType: incomingData.verificationType, incomingData: authenticateRequest) {
                         switch $0 {
@@ -509,7 +516,7 @@ public class VerificationInteractor {
                             }
                             break
                         case .failure(let authenticateErrorResponse):
-                            VerificationPresenter.shared.login(loginResponse: nil, errorResponse: authenticateErrorResponse, callback: callback)
+                            self.sharedPresenter.login(loginResponse: nil, errorResponse: authenticateErrorResponse, callback: callback)
                             break
                         }
                     }
@@ -528,14 +535,14 @@ public class VerificationInteractor {
                             }
                             break
                         case .failure(let authenticateErrorResponse):
-                            VerificationPresenter.shared.login(loginResponse: nil, errorResponse: authenticateErrorResponse, callback: callback)
+                            self.sharedPresenter.login(loginResponse: nil, errorResponse: authenticateErrorResponse, callback: callback)
                             break
                         }
                     }
                 }
                 break
             case .failure(let initiateErrorResponse):
-                VerificationPresenter.shared.login(loginResponse: nil, errorResponse: initiateErrorResponse, callback: callback)
+                self.sharedPresenter.login(loginResponse: nil, errorResponse: initiateErrorResponse, callback: callback)
                 break
             }
         }
@@ -547,7 +554,7 @@ public class VerificationInteractor {
         if (incomingData.sub == "" || incomingData.requestId == "" || incomingData.status_id == "" || incomingData.verificationType == "") {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "sub cannot be empty", statusCode: 417)
-            VerificationPresenter.shared.passwordlessContinue(passwordlessContinueResponse: nil, errorResponse: error, callback: callback)
+            sharedPresenter.passwordlessContinue(passwordlessContinueResponse: nil, errorResponse: error, callback: callback)
             return
         }
         
@@ -556,13 +563,13 @@ public class VerificationInteractor {
         if (savedProp == nil) {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
-            VerificationPresenter.shared.passwordlessContinue(passwordlessContinueResponse: nil, errorResponse: error, callback: callback)
+            sharedPresenter.passwordlessContinue(passwordlessContinueResponse: nil, errorResponse: error, callback: callback)
             return
         }
         
         // call worker
-        VerificationServiceWorker.shared.passwordlessContinue(incomingData: incomingData, properties: savedProp!) { response, error in
-            VerificationPresenter.shared.passwordlessContinue(passwordlessContinueResponse: response, errorResponse: error, callback: callback)
+        sharedService.passwordlessContinue(incomingData: incomingData, properties: savedProp!) { response, error in
+            self.sharedPresenter.passwordlessContinue(passwordlessContinueResponse: response, errorResponse: error, callback: callback)
         }
     }
     
@@ -591,7 +598,7 @@ public class VerificationInteractor {
                         let errorResponse = error.error
                         errorResponse.error.code = res_errorCode ?? WebAuthError.shared.errorCode
                         
-                        VerificationPresenter.shared.enroll(enrollResponse: nil, errorResponse: error, callback: callback)
+                        self.sharedPresenter.enroll(enrollResponse: nil, errorResponse: error, callback: callback)
                         
                         return
                     }
@@ -605,7 +612,7 @@ public class VerificationInteractor {
                 let errorResponse = error.error
                 errorResponse.error.code = errorCode ?? WebAuthError.shared.errorCode
                 
-                VerificationPresenter.shared.enroll(enrollResponse: nil, errorResponse: error, callback: callback)
+                self.sharedPresenter.enroll(enrollResponse: nil, errorResponse: error, callback: callback)
                 return
             }
         }
@@ -628,7 +635,7 @@ public class VerificationInteractor {
                         let errorResponse = error.error
                         errorResponse.error.code = res_errorCode ?? WebAuthError.shared.errorCode
                         
-                        VerificationPresenter.shared.authenticate(authenticateResponse: nil, errorResponse: error, callback: callback)
+                        self.sharedPresenter.authenticate(authenticateResponse: nil, errorResponse: error, callback: callback)
                         
                         return
                     }
@@ -642,7 +649,7 @@ public class VerificationInteractor {
                 let errorResponse = error.error
                 errorResponse.error.code = errorCode ?? WebAuthError.shared.errorCode
                 
-                VerificationPresenter.shared.authenticate(authenticateResponse: nil, errorResponse: error, callback: callback)
+                self.sharedPresenter.authenticate(authenticateResponse: nil, errorResponse: error, callback: callback)
                 return
             }
         }
@@ -664,7 +671,7 @@ public class VerificationInteractor {
                         do {
                             let data = try encoder.encode(loginResp)
                             let loginResponseString = String(data: data, encoding: .utf8)
-                            VerificationPresenter.shared.login(loginResponse: loginResponseString, errorResponse: nil, callback: callback)
+                            self.sharedPresenter.login(loginResponse: loginResponseString, errorResponse: nil, callback: callback)
                         }
                         catch(let err) {
                             let error_resp = WebAuthError.shared
@@ -672,17 +679,17 @@ public class VerificationInteractor {
                             error_resp.errorMessage = "JSON parsing error: \(err.localizedDescription)"
                             error_resp.statusCode = 500
                             
-                            VerificationPresenter.shared.login(loginResponse: nil, errorResponse: error_resp, callback: callback)
+                            self.sharedPresenter.login(loginResponse: nil, errorResponse: error_resp, callback: callback)
                         }
                         break
                     case .failure(let tokenFailureResponse):
-                        VerificationPresenter.shared.login(loginResponse: nil, errorResponse: tokenFailureResponse, callback: callback)
+                        self.sharedPresenter.login(loginResponse: nil, errorResponse: tokenFailureResponse, callback: callback)
                         break
                     }
                 }
                 break
             case .failure(let passwordlessContinueFailureResponse):
-                VerificationPresenter.shared.login(loginResponse: nil, errorResponse: passwordlessContinueFailureResponse, callback: callback)
+                self.sharedPresenter.login(loginResponse: nil, errorResponse: passwordlessContinueFailureResponse, callback: callback)
                 break
             }
         }
@@ -695,7 +702,7 @@ public class VerificationInteractor {
         if (savedProp == nil) {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
-            VerificationPresenter.shared.login(loginResponse: nil, errorResponse: error, callback: callback)
+            sharedPresenter.login(loginResponse: nil, errorResponse: error, callback: callback)
             return
         }
         
@@ -713,7 +720,7 @@ public class VerificationInteractor {
                 }
                 break
             case .failure(let authenticateErrorResponse):
-                VerificationPresenter.shared.login(loginResponse: nil, errorResponse: authenticateErrorResponse, callback: callback)
+                self.sharedPresenter.login(loginResponse: nil, errorResponse: authenticateErrorResponse, callback: callback)
                 break
             }
 

@@ -6,7 +6,7 @@ target 'Cidaas_Example' do
 
   target 'Cidaas_Tests' do
     inherit! :search_paths
-    pod 'Quick', '~> 1.2.0'
-    pod 'Mockingjay', '~> 2.0'
+    pod 'Quick', '2.2.0'
+    pod 'Mockingjay', '3.0.0-alpha.1'
   end
 end

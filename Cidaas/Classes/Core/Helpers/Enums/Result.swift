@@ -12,7 +12,3 @@ public enum Result<T> {
     case success(result: T)
     case failure(error: WebAuthError)
 }
-
-public enum ServiceError<T> {
-    case error(error: T)
-}
