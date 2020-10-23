@@ -26,12 +26,12 @@ public class LoginServiceWorker {
         var baseURL : String
         
         // construct body params
-        var bodyParams = Dictionary<String, String>()
+        var bodyParams = Dictionary<String, Any>()
         
         do {
             let encoder = JSONEncoder()
             let data = try encoder.encode(incomingData)
-            bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, String> ?? Dictionary<String, String>()
+            bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
         }
         catch(_) {
             callback(nil, WebAuthError.shared.conversionException())
