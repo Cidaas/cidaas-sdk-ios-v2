@@ -21,6 +21,8 @@ public class CidaasNative {
     var sharedChangePasswordViewController: ChangePasswordViewController
     var sharedLinkUnlinkViewController: LinkUnlinkViewController
     var sharedLoginViewController: LoginViewController
+    var enablePkce : Bool = true
+    var propertyFileRead: Bool = false
     
     public init() {
         sharedAccountVerificationViewController = AccountVerificationViewController.shared
@@ -35,6 +37,7 @@ public class CidaasNative {
         sharedChangePasswordViewController = ChangePasswordViewController.shared
         sharedLinkUnlinkViewController = LinkUnlinkViewController.shared
         sharedLoginViewController = LoginViewController.shared
+        readPropertyFile();
     }
     
     // login with credentials service
@@ -141,5 +144,82 @@ public class CidaasNative {
     // unlink user
     public func unlinkAccount(access_token: String, identityId: String, callback: @escaping(Result<LinkAccountResponseEntity>) -> Void) {
         sharedLinkUnlinkViewController.unlinkAccount(access_token: access_token, identityId: identityId, callback: callback)
+    }
+    
+    // read property file
+       public func readPropertyFile() {
+           FileHelper.shared.readProperties {
+               switch $0 {
+               case .failure(let error):
+                   // log error
+                   let loggerMessage = "Read properties file failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                   logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                   
+                   return
+               case .success(let properties):
+                   // log success
+                   let loggerMessage = "Read properties file success : " + "Properties Count - " + String(describing: properties.count)
+                   logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                   
+                   
+                   self.saveProperties(properties: properties) {
+                       switch $0 {
+                       case .failure (let error):
+                           // log error
+                           let loggerMessage = "Saving properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                           logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                           return
+                       case .success(let response):
+                           // log success
+                           let loggerMessage = "Saved Property status : \(response)"
+                           logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                           self.propertyFileRead = true
+                           break
+                       }
+                   }
+               }
+           }
+       }
+    func saveProperties(properties: Dictionary<String, String>, callback:@escaping (Result<Bool>) -> Void) {
+        var savedProperties = properties
+        
+        if self.enablePkce == false {
+            // client secret null check
+            if properties["ClientSecret"] == "" || properties["ClientSecret"] == nil {
+                let error = WebAuthError.shared.propertyMissingException()
+                // log error
+                let loggerMessage = "Read properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                
+                DispatchQueue.main.async {
+                    callback(Result.failure(error: error))
+                }
+                return
+            }
+            else {
+                savedProperties["ClientSecret"] = properties["ClientSecret"]
+            }
+        }
+            
+        else {
+            // create challenge and verifier
+            let generator : OAuthChallengeGenerator = OAuthChallengeGenerator()
+            savedProperties["Verifier"] = generator.verifier
+            savedProperties["Challenge"] = generator.challenge
+            savedProperties["Method"] = generator.method
+        }
+        savedProperties["AuthorizationURL"] = (properties["DomainURL"]!) + "/authz-srv/authz"
+        savedProperties["TokenURL"] = (properties["DomainURL"]!) + "/token-srv/token"
+        savedProperties["GrantType"] = "authorization_code"
+        savedProperties["ResponseType"] = "code"
+        savedProperties["UserInfoURL"] = (properties["DomainURL"]!) + "/users-srv/userinfo"
+        
+
+        // save local
+        DBHelper.shared.setPropertyFile(properties: savedProperties)
+        
+        DispatchQueue.main.async {
+            callback(Result.success(result: true))
+        }
     }
 }
