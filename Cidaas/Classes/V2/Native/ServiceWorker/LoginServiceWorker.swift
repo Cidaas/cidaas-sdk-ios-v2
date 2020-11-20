@@ -18,6 +18,26 @@ public class LoginServiceWorker {
         sharedURL = LoginURLHelper.shared
     }
     
+    public func logout(access_token : String, properties : Dictionary<String, String>, callback: @escaping (String?, WebAuthError?) -> Void){
+        // local variables
+               var urlString : String
+               var baseURL : String
+               
+               // assign base url
+               baseURL = (properties["DomainURL"]) ?? ""
+               
+               if (baseURL == "") {
+                   callback(nil, WebAuthError.shared.propertyMissingException())
+                   return
+               }
+               
+               // construct url
+               urlString = baseURL + sharedURL.getLogout(accessToken: access_token)
+               // urlString = baseURL + "/session/end_session?access_token_hint="+access_token
+               
+               sharedSession.startSession(url: urlString, method: .get, parameters: nil, callback: callback)
+    }
+    
     // login with credentials service
     public func loginWithCredentials(incomingData : LoginEntity, properties : Dictionary<String, String>, callback: @escaping (String?, WebAuthError?) -> Void) {
         

@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'Cidaas'
-  s.version          = '1.2.1'
+  s.version          = '1.2.2'
   s.summary          = 'Native SDK for iOS providing login, registration and verification functionalities'
   s.homepage         = 'https://github.com/Cidaas/cidaas-sdk-ios-v2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   s.source       = { :git => 'https://github.com/Cidaas/cidaas-sdk-ios-v2.git', :tag => s.version }
   s.ios.deployment_target = '10.0'
   s.source_files = 'Cidaas/Classes/**/*'
-  s.dependency 'Alamofire', '5.1.0'
+  s.dependency 'Alamofire', '~> 5.1.0'
   s.dependency 'OneTimePassword', '3.2.0'
   s.dependency 'CryptoSwift', '1.3.1'
   s.dependency 'SwiftKeychainWrapper', '3.4.0'

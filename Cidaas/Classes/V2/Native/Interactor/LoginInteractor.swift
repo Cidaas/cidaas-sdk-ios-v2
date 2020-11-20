@@ -12,6 +12,7 @@ public class LoginInteractor {
     public static var shared: LoginInteractor = LoginInteractor()
     var sharedService: LoginServiceWorker
     var sharedPresenter: LoginPresenter
+  
     
     public init() {
         sharedService = LoginServiceWorker.shared
@@ -41,6 +42,22 @@ public class LoginInteractor {
         // call worker
         sharedService.loginWithCredentials(incomingData: incomingData, properties: savedProp!) { response, error in
             self.sharedPresenter.loginWithCredentials(response: response, errorResponse: error, callback: callback)
+        }
+    }
+    
+    public func logout(access_token : String,  callback: @escaping(Result<Bool>) -> Void){
+        // get saved properties
+               let savedProp = getProperties()
+               if (savedProp == nil) {
+                   // send response to presenter
+                   let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
+                   sharedPresenter.logout(response: nil, errorResponse: error, callback: callback)
+                   return
+               }
+        // call worker
+        sharedService.logout(access_token : access_token, properties: savedProp!) { response, error in
+            self.sharedPresenter.logout(response: response, errorResponse: error, callback: callback)
+            
         }
     }
     

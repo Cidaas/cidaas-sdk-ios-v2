@@ -56,6 +56,8 @@ public class LoginController {
         }
     }
     
+  
+    
     // login With social
     public func loginWithSocial(provider: String, requestId: String, delegate: UIViewController, properties: Dictionary<String, String>, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         // null check
