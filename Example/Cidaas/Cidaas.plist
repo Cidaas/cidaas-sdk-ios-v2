@@ -3,10 +3,10 @@
 <plist version="1.0">
 <dict>
 	<key>DomainURL</key>
-	<string></string>
+	<string>https://nightlybuild.cidaas.de</string>
 	<key>ClientId</key>
 	<string></string>
 	<key>RedirectURL</key>
-	<string></string>
+	<string>com.cidaas.authenticator://nightlybuild.cidaas.de/user-profile/editprofile</string>
 </dict>
 </plist>
