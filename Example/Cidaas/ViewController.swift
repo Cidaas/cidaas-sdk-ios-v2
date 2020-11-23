@@ -71,7 +71,7 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
     func login(){
         let loginEntity = LoginEntity()
                 loginEntity.username = "ganesh.kumar@widas.in"
-                loginEntity.password = "123456"
+                loginEntity.password = ""
                 loginEntity.username_type = "email" // either email or mobile or username
                 loginEntity.requestId = self.requestID
         
