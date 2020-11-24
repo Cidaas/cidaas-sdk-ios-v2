@@ -43,7 +43,7 @@ pod 'Cidaas'
 
 The following steps are to be followed to use this cidaas SDK.
 
-Create a plist file named <b>cidaas.plist</b> and fill all the inputs in key value pair. The inputs are mentioned below.
+Create a plist file named <b>Cidaas.plist</b> and fill all the inputs in key value pair. The inputs are mentioned below.
 
 A sample plist file would look like this :
 
