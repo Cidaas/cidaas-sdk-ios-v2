@@ -21,6 +21,7 @@ public class CidaasNative {
     var sharedChangePasswordViewController: ChangePasswordViewController
     var sharedLinkUnlinkViewController: LinkUnlinkViewController
     var sharedLoginViewController: LoginViewController
+    var sharedLogoutController: LogoutController
     var enablePkce : Bool = true
     var propertyFileRead: Bool = false
     
@@ -37,12 +38,18 @@ public class CidaasNative {
         sharedChangePasswordViewController = ChangePasswordViewController.shared
         sharedLinkUnlinkViewController = LinkUnlinkViewController.shared
         sharedLoginViewController = LoginViewController.shared
+         sharedLogoutController = LogoutController.shared
         readPropertyFile();
     }
     
     // login with credentials service
     public func loginWithCredentials(incomingData : LoginEntity, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         sharedLoginViewController.loginWithCredentials(incomingData: incomingData, callback: callback)
+    }
+    // logout service
+    public func logout(access_token : String, callback: @escaping(Result<Bool>) -> Void){
+        print("logout process started")
+        sharedLogoutController.logout(access_token : access_token, callback: callback)
     }
     
     // Account verification

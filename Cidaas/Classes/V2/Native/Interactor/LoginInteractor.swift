@@ -44,6 +44,23 @@ public class LoginInteractor {
         }
     }
     
+    
+    public func logout(access_token : String,  callback: @escaping(Result<Bool>) -> Void){
+           // get saved properties
+                  let savedProp = getProperties()
+                  if (savedProp == nil) {
+                      // send response to presenter
+                      let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
+                      sharedPresenter.logout(response: nil, errorResponse: error, callback: callback)
+                      return
+                  }
+           // call worker
+           sharedService.logout(access_token : access_token, properties: savedProp!) { response, error in
+               self.sharedPresenter.logout(response: response, errorResponse: error, callback: callback)
+               
+           }
+       }
+    
     func getProperties() -> Dictionary<String, String>? {
         let savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
