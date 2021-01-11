@@ -71,12 +71,15 @@ public class RegistrationServiceWorker {
         var baseURL : String
         
         // construct body params
-        var bodyParams = Dictionary<String, String>()
+        var bodyParams = Dictionary<String, Any>()
+        
         
         do {
             let encoder = JSONEncoder()
             let data = try encoder.encode(incomingData)
-            bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, String> ?? Dictionary<String, String>()
+            bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+            
+            
         }
         catch(_) {
             callback(nil, WebAuthError.shared.conversionException())
@@ -97,6 +100,6 @@ public class RegistrationServiceWorker {
         // construct url
         urlString = baseURL + sharedURL.getUpdateUserURL(sub: incomingData.sub)
         
-        sharedSession.startSession(url: urlString, method: .post, parameters: bodyParams, callback: callback)
+        sharedSession.startSession(url: urlString, method: .put, parameters: bodyParams,extraheaders: headers, callback: callback)
     }
 }

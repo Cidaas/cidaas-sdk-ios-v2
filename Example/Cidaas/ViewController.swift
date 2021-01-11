@@ -13,9 +13,12 @@ import AuthenticationServices
 class ViewController: UIViewController, ASWebAuthenticationPresentationContextProviding {
     
    // var cidaas = Cidaas.shared
-    var cidaas = CidaasNative()
+    var cidaasNative = CidaasNative.shared
+    var cidaas = Cidaas.shared
+  //  var cidaasConsent = CidaasConsent()
      var requestID: String = ""
     var accessToken : String = ""
+    var sub: String = ""
     
     // did load
     override func viewDidLoad() {
@@ -25,7 +28,7 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
     @IBAction func logoutBtn(_ sender: Any) {
         self.readdata();
         print(accessToken)
-        cidaas.logout(access_token: accessToken){
+        cidaasNative.logout(access_token: accessToken){
            switch $0 {
                case .success(let loginSuccess):
                    print( loginSuccess);
@@ -37,7 +40,42 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
            }
         }
     }
-   
+    @IBAction func updateUser(_ sender: Any) {
+        self.readdata()
+       let incomingData = RegistrationEntity()
+           incomingData.given_name = "Test"
+           incomingData.sub = sub
+        incomingData.provider = "self"
+            print(incomingData.sub)
+        print("Access Token : "+accessToken)
+       
+           self.cidaasNative.updateUser(access_token: accessToken, incomingData: incomingData) {
+               switch $0 {
+                   case .success(let updateResponse):
+                       print(updateResponse.data.updated)
+                       self.getUserInfo()
+                       break
+                   case .failure(let errorResponse):
+                       print(errorResponse.errorMessage)
+                       break
+               }
+           }
+       
+    }
+    
+    func getUserInfo() {
+        self.cidaas.getUserInfo(sub: sub) {
+            switch $0 {
+                case .success(let profileResponse):
+                    print(profileResponse.email)
+                    break
+                case .failure(let errorResponse):
+                    print(errorResponse.errorMessage)
+                    break
+            }
+        }
+    }
+        
     @IBAction func login(_ sender: Any) {
 //        cidaas.loginWithBrowser(delegate: self) {
 //            switch $0 {
@@ -51,7 +89,9 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
 //                    break
 //            }
 //        }
-        cidaas.getRequestId(){
+        
+    
+        cidaasNative.getRequestId(){
                    switch $0 {
                        case .success(let loginSuccess):
                            print( loginSuccess);
@@ -70,17 +110,19 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
     
     func login(){
         let loginEntity = LoginEntity()
-                loginEntity.username = "ganesh.kumar@widas.in"
+                loginEntity.username = ""
                 loginEntity.password = ""
                 loginEntity.username_type = "email" // either email or mobile or username
                 loginEntity.requestId = self.requestID
         
-               cidaas.loginWithCredentials(incomingData: loginEntity) {
+               cidaasNative.loginWithCredentials(incomingData: loginEntity) {
                    switch $0 {
                        case .success(let loginSuccess):
 
                            print( loginSuccess);
                            self.saveaccessToken(accesstoken: loginSuccess.data.access_token);
+                           self.sub = loginSuccess.data.sub
+                           
                            
                        break
                        case .failure(let error):
