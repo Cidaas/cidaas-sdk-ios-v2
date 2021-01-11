@@ -5,7 +5,7 @@
 	<key>DomainURL</key>
 	<string>https://nightlybuild.cidaas.de</string>
 	<key>ClientId</key>
-	<string></string>
+	<string>b68bd1f6-07b1-4cb9-925f-b6b68567da18</string>
 	<key>RedirectURL</key>
 	<string>com.cidaas.authenticator://nightlybuild.cidaas.de/user-profile/editprofile</string>
 </dict>
