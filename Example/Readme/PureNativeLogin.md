@@ -15,6 +15,7 @@ This document will guide to link the appropriate cidaas methods and services to 
     <!--ts-->
     * [Getting Registration Fields](#getting-registration-fields)
     * [Register user](#register-user)
+    * [Update user info](#update-user-info)
     <!--te-->
 * [De-duplication](#de-duplication)
     <!--ts-->
@@ -271,6 +272,45 @@ cidaas.registerUser(registrationEntity: registrationEntity) {
         "userStatus": "VERIFIED",
         "email_verified": false,
         "suggested_action": "LOGIN"
+    }
+}
+```
+
+#### Update user info
+
+To update info about existing user, call ****updateUser()****.
+
+or want to accepted consent, call ****updateUser()****. 
+
+```swift 
+    let registrationEntity = RegistrationEntity()
+     registrationEntity.given_name = "updatedName"
+     registrationEntity.sub = sub
+     registrationEntity.provider = "self" // either self or facebook or google or other login providers
+
+  and for updating consent, add value to key field "true" or "false" in customFields of RegistrationEntity.          
+
+
+cidaas.updateUser(access_token: accessToken, incomingData: registrationEntity) {
+    switch $0 {
+        case .failure(let error):
+            // your failure code here
+        break
+        case .success(let updateResponse):
+            // your success code here
+        break
+    }
+} 
+```
+
+**Response:**
+
+```json
+{
+    "success": true,
+    "status": 200,
+    "data": {
+        "updated" :  "true"
     }
 }
 ```
