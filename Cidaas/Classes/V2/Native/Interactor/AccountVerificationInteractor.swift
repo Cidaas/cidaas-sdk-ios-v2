@@ -21,7 +21,7 @@ public class AccountVerificationInteractor {
     public func initiateAccountVerification(incomingData : InitiateAccountVerificationEntity, callback: @escaping (Result<InitiateAccountVerificationResponseEntity>) -> Void) {
         
         // validation
-        if (incomingData.requestId == "" || incomingData.sub == "" || incomingData.verificationMedium == "" || incomingData.processingType == "") {
+        if (incomingData.requestId == "" || (incomingData.sub == "" && incomingData.email == "" && incomingData.mobile == "") || incomingData.verificationMedium == "" || incomingData.processingType == "") {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "requestId or sub or verificationMedium or processingType cannot be empty", statusCode: 417)
             sharedPresenter.initiateAccountVerification(response: nil, errorResponse: error, callback: callback)
