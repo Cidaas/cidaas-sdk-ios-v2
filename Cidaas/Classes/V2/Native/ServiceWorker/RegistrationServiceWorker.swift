@@ -46,6 +46,19 @@ public class RegistrationServiceWorker {
         var urlString : String
         var baseURL : String
         
+        // construct body params
+        var bodyParams = Dictionary<String, Any>()
+        
+        do {
+            let encoder = JSONEncoder()
+            let data = try encoder.encode(incomingData)
+            bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+        }
+        catch(_) {
+            callback(nil, WebAuthError.shared.conversionException())
+            return
+        }
+        
         // assign base url
         baseURL = (properties["DomainURL"]) ?? ""
         
@@ -60,7 +73,7 @@ public class RegistrationServiceWorker {
         // construct url
         urlString = baseURL + sharedURL.getRegistrationURL()
         
-        sharedSession.startSession(url: urlString, method: .post, parameters: nil, extraheaders: headers, callback: callback)
+        sharedSession.startSession(url: urlString, method: .post, parameters: bodyParams, extraheaders: headers, callback: callback)
     }
     
     // Update user
