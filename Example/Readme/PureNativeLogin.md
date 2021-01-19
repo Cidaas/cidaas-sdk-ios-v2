@@ -25,9 +25,7 @@ This document will guide to link the appropriate cidaas methods and services to 
     <!--te-->
 * [Account Verification](#account-verification)
     <!--ts-->
-    * [Initiate Email verification](#initiate-email-verification)
-    * [Initiate SMS verification](#initiate-sms-verification)
-    * [Initiate IVR verification](#initiate-ivr-verification)
+    * [Initiate Account verification](#initiate-account-verification)
     * [Verify Account](#verify-account)
     <!--te-->
 * [Forgot Password](#forgot-password)
