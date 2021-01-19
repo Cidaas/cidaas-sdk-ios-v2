@@ -453,59 +453,32 @@ cidaas.loginWithDeduplication("sub": "51701ec8-f2d7-4361-a727-f8df476a711a", "pa
 In order to avoid misuse of user registration functions, it is a good practice to include account verification along with it.
 Once registeration is done, you can verify your account either by Email, SMS or IVR verification call. To do this, first you have to initiate the account verification. You can invoke any of the following  based on your use case.
 
-#### Initiate Email verification
+#### Initiate Account Verification
 
-This method is to be used when you want to receive a verification code via Email, call **initiateEmailVerification()**.
+This method has to be used when you want to receive a verification code or Link via email/sms/ivr:
 
 ```swift
-cidaas.initiateEmailVerification(sub:"7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
+let incomingData: InitiateAccountVerificationEntity = InitiateAccountVerificationEntity()
+incomingData.requestId = "Your request id"
+incomingData.processingType = "CODE" // You can set CODE or LINK as processingType
+incomingData.verificationMedium = "email" //You can set email,sms,ivr
+incomingData.sub = "your received sub" // This you can get it from the registration api response
+incomingData.email = "your email"
+incomingData.mobile = "your mobile"
+
+// sub, email or mobile any one is mandatory. sub - you can get it from registration api response
+
+cidaas.initiateAccountVerification(accountVerificationEntity: incomingData) {
     switch $0 {
-        case .success(let configureSuccess):
+        case .success(let successResponse):
             // your success code here
         break
-        case .failure(let error):
+        case .failure(let errorResponse):
             // your failure code here
         break
     }
 }
 ```
-Here, **sub** is the key you would get from the success response of the registration
-
-#### Initiate SMS verification
-
-If you would like to receive a verification code via SMS, call **initiateSMSVerification()**.
-
-```swift
-cidaas.initiateSMSVerification(sub:"7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
-    switch $0 {
-        case .success(let configureSuccess):
-            // your success code here
-        break
-        case .failure(let error):
-            // your failure code here
-        break
-    }
-}
-```
-Here, **sub** is the key you would get from the success response of the registration
-
-#### Initiate IVR verification
-
-In order to receive a verification code via IVR verification call, call **initiateIVRVerification()**.
-
-```swift
-cidaas.initiateIVRVerification(sub:"7dfb2122-fa5e-4f7a-8494-dadac9b43f9d") {
-    switch $0 {
-        case .success(let configureSuccess):
-            // your success code here
-        break
-        case .failure(let error):
-            // your failure code here
-        break
-    }
-}
-```
-Here, **sub** is the key you would get from the success response of the registration
 
 **Response:**
 
@@ -521,21 +494,24 @@ Here, **sub** is the key you would get from the success response of the registra
 
 #### Verify Account
 
-Once you received your verification code via any of the mediums like Email, SMS or IVR, you need to verify the code. For that verification, call **verifyAccount()**.
+Once you received your verification code via any of the mediums like Email, SMS or IVR, you need to verify the code. For that verification, call **verifyAccount()**. You get the accvid in the initate account verification call
 
 ```swift
-cidaas.verifyAccount(code:"658144") {
+let accountVerificationEntity = VerifyAccountEntity()
+accountVerificationEntity.accvid = "your accvid"
+accountVerificationEntity.code = "your otp"
+
+cidaas.verifyAccount(accountVerificationEntity: accountVerificationEntity) {
     switch $0 {
-        case .success(let configureSuccess):
+        case .success(let successResponse):
             // your success code here
         break
-        case .failure(let error):
+        case .failure(let errorResponse):
             // your failure code here
         break
     }
 }
 ```
-Here, **code** is the key you would get from the Email, SMS or IVR verification call
 
 **Response:**
 

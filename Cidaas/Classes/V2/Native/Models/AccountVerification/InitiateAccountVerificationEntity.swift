@@ -14,6 +14,8 @@ public class InitiateAccountVerificationEntity : Codable {
     public var requestId: String = ""
     public var processingType: String = ""
     public var sub: String = ""
+    public var email: String = ""
+    public var mobile: String = ""
     
     // Constructors
     public init() {
