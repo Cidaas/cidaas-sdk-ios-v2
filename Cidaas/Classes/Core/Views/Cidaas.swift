@@ -412,6 +412,27 @@ public class Cidaas {
         }
     }
     
+    public func getUserInfo(accessToken: String, callback: @escaping(Result<UserInfoEntity>) -> Void) {
+        
+        let savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            UsersController.shared.getUserInfo(accessToken: accessToken, properties: savedProp!, callback: callback)
+        }
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+    }
+    
     
     // get access token from sub
     // 1. Call getAccessToken method

@@ -121,9 +121,9 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
 
                            print( loginSuccess);
                            self.saveaccessToken(accesstoken: loginSuccess.data.access_token);
-                           self.sub = loginSuccess.data.sub
+                           self.sub = loginSuccess.data.access_token
                            
-                           
+                        self.getUserInfo(accessToken: self.sub)
                        break
                        case .failure(let error):
                            print(error);
@@ -131,6 +131,20 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
                    }
                }
     }
+    
+    func getUserInfo(accessToken: String) {
+        cidaas.getUserInfo(accessToken: accessToken) {
+            switch $0 {
+                case .success(let userInfo):
+                    print(userInfo.gender)
+                break
+                case .failure(let error):
+                    print(error);
+                break
+            }
+        }
+    }
+    
     func saveaccessToken(accesstoken :  String) -> Void{
         let preferences = UserDefaults.standard
 
