@@ -11,6 +11,8 @@
 [![Build Status](https://travis-ci.org/Cidaas/cidaas-sdk-ios-v2.svg?branch=master)](https://travis-ci.org/Cidaas/cidaas-sdk-ios-v2) 
 [![Platform](https://img.shields.io/badge/Platforms-iOS-4E4E4E.svg?colorA=28a745)](#installation)
 
+You can find the changelogs [here](/Example/Readme/Changelogs.md)
+
 The steps here will guide you through setting up and managing authentication and authorization in your apps using cidaas SDK.
 
 ## Table of Contents
