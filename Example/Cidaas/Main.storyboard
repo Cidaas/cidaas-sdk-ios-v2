@@ -17,12 +17,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wmx-Hc-mzg">
-                                <rect key="frame" x="124" y="284" width="80" height="50"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wmx-Hc-mzg">
+                                <rect key="frame" x="137.66666666666666" y="381" width="100" height="50"/>
                                 <color key="backgroundColor" systemColor="systemOrangeColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="80" id="Rjm-1J-5KN"/>
-                                    <constraint firstAttribute="height" constant="50" id="hAz-x1-NW8"/>
+                                    <constraint firstAttribute="height" constant="50" id="3PX-R9-wZt"/>
+                                    <constraint firstAttribute="width" constant="100" id="hKF-Tx-k4m"/>
                                 </constraints>
                                 <state key="normal" title="Login">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -31,33 +31,24 @@
                                     <action selector="login:" destination="eVY-Ca-2R4" eventType="touchUpInside" id="GBQ-wO-Jtp"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="McM-TG-uyx">
-                                <rect key="frame" x="267" y="145" width="48" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VAK-sJ-Uoz">
+                                <rect key="frame" x="137" y="449" width="100" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Logout"/>
-                                <connections>
-                                    <action selector="logoutBtn:" destination="eVY-Ca-2R4" eventType="touchUpInside" id="RXh-3M-jLC"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="vrP-tg-5sG">
-                                <rect key="frame" x="105" y="394" width="92" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.0" green="0.56904578210000001" blue="0.57461684940000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                <state key="normal" title="Update User">
+                                <color key="backgroundColor" systemColor="systemOrangeColor"/>
+                                <state key="normal" title="Register">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="medium"/>
                                 </state>
                                 <connections>
-                                    <action selector="updateUser:" destination="eVY-Ca-2R4" eventType="touchUpInside" id="2oP-Qg-fW9"/>
+                                    <action selector="login:" destination="eVY-Ca-2R4" eventType="touchUpInside" id="2zZ-BL-VqP"/>
+                                    <action selector="register:" destination="eVY-Ca-2R4" eventType="touchUpInside" id="7Lh-Hs-Stg"/>
                                 </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="F1r-ws-735"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="wmx-Hc-mzg" firstAttribute="centerX" secondItem="F1r-ws-735" secondAttribute="centerX" id="OXl-YA-Wqe"/>
-                            <constraint firstItem="wmx-Hc-mzg" firstAttribute="centerY" secondItem="F1r-ws-735" secondAttribute="centerY" id="aqJ-LL-zwi"/>
+                            <constraint firstItem="wmx-Hc-mzg" firstAttribute="centerX" secondItem="qhB-a3-VD1" secondAttribute="centerX" id="7ha-jZ-ZX8"/>
+                            <constraint firstItem="wmx-Hc-mzg" firstAttribute="centerY" secondItem="qhB-a3-VD1" secondAttribute="centerY" id="vFb-3H-fpa"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="cidaas" id="GLN-eY-Cdw"/>

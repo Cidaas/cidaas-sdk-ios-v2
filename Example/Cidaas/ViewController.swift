@@ -23,120 +23,78 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
     // did load
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-    }
-    @IBAction func logoutBtn(_ sender: Any) {
-        self.readdata();
-        print(accessToken)
-        cidaasNative.logout(access_token: accessToken){
-           switch $0 {
-               case .success(let loginSuccess):
-                   print( loginSuccess);
-                  
-               break
-               case .failure(let error):
-                   print(error);
-               break
-           }
-        }
-    }
-    @IBAction func updateUser(_ sender: Any) {
-        self.readdata()
-       let incomingData = RegistrationEntity()
-           incomingData.given_name = "Test"
-           incomingData.sub = sub
-        incomingData.provider = "self"
-            print(incomingData.sub)
-        print("Access Token : "+accessToken)
-       
-           self.cidaasNative.updateUser(access_token: accessToken, incomingData: incomingData) {
-               switch $0 {
-                   case .success(let updateResponse):
-                       print(updateResponse.data.updated)
-                       self.getUserInfo()
-                       break
-                   case .failure(let errorResponse):
-                       print(errorResponse.errorMessage)
-                       break
-               }
-           }
-       
+        self.getRequestId()
     }
     
-    func getUserInfo() {
-        self.cidaas.getUserInfo(sub: sub) {
+    func getRequestId() {
+        cidaasNative.getRequestId {
             switch $0 {
-                case .success(let profileResponse):
-                    print(profileResponse.email)
+                case .success(let successResponse):
+                    // your success code here
+                    self.requestID = successResponse.data.requestId
                     break
-                case .failure(let errorResponse):
-                    print(errorResponse.errorMessage)
+                case .failure(let error):
+                    // your failure code here
+                    print("Error - \(error.errorMessage)")
+                    break
+            }
+        }
+    }
+    
+    @IBAction func register(_ sender: Any) {
+        let registrationEntity = RegistrationEntity()
+        registrationEntity.email = "xxx@gmail.com"
+        registrationEntity.given_name = "xx"
+        registrationEntity.family_name = "xx"
+        registrationEntity.password = "123456"
+        registrationEntity.password_echo = "123456"
+        registrationEntity.provider = "SELF"
+        
+        registrationEntity.customFields = Dictionary<String, RegistrationCustomFieldsEntity>()
+        
+        // add customField
+        
+        let field: RegistrationCustomFieldsEntity = RegistrationCustomFieldsEntity()
+        field.value = true
+        field.key = "field_key"
+        
+        registrationEntity.customFields["field"] = field
+        
+        cidaasNative.registerUser(requestId: self.requestID, incomingData: registrationEntity) {
+            switch $0 {
+                case .success(let successResponse):
+                    // your success code here
+                    print("User Status - \(successResponse.data.userStatus)")
+                   break
+                case .failure(let error):
+                    // your failure code here
+                    print("Error - \(error.errorMessage)")
                     break
             }
         }
     }
         
     @IBAction func login(_ sender: Any) {
-//        cidaas.loginWithBrowser(delegate: self) {
-//            switch $0 {
-//                case .success(let successResponse):
-//                    // your success code here
-//                    print("Access Token - \(successResponse.data.access_token)")
-//                    break
-//                case .failure(let error):
-//                    // your failure code here
-//                    print("Error - \(error.errorMessage)")
-//                    break
-//            }
-//        }
-        
-    
-        cidaasNative.getRequestId(){
-                   switch $0 {
-                       case .success(let loginSuccess):
-                           print( loginSuccess);
-                           self.requestID = loginSuccess.data.requestId
-                           self.login()
-                       break
-                       case .failure(let error):
-                           print(error);
-                       break
-                   }
-               }
-      //  login();
-        
-         
-    }
-    
-    func login(){
-        let loginEntity = LoginEntity()
-                loginEntity.username = ""
-                loginEntity.password = ""
-                loginEntity.username_type = "email" // either email or mobile or username
-                loginEntity.requestId = self.requestID
-        
-               cidaasNative.loginWithCredentials(incomingData: loginEntity) {
-                   switch $0 {
-                       case .success(let loginSuccess):
-
-                           print( loginSuccess);
-                           self.saveaccessToken(accesstoken: loginSuccess.data.access_token);
-                           self.sub = loginSuccess.data.access_token
-                           
-                        self.getUserInfo(accessToken: self.sub)
-                       break
-                       case .failure(let error):
-                           print(error);
-                       break
-                   }
-               }
+        cidaas.loginWithBrowser(delegate: self) {
+            switch $0 {
+                case .success(let successResponse):
+                    // your success code here
+                    print("Access Token - \(successResponse.data.access_token)")
+                    self.getUserInfo(accessToken: successResponse.data.access_token)
+                    break
+                case .failure(let error):
+                    // your failure code here
+                    print("Error - \(error.errorMessage)")
+                    break
+            }
+        }
     }
     
     func getUserInfo(accessToken: String) {
         cidaas.getUserInfo(accessToken: accessToken) {
             switch $0 {
                 case .success(let userInfo):
-                    print(userInfo.gender)
+                    print(userInfo.customFields)
                 break
                 case .failure(let error):
                     print(error);

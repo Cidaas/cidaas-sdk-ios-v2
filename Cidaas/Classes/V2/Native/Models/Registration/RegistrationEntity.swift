@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import AnyCodable
 
 public class RegistrationEntity : Codable {
     
@@ -35,7 +36,7 @@ public class RegistrationCustomFieldsEntity : Codable {
     // properties
     public var id: String = ""
     public var dataType: String = ""
-    public var value: String = ""
+    public var value: AnyCodable = ""
     public var readOnly: Bool = false
     public var lastUpdateFrom: String = ""
     public var key: String = ""
