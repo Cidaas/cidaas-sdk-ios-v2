@@ -5,6 +5,7 @@ This document will guide to link the appropriate cidaas methods and services to 
 ## Table of Contents
 
 <!--ts-->
+* [Getting RequestId ](#getting-requestid) 
 * [Getting Tenant Information](#getting-tenant-info)
 * [Getting Client Information](#getting-client-info)
 * [Login](#login)
@@ -43,6 +44,37 @@ This document will guide to link the appropriate cidaas methods and services to 
 
 ```
 pod 'Cidaas/Native'
+```
+
+#### Getting RequestId
+
+To get the requestId, call ****getRequestId()****.
+
+```swift
+cidaas.getRequestId() {
+    switch $0 {
+        case .success(let requestIdInfoSuccess):
+            // your success code here
+        break
+        case .failure(let error):
+            // your failure code here
+        break
+    }
+} 
+```
+
+**Response:**
+
+```json
+{
+    "success": true,
+    "status": 200,
+    "data": {
+        "groupname": "default",
+        "view_type": "login",
+        "requestId": "3f7e8b29-xxxx-xxxx-xxxx-0b138b2f588e"
+    }
+}
 ```
 
 #### Getting Tenant Info
@@ -124,7 +156,8 @@ To login with your username and password, call ****loginWithCredentials()****.
 ```swift
 let loginEntity = LoginEntity()
 loginEntity.username = "xxx@gmail.com"
-loginEntity.password = "test#123"
+loginEntity.password = "test123"
+loginEntity.requestId = "82425345-435345-xxxxx"
 loginEntity.username_type = "email" // either email or mobile or username
 
 cidaas.loginWithCredentials(loginEntity: loginEntity) {
