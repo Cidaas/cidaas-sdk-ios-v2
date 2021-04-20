@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import AnyCodable
 
 public class UserInfoEntity: Codable {
     
@@ -30,6 +31,7 @@ public class UserInfoEntity: Codable {
     public var identities: [UserInfoIdentity] = []
     public var picture: String = ""
     public var gender: String = ""
+    public var customFields: AnyCodable = ""
     
     public init() {
         
@@ -57,6 +59,7 @@ public class UserInfoEntity: Codable {
         self.identities = try container.decodeIfPresent([UserInfoIdentity].self, forKey: .identities) ?? []
         self.picture = try container.decodeIfPresent(String.self, forKey: .picture) ?? ""
         self.gender = try container.decodeIfPresent(String.self, forKey: .gender) ?? ""
+        self.customFields = try container.decodeIfPresent(AnyCodable.self, forKey: .customFields) ?? ""
     }
     
 }

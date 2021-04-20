@@ -1,34 +1,39 @@
 PODS:
   - Alamofire (5.1.0)
+  - AnyCodable-FlightSchool (0.4.0)
   - AppAuth (1.3.0):
     - AppAuth/Core (= 1.3.0)
     - AppAuth/ExternalUserAgent (= 1.3.0)
   - AppAuth/Core (1.3.0)
   - AppAuth/ExternalUserAgent (1.3.0)
   - Base32 (1.1.2)
-  - Cidaas (1.2.4):
+  - Cidaas (1.2.7):
     - Alamofire (~> 5.1)
-    - Cidaas/Consent (= 1.2.4)
-    - Cidaas/Core (= 1.2.4)
-    - Cidaas/Facebook (= 1.2.4)
-    - Cidaas/Native (= 1.2.4)
-    - Cidaas/Verification (= 1.2.4)
+    - AnyCodable-FlightSchool (~> 0.4.0)
+    - Cidaas/Consent (= 1.2.7)
+    - Cidaas/Core (= 1.2.7)
+    - Cidaas/Facebook (= 1.2.7)
+    - Cidaas/Native (= 1.2.7)
+    - Cidaas/Verification (= 1.2.7)
     - CryptoSwift (~> 1.3)
     - OneTimePassword (~> 3.2)
     - SwiftKeychainWrapper (~> 3.4)
-  - Cidaas/Consent (1.2.4):
+  - Cidaas/Consent (1.2.7):
     - Alamofire (~> 5.1)
+    - AnyCodable-FlightSchool (~> 0.4.0)
     - Cidaas/Core
     - CryptoSwift (~> 1.3)
     - OneTimePassword (~> 3.2)
     - SwiftKeychainWrapper (~> 3.4)
-  - Cidaas/Core (1.2.4):
+  - Cidaas/Core (1.2.7):
     - Alamofire (~> 5.1)
+    - AnyCodable-FlightSchool (~> 0.4.0)
     - CryptoSwift (~> 1.3)
     - OneTimePassword (~> 3.2)
     - SwiftKeychainWrapper (~> 3.4)
-  - Cidaas/Facebook (1.2.4):
+  - Cidaas/Facebook (1.2.7):
     - Alamofire (~> 5.1)
+    - AnyCodable-FlightSchool (~> 0.4.0)
     - Cidaas/Core
     - CryptoSwift (~> 1.3)
     - FacebookCore (= 0.8)
@@ -37,14 +42,16 @@ PODS:
     - FBSDKLoginKit (= 5.5.0)
     - OneTimePassword (~> 3.2)
     - SwiftKeychainWrapper (~> 3.4)
-  - Cidaas/Native (1.2.4):
+  - Cidaas/Native (1.2.7):
     - Alamofire (~> 5.1)
+    - AnyCodable-FlightSchool (~> 0.4.0)
     - Cidaas/Core
     - CryptoSwift (~> 1.3)
     - OneTimePassword (~> 3.2)
     - SwiftKeychainWrapper (~> 3.4)
-  - Cidaas/Verification (1.2.4):
+  - Cidaas/Verification (1.2.7):
     - Alamofire (~> 5.1)
+    - AnyCodable-FlightSchool (~> 0.4.0)
     - Cidaas/Core
     - CryptoSwift (~> 1.3)
     - OneTimePassword (~> 3.2)
@@ -98,6 +105,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - Alamofire
+    - AnyCodable-FlightSchool
     - AppAuth
     - Base32
     - CryptoSwift
@@ -120,9 +128,10 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Alamofire: 9d5c5f602928e512395b30950c5984eca840093c
+  AnyCodable-FlightSchool: 9bf42632b5256c78710e2f4fb18ce78e89180883
   AppAuth: 73574f3013a1e65b9601a3ddc8b3158cce68c09d
   Base32: 163c298644d184e89ca4e00a996bad6bf5166390
-  Cidaas: 4446b026ce17c0cd09005720cc4901ef0eab0253
+  Cidaas: e0959f8a9e2a9e30bd4232653c2ec7ae545b65e6
   CryptoSwift: f12f037f6d0fcd6d48c96db0071b653de64e6c4d
   FacebookCore: 563bb4cbcd7dd86cf89f3729252140bf256aacaa
   FacebookLogin: 8b966ae661e95e7dba837d7cc49cc464ce003dba
