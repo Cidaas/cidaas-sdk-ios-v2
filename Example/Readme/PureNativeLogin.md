@@ -35,6 +35,10 @@ This document will guide to link the appropriate cidaas methods and services to 
     * [Handle Reset Password](#handle-reset-password)
     * [Reset Password](#reset-password)
     <!--te-->
+* [Change Password](#change-password-after-login)
+    <!--ts-->
+    * [Change Password](#change-password-after-login)
+    <!--te-->
 * [Passwordless or Multifactor Authentication](/Example/Readme/Passwordless.md)
 <!--te-->
 
@@ -657,6 +661,40 @@ cidaas.restPassword(password:"test#123",confirmPassword:"test#123") {
     "status": 200,
     "data": {
         "reseted":true
+    }
+}
+```
+#### Change Password After Login
+
+You can change your password by calling ****changePassword()****.
+
+```swift
+let incomingData = ChangePasswordEntity()
+incomingData.new_password = "123456"
+incomingData.confirm_password = "123456"
+incomingData.old_password = "12345678"
+incomingData.identityId = "f595edfb-754e-444c-ba01-6b69b89fb42a"
+        
+cidaasNative.changePassword(access_token: "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxMGE5LTV", incomingData: incomingData) {
+    switch $0 {
+        case .success(let successResponse):
+            // your success code here
+        break
+        case .failure(let error):
+            // your failure code here
+        break
+    }
+}
+```
+
+**Response:**
+
+```json
+{
+    "success": true,
+    "status": 200,
+    "data": {
+        "changed":true
     }
 }
 ```
