@@ -313,9 +313,9 @@ cidaas.registerUser(registrationEntity: registrationEntity) {
 
 #### Update user info
 
-To update info about existing user, call ****updateUser()****.
+To update the information for an existing user or for accepted consent call **updateUser()**.
 
-or want to accepted consent, call ****updateUser()****. 
+**Note:** <i>You can also use this method to **change a user's email address**.</i>
 
 ```swift 
     let registrationEntity = RegistrationEntity()
@@ -666,7 +666,10 @@ cidaas.restPassword(password:"test#123",confirmPassword:"test#123") {
 ```
 #### Change Password After Login
 
-You can change your password by calling ****changePassword()****.
+You can change your existing password after login by calling **changePassword()**. 
+
+**Note:** <i>If you are using the **getUserInfo()** method to get the profile information and identityId, you need to use the **last_used_identity_id** passed in this method as the **identityId**.</i>
+
 
 ```swift
 let incomingData = ChangePasswordEntity()
@@ -698,3 +701,4 @@ cidaasNative.changePassword(access_token: "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxM
     }
 }
 ```
+
