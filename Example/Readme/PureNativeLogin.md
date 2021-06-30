@@ -18,6 +18,9 @@ This document will guide to link the appropriate cidaas methods and services to 
     * [Register user](#register-user)
     * [Update user info](#update-user-info)
     <!--te-->
+* [Update User Info](#update-user-info)
+    <!--ts-->
+    <!--te-->
 * [De-duplication](#de-duplication)
     <!--ts-->
     * [Get Deduplication Details](#get-deduplication-details)
@@ -337,7 +340,6 @@ cidaas.updateUser(access_token: accessToken, incomingData: registrationEntity) {
     }
 } 
 ```
-
 **Response:**
 
 ```json
@@ -349,7 +351,6 @@ cidaas.updateUser(access_token: accessToken, incomingData: registrationEntity) {
     }
 }
 ```
-
 #### De-duplication
 
 User de-duplication is a process that eliminates redundant user accounts thus reducing storage overhead as well as other inefficiencies. This process can be triggered during registration itself by the following steps.
@@ -670,7 +671,6 @@ You can change your existing password after login by calling **changePassword()*
 
 **Note:** <i>If you are using the **getUserInfo()** method to get the profile information and identityId, you need to use the **last_used_identity_id** passed in this method as the **identityId**.</i>
 
-
 ```swift
 let incomingData = ChangePasswordEntity()
 incomingData.new_password = "123456"
@@ -689,7 +689,6 @@ cidaasNative.changePassword(access_token: "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxM
     }
 }
 ```
-
 **Response:**
 
 ```json
@@ -701,5 +700,6 @@ cidaasNative.changePassword(access_token: "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxM
     }
 }
 ```
+
 
 
