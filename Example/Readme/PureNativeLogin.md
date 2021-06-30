@@ -16,6 +16,9 @@ This document will guide to link the appropriate cidaas methods and services to 
     * [Getting Registration Fields](#getting-registration-fields)
     * [Register user](#register-user)
     <!--te-->
+* [Update User Info](#update-user-info)
+    <!--ts-->
+    <!--te-->
 * [De-duplication](#de-duplication)
     <!--ts-->
     * [Get Deduplication Details](#get-deduplication-details)
@@ -35,6 +38,7 @@ This document will guide to link the appropriate cidaas methods and services to 
     * [Handle Reset Password](#handle-reset-password)
     * [Reset Password](#reset-password)
     <!--te-->
+* [Change Password](#change-password-after-login)
 * [Passwordless or Multifactor Authentication](/Example/Readme/Passwordless.md)
 <!--te-->
 
@@ -275,6 +279,42 @@ cidaas.registerUser(registrationEntity: registrationEntity) {
 }
 ```
 
+#### Update User Info
+
+To update the information for an existing user or for accepted consent call **updateUser()**.
+
+**Note:** <i>You can also use this method to **change a user's email address**.</i>
+
+```swift
+let registrationEntity = RegistrationEntity()
+registrationEntity.given_name = "updatedName"
+registrationEntity.sub = sub
+registrationEntity.provider = "self" // either self or facebook or google or other login providers
+
+and for updating consent, add value to key field "true" or "false" in customFields of RegistrationEntity.          
+
+cidaas.registerUser(registrationEntity: registrationEntity) {
+    switch $0 {
+        case .failure(let error):
+            // your failure code here
+        break
+        case .success(let registrationResponse):
+            // your success code here
+        break
+    }
+} 
+```
+**Response:**
+
+```json
+{
+    "success": true,
+    "status": 200,
+    "data": {
+        "updated" :  "true"
+    }
+}
+```
 #### De-duplication
 
 User de-duplication is a process that eliminates redundant user accounts thus reducing storage overhead as well as other inefficiencies. This process can be triggered during registration itself by the following steps.
@@ -613,3 +653,42 @@ cidaas.restPassword(password:"test#123",confirmPassword:"test#123") {
     }
 }
 ```
+#### Change Password after Login
+
+You can change your existing password after login by calling **changePassword()**. 
+
+**Note:** <i>If you are using the **getUserInfo()** method to get the profile information and identityId, you need to use the **last_used_identity_id** passed in this method as the **identityId**.</i>
+
+```swift
+let incomingData = ChangePasswordEntity()
+incomingData.new_password = "123456"
+incomingData.confirm_password = "123456"
+incomingData.old_password = "12345678"
+incomingData.identityId = "f595edfb-754e-444c-ba01-6b69b89fb42a"
+        
+cidaasNative.changePassword(access_token: "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxMGE5LTV", incomingData: incomingData) {
+    switch $0 {
+        case .success(let successResponse):
+            // your success code here
+        break
+        case .failure(let error):
+            // your failure code here
+        break
+    }
+}
+```
+**Response:**
+
+```json
+{
+    "success": true,
+    "status": 200,
+    "data": {
+        "changed":true
+    }
+}
+```
+
+
+
+
