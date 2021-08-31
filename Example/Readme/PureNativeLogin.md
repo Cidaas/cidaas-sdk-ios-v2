@@ -566,20 +566,14 @@ There is an option to reset password in case the password is forgotten.
 For resetting password, you will get a verification code either via Email or SMS. For that you need to call ****initateRestPassword()****.
 
 ```swift
-cidaas.initateRestPassword(email:"xxx@gmail.com") {
-    switch $0 {
-        case .success(let configureSuccess):
-            // your success code here
-        break
-        case .failure(let error):
-            // your failure code here
-        break
-    }
-} 
-```
+let incomingData: InitiateResetPasswordEntity = InitiateResetPasswordEntity()
+incomingData.requestId = "Your request id"
+incomingData.processingType = "CODE" // You can set CODE or LINK as processingType
+incomingData.resetMedium = "email" //You can set email,sms,ivr
+incomingData.email = "your email"
+incomingData.mobile = "your mobile" // pass either email or mobile depends on resetMedium
 
-```swift
-cidaas.initateRestPassword(mobile:"+919876543210") {
+cidaas.initateRestPassword(incomingData: initiateResetPassworEntity) {
     switch $0 {
         case .success(let configureSuccess):
             // your success code here
@@ -598,7 +592,7 @@ cidaas.initateRestPassword(mobile:"+919876543210") {
     "success": true,
     "status": 200,
     "data": {
-        "rprq": "f595edfb-754e-444c-ba01-6b69b89fb42a",
+        "rprq": "f595edfb-754e-444c-ba01-6b69b89fb42a", // available only for code flow
         "reset_initiated": true
     }
 }
@@ -610,7 +604,11 @@ cidaas.initateRestPassword(mobile:"+919876543210") {
 Once the verification code is received, verify that code by calling ****handleRestPassword()****.
 
 ```swift
-cidaas.handleRestPassword(code:"65864776") {
+let handleResetPasswordEntity = HandleResetPasswordEntity()
+handleResetPasswordEntity.code = "123456" // code you received via email or sms
+handleResetPasswordEntity.resetRequestId = "f595edfb-754e-444c-ba01-6b69b89fb42a" // rprq you received in the preivous request
+
+cidaas.handleRestPassword(incomingData: handleResetPasswordEntity) {
     switch $0 {
         case .success(let configureSuccess):
             // your success code here
@@ -621,7 +619,6 @@ cidaas.handleRestPassword(code:"65864776") {
     }
 } 
 ```
-Here, **code** is the key you would get from the Email or SMS
 
 **Response:**
 
@@ -641,7 +638,13 @@ Here, **code** is the key you would get from the Email or SMS
 Once the code is verified, reset your password with your new password. To reset your password, call ****restPassword()****.
 
 ```swift
-cidaas.restPassword(password:"test#123",confirmPassword:"test#123") {
+let resetPasswordEntity = ResetPasswordEntity()
+resetPasswordEntity.password = "123456"
+resetPasswordEntity.confirmPassword = "123456"
+resetPasswordEntity.exchangeId = "1c4176bd-12b0-4672-b20c-9616e93457ed" // exchangeId you receive in the previous response
+resetPasswordEntity.resetRequestId = "f595edfb-754e-444c-ba01-6b69b89fb42a" // resetRequestId you receive in the previous response
+
+cidaas.restPassword(incomingData: ResetPasswordEntity) {
     switch $0 {
         case .success(let configureSuccess):
             // your success code here
