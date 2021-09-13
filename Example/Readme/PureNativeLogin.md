@@ -18,6 +18,9 @@ This document will guide to link the appropriate cidaas methods and services to 
     * [Register user](#register-user)
     * [Update user info](#update-user-info)
     <!--te-->
+* [Update User Info](#update-user-info)
+    <!--ts-->
+    <!--te-->
 * [De-duplication](#de-duplication)
     <!--ts-->
     * [Get Deduplication Details](#get-deduplication-details)
@@ -313,9 +316,9 @@ cidaas.registerUser(registrationEntity: registrationEntity) {
 
 #### Update user info
 
-To update info about existing user, call ****updateUser()****.
+To update the information for an existing user or for accepted consent call **updateUser()**.
 
-or want to accepted consent, call ****updateUser()****. 
+**Note:** <i>You can also use this method to **change a user's email address**.</i>
 
 ```swift 
     let registrationEntity = RegistrationEntity()
@@ -337,7 +340,6 @@ cidaas.updateUser(access_token: accessToken, incomingData: registrationEntity) {
     }
 } 
 ```
-
 **Response:**
 
 ```json
@@ -349,7 +351,6 @@ cidaas.updateUser(access_token: accessToken, incomingData: registrationEntity) {
     }
 }
 ```
-
 #### De-duplication
 
 User de-duplication is a process that eliminates redundant user accounts thus reducing storage overhead as well as other inefficiencies. This process can be triggered during registration itself by the following steps.
@@ -669,7 +670,9 @@ cidaas.restPassword(incomingData: ResetPasswordEntity) {
 ```
 #### Change Password After Login
 
-You can change your password by calling ****changePassword()****.
+You can change your existing password after login by calling **changePassword()**. 
+
+**Note:** <i>If you are using the **getUserInfo()** method to get the profile information and identityId, you need to use the **last_used_identity_id** passed in this method as the **identityId**.</i>
 
 ```swift
 let incomingData = ChangePasswordEntity()
@@ -689,7 +692,6 @@ cidaasNative.changePassword(access_token: "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxM
     }
 }
 ```
-
 **Response:**
 
 ```json
@@ -701,3 +703,6 @@ cidaasNative.changePassword(access_token: "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxNWYxM
     }
 }
 ```
+
+
+
