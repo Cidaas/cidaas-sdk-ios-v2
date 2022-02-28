@@ -32,7 +32,7 @@ The steps here will guide you through setting up and managing authentication and
         <!--te-->
     * [Embedded Browser Integration](#wkwebview-integration)
     * [Native UI Integration](/Example/Readme/PureNativeLogin.md)
-    * [Verification Integration](/Example/Readme/Verification.md)
+    * [Verification Integration](/Example/Readme/Passwordless.md)
     * [Consent Management Integration](/Example/Readme/ConsentManagement.md)
     <!--te-->
 
