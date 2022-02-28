@@ -50,6 +50,13 @@ Cidaas is available through [CocoaPods](https://cocoapods.org/pods/Cidaas). To i
 ```
 pod 'Cidaas'
 ```
+
+To use only core functionality and to reduce the size of the dependency
+
+```
+pod 'Cidaas/Core'
+```
+
 #### Getting started
 
 The following steps are to be followed to use this cidaas SDK.
