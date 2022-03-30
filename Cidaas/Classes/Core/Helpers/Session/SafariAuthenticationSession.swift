@@ -18,13 +18,7 @@ public class SafariAuthenticationSession : AuthSession {
     public init(loginURL : URL, redirectURL : String, callback: @escaping (Result<LoginResponseEntity>) -> ()) {
         self.loginURL = loginURL
         super.init(callback: callback)
-        let arrayOfURL = redirectURL.components(separatedBy: "://")
-        var shortRedirectURL = redirectURL
-        if arrayOfURL.count > 0 {
-            shortRedirectURL = arrayOfURL[0]
-        }
-        
-        self.authSession = ASWebAuthenticationSession(url: self.loginURL, callbackURLScheme: shortRedirectURL, completionHandler: { (resultURL, resultError) in
+        self.authSession = ASWebAuthenticationSession(url: self.loginURL, callbackURLScheme: redirectURL, completionHandler: { (resultURL, resultError) in
             guard resultError == nil, let callbackURL = resultURL else {
                 if case SFAuthenticationError.canceledLogin = resultError! {
                     callback(Result.failure(error: WebAuthError.shared.userCancelledException()))
