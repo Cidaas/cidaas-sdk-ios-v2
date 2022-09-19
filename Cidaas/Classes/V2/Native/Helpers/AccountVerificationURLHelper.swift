@@ -11,7 +11,7 @@ public class AccountVerificationURLHelper {
     
     public static var shared : AccountVerificationURLHelper = AccountVerificationURLHelper()
     
-    public var initiateAccountVerificationURL = "/verification-srv/account/initiate"
+    public var initiateAccountVerificationURL = "/verification-srv/account/initiate/sdk"
     public var verifyAccountURL = "/verification-srv/account/verify"
     public var verifyAccountListURL = "/users-srv/user/communication/status"
     

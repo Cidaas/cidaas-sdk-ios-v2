@@ -16,6 +16,8 @@ public class InitiateAccountVerificationEntity : Codable {
     public var sub: String = ""
     public var email: String = ""
     public var mobile: String = ""
+    public var locale: String = ""
+
     
     // Constructors
     public init() {
