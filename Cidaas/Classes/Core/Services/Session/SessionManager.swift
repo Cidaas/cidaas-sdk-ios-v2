@@ -56,6 +56,16 @@ public class SessionManager {
         for(key, value) in extraheaders {
             headers[key] = value
         }
+        if let locale = bodyParams?["locale"] as? String {
+             headers["Accept-Language"]  = locale
+        }
+        
+        print("=============Header============")
+        print(headers)
+        print("==============Parameter==============")
+        print(bodyParams)
+        print("===================url=============")
+        print(url)
         
         session.request(url, method: method, parameters: bodyParams, encoding: JSONEncoding.default, headers: headers).validate().responseString { response in
             self.responseRedirect(response: response, callback: callback)
