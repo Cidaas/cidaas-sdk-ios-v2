@@ -8,5 +8,7 @@
 	<string></string>
 	<key>RedirectURL</key>
 	<string></string>
+	<key>CidaasVersion</key>
+	<string></string>
 </dict>
 </plist>

@@ -86,7 +86,6 @@ public class URLHelper {
     public var userLoginInfoURL = "/verification-srv/verificationstatus/status/search/sdk"
     public var imageUploadURL = "/image-srv/profile/upload"
     
-    public var locationListURL = "/access-control-srv/location/list"
     public var locationEmissionURL = "/access-control-srv/notification/locationchange"
     public var beaconListURL = "/access-control-srv/devices/beacons/configs"
     public var beaconEmissionURL = "/access-control-srv/notification/beaconemit"
@@ -112,10 +111,6 @@ public class URLHelper {
     
     public func getPendingNotificationListURL(userDeviceId: String) -> String {
         return pendingNotificationListURL + "/" + userDeviceId
-    }
-    
-    public func getLocationListURL() -> String {
-        return locationListURL
     }
     
     public func getBeaconListURL() -> String {

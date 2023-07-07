@@ -53,7 +53,6 @@ public class TrackingManager: NSObject, CLLocationManagerDelegate {
     public func startTracking(sub: String, properties: Dictionary<String, String>) {
         self.properties = properties
         self.sub = sub
-        getLocationList()
         getBeaconList()
     }
     
@@ -275,7 +274,6 @@ public class TrackingManager: NSObject, CLLocationManagerDelegate {
                 // log
                 logw("Update Locations Service body data response - \(String(describing: jsonString))", cname: "cidaaslocationtracking")
                 
-                emitLocation(locationEmission: locationEmission)
             }
         }
     }
@@ -347,7 +345,6 @@ public class TrackingManager: NSObject, CLLocationManagerDelegate {
                     // log
                     logw("Entered Region Service body data response - \(String(describing: jsonString))", cname: "cidaaslocationtracking")
                     
-                    emitLocation(locationEmission: locationEmission)
                     userDefaults.set(sessionId, forKey: ("\(region.identifier)_session_id"))
                     userDefaults.set(region.identifier, forKey: region.identifier)
                     userDefaults.synchronize()
@@ -474,7 +471,6 @@ public class TrackingManager: NSObject, CLLocationManagerDelegate {
                     // log
                     logw("Exited Region Service body data response - \(String(describing: jsonString))", cname: "cidaaslocationtracking")
                     
-                    emitLocation(locationEmission: locationEmission)
                     userDefaults.removeObject(forKey: ("\(region.identifier)_session_id"))
                     let check = locationIds.filter({$0 != region.identifier})
                     userDefaults.set(check, forKey: "locationIds")
@@ -487,43 +483,6 @@ public class TrackingManager: NSObject, CLLocationManagerDelegate {
         // log
         logw("Exited Beacon Region", cname: "cidaasbeacontracking")
         manager.stopRangingBeacons(in: region as! CLBeaconRegion)
-    }
-    
-    func getLocationList() {
-        
-        // log
-        logw("Getting location list - Passes Sub \(sub)", cname: "cidaaslocationtracking")
-        
-        LocationController.shared.getLocationList(sub: sub, properties: self.properties) {
-            switch $0 {
-            case .success(let result):
-                // log
-                logw("Getting location list response success  \(result.data.data)", cname: "cidaaslocationtracking")
-                
-                self.configureLocation(data: result.data)
-                
-            case .failure(let error):
-                // log
-                logw("Getting location list response failure \(error.error)", cname: "cidaaslocationtracking")
-            }
-        }
-    }
-    
-    func emitLocation(locationEmission: LocationEmission) {
-        // log
-        logw("Emitting location - Passes Sub \(sub)", cname: "cidaaslocationtracking")
-        
-        LocationController.shared.emitLocation(locationEmission: locationEmission, properties: self.properties) {
-            switch $0 {
-            case .success(let result):
-                // log
-                logw("Location Emission response success  \(result.data.result)", cname: "cidaaslocationtracking")
-
-            case .failure(let error):
-                // log
-                logw("Location Emission response failure \(error.error)", cname: "cidaaslocationtracking")
-            }
-        }
     }
     
     func getBeaconList() {

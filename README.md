@@ -76,6 +76,8 @@ A sample plist file would look like this :
         <string>Your redirect url</string>
         <key>ClientId</key>
         <string>Your client id</string>
+        <key>CidaasVersion</key>
+        <string>Your instances major Cidaas Version</string>
     </dict>
 </plist>
 ```
