@@ -1,13 +1,17 @@
-# About cidaas:
-[cidaas](https://www.cidaas.com) is a fast and secure Cloud Identity & Access Management solution that standardises what’s important and simplifies what’s complex.
- ## Feature set includes:
+![Logo](logo.jpg)
+
+## About cidaas:
+[cidaas](https://www.cidaas.com)
+ is a fast and secure Cloud Identity & Access Management solution that standardises what’s important and simplifies what’s complex.
+
+## Feature set includes:
 * Single Sign On (SSO) based on OAuth 2.0, OpenID Connect, SAML 2.0 
 * Multi-Factor-Authentication with more than 14 authentication methods, including TOTP and FIDO2 
 * Passwordless Authentication 
 * Social Login (e.g. Facebook, Google, LinkedIn and more) as well as Enterprise Identity Provider (e.g. SAML or AD) 
 * Security in Machine-to-Machine (M2M) and IoT
 
-# cidaas-sdk-ios-v2
+# Cidaas SDK for IOS V2
 [![Build Status](https://travis-ci.org/Cidaas/cidaas-sdk-ios-v2.svg?branch=master)](https://travis-ci.org/Cidaas/cidaas-sdk-ios-v2) 
 [![Platform](https://img.shields.io/badge/Platforms-iOS-4E4E4E.svg?colorA=28a745)](#installation)
 
