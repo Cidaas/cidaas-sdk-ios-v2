@@ -81,7 +81,13 @@ public class ResetPasswordServiceWorker {
         }
         
         // construct url
-        urlString = baseURL + sharedURL.getHandleResetPasswordURL()
+        
+        // construct url
+        if ((properties["CidaasVersion"] != nil) && properties["CidaasVersion"] == "3") {
+            urlString = baseURL + sharedURL.getHandleResetPasswordV3URL()
+        } else {
+            urlString = baseURL + sharedURL.getHandleResetPasswordURL()
+        }
         
         sharedSession.startSession(url: urlString, method: .post, parameters: bodyParams, callback: callback)
     }
@@ -115,7 +121,11 @@ public class ResetPasswordServiceWorker {
         }
         
         // construct url
-        urlString = baseURL + sharedURL.getResetPasswordURL()
+        if ((properties["CidaasVersion"] != nil) && properties["CidaasVersion"] == "3") {
+            urlString = baseURL + sharedURL.getResetPasswordV3URL()
+        } else {
+            urlString = baseURL + sharedURL.getResetPasswordURL()
+        }
         
         sharedSession.startSession(url: urlString, method: .post, parameters: bodyParams, callback: callback)
     }

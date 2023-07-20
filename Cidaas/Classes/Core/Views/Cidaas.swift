@@ -480,58 +480,6 @@ public class Cidaas {
  
 
     
-    // upload image from plist
-    // 1. Read properties from file
-    // 2. Call uploadImage method
-    // 3. Maintain logs based on flags
-    
-    public func uploadImage(sub: String, photo: UIImage, callback: @escaping(Result<UploadImageResponseEntity>) -> Void) {
-        
-        let savedProp = DBHelper.shared.getPropertyFile()
-        if (savedProp != nil) {
-            UsersController.shared.uploadImage(sub: sub, photo: photo, properties: savedProp!, callback: callback)
-        }
-        else {
-            // log error
-            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
-            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-            
-            let error = WebAuthError.shared.fileNotFoundException()
-            
-            // return failure callback
-            DispatchQueue.main.async {
-                callback(Result.failure(error: error))
-            }
-            return
-        }
-    }
-   
-    
-    // get location list from plist
-    // 1. Read properties from file
-    // 2. Call getLocationList method
-    // 3. Maintain logs based on flags
-    
-    public func getLocationList(sub: String, callback: @escaping(Result<LocationListResponse>) -> Void) {
-        
-        let savedProp = DBHelper.shared.getPropertyFile()
-        if (savedProp != nil) {
-            LocationController.shared.getLocationList(sub: sub, properties: savedProp!, callback: callback)
-        }
-        else {
-            // log error
-            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
-            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-            
-            let error = WebAuthError.shared.fileNotFoundException()
-            
-            // return failure callback
-            DispatchQueue.main.async {
-                callback(Result.failure(error: error))
-            }
-            return
-        }
-    }
    
     
     // get beacon list from plist
@@ -559,34 +507,6 @@ public class Cidaas {
             return
         }
     }
- 
-    
-    // emit location from plist
-    // 1. Read properties from file
-    // 2. Call emitLocation method
-    // 3. Maintain logs based on flags
-    
-    public func emitLocation(locationEmission: LocationEmission, callback: @escaping(Result<EmissionResponse>) -> Void) {
-        
-        let savedProp = DBHelper.shared.getPropertyFile()
-        if (savedProp != nil) {
-            LocationController.shared.emitLocation(locationEmission: locationEmission, properties: savedProp!, callback: callback)
-        }
-        else {
-            // log error
-            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
-            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-            
-            let error = WebAuthError.shared.fileNotFoundException()
-            
-            // return failure callback
-            DispatchQueue.main.async {
-                callback(Result.failure(error: error))
-            }
-            return
-        }
-    }
-  
     
     // emit beacon from plist
     // 1. Read properties from file
@@ -613,34 +533,6 @@ public class Cidaas {
             return
         }
     }
-
-    
-    // enroll document from plist
-    // 1. Read properties from file
-    // 2. Call emitLocation method
-    // 3. Maintain logs based on flags
-    
-    public func enrollDocument(photo: UIImage, sub: String, callback: @escaping(Result<EnrollDocumentResponseEntity>) -> Void) {
-        
-        let savedProp = DBHelper.shared.getPropertyFile()
-        if (savedProp != nil) {
-            DocumentScanController.shared.scanDocument(sub: sub, photo: photo, properties: savedProp!, callback: callback)
-        }
-        else {
-            // log error
-            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
-            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-            
-            let error = WebAuthError.shared.fileNotFoundException()
-            
-            // return failure callback
-            DispatchQueue.main.async {
-                callback(Result.failure(error: error))
-            }
-            return
-        }
-    }
-  
     
     // save properties
     func saveProperties(properties: Dictionary<String, String>, callback:@escaping (Result<Bool>) -> Void) {

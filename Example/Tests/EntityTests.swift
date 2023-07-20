@@ -116,23 +116,6 @@ class EntityTests: QuickSpec {
                     XCTAssertEqual(entity.success, true)
                 }
 
-//                it("call accept consent response entity") {
-//                    var entity = AcceptConsentResponseEntity()
-//
-//                    let jsonString = "{\"success\":true,\"status\":200,\"data\":true}"
-//                    let decoder = JSONDecoder()
-//                    do {
-//                        let data = jsonString.data(using: .utf8)!
-//                        // decode the json data to object
-//                        entity = try decoder.decode(AcceptConsentResponseEntity.self, from: data)
-//                        print(entity.success)
-//                    }
-//                    catch(let error) {
-//                        print(error.localizedDescription)
-//                    }
-//                    XCTAssertEqual(entity.success, true)
-//                }
-
                 it("call consent details response entity") {
                     var entity = ConsentDetailsResponseEntity()
 
@@ -149,23 +132,6 @@ class EntityTests: QuickSpec {
                     }
                     XCTAssertEqual(entity.success, true)
                 }
-
-//                it("call consent response entity") {
-//                    var entity = ConsentResponseEntity()
-//
-//                    let jsonString = "{\"success\":true,\"status\":200,\"data\":\"asdasd\"}"
-//                    let decoder = JSONDecoder()
-//                    do {
-//                        let data = jsonString.data(using: .utf8)!
-//                        // decode the json data to object
-//                        entity = try decoder.decode(ConsentResponseEntity.self, from: data)
-//                        print(entity.success)
-//                    }
-//                    catch(let error) {
-//                        print(error.localizedDescription)
-//                    }
-//                    XCTAssertEqual(entity.success, true)
-//                }
 
                 it("call deduplication details response entity") {
                     var entity = DeduplicationDetailsResponseEntity()

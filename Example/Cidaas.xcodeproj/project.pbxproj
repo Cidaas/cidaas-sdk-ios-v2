@@ -9,9 +9,7 @@
 /* Begin PBXBuildFile section */
 		1F3458992147ECEB0090FE25 /* Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3458982147ECEB0090FE25 /* Converter.swift */; };
 		1F34589B2148E0B40090FE25 /* ControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F34589A2148E0B40090FE25 /* ControllerTests.swift */; };
-		1F4179D32135551000ADFFFA /* RequestIdTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4179D22135551000ADFFFA /* RequestIdTests.swift */; };
 		1F49FA6F213FA087001A49BB /* EntityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F49FA6E213FA087001A49BB /* EntityTests.swift */; };
-		1F49FA712140B93C001A49BB /* HelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F49FA702140B93C001A49BB /* HelperTests.swift */; };
 		1F49FA732140C2F2001A49BB /* Test.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1F49FA722140C2F2001A49BB /* Test.plist */; };
 		1F5600F7212ECF9B00F842A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5600F6212ECF9B00F842A4 /* AppDelegate.swift */; };
 		1F5600FF212ECFF800F842A4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1F5600FE212ECFF800F842A4 /* LaunchScreen.storyboard */; };
@@ -21,14 +19,12 @@
 		1F5D0FD02146628600D63E9A /* ServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5D0FCF2146628600D63E9A /* ServiceTests.swift */; };
 		1FA3C96E21F5A6CF0025F515 /* CidaasGoogle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA3C96D21F5A6CF0025F515 /* CidaasGoogle.swift */; };
 		1FA3C97021F5AD440025F515 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1FA3C96F21F5AD440025F515 /* GoogleService-Info.plist */; };
-		1FB3D561214E884B00E6474E /* UsersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FB3D560214E884B00E6474E /* UsersTests.swift */; };
 		1FF3C9F8247B8D610056B53D /* ConsentManagement.md in Resources */ = {isa = PBXBuildFile; fileRef = 1FF3C9F7247B8D610056B53D /* ConsentManagement.md */; };
 		1FFED19321F0573400280114 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FFED19121F0573400280114 /* MBProgressHUD.m */; };
 		1FFED19521F0574800280114 /* CustomLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FFED19421F0574700280114 /* CustomLoader.swift */; };
 		41E2F7DA1D630AA27B6C7971 /* Pods_Cidaas_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A675B84C6D007CE26955DE83 /* Pods_Cidaas_Tests.framework */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
-		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
 		DC74F28B874FCDA5958F1758 /* Pods_Cidaas_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C9E98A2CD7AE77021A0CE68 /* Pods_Cidaas_Example.framework */; };
 /* End PBXBuildFile section */
 
@@ -48,7 +44,6 @@
 		1F174EA021B6AAE500520DF9 /* Cidaas_Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Cidaas_Example.entitlements; sourceTree = "<group>"; };
 		1F3458982147ECEB0090FE25 /* Converter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Converter.swift; sourceTree = "<group>"; };
 		1F34589A2148E0B40090FE25 /* ControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerTests.swift; sourceTree = "<group>"; };
-		1F4179D22135551000ADFFFA /* RequestIdTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestIdTests.swift; sourceTree = "<group>"; };
 		1F49FA54213D6393001A49BB /* Alamofire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F49FA56213D6393001A49BB /* Base32.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Base32.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F49FA58213D6393001A49BB /* Cidaas.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Cidaas.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -62,7 +57,6 @@
 		1F49FA6A213D6393001A49BB /* SCLAlertView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SCLAlertView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F49FA6C213D6393001A49BB /* SDWebImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SDWebImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F49FA6E213FA087001A49BB /* EntityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityTests.swift; sourceTree = "<group>"; };
-		1F49FA702140B93C001A49BB /* HelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperTests.swift; sourceTree = "<group>"; };
 		1F49FA722140C2F2001A49BB /* Test.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Test.plist; sourceTree = "<group>"; };
 		1F5600C6212ECE1900F842A4 /* Cidaas_Example-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Cidaas_Example-Bridging-Header.h"; sourceTree = "<group>"; };
 		1F5600F6212ECF9B00F842A4 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -76,7 +70,6 @@
 		1FA3C96D21F5A6CF0025F515 /* CidaasGoogle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CidaasGoogle.swift; sourceTree = "<group>"; };
 		1FA3C96F21F5AD440025F515 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		1FB34815262EB88700796645 /* Changelogs.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Changelogs.md; sourceTree = "<group>"; };
-		1FB3D560214E884B00E6474E /* UsersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersTests.swift; sourceTree = "<group>"; };
 		1FF3C9F7247B8D610056B53D /* ConsentManagement.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ConsentManagement.md; sourceTree = "<group>"; };
 		1FFED19121F0573400280114 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		1FFED19221F0573400280114 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
@@ -88,7 +81,6 @@
 		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		607FACE51AFB9204008FA782 /* Cidaas_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Cidaas_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		60BA74D5459EF4CA93778EE2 /* Pods-Cidaas_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Cidaas_Example.release.xcconfig"; path = "Target Support Files/Pods-Cidaas_Example/Pods-Cidaas_Example.release.xcconfig"; sourceTree = "<group>"; };
 		8B908A42B68FF2EDE01D2BB0 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		8C9E98A2CD7AE77021A0CE68 /* Pods_Cidaas_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Cidaas_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -185,14 +177,10 @@
 		607FACE81AFB9204008FA782 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				607FACEB1AFB9204008FA782 /* Tests.swift */,
-				1F4179D22135551000ADFFFA /* RequestIdTests.swift */,
 				1F49FA6E213FA087001A49BB /* EntityTests.swift */,
-				1F49FA702140B93C001A49BB /* HelperTests.swift */,
 				1F5D0FCF2146628600D63E9A /* ServiceTests.swift */,
 				1F3458982147ECEB0090FE25 /* Converter.swift */,
 				1F34589A2148E0B40090FE25 /* ControllerTests.swift */,
-				1FB3D560214E884B00E6474E /* UsersTests.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 			);
 			path = Tests;
@@ -260,7 +248,6 @@
 				607FACCD1AFB9204008FA782 /* Frameworks */,
 				607FACCE1AFB9204008FA782 /* Resources */,
 				547CA96E3CA4CB2DAD4843A1 /* [CP] Embed Pods Frameworks */,
-				0B590D29CF8F88A670F01D5B /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -366,23 +353,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0B590D29CF8F88A670F01D5B /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Cidaas_Example/Pods-Cidaas_Example-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Cidaas_Example/Pods-Cidaas_Example-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Cidaas_Example/Pods-Cidaas_Example-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		26C332465C6E5D70F5888B81 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -483,11 +453,7 @@
 				1F5D0FD02146628600D63E9A /* ServiceTests.swift in Sources */,
 				1F49FA6F213FA087001A49BB /* EntityTests.swift in Sources */,
 				1F3458992147ECEB0090FE25 /* Converter.swift in Sources */,
-				1FB3D561214E884B00E6474E /* UsersTests.swift in Sources */,
-				1F4179D32135551000ADFFFA /* RequestIdTests.swift in Sources */,
-				607FACEC1AFB9204008FA782 /* Tests.swift in Sources */,
 				1F34589B2148E0B40090FE25 /* ControllerTests.swift in Sources */,
-				1F49FA712140B93C001A49BB /* HelperTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
