@@ -49,6 +49,10 @@ public class FileHelper: NSObject {
                     callback(Result.failure(error: WebAuthError.shared.propertyMissingException()))
                     return
                 }
+
+                 if let cidaasVersion = dict.object(forKey: "CidaasVersion") {
+                    properties["CidaasVersion"] = (cidaasVersion as? String) ?? ""
+                }
                 
                 // return success
                 callback(Result.success(result: properties))

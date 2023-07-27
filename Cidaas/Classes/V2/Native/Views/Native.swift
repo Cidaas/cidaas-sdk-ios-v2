@@ -221,6 +221,7 @@ public class CidaasNative {
         savedProperties["GrantType"] = "authorization_code"
         savedProperties["ResponseType"] = "code"
         savedProperties["UserInfoURL"] = (properties["DomainURL"]!) + "/users-srv/userinfo"
+        savedProperties["CidaasVersion"] = (properties["CidaasVersion"]!)
         
 
         // save local
