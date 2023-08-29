@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0BE4C7C62A9DC9E600B7465B /* CidaasGoogle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE4C7C52A9DC9E600B7465B /* CidaasGoogle.swift */; };
 		1F3458992147ECEB0090FE25 /* Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3458982147ECEB0090FE25 /* Converter.swift */; };
 		1F34589B2148E0B40090FE25 /* ControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F34589A2148E0B40090FE25 /* ControllerTests.swift */; };
 		1F49FA6F213FA087001A49BB /* EntityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F49FA6E213FA087001A49BB /* EntityTests.swift */; };
@@ -17,7 +18,6 @@
 		1F56010C212ED08000F842A4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F56010B212ED08000F842A4 /* ViewController.swift */; };
 		1F560119212ED12900F842A4 /* Cidaas.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1F560118212ED12900F842A4 /* Cidaas.plist */; };
 		1F5D0FD02146628600D63E9A /* ServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5D0FCF2146628600D63E9A /* ServiceTests.swift */; };
-		1FA3C96E21F5A6CF0025F515 /* CidaasGoogle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA3C96D21F5A6CF0025F515 /* CidaasGoogle.swift */; };
 		1FA3C97021F5AD440025F515 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1FA3C96F21F5AD440025F515 /* GoogleService-Info.plist */; };
 		1FF3C9F8247B8D610056B53D /* ConsentManagement.md in Resources */ = {isa = PBXBuildFile; fileRef = 1FF3C9F7247B8D610056B53D /* ConsentManagement.md */; };
 		1FFED19321F0573400280114 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FFED19121F0573400280114 /* MBProgressHUD.m */; };
@@ -40,6 +40,7 @@
 
 /* Begin PBXFileReference section */
 		0B711B9EE75AA6FCBEAD305C /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		0BE4C7C52A9DC9E600B7465B /* CidaasGoogle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CidaasGoogle.swift; sourceTree = "<group>"; };
 		124297B2E684D107CF975325 /* Cidaas.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Cidaas.podspec; path = ../Cidaas.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		1F174EA021B6AAE500520DF9 /* Cidaas_Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Cidaas_Example.entitlements; sourceTree = "<group>"; };
 		1F3458982147ECEB0090FE25 /* Converter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Converter.swift; sourceTree = "<group>"; };
@@ -67,7 +68,6 @@
 		1F5D0FCF2146628600D63E9A /* ServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTests.swift; sourceTree = "<group>"; };
 		1F74F84321C117DA00E5C856 /* PureNativeLogin.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = PureNativeLogin.md; sourceTree = "<group>"; };
 		1F74F84421C22E0C00E5C856 /* Passwordless.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Passwordless.md; sourceTree = "<group>"; };
-		1FA3C96D21F5A6CF0025F515 /* CidaasGoogle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CidaasGoogle.swift; sourceTree = "<group>"; };
 		1FA3C96F21F5AD440025F515 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		1FB34815262EB88700796645 /* Changelogs.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Changelogs.md; sourceTree = "<group>"; };
 		1FF3C9F7247B8D610056B53D /* ConsentManagement.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ConsentManagement.md; sourceTree = "<group>"; };
@@ -146,6 +146,7 @@
 		607FACD21AFB9204008FA782 /* Example for Cidaas */ = {
 			isa = PBXGroup;
 			children = (
+				0BE4C7C52A9DC9E600B7465B /* CidaasGoogle.swift */,
 				1FFED19221F0573400280114 /* MBProgressHUD.h */,
 				1FFED19121F0573400280114 /* MBProgressHUD.m */,
 				1FFED19421F0574700280114 /* CustomLoader.swift */,
@@ -159,7 +160,6 @@
 				1F5600C6212ECE1900F842A4 /* Cidaas_Example-Bridging-Header.h */,
 				1F560118212ED12900F842A4 /* Cidaas.plist */,
 				1F49FA722140C2F2001A49BB /* Test.plist */,
-				1FA3C96D21F5A6CF0025F515 /* CidaasGoogle.swift */,
 				1FA3C96F21F5AD440025F515 /* GoogleService-Info.plist */,
 			);
 			name = "Example for Cidaas";
@@ -290,7 +290,6 @@
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
-						DevelopmentTeam = BWMM72Q5M6;
 						LastSwiftMigration = 1130;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -440,7 +439,7 @@
 			files = (
 				1F5600F7212ECF9B00F842A4 /* AppDelegate.swift in Sources */,
 				1FFED19321F0573400280114 /* MBProgressHUD.m in Sources */,
-				1FA3C96E21F5A6CF0025F515 /* CidaasGoogle.swift in Sources */,
+				0BE4C7C62A9DC9E600B7465B /* CidaasGoogle.swift in Sources */,
 				1F56010C212ED08000F842A4 /* ViewController.swift in Sources */,
 				1FFED19521F0574800280114 /* CustomLoader.swift in Sources */,
 			);
@@ -527,7 +526,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -577,7 +576,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -594,7 +593,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Cidaas_Example.entitlements;
-				DEVELOPMENT_TEAM = BWMM72Q5M6;
+				DEVELOPMENT_TEAM = 34Y5KMGP7B;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "";
 				INFOPLIST_FILE = Cidaas/Info.plist;
@@ -619,7 +618,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Cidaas_Example.entitlements;
-				DEVELOPMENT_TEAM = BWMM72Q5M6;
+				DEVELOPMENT_TEAM = 34Y5KMGP7B;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "";
 				INFOPLIST_FILE = Cidaas/Info.plist;
@@ -641,6 +640,7 @@
 			baseConfigurationReference = 2F43D9747D681E0B7510812F /* Pods-Cidaas_Tests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				DEVELOPMENT_TEAM = 34Y5KMGP7B;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -667,6 +667,7 @@
 			baseConfigurationReference = A930EE83522F1BA3622732CE /* Pods-Cidaas_Tests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				DEVELOPMENT_TEAM = 34Y5KMGP7B;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
