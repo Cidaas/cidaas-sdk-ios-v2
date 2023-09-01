@@ -14,7 +14,15 @@ public extension String {
     // Encryption
     func aesEncrypt(key: String, iv: String) throws -> String {
         let data = self.data(using: .utf8)!
-        let encrypted = try AES(key: key, iv: iv, padding: .pkcs7).encrypt([UInt8](data))
+        guard let keyData = key.data(using: .utf8) else {
+                   return "Invalid key"
+               }
+        guard let ivData = iv.data(using: .utf8) else {
+                   return "Invalid iv"
+               }
+
+        let aes = try AES(key: keyData.bytes, blockMode: GCM(iv: ivData.bytes), padding: .noPadding)
+        let encrypted = try aes.encrypt(data.bytes)
         let encryptedData = Data(encrypted)
         return encryptedData.base64EncodedString()
     }
@@ -22,9 +30,22 @@ public extension String {
     // Decryption
     func aesDecrypt(key: String, iv: String) throws -> String {
         let data = Data(base64Encoded: self)!
-        let decrypted = try AES(key: key, iv: iv, padding: .pkcs7).decrypt([UInt8](data))
+        guard let keyData = key.data(using: .utf8) else {
+                   return "Invalid key"
+               }
+        guard let ivData = iv.data(using: .utf8) else {
+                   return "Invalid iv"
+               }
+        let aes = try AES(key: keyData.bytes, blockMode: GCM(iv: ivData.bytes), padding: .noPadding)
+
+        let decrypted = try aes.decrypt([UInt8](data))
         let decryptedData = Data(decrypted)
-        return String(bytes: decryptedData.bytes, encoding: .utf8) ?? "Could not decrypt"
+
+                guard let decryptedString = String(data: decryptedData, encoding: .utf8) else {
+                    return "Could not decrypt"
+                }
+
+                return decryptedString
         
     }
     

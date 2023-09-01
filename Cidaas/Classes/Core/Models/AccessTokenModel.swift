@@ -20,10 +20,8 @@ public class AccessTokenModel : Codable {
     public var scope: String = ""
     public var id_token: String = ""
     public var expires_in: Int64 = 0
-    public var salt: String = ""
     public var sub: String = ""
     public var seconds: Int64 = 0
-    public var key: String = ""
     
     // Constructors
     public init() {
@@ -37,9 +35,7 @@ public class AccessTokenModel : Codable {
         self.refresh_token = try container.decodeIfPresent(String.self, forKey: .refresh_token) ?? ""
         self.scope = try container.decodeIfPresent(String.self, forKey: .scope) ?? ""
         self.id_token = try container.decodeIfPresent(String.self, forKey: .id_token) ?? ""
-        self.salt = try container.decodeIfPresent(String.self, forKey: .salt) ?? ""
         self.sub = try container.decodeIfPresent(String.self, forKey: .sub) ?? ""
-        self.key = try container.decodeIfPresent(String.self, forKey: .key) ?? ""
         self.seconds = try container.decodeIfPresent(Int64.self, forKey: .seconds) ?? 0
         self.expires_in = try container.decodeIfPresent(Int64.self, forKey: .expires_in) ?? 0
     }
