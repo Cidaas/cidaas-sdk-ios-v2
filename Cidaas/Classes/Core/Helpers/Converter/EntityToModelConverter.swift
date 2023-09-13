@@ -19,19 +19,30 @@ public class EntityToModelConverter {
     public func accessTokenEntityToAccessTokenModel(accessTokenEntity : AccessTokenEntity, callback: @escaping (AccessTokenModel)-> Void) {
         let salt = randomString(length: 16)
         let key = randomString(length: 16)
+        let encData = (salt + "," + key).data(using: .utf8)!
+
+        let deleteQuery: [String: Any] = [
+                  kSecClass as String: kSecClassGenericPassword,
+                  kSecAttrAccount as String: "salt,key",
+              ]
+              
+              // deleted existing salt,key
+              
+              SecItemDelete(deleteQuery as CFDictionary)
+
         // Set attributes
         let attributes: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccount as String: "salt,key",
-            kSecValueData as String: salt + "," + key,
-        ]
+                   kSecClass as String: kSecClassGenericPassword,
+                   kSecAttrAccount as String: "salt,key",
+                   kSecValueData as String: encData,
+               ]
+
         SecItemAdd(attributes as CFDictionary, nil)
         AccessTokenModel.shared.expires_in = accessTokenEntity.expires_in
         AccessTokenModel.shared.id_token = accessTokenEntity.id_token
         AccessTokenModel.shared.refresh_token = try! accessTokenEntity.refresh_token.aesEncrypt(key: key, iv: salt)
         AccessTokenModel.shared.sub = accessTokenEntity.sub
         AccessTokenModel.shared.access_token = try! accessTokenEntity.access_token.aesEncrypt(key: key, iv: salt)
-        
         callback(AccessTokenModel.shared)
     }
     
@@ -40,26 +51,28 @@ public class EntityToModelConverter {
         let accessTokenEntity = AccessTokenEntity()
         
         let query: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccount as String: "salt,key",
-            kSecMatchLimit as String: kSecMatchLimitOne,
-            kSecReturnAttributes as String: true,
-            kSecReturnData as String: true,
-        ]
+                        kSecClass as String: kSecClassGenericPassword,
+                        kSecAttrAccount as String: "salt,key",
+                        kSecMatchLimit as String: kSecMatchLimitOne,
+                        kSecReturnAttributes as String: true,
+                        kSecReturnData as String: true,
+                    ]
+
         var item: CFTypeRef?
+        var salt: String = ""
+        var key: String = ""
         // Check if user exists in the keychain
         if SecItemCopyMatching(query as CFDictionary, &item) == noErr {
             // Extract result
-            if let existingItem = item as? [String: Any] {
-                let saltKey = existingItem[kSecValueData as String] as! String
-                let salt = saltKey.components(separatedBy: ",")[0]
-                let key = saltKey.components(separatedBy: ",")[1]
-                
-            }
+            if let existingItem = item as? [String: Any], let saltKey = existingItem[kSecValueData as String] as? Data,
+                           let saltKeyDecoded = String(data: saltKey, encoding: .utf8) {
+                               salt = saltKeyDecoded.components(separatedBy: ",")[0]
+                               key = saltKeyDecoded.components(separatedBy: ",")[1]
+                           
+                           }
+
         }
-            
-            let salt: String = userDefaults.object(forKey: "salt") as! String
-            let key: String = userDefaults.object(forKey: "key") as! String
+
             accessTokenEntity.expires_in = accessTokenModel.expires_in
             accessTokenEntity.id_token = accessTokenModel.id_token
             accessTokenEntity.refresh_token = try! accessTokenModel.refresh_token.aesDecrypt(key: key, iv: salt)
