@@ -75,56 +75,22 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
     }
         
     @IBAction func login(_ sender: Any) {
-        for (key, value) in UserDefaults.standard.dictionaryRepresentation() {
-            print("I am here")
-            print("\(key) = \(value) \n")
-        }
-
-            cidaas.loginWithBrowser(delegate: self) {
-
-                switch $0 {
-
-                    case .success(let successResponse):
-
-                        // your success code here
-
-                        print("Access Token - \(successResponse.data.access_token)")
-
-    //                    self.logout(accessToken: successResponse.data.access_token)
-
-                        self.getUserInfo(accessToken: successResponse.data.access_token)
-
-                        break
-
-                    case .failure(let error):
-
-                        // your failure code here
-
-                        print("Error - \(error.errorMessage)")
-
-                        break
-
-                }
-
-            }
-
-        }
-    
-    func getUserInfo(accessToken: String) {
-        AccessTokenController.shared.getAccessToken(sub: "f1a8e35f-d604-4f97-b964-96a3dbd863d7") {
+        cidaas.loginWithBrowser(delegate: self) {
             switch $0 {
                 case .success(let successResponse):
-                print("Here I got my dataaaaaaaa")
-                print(successResponse)
+                    // your success code here
+                    print("Access Token - \(successResponse.data.access_token)")
+                    self.getUserInfo(accessToken: successResponse.data.access_token)
                     break
-                case .failure( _):
+                case .failure(let error):
+                    // your failure code here
+                    print("Error - \(error.errorMessage)")
                     break
             }
         }
-      //  for (key, value) in UserDefaults.standard.dictionaryRepresentation() {
-        //      print("Here I got my data")
-        //       print("\(key) = \(value) \n")
-        //   }
+    }
+    
+    func getUserInfo(accessToken: String) {
         cidaas.getUserInfo(accessToken: accessToken) {
             switch $0 {
                 case .success(let userInfo):
@@ -158,27 +124,6 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
     }
     
     
-    func logout(accessToken: String) {
-
-            cidaasNative.logout(access_token: accessToken) {
-
-                switch $0 {
-
-                case .success(_):
-
-                    break
-
-                    case .failure(let error):
-
-                        print(error);
-
-                    break
-
-                }
-
-            }
-
-        }
     
     
     @available(iOS 12.0, *)

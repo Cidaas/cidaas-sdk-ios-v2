@@ -3,12 +3,12 @@
 <plist version="1.0">
 <dict>
 	<key>DomainURL</key>
-	<string>https://kube-nightlybuild-dev.cidaas.de</string>
+	<string></string>
 	<key>ClientId</key>
-	<string>16a5aabb-8f18-4896-ba10-208e96e368e7</string>
+	<string></string>
 	<key>RedirectURL</key>
-	<string>com.cidaas.sdk://user-profile/editprofile</string>
+	<string></string>
 	<key>CidaasVersion</key>
-	<string>3</string>
+	<string></string>
 </dict>
 </plist>

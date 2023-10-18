@@ -10,7 +10,7 @@ import Foundation
 import GoogleSignIn
 import Cidaas
 
-public class CidaasGoogle : UIViewController {
+public class CidaasGoogle : UIViewController, GIDSignInDelegate, CidaasGoogleDelegate {
     
     public static var shared : CidaasGoogle = CidaasGoogle()
     var googleCallback: ((Result<LoginResponseEntity>) -> ())!
@@ -22,7 +22,7 @@ public class CidaasGoogle : UIViewController {
             return self.DELEGATE
         }
         set(delegate) {
-            //CidaasView.googleDelegate = self
+            CidaasView.googleDelegate = self
             self.DELEGATE = delegate
         }
     }
@@ -30,14 +30,16 @@ public class CidaasGoogle : UIViewController {
     var googleViewController: UIViewController!
     
     public func login(viewType: String, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
-
+        GIDSignIn.sharedInstance()?.delegate = self
+        GIDSignIn.sharedInstance().signIn()
         
         self.viewType = viewType
         self.googleCallback = callback
     }
     
-    //public func logout() {
-    //}
+    public func logout() {
+        GIDSignIn.sharedInstance().signOut()
+    }
     
     public func sign(_ signIn: GIDSignIn!, present viewController: UIViewController!) {
         
@@ -70,7 +72,7 @@ public class CidaasGoogle : UIViewController {
             let dict = NSDictionary(contentsOfFile: path!)
             
             if let clientID = dict?.object(forKey: "CLIENT_ID") {
-        //        GIDSignIn.sharedInstance().clientID = clientID as? String ?? ""
+                GIDSignIn.sharedInstance().clientID = clientID as? String ?? ""
 //                GIDSignIn.sharedInstance().delegate = appDelegate
             }
         }
