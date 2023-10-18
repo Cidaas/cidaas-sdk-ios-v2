@@ -25,6 +25,7 @@ The steps here will guide you through setting up and managing authentication and
 * [Requirements](#requirements)
 * [Installation](#installation)
 * [Getting started](#getting-started)
+* [Migrating to Cidaas V3](#migrating-to-cidaas-v3)
 * [Getting Client Id and urls](#getting-client-id-and-urls)
 * [Initialisation](#initialisation)
 * [Usage](#usage)
@@ -82,6 +83,33 @@ A sample plist file would look like this :
         <string>Your client id</string>
         <key>CidaasVersion</key>
         <string>Your instances major Cidaas Version</string>
+    </dict>
+</plist>
+```
+
+## Migrating to Cidaas V3
+
+Cidaas V3 has response handling adjustment on some of the cidaas service calls. To migrate to cidaas V3, you need to do the following:
+
+* Ensure that you use at least cidaas version: 3.97.0. You can find the cidaas version from cidaas service portal, and ask our customer service if it needs to be updated.
+* Ensure that you use at least cidaas-ios-sdk version: 1.3.2
+* add CidaasVersion  to <b>Cidaas.plist</b>
+
+For Example:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>DomainURL</key>
+        <string>Your Domain URL</string>
+        <key>RedirectURL</key>
+        <string>Your redirect url</string>
+        <key>ClientId</key>
+        <string>Your client id</string>
+        <key>CidaasVersion</key>
+        <string>3</string>
     </dict>
 </plist>
 ```
