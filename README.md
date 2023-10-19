@@ -46,7 +46,7 @@ The steps here will guide you through setting up and managing authentication and
 
 Operating System | Xcode | Swift
 --- | --- | ---
-iOS 10.0 or above | 9.0 or above | 3.3 or above 
+iOS 11.0 or above | 9.0 or above | 3.3 or above 
 
 #### Installation
 
