@@ -19,6 +19,7 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
      var requestID: String = ""
     var accessToken : String = ""
     var sub: String = ""
+    var last_used_identity_id:  String = ""
     
     // did load
     override func viewDidLoad() {
@@ -125,6 +126,27 @@ class ViewController: UIViewController, ASWebAuthenticationPresentationContextPr
     
     
     
+    @IBAction func changePassword(_ sender: Any) {
+        let incomingData = ChangePasswordEntity()
+        incomingData.new_password = "123456"
+        incomingData.confirm_password = "123456"
+        incomingData.old_password = "12345678"
+        incomingData.identityId = self.last_used_identity_id
+                
+        cidaasNative.changePassword(access_token: self.accessToken, incomingData: incomingData) {
+            switch $0 {
+                case .success(let successResponse):
+                    // your success code here
+                print(successResponse.data)
+
+                break
+                case .failure(let error):
+                    // your failure code here
+                break
+            }
+        }
+        
+    }
     
     @available(iOS 12.0, *)
     func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
