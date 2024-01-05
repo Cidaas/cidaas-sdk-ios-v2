@@ -15,6 +15,7 @@ public class ChangePasswordEntity : Codable {
     public var new_password: String = ""
     public var old_password: String = ""
     public var identityId: String = ""
+    public var logout_option: String = ""
     
     // Constructors
     public init() {
