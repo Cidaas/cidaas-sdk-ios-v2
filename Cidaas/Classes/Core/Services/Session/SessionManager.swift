@@ -7,6 +7,7 @@
 
 import Foundation
 import Alamofire
+import UIKit
 
 public class SessionManager {
     
@@ -62,8 +63,6 @@ public class SessionManager {
         
         print("=============Header============")
         print(headers)
-        print("==============Parameter==============")
-        print(bodyParams)
         print("===================url=============")
         print(url)
         

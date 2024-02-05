@@ -213,7 +213,7 @@ public class CidaasNative {
             // create challenge and verifier
             let generator : OAuthChallengeGenerator = OAuthChallengeGenerator()
             savedProperties["Verifier"] = generator.verifier
-            savedProperties["Challenge"] = generator.challenge
+            savedProperties["Challenge"] = generator.challenge()
             savedProperties["Method"] = generator.method
         }
         savedProperties["AuthorizationURL"] = (properties["DomainURL"]!) + "/authz-srv/authz"

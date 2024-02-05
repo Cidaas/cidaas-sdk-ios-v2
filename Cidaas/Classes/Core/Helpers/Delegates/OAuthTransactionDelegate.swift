@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 public protocol OAuthTransactionDelegate {
     var state: String? { get }
