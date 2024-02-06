@@ -7,6 +7,7 @@
 
 import Foundation
 import Alamofire
+import UIKit
 
 public class VerificationServiceWorker {
     

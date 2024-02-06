@@ -75,21 +75,20 @@ public class LoginController {
         
         // construct url
         let loginURL = constructSocialURL(provider: provider, requestId: requestId, properties: properties)
-        let redirectURL = URL(string: properties["RedirectURL"] ?? "")!
+        let redirectURL = properties["RedirectURL"] ?? ""
         
-//        if #available(iOS 13.0, *) {
-//
-//            // initiate safari session with the constructed url performing single sign on
-//            let session = SafariAuthenticationSession(loginURL: loginURL, redirectURL: redirectURL, delegate: delegate, callback: callback)
-//
-//            // save the session
-//            self.storage.store(session)
-//        }
-//        else {
+       if #available(iOS 13.0, *) {
+
+           // initiate safari session with the constructed url performing single sign on
+            let session = SafariAuthenticationSession(loginURL: loginURL, redirectURL: redirectURL, callback: callback)
+           // save the session
+           self.storage.store(session)
+       }
+       else {
             self.delegate = delegate
             // call open safari method
             openSafari(loginURL : loginURL)
-//        }
+       }
     }
     
     // open safari browser. This method opens the Safari browser to display the login page. This method should be called internally and only for lower versions of ios (below 11.0)

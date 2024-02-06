@@ -26,7 +26,6 @@ public class Cidaas {
     var deviceInfo : DeviceInfoModel
     var storage: TransactionStore
     var timer = Timer()
-    var trackingManager: TrackingManager!
     var browserCallback: ((Result<LoginResponseEntity>) -> ())!
     var propertyFileRead: Bool = false
     var locationDetector : LocationDetector
@@ -103,9 +102,6 @@ public class Cidaas {
         
         // read property from file
         self.readPropertyFile()
-        
-        // initiate tracking manager
-        self.trackingManager = TrackingManager.shared
         
     }
     
@@ -322,30 +318,6 @@ public class Cidaas {
         }
     }
     
-    
-    // stop session tracking
-    public func stopTracking() {
-        self.trackingManager.stopTracking()
-    }
-
-    
-    // start tracking
-    public func startTracking(delegate: UIViewController, sub: String) {
-        let savedProp = DBHelper.shared.getPropertyFile()
-        if (savedProp != nil) {
-            self.trackingManager.delegate = delegate
-            self.trackingManager.startTracking(sub: sub, properties: savedProp!)
-        }
-            
-        else {
-            // log error
-            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
-            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-            return
-        }
-        
-    }
-    
     // call biometrics
     // 1. call biometrics
     // 2. Maintain logs based on flags
@@ -477,62 +449,7 @@ public class Cidaas {
     public func getAccessToken(refreshToken: String, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
         AccessTokenController.shared.getAccessToken(refreshToken: refreshToken, callback: callback)
     }
- 
 
-    
-   
-    
-    // get beacon list from plist
-    // 1. Read properties from file
-    // 2. Call getBeaconList method
-    // 3. Maintain logs based on flags
-    
-    public func getBeaconList(callback: @escaping(Result<BeaconListResponse>) -> Void) {
-        
-        let savedProp = DBHelper.shared.getPropertyFile()
-        if (savedProp != nil) {
-            LocationController.shared.getBeaconList(properties: savedProp!, callback: callback)
-        }
-        else {
-            // log error
-            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
-            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-            
-            let error = WebAuthError.shared.fileNotFoundException()
-            
-            // return failure callback
-            DispatchQueue.main.async {
-                callback(Result.failure(error: error))
-            }
-            return
-        }
-    }
-    
-    // emit beacon from plist
-    // 1. Read properties from file
-    // 2. Call emitLocation method
-    // 3. Maintain logs based on flags
-    
-    public func emitBeacon(beaconEmission: BeaconEmission, callback: @escaping(Result<EmissionResponse>) -> Void) {
-        
-        let savedProp = DBHelper.shared.getPropertyFile()
-        if (savedProp != nil) {
-            LocationController.shared.emitBeacon(beaconEmission: beaconEmission, properties: savedProp!, callback: callback)
-        }
-        else {
-            // log error
-            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
-            logw(loggerMessage, cname: "cidaas-sdk-error-log")
-            
-            let error = WebAuthError.shared.fileNotFoundException()
-            
-            // return failure callback
-            DispatchQueue.main.async {
-                callback(Result.failure(error: error))
-            }
-            return
-        }
-    }
     
     // save properties
     func saveProperties(properties: Dictionary<String, String>, callback:@escaping (Result<Bool>) -> Void) {
@@ -560,7 +477,7 @@ public class Cidaas {
             // create challenge and verifier
             let generator : OAuthChallengeGenerator = OAuthChallengeGenerator()
             savedProperties["Verifier"] = generator.verifier
-            savedProperties["Challenge"] = generator.challenge
+            savedProperties["Challenge"] = generator.challenge()
             savedProperties["Method"] = generator.method
         }
         savedProperties["AuthorizationURL"] = (properties["DomainURL"]!) + "/authz-srv/authz"

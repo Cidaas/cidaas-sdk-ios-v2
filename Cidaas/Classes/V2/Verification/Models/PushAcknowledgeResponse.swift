@@ -57,7 +57,7 @@ public class PushDeviceInformation : Codable {
     public init() {
         
     }
-                    
+    
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.device_info = try container.decodeIfPresent(PushDeviceInfo.self, forKey: .device_info) ?? PushDeviceInfo()
