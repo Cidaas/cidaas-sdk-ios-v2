@@ -12,7 +12,6 @@
 * Security in Machine-to-Machine (M2M) and IoT
 
 # Cidaas SDK for IOS V2
-[![Build Status](https://travis-ci.org/Cidaas/cidaas-sdk-ios-v2.svg?branch=master)](https://travis-ci.org/Cidaas/cidaas-sdk-ios-v2) 
 [![Platform](https://img.shields.io/badge/Platforms-iOS-4E4E4E.svg?colorA=28a745)](#installation)
 
 You can find the changelogs [here](/Example/Readme/Changelogs.md)
@@ -22,7 +21,6 @@ The steps here will guide you through setting up and managing authentication and
 ## Table of Contents
 
 <!--ts-->
-* [Requirements](#requirements)
 * [Installation](#installation)
 * [Getting started](#getting-started)
 * [Migrating to Cidaas V3](#migrating-to-cidaas-v3)
@@ -42,15 +40,26 @@ The steps here will guide you through setting up and managing authentication and
     <!--te-->
 
 
-#### Requirements
-
-Operating System | Xcode | Swift
---- | --- | ---
-iOS 11.0 or above | 9.0 or above | 3.3 or above 
-
 #### Installation
 
-Cidaas is available through [CocoaPods](https://cocoapods.org/pods/Cidaas). To install it, simply add the following line to your Podfile:
+#### Swift Package Manager
+
+Open the following menu item in Xcode:
+
+**File > Add Packages...**
+
+In the **Search or Enter Package URL** search box enter this URL: 
+
+```text
+https://github.com/Cidaas/cidaas-sdk-ios-v2
+```
+
+Then, select the dependency rule and press **Add Package**.
+
+
+#### Cocoapods
+
+Add the following line to your `Podfile`:
 
 ```
 pod 'Cidaas'
