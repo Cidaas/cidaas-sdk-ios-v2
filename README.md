@@ -14,8 +14,6 @@
 # Cidaas SDK for IOS V2
 [![Platform](https://img.shields.io/badge/Platforms-iOS-4E4E4E.svg?colorA=28a745)](#installation)
 
-You can find the changelogs [here](/Example/Readme/Changelogs.md)
-
 The steps here will guide you through setting up and managing authentication and authorization in your apps using cidaas SDK.
 
 ## Table of Contents
@@ -25,7 +23,6 @@ The steps here will guide you through setting up and managing authentication and
 * [Getting started](#getting-started)
 * [Migrating to Cidaas V3](#migrating-to-cidaas-v3)
 * [Getting Client Id and urls](#getting-client-id-and-urls)
-* [Initialisation](#initialisation)
 * [Usage](#usage)
     <!--ts-->
     * [Native Browser Login](#native-browser-login)
@@ -34,9 +31,8 @@ The steps here will guide you through setting up and managing authentication and
         * [Social Login](#social-login)
         <!--te-->
     * [Embedded Browser Integration](#wkwebview-integration)
-    * [Native UI Integration](/Example/Readme/PureNativeLogin.md)
-    * [Verification Integration](/Example/Readme/Passwordless.md)
-    * [Consent Management Integration](/Example/Readme/ConsentManagement.md)
+    * [Native UI Integration](PureNativeLogin.md)
+    * [Verification Integration](Passwordless.md)
     <!--te-->
 
 
