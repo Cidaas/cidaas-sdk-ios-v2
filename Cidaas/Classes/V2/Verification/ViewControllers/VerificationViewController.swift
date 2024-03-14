@@ -90,4 +90,25 @@ public class VerificationViewController {
     public func verify(verificationType: String,incomingData: AuthenticateRequest, callback: @escaping(Result<LoginResponse>) -> Void) {
         VerificationInteractor.shared.verify(verificationType: verificationType, incomingData: incomingData, callback: callback)
     }
+    
+//    public func denyNotificationRequest(sub: String,statusId: String, rejectReason: denyReason, callback: @escaping(Result<LoginResponse>) -> Void) {
+//        VerificationInteractor.shared.denyNotificationRequest(sub: sub, statusId: statusId, rejectReason: rejectReason, callback: callback)
+//    }
+    
+    public func getTimeLineDetails(timeLineRequest: TimeLineRequest, callback: @escaping(Result<TimeLineDetailsResponse>) -> Void) {
+        VerificationInteractor.shared.getTimeLineDetails(timeLineRequest: timeLineRequest, callback: callback)
+    }
+    
+    
+    public func getMFAConfiguredDeviceList(mfaconfiguredDeviceListRequest: MFAConfiguredDeviceListRequest, callback: @escaping(Result<MFAConfiguredDeviceListResponse>) -> Void) {
+        VerificationInteractor.shared.getMFAConfiguredDeviceList(mfaconfiguredDeviceListRequest: mfaconfiguredDeviceListRequest, callback: callback)
+    }
+    
+    public func deleteDevice(deleteRequest: DeleteRequest, callback: @escaping(result<DeleteResponse>) -> void) {
+        VerificationInteractor.shared.deleteDevice(deletedevice: deleteRequest, callback: callback)
+    }
+    
+    public func getDeviceConfiguredList(mfaListRequest: MFAListRequest, callback: @escaping(result<MFAListResponse>) -> void) {
+        VerificationInteractor.shared.getDeviceConfiguredList(mfaListRequest: mfaListRequest, callback: callback)
+    }
 }

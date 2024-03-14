@@ -727,4 +727,29 @@ public class VerificationInteractor {
 
         }
     }
+    
+//    public func denyNotificationRequest(sub: String,statusId: String, rejectReason: denyReason, callback: @escaping(Result<LoginResponse>) -> Void) {
+//        
+//        print("running")
+//        
+//    }
+    
+    public func getTimeLineDetails(timeLineRequest: TimeLineRequest, callback: @escaping(Result<TimeLineDetailsResponseData>) -> Void) {
+        print("running")
+       
+    }
+    
+    
+    public func getMFAConfiguredDeviceList(mfaconfiguredDeviceListRequest: MFAConfiguredDeviceListRequest, callback: @escaping(Result<MFAConfiguredDeviceListResponse>) -> Void) {
+        print("running")
+    }
+    
+    
+    public func deleteDevice(deletedevice: DeleteRequest, callback: @escaping(result<DeleteResponse>) -> void) {
+        print("running")
+    }
+    
+    public func getDeviceConfiguredList(mfaListRequest: MFAListRequest, callback: @escaping(result<MFAListResponse>) -> void) {
+        print("running")
+    }
 }

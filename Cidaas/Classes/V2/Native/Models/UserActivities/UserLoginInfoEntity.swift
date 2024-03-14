@@ -15,6 +15,7 @@ public class UserLoginInfoEntity : Codable {
     public var verificationType: String = ""
     public var startDate: String = ""
     public var endDate: String = ""
+    public var status: String = ""
     
     // Constructors
     public init() {

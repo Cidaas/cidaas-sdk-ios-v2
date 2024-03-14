@@ -78,6 +78,7 @@ public class UserInformation: Codable {
     public var picture: String = ""
     public var profile: String = ""
     public var providerUserId: String = ""
+    public var name: String = ""
     
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)

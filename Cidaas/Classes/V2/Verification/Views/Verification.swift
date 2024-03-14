@@ -84,4 +84,25 @@ public class CidaasVerification {
     public func verify(verificationType: String, authenticateRequest: AuthenticateRequest, callback:@escaping (Result<LoginResponse>) -> Void) {
         sharedViewController.verify(verificationType: verificationType, incomingData: authenticateRequest, callback: callback)
     }
+    
+//    public func denyNotificationRequest(sub: String, statusId: String, rejectReason: denyReason, callback: @escaping (Result<DenyNotif>) -> Void) {
+//        sharedViewController.denyNotificationRequest(push_id: push_id)
+//    }
+    
+    
+    public func getTimelineDetails(timeLineRequest: TimeLineRequest, callback: @escaping (Result<TimeLineDetailsResponse>) -> Void) {
+        sharedViewController.getTimeLineDetails(timeLineRequest: timeLineRequest, callback: callback)
+    }
+    
+    public func getMFAConfiguredDeviceList(mfaConfiguredDeviceListRequest: MFAConfiguredDeviceListRequest, callback: @escaping (Result<MFAConfiguredDeviceListRequest>) -> Void) {
+        sharedViewController.getMFAConfiguredDeviceList(mfaconfiguredDeviceListRequest: mfaConfiguredDeviceListRequest, callback: callback)
+    }
+    
+    public func deleteDevice(deleteRequest: DeleteRequest, callback: @escaping (result<DeleteResponse>) -> void) {
+        sharedviewcontroller.deleteDevice(deletedevice: deleteRequest, callback: callback)
+    }
+    
+    public func getDeviceConfiguredList(mfaListRequest: MFAListRequest, callback: @escaping (result<MFAListResponse>) -> void) {
+        sharedviewcontroller.getDeviceConfiguredList(mfaListRequest: mfaListRequest, callback: callback)
+    }
 }

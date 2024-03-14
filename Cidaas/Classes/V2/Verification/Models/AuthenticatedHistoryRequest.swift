@@ -20,4 +20,5 @@ public class AuthenticatedHistoryRequest: Codable {
     public var verification_type: String = ""
     public var start_time: String = ""
     public var end_time: String = ""
+    public var status: String = ""
 }
