@@ -28,7 +28,6 @@ public class Cidaas {
     var timer = Timer()
     var browserCallback: ((Result<LoginResponseEntity>) -> ())!
     var propertyFileRead: Bool = false
-    var locationDetector : LocationDetector
     
     // static variables
     public static var intermediate_verifiation_id: String = ""
@@ -88,8 +87,6 @@ public class Cidaas {
         deviceInfo.deviceVersion = UIDevice.current.systemVersion
         DBHelper.shared.setDeviceInfo(deviceInfo: deviceInfo)
         
-        locationDetector = LocationDetector()
-//        locationDetector.startTracking()
         
         // set storage in local
         self.storage = storage
