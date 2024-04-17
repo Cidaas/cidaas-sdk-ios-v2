@@ -16,12 +16,10 @@ public class VerificationInteractor {
     public static var shared: VerificationInteractor = VerificationInteractor()
     var sharedPresenter: VerificationPresenter
     var sharedService: VerificationServiceWorker
-    var sharedTOTP: TOTPHelper
     
     public init() {
         sharedPresenter = VerificationPresenter.shared
         sharedService = VerificationServiceWorker.shared
-        sharedTOTP = TOTPHelper.shared
     }
     
     public func setup(verificationType: String, incomingData: SetupRequest, callback: @escaping (Result<SetupResponse>) -> Void) {
@@ -374,17 +372,6 @@ public class VerificationInteractor {
         self.setup(verificationType: incomingData.verificationType, incomingData: setupRequest) {
             switch $0 {
             case .success(let setupSuccessResponse):
-                if (incomingData.verificationType == VerificationTypes.TOTP.rawValue) {
-                    
-                    // save qrcode
-                    DBHelper.shared.setTOTPSecret(secret: setupSuccessResponse.data.totp_secret, name: setupSuccessResponse.data.totp_secret, issuer: setupSuccessResponse.data.totp_secret, key: setupSuccessResponse.data.sub)
-                    let secret = DBHelper.shared.getTOTPSecret(key: setupSuccessResponse.data.sub)
-                    let enrollRequest = EnrollRequest()
-                    enrollRequest.pass_code = self.sharedTOTP.gettingTOTPCode(url: URL(string: secret.addingPercentEncoding(withAllowedCharacters:NSCharacterSet.urlQueryAllowed)!)!).totp_string
-                    enrollRequest.exchange_id = setupSuccessResponse.data.exchange_id.exchange_id
-                    self.enroll(verificationType: incomingData.verificationType, incomingData: enrollRequest, callback: callback)
-                }
-                else {
                     let scannedRequest = ScannedRequest()
                     scannedRequest.sub = setupSuccessResponse.data.sub
                     scannedRequest.exchange_id = setupSuccessResponse.data.exchange_id.exchange_id
@@ -419,7 +406,6 @@ public class VerificationInteractor {
                             break
                         }
                     }
-                }
                 break
             case .failure(let setupErrorResponse):
                 DispatchQueue.main.async {
@@ -489,30 +475,6 @@ public class VerificationInteractor {
                                 passwordlessRequest.sub = incomingData.sub
                                 passwordlessRequest.verificationType = incomingData.verificationType
 
-                                self.continueMFA(passwordlessRequest: passwordlessRequest, properties: savedProp!, callback: callback)
-                            }
-                            break
-                        case .failure(let authenticateErrorResponse):
-                            self.sharedPresenter.login(loginResponse: nil, errorResponse: authenticateErrorResponse, callback: callback)
-                            break
-                        }
-                    }
-                }
-                else if (incomingData.verificationType == VerificationTypes.TOTP.rawValue) {
-                    // getting secret
-                    self.secret = DBHelper.shared.getTOTPSecret(key: incomingData.sub)
-                    authenticateRequest.pass_code = self.sharedTOTP.gettingTOTPCode(url: URL(string: self.secret.addingPercentEncoding(withAllowedCharacters:NSCharacterSet.urlQueryAllowed)!)!).totp_string
-                    
-                    self.authenticate(verificationType: incomingData.verificationType, incomingData: authenticateRequest) {
-                        switch $0 {
-                        case .success(let authenticateSuccessResponse):
-                            if (incomingData.usage_type == UsageTypes.PASSWORDLESS.rawValue) {
-                                let passwordlessRequest = PasswordlessRequest()
-                                passwordlessRequest.requestId = incomingData.request_id
-                                passwordlessRequest.status_id = authenticateSuccessResponse.data.status_id
-                                passwordlessRequest.sub = incomingData.sub
-                                passwordlessRequest.verificationType = incomingData.verificationType
-                                
                                 self.continueMFA(passwordlessRequest: passwordlessRequest, properties: savedProp!, callback: callback)
                             }
                             break

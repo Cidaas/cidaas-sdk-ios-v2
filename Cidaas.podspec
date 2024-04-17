@@ -17,7 +17,6 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '11.0'
   s.source_files = 'Cidaas/Classes/**/*'
   s.dependency 'Alamofire', '~> 5.1'
-  s.dependency 'Base32', '~> 1.1.2'
   s.dependency 'CryptoSwift', '~> 1.3'
   s.dependency 'SwiftKeychainWrapper', '~> 3.4'
   s.dependency 'AnyCodable-FlightSchool', '~> 0.4.0'

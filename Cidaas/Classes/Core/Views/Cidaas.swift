@@ -504,24 +504,3 @@ public class Cidaas {
 extension Notification.Name {
     static let totp = Notification.Name("TOTP")
 }
-
-
-//    // get TOTP frequently
-//    public func listenTOTP(sub: String) {
-//        let qrcode = DBHelper.shared.getTOTPSecret(key: sub)
-//
-//        if (qrcode == "") {
-//            // TODO handle error message
-//            return
-//        }
-//
-//        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (timer_response) in
-//            let totp_entity = TOTPVerificationController.shared.gettingTOTPCode(url: URL(string: qrcode)!)
-//            NotificationCenter.default.post(name: .totp, object: totp_entity)
-//        })
-//    }
-//
-//    // cancel listen TOTP
-//    public func cancelListenTOTP() {
-//        timer.invalidate()
-//    }
