@@ -1,4 +1,4 @@
-![Logo](logo.jpg)
+![Logo](https://raw.githubusercontent.com/Cidaas/cidaas-sdk-ios-v2/master/logo.jpg)
 
 ## About cidaas:
 [cidaas](https://www.cidaas.com)
