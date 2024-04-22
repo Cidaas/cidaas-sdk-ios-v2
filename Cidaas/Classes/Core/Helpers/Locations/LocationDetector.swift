@@ -38,4 +38,37 @@ public class LocationDetector: NSObject, CLLocationManagerDelegate {
     public func updateLocation() {
         DBHelper.shared.setLocation(lat: latitude, lon: longitude)
     }
+    
+//    public func checkIfLocationServicesIsEnabled() {
+//        if CLLocationManager.locationServicesEnabled() {
+//            switch CLLocationManager.authorizationStatus() {
+//            case .notDetermined, .restricted, .denied:
+//                print("Location services are enabled but not authorized.")
+//            case .authorizedAlways, .authorizedWhenInUse:
+//                print("Location services are enabled and authorized.")
+//            @unknown default:
+//                print("Location services status is unknown.")
+//            }
+//        } else {
+//            print("Location services are disabled.")
+//        }
+//    }
+    
+    public func checkIfLocationServicesIsEnabled() {
+        DispatchQueue.global(qos: .background).async {
+            if CLLocationManager.locationServicesEnabled() {
+                switch CLLocationManager.authorizationStatus() {
+                case .notDetermined, .restricted, .denied:
+                    print("Location services are enabled but not authorized.")
+                case .authorizedAlways, .authorizedWhenInUse:
+                    print("Location services are enabled and authorized.")
+                @unknown default:
+                    print("Location services status is unknown.")
+                }
+            } else {
+                print("Location services are disabled.")
+            }
+        }
+    }
+
 }

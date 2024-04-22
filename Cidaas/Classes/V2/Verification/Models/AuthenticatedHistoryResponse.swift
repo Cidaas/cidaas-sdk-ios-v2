@@ -30,6 +30,13 @@ public class AuthenticatedHistoryResponseData: Codable {
     public var device_info: PushDeviceInformation = PushDeviceInformation()
     public var location_details: LocationDetails = LocationDetails()
     public var auth_time: String = ""
+    public var initial_status: String = ""
+    public var final_status: String = ""
+    public var authenticated: Bool = false
+    public var initiated: Int = 0
+    public var failed: Int = 0
+    public var authenticatedCount: Int = 0
+    public var address: String = ""
     
     public init() {
         

@@ -286,7 +286,7 @@ public class VerificationServiceWorker {
         // construct scanned url
         urlString = baseURL + sharedURL.getDeleteAllURL(deviceId: deviceInfo.deviceId)
         
-        sharedSession.startSession(url: urlString, method: .post, parameters: bodyParams, callback: callback)
+        sharedSession.startSession(url: urlString, method: .delete, parameters: bodyParams, callback: callback)
     }
     
     public func delete(incomingData: DeleteRequest, properties: Dictionary<String, String>, callback: @escaping (String?, WebAuthError?) -> Void) {
@@ -311,7 +311,7 @@ public class VerificationServiceWorker {
             return
         }
         
-        sharedSession.startSession(url: urlString, method: .post, parameters: bodyParams, callback: callback)
+        sharedSession.startSession(url: urlString, method: .delete, parameters: bodyParams, callback: callback)
     }
     
     public func getConfiguredList(incomingData: MFAListRequest, properties: Dictionary<String, String>, callback: @escaping (String?, WebAuthError?) -> Void) {
@@ -426,6 +426,150 @@ public class VerificationServiceWorker {
         
         // construct scanned url
         urlString = baseURL + sharedURL.getPasswordlessContinueURL()
+        
+        // construct body params
+        var bodyParams = Dictionary<String, Any>()
+        do {
+            let encoder = JSONEncoder()
+            let data = try encoder.encode(incomingData)
+            bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+        }
+        catch(_) {
+            callback(nil, WebAuthError.shared.conversionException())
+            return
+        }
+        
+        sharedSession.startSession(url: urlString, method: .post, parameters: bodyParams, callback: callback)
+    }
+    
+    public func updateFCMToken(incomingData: UpdateFCMRequest, properties: Dictionary<String, String>, callback: @escaping (String?, WebAuthError?) -> Void) {
+        var urlString : String
+        
+        // assign base url
+        let baseURL = (properties["DomainURL"])!
+        
+        // construct url
+        urlString = baseURL + sharedURL.getUpdateFCMURL()
+        
+        // construct body params
+        var bodyParams = Dictionary<String, Any>()
+        do {
+            let encoder = JSONEncoder()
+            let data = try encoder.encode(incomingData)
+            bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+        }
+        catch(_) {
+            callback(nil, WebAuthError.shared.conversionException())
+            return
+        }
+        
+        sharedSession.startSession(url: urlString, method: .post, parameters: bodyParams, callback: callback)
+    }
+    
+    public func getTimeLineDetails(incomingData: TimeLineRequest, properties: Dictionary<String, String>, callback: @escaping (String?, WebAuthError?) -> Void) {
+        var urlString : String
+        
+        // assign base url
+        let baseURL = (properties["DomainURL"])!
+        
+        // construct url
+        urlString = baseURL + sharedURL.getTimeLineURL()
+        
+        // construct body params
+        var bodyParams = Dictionary<String, Any>()
+        do {
+            let encoder = JSONEncoder()
+            let data = try encoder.encode(incomingData)
+            bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+        }
+        catch(_) {
+            callback(nil, WebAuthError.shared.conversionException())
+            return
+        }
+        
+        sharedSession.startSession(url: urlString, method: .post, parameters: bodyParams, callback: callback)
+    }
+    
+    public func getMFAConfiguredDeviceList(incomingData: MFAConfiguredDeviceListRequest, properties: Dictionary<String, String>, callback: @escaping (String?, WebAuthError?) -> Void) {
+        var urlString : String
+        
+        // assign base url
+        let baseURL = (properties["DomainURL"])!
+        
+        // construct url
+        urlString = baseURL + sharedURL.getListURL()
+        
+        // construct body params
+        var bodyParams = Dictionary<String, Any>()
+        do {
+            let encoder = JSONEncoder()
+            let data = try encoder.encode(incomingData)
+            bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+        }
+        catch(_) {
+            callback(nil, WebAuthError.shared.conversionException())
+            return
+        }
+        
+        sharedSession.startSession(url: urlString, method: .post, parameters: bodyParams, callback: callback)
+    }
+    
+    public func deleteDevice(incomingData: DeleteDeviceRequest, properties: Dictionary<String, String>, callback: @escaping (String?, WebAuthError?) -> Void) {
+        var urlString : String
+        
+        // assign base url
+        let baseURL = (properties["DomainURL"])!
+        
+        // construct url
+        urlString = baseURL + sharedURL.getDeleteDeviceURL()
+        
+        // construct body params
+        var bodyParams = Dictionary<String, Any>()
+        do {
+            let encoder = JSONEncoder()
+            let data = try encoder.encode(incomingData)
+            bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+        }
+        catch(_) {
+            callback(nil, WebAuthError.shared.conversionException())
+            return
+        }
+        
+        sharedSession.startSession(url: urlString, method: .post, parameters: bodyParams, callback: callback)
+    }
+    
+    public func getDeviceConfiguredList(incomingData: MFAListRequest, properties: Dictionary<String, String>, callback: @escaping (String?, WebAuthError?) -> Void) {
+        var urlString : String
+        
+        // assign base url
+        let baseURL = (properties["DomainURL"])!
+        
+        // construct url
+        urlString = baseURL + sharedURL.getConfiguredListURL()
+        
+        // construct body params
+        var bodyParams = Dictionary<String, Any>()
+        do {
+            let encoder = JSONEncoder()
+            let data = try encoder.encode(incomingData)
+            bodyParams = try! JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, Any> ?? Dictionary<String, Any>()
+        }
+        catch(_) {
+            callback(nil, WebAuthError.shared.conversionException())
+            return
+        }
+        
+        sharedSession.startSession(url: urlString, method: .post, parameters: bodyParams, callback: callback)
+    }
+    
+    public func cancelQr(verificationType: String,incomingData: CancelQrRequest, properties: Dictionary<String, String>, callback: @escaping (String?, WebAuthError?) -> Void) {
+        var urlString : String
+        
+        // assign base url
+        let baseURL = (properties["DomainURL"])!
+        
+        // construct url
+        urlString = baseURL + sharedURL.getCancelURL(verificationType: verificationType)
         
         // construct body params
         var bodyParams = Dictionary<String, Any>()

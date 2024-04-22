@@ -12,7 +12,7 @@ public class MFAConfiguredDeviceListRequest: Codable {
     // properties
     public var client_id: String = ""
     public var push_id: String = ""
-    public var sub: String = ""
+    public var sub: [String] = []
 
     // constructor
     public init() {}

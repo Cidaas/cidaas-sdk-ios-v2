@@ -734,22 +734,171 @@ public class VerificationInteractor {
 //        
 //    }
     
-    public func getTimeLineDetails(timeLineRequest: TimeLineRequest, callback: @escaping(Result<TimeLineDetailsResponseData>) -> Void) {
-        print("running")
+    public func updateFCMToken(sub: String, fcmId: String, callback: @escaping (Result<UpdateFCMResponse>) -> Void) {
+        
+        // validation
+        if (sub == "" || fcmId == "") {
+            // send response to presenter
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "sub or fcmId cannot be empty", statusCode: 417)
+            
+            sharedPresenter.updateFCMToken(fcmTokenResponse: nil, errorResponse: error, callback: callback)
+            return
+        }
+        
+        // get saved properties
+        let savedProp = getProperties()
+        if (savedProp == nil) {
+            // send response to presenter
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
+            sharedPresenter.updateFCMToken(fcmTokenResponse: nil, errorResponse: error, callback: callback)
+            return
+        }
+        
+        var incomingData = UpdateFCMRequest()
+        
+        incomingData.push_id = fcmId
+        
+        // call worker
+            sharedService.updateFCMToken(incomingData: incomingData, properties: savedProp!) {response, error in
+            self.sharedPresenter.updateFCMToken(fcmTokenResponse: response, errorResponse: error, callback: callback)
+        }
+        
+    }
+    
+    public func getTimeLineDetails(incomingData: TimeLineRequest, callback: @escaping(Result<TimeLineDetailsResponse>) -> Void) {
+        // validation
+        if (incomingData.client_id == "" || incomingData.push_id == "" || incomingData.status_id == "" ) {
+            // send response to presenter
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "client_id or push_id or status_id cannot be empty", statusCode: 417)
+            
+            sharedPresenter.getTimeLineDetails(timeLineDetailsResponse: nil, errorResponse: error, callback: callback)
+            return
+        }
+        
+        // get saved properties
+        let savedProp = getProperties()
+        if (savedProp == nil) {
+            // send response to presenter
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
+            sharedPresenter.getTimeLineDetails(timeLineDetailsResponse: nil, errorResponse: error, callback: callback)
+            return
+        }
+        
+        // call worker
+        sharedService.getTimeLineDetails(incomingData: incomingData, properties: savedProp!) { response, error in
+            self.sharedPresenter.getTimeLineDetails(timeLineDetailsResponse: response, errorResponse: error, callback: callback)
+        }
        
     }
     
     
-    public func getMFAConfiguredDeviceList(mfaconfiguredDeviceListRequest: MFAConfiguredDeviceListRequest, callback: @escaping(Result<MFAConfiguredDeviceListResponse>) -> Void) {
-        print("running")
+    public func getMFAConfiguredDeviceList(mfaConfiguredDeviceListRequest: MFAConfiguredDeviceListRequest, callback: @escaping(Result<MFAConfiguredDeviceListResponse>) -> Void) {
+        
+        // validation
+        if (mfaConfiguredDeviceListRequest.client_id == "" || mfaConfiguredDeviceListRequest.push_id == "" || mfaConfiguredDeviceListRequest.sub.count == 0 ) {
+            // send response to presenter
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "client_id or push_id or sub cannot be empty", statusCode: 417)
+            
+            sharedPresenter.getMFAConfiguredDeviceList(mfaConfiguredDeviceListResponse: nil, errorResponse: error, callback: callback)
+           return
+        }
+        
+        // get saved properties
+        let savedProp = getProperties()
+        if (savedProp == nil) {
+            // send response to presenter
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
+            sharedPresenter.getMFAConfiguredDeviceList(mfaConfiguredDeviceListResponse: nil, errorResponse: error, callback: callback)
+            return
+        }
+        
+        // call worker
+        sharedService.getMFAConfiguredDeviceList(incomingData: mfaConfiguredDeviceListRequest, properties: savedProp!) {
+            response, error in
+            self.sharedPresenter.getMFAConfiguredDeviceList(mfaConfiguredDeviceListResponse: response, errorResponse: error, callback: callback)
+        }
     }
     
     
-    public func deleteDevice(deletedevice: DeleteRequest, callback: @escaping(result<DeleteResponse>) -> void) {
-        print("running")
+    public func deleteDevice(deleteDeviceRequest: DeleteDeviceRequest, callback: @escaping(Result<DeleteResponse>) -> Void) {
+        
+        // validation
+        if (deleteDeviceRequest.client_id == "" || deleteDeviceRequest.push_id == "" || deleteDeviceRequest.sub == "" || deleteDeviceRequest.device_id == "" ) {
+            // send response to presenter
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "client_id or push_id or sub or device_id cannot be empty", statusCode: 417)
+            
+            sharedPresenter.deleteDevice(deleteDeviceResponse: nil, errorResponse: error, callback: callback)
+           return
+        }
+        
+        // get saved properties
+        let savedProp = getProperties()
+        if (savedProp == nil) {
+            // send response to presenter
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
+            sharedPresenter.deleteDevice(deleteDeviceResponse: nil, errorResponse: error, callback: callback)
+            return
+        }
+        
+        // call worker
+        sharedService.deleteDevice(incomingData: deleteDeviceRequest, properties: savedProp!) {
+            response, error in
+            self.sharedPresenter.deleteDevice(deleteDeviceResponse: response, errorResponse: error, callback: callback)
+        }
     }
     
-    public func getDeviceConfiguredList(mfaListRequest: MFAListRequest, callback: @escaping(result<MFAListResponse>) -> void) {
-        print("running")
+    public func getDeviceConfiguredList(mfaListRequest: MFAListRequest, callback: @escaping(Result<MFAListResponse>) -> Void) {
+        
+        // validation
+        if (mfaListRequest.client_id == "" || mfaListRequest.push_id == "" || mfaListRequest.sub == "" || mfaListRequest.linked_device_id == "") {
+            // send response to presenter
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "client_id or push_id or sub or linked_device_id cannot be empty", statusCode: 417)
+            
+            sharedPresenter.getDeviceConfiguredList(deviceConfiguredListResponse: nil, errorResponse: error, callback: callback)
+           return
+        }
+        
+        // get saved properties
+        let savedProp = getProperties()
+        if (savedProp == nil) {
+            // send response to presenter
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
+            sharedPresenter.getDeviceConfiguredList(deviceConfiguredListResponse: nil, errorResponse: error, callback: callback)
+            return
+        }
+        
+        // call worker
+            sharedService.getDeviceConfiguredList(incomingData: mfaListRequest, properties: savedProp!) {
+            response, error in
+            self.sharedPresenter.getDeviceConfiguredList(deviceConfiguredListResponse: response, errorResponse: error, callback: callback)
+        }
     }
+    
+    public func cancelQr(verificationType: String, cancelQrRequest: CancelQrRequest,callback: @escaping(Result<CancelQrResponse>) -> Void) {
+        
+        // validation
+        if (cancelQrRequest.exchange_id == "" || cancelQrRequest.reason == "") {
+            // send response to presenter
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "exchange_id or reason cannot be empty", statusCode: 417)
+            
+            sharedPresenter.cancelQr(cancelQrResult: nil, errorResponse: error, callback: callback)
+           return
+        }
+        
+        // get saved properties
+        let savedProp = getProperties()
+        if (savedProp == nil) {
+            // send response to presenter
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
+            sharedPresenter.cancelQr(cancelQrResult: nil, errorResponse: error, callback: callback)
+            return
+        }
+        
+        // call worker
+        sharedService.cancelQr(verificationType: verificationType, incomingData: cancelQrRequest, properties: savedProp!) {
+            response, error in
+            self.sharedPresenter.cancelQr(cancelQrResult: response, errorResponse: error, callback: callback)
+        }
+    }
+        
 }

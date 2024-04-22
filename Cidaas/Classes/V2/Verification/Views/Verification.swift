@@ -89,20 +89,27 @@ public class CidaasVerification {
 //        sharedViewController.denyNotificationRequest(push_id: push_id)
 //    }
     
+     public func updateFCMToken(sub: String, fcmId: String, callback: @escaping (Result<UpdateFCMResponse>) -> Void) {
+         sharedViewController.updateFCMToken(sub: sub, fcmId: fcmId, callback: callback)
+     }
     
     public func getTimelineDetails(timeLineRequest: TimeLineRequest, callback: @escaping (Result<TimeLineDetailsResponse>) -> Void) {
         sharedViewController.getTimeLineDetails(timeLineRequest: timeLineRequest, callback: callback)
     }
     
-    public func getMFAConfiguredDeviceList(mfaConfiguredDeviceListRequest: MFAConfiguredDeviceListRequest, callback: @escaping (Result<MFAConfiguredDeviceListRequest>) -> Void) {
-        sharedViewController.getMFAConfiguredDeviceList(mfaconfiguredDeviceListRequest: mfaConfiguredDeviceListRequest, callback: callback)
+    public func getMfaConfigureDeviceList(mfaConfiguredDeviceListRequest: MFAConfiguredDeviceListRequest, callback: @escaping (Result<MFAConfiguredDeviceListResponse>) -> Void) {
+        sharedViewController.getMFAConfiguredDeviceList(mfaConfiguredDeviceListRequest: mfaConfiguredDeviceListRequest, callback: callback)
     }
     
-    public func deleteDevice(deleteRequest: DeleteRequest, callback: @escaping (result<DeleteResponse>) -> void) {
-        sharedviewcontroller.deleteDevice(deletedevice: deleteRequest, callback: callback)
+    public func deleteDevice(deleteRequest: DeleteDeviceRequest, callback: @escaping (Result<DeleteResponse>) -> Void) {
+        sharedViewController.deleteDevice(deleteRequest: deleteRequest, callback: callback)
     }
     
-    public func getDeviceConfiguredList(mfaListRequest: MFAListRequest, callback: @escaping (result<MFAListResponse>) -> void) {
-        sharedviewcontroller.getDeviceConfiguredList(mfaListRequest: mfaListRequest, callback: callback)
+    public func getDeviceConfiguredList(mfaListRequest: MFAListRequest, callback: @escaping (Result<MFAListResponse>) -> Void) {
+        sharedViewController.getDeviceConfiguredList(mfaListRequest: mfaListRequest, callback: callback)
+    }
+    
+    public func cancelQr(verificationType: String, cancelQrRequest: CancelQrRequest,callback: @escaping (Result<CancelQrResponse>) -> Void) {
+        sharedViewController.cancelQr(verificationType: verificationType, cancelQrRequest: cancelQrRequest, callback: callback)
     }
 }

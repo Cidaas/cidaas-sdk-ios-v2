@@ -7,8 +7,10 @@
 //
 
 import Foundation
+import CoreLocation
 
-public class DBHelper : NSObject {
+public class DBHelper : NSObject, CLLocationManagerDelegate {
+    var location: CLLocation?
     
     // shared instance
     public static var shared : DBHelper = DBHelper()
@@ -184,4 +186,312 @@ public class DBHelper : NSObject {
         }
         return ("", "")
     }
-}
+    
+    // get device location address
+    //    func getDeviceLocationAddress() -> String? {
+    //        let locationManager = CLLocationManager()
+    //
+    //        // Check if location services are enabled
+    //        guard CLLocationManager.locationServicesEnabled() else {
+    //            return nil
+    //        }
+    //
+    //        locationManager.requestWhenInUseAuthorization()
+    //
+    //        // Request permission to use location services
+    //        guard CLLocationManager.authorizationStatus() == .authorizedWhenInUse else {
+    //            return nil
+    //        }
+    //
+    //        guard let location = locationManager.location else {
+    //            return nil
+    //        }
+    //
+    //        let geocoder = CLGeocoder()
+    //        var addressString: String?
+    //
+    //        geocoder.reverseGeocodeLocation(location) { placemarks, error in
+    //            guard let placemark = placemarks?.first else {
+    //                return
+    //            }
+    //
+    //            // Construct the address using placemark's properties
+    //            var address = ""
+    //            if let subThoroughfare = placemark.subThoroughfare {
+    //                address += "\(subThoroughfare) "
+    //            }
+    //            if let thoroughfare = placemark.thoroughfare {
+    //                address += "\(thoroughfare), "
+    //            }
+    //            if let locality = placemark.locality {
+    //                address += "\(locality), "
+    //            }
+    //            if let administrativeArea = placemark.administrativeArea {
+    //                address += "\(administrativeArea) "
+    //            }
+    //            if let postalCode = placemark.postalCode {
+    //                address += "\(postalCode)"
+    //            }
+    //
+    //            addressString = address
+    //        }
+    //
+    //        while addressString == nil {
+    //            // Wait for the reverse geocoding to complete
+    //            // This is not recommended in production code, as it blocks the main thread
+    //            // You should use a completion handler instead
+    //            RunLoop.current.run(mode: .default, before: Date(timeIntervalSinceNow: 0.1))
+    //        }
+    //
+    //        return addressString
+    //    }
+    
+    //    public func getDeviceLocationAddress() -> String? {
+    //        let locationManager = CLLocationManager()
+    //
+    //        // Check if location services are enabled
+    //        guard CLLocationManager.locationServicesEnabled() else {
+    //            return nil
+    //        }
+    //
+    //        locationManager.requestWhenInUseAuthorization()
+    //
+    //        // Request permission to use location services
+    //        guard CLLocationManager.authorizationStatus() == .authorizedWhenInUse else {
+    //            return nil
+    //        }
+    //
+    //        let dispatchGroup = DispatchGroup()
+    //        dispatchGroup.enter()
+    //
+    //        var addressString: String?
+    //
+    //        // Start location updates
+    //        locationManager.startUpdatingLocation()
+    //
+    //        // Use didUpdateLocations delegate method to get location
+    //        locationManager.delegate = LocationDelegate(completion: { location in
+    //            if let location = location {
+    //                let geocoder = CLGeocoder()
+    //                geocoder.reverseGeocodeLocation(location) { placemarks, error in
+    //                    guard let placemark = placemarks?.first else {
+    //                        return
+    //                    }
+    //
+    //                    // Construct the address using placemark's properties
+    //                    var address = ""
+    //                    if let subThoroughfare = placemark.subThoroughfare {
+    //                        address += "\(subThoroughfare) "
+    //                    }
+    //                    if let thoroughfare = placemark.thoroughfare {
+    //                        address += "\(thoroughfare), "
+    //                    }
+    //                    if let locality = placemark.locality {
+    //                        address += "\(locality), "
+    //                    }
+    //                    if let administrativeArea = placemark.administrativeArea {
+    //                        address += "\(administrativeArea) "
+    //                    }
+    //                    if let postalCode = placemark.postalCode {
+    //                        address += "\(postalCode)"
+    //                    }
+    //
+    //                    addressString = address
+    //
+    //                    // Leave the dispatch group when reverse geocoding is completed
+    //                    dispatchGroup.leave()
+    //                }
+    //            } else {
+    //                // Leave the dispatch group if location is nil
+    //                dispatchGroup.leave()
+    //            }
+    //        })
+    //
+    //        // Wait for the reverse geocoding to complete
+    //        dispatchGroup.wait()
+    //
+    //        return addressString
+    //    }
+    //
+    //    class LocationDelegate: NSObject, CLLocationManagerDelegate {
+    //        var completion: ((CLLocation?) -> Void)?
+    //
+    //        init(completion: @escaping (CLLocation?) -> Void) {
+    //            self.completion = completion
+    //        }
+    //
+    //        func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    //            completion?(locations.last)
+    //            manager.stopUpdatingLocation() // Stop location updates once location is obtained
+    //            manager.delegate = nil // Reset delegate to avoid retaining reference to self
+    //        }
+    //
+    //        func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+    //            completion?(nil)
+    //            manager.stopUpdatingLocation() // Stop location updates if there's an error
+    //            manager.delegate = nil // Reset delegate to avoid retaining reference to self
+    //        }
+    //    }
+    
+    
+    /*
+     public func getDeviceLocationAddress() -> String? {
+     var addressString: String?
+     
+     let semaphore = DispatchSemaphore(value: 0)
+     
+     // Perform location services check asynchronously
+     DispatchQueue.global(qos: .background).async {
+     if CLLocationManager.locationServicesEnabled() {
+     DispatchQueue.main.async {
+     // Location services are enabled
+     // Continue with authorization check
+     addressString = self.checkLocationAuthorization()
+     semaphore.signal() // Signal semaphore to unblock
+     }
+     } else {
+     DispatchQueue.main.async {
+     // Location services are not enabled
+     semaphore.signal() // Signal semaphore to unblock
+     }
+     }
+     }
+     
+     // Wait for the location services check to complete
+     _ = semaphore.wait(timeout: .now() + 5) // Wait for 5 seconds
+     
+     return addressString
+     }
+     
+     private func checkLocationAuthorization() -> String? {
+     let locationManager = CLLocationManager()
+     
+     locationManager.requestWhenInUseAuthorization()
+     
+     // Request permission to use location services
+     guard CLLocationManager.authorizationStatus() == .authorizedWhenInUse else {
+     return nil
+     }
+     
+     var addressString: String?
+     
+     let dispatchGroup = DispatchGroup()
+     dispatchGroup.enter()
+     
+     // Start location updates
+     locationManager.startUpdatingLocation()
+     
+     // Use didUpdateLocations delegate method to get location
+     let delegate = LocationDelegate { location in
+     if let location = location {
+     let geocoder = CLGeocoder()
+     geocoder.reverseGeocodeLocation(location) { placemarks, error in
+     guard let placemark = placemarks?.first else {
+     dispatchGroup.leave() // Leave the dispatch group to unblock
+     return
+     }
+     
+     // Construct the address using placemark's properties
+     var address = ""
+     if let subThoroughfare = placemark.subThoroughfare {
+     address += "\(subThoroughfare) "
+     }
+     if let thoroughfare = placemark.thoroughfare {
+     address += "\(thoroughfare), "
+     }
+     if let locality = placemark.locality {
+     address += "\(locality), "
+     }
+     if let administrativeArea = placemark.administrativeArea {
+     address += "\(administrativeArea) "
+     }
+     if let postalCode = placemark.postalCode {
+     address += "\(postalCode)"
+     }
+     
+     addressString = address
+     
+     dispatchGroup.leave() // Leave the dispatch group to unblock
+     }
+     } else {
+     dispatchGroup.leave() // Leave the dispatch group to unblock
+     }
+     }
+     locationManager.delegate = delegate
+     
+     // Wait for the reverse geocoding to complete
+     _ = dispatchGroup.wait(timeout: .now() + 30) // Wait for 30 seconds
+     
+     locationManager.stopUpdatingLocation() // Stop location updates
+     
+     return addressString
+     }
+     
+     class LocationDelegate: NSObject, CLLocationManagerDelegate {
+     var completion: ((CLLocation?) -> Void)?
+     
+     init(completion: @escaping (CLLocation?) -> Void) {
+     self.completion = completion
+     }
+     
+     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+     completion?(locations.last)
+     }
+     
+     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+     completion?(nil)
+     }
+     }
+     */
+    
+    public func getDeviceLocationAddress() -> String? {
+        let locationManager = CLLocationManager()
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        
+        // Check if location services are enabled
+        guard CLLocationManager.locationServicesEnabled() else {
+            return nil
+        }
+        
+        // Request permission to use location services
+        locationManager.requestWhenInUseAuthorization()
+        
+        var addressString: String?
+        
+        // Fetch location synchronously
+        if let location = locationManager.location {
+            let geocoder = CLGeocoder()
+            geocoder.reverseGeocodeLocation(location) { (placemarks, error) in
+                if let error = error {
+                    print("Reverse geocoding error: \(error.localizedDescription)")
+                    return
+                }
+                
+                if let placemark = placemarks?.first {
+                    // Construct address string from placemark
+                    addressString = ""
+                    if let subThoroughfare = placemark.subThoroughfare {
+                        addressString? += subThoroughfare + " "
+                    }
+                    if let thoroughfare = placemark.thoroughfare {
+                        addressString? += thoroughfare + ", "
+                    }
+                    if let locality = placemark.locality {
+                        addressString? += locality + ", "
+                    }
+                    if let administrativeArea = placemark.administrativeArea {
+                        addressString? += administrativeArea + " "
+                    }
+                    if let postalCode = placemark.postalCode {
+                        addressString? += postalCode
+                    }
+                }
+            }
+        }
+        
+        return addressString
+    }
+    
+    }
+
+    
