@@ -696,12 +696,12 @@ public class VerificationInteractor {
 //        
 //    }
     
-    public func updateFCMToken(sub: String, fcmId: String, callback: @escaping (Result<UpdateFCMResponse>) -> Void) {
+    public func updateFCMToken(updateFCMRequest: UpdateFCMRequest, callback: @escaping (Result<UpdateFCMResponse>) -> Void) {
         
         // validation
-        if (sub == "" || fcmId == "") {
+        if (updateFCMRequest.push_id == "" || updateFCMRequest.client_id == "" || updateFCMRequest.device_id == "") {
             // send response to presenter
-            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "sub or fcmId cannot be empty", statusCode: 417)
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "push_id or client_id or device_id cannot be empty", statusCode: 417)
             
             sharedPresenter.updateFCMToken(fcmTokenResponse: nil, errorResponse: error, callback: callback)
             return
@@ -716,12 +716,8 @@ public class VerificationInteractor {
             return
         }
         
-        var incomingData = UpdateFCMRequest()
-        
-        incomingData.push_id = fcmId
-        
         // call worker
-            sharedService.updateFCMToken(incomingData: incomingData, properties: savedProp!) {response, error in
+            sharedService.updateFCMToken(incomingData: updateFCMRequest, properties: savedProp!) {response, error in
             self.sharedPresenter.updateFCMToken(fcmTokenResponse: response, errorResponse: error, callback: callback)
         }
         

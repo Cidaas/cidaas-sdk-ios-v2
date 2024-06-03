@@ -89,8 +89,8 @@ public class CidaasVerification {
 //        sharedViewController.denyNotificationRequest(push_id: push_id)
 //    }
     
-     public func updateFCMToken(sub: String, fcmId: String, callback: @escaping (Result<UpdateFCMResponse>) -> Void) {
-         sharedViewController.updateFCMToken(sub: sub, fcmId: fcmId, callback: callback)
+    public func updateFCMToken(updateFCMRequest: UpdateFCMRequest, callback: @escaping (Result<UpdateFCMResponse>) -> Void) {
+        sharedViewController.updateFCMToken(updateFCMRequest: updateFCMRequest, callback: callback)
      }
     
     public func getTimelineDetails(timeLineRequest: TimeLineRequest, callback: @escaping (Result<TimeLineDetailsResponse>) -> Void) {

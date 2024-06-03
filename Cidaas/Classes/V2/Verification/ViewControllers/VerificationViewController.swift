@@ -95,8 +95,8 @@ public class VerificationViewController {
 //        VerificationInteractor.shared.denyNotificationRequest(sub: sub, statusId: statusId, rejectReason: rejectReason, callback: callback)
 //    }
     
-    public func updateFCMToken(sub: String, fcmId: String, callback: @escaping (Result<UpdateFCMResponse>) -> Void) {
-        VerificationInteractor.shared.updateFCMToken(sub: sub, fcmId: fcmId, callback: callback)
+    public func updateFCMToken(updateFCMRequest: UpdateFCMRequest, callback: @escaping (Result<UpdateFCMResponse>) -> Void) {
+        VerificationInteractor.shared.updateFCMToken(updateFCMRequest: updateFCMRequest, callback: callback)
     }
     
     public func getTimeLineDetails(timeLineRequest: TimeLineRequest, callback: @escaping(Result<TimeLineDetailsResponse>) -> Void) {
