@@ -66,7 +66,7 @@ public class SessionManager {
         print("===================url=============")
         print(url)
         
-        session.request(url, method: method, parameters: bodyParams, encoding: JSONEncoding.default, headers: headers).validate().responseString { response in
+        session.request(url, method: method, parameters: bodyParams, encoding: JSONEncoding.default, headers: headers).validate().responseString(encoding: .utf8) { response in
             self.responseRedirect(response: response, callback: callback)
         }
     }
