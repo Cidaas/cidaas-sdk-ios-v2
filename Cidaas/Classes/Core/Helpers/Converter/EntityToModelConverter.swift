@@ -40,13 +40,19 @@ public class EntityToModelConverter {
         SecItemAdd(attributes as CFDictionary, nil)
         AccessTokenModel.shared.expires_in = accessTokenEntity.expires_in
         AccessTokenModel.shared.id_token = accessTokenEntity.id_token
-         do {
+        do {
             AccessTokenModel.shared.refresh_token = try accessTokenEntity.refresh_token.aesEncrypt(key: key, iv: salt)
         } catch {
             AccessTokenModel.shared.refresh_token = accessTokenEntity.refresh_token
         }
+        
         AccessTokenModel.shared.sub = accessTokenEntity.sub
-        AccessTokenModel.shared.access_token = try! accessTokenEntity.access_token.aesEncrypt(key: key, iv: salt)
+        
+        do {
+            AccessTokenModel.shared.access_token = try accessTokenEntity.access_token.aesEncrypt(key: key, iv: salt)
+        } catch {
+            AccessTokenModel.shared.refresh_token = accessTokenEntity.access_token
+        }
         callback(AccessTokenModel.shared)
     }
     
