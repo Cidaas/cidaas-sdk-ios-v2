@@ -23,7 +23,7 @@ public class VerificationURLHelper {
     public var deleteURL: String = "/verification-srv/v2/setup/device/configured/remove/"
     public var configuredListURL: String = "/verification-srv/v2/setup/device/configured/list"
     public var pendingNotificationListURL: String = "/verification-srv/v2/setup/device/pending/auth/list"
-    public var authenticatedHistoryURL: String = "/verification-srv/v2/setup/device/authenticated/list"
+    public var mfaHistoryURL: String = "/verification-srv/v2/device/mfa/history"
     public var fcmURL: String = "/verification-srv/v2/setup/device/update/pushid"
     public var passwordlessContinueURL: String = "/login-srv/verification/sdk/login"
     public var unlinkURL: String = "/verification-srv/v2/manage/mfa/device/unlink"
@@ -79,8 +79,8 @@ public class VerificationURLHelper {
         return pendingNotificationListURL
     }
     
-    public func getAuthenticatedHistoryListURL() -> String {
-        return authenticatedHistoryURL
+    public func getMFAHistoryURL() -> String {
+        return mfaHistoryURL
     }
     
     public func getPasswordlessContinueURL() -> String {

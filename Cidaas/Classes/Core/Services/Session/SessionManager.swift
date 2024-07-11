@@ -51,7 +51,7 @@ public class SessionManager {
         
         if parameters != nil {
             bodyParams!["device_id"] = deviceInfo.deviceId
-            bodyParams!["push_id"] = push_id
+            bodyParams!["push_id"] = DBHelper.shared.getFCM()
         }
         
         for(key, value) in extraheaders {

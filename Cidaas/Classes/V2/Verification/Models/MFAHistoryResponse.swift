@@ -1,5 +1,5 @@
 //
-//  AuthenticatedHistoryResponse.swift
+//  MFAHistoryResponse.swift
 //  Cidaas
 //
 //  Created by ganesh on 23/05/19.
@@ -7,10 +7,10 @@
 
 import Foundation
 
-public class AuthenticatedHistoryResponse: Codable {
+public class MFAHistoryResponse: Codable {
     public var success: Bool = false
     public var status: Int32 = 0
-    public var data: [AuthenticatedHistoryResponseData] = []
+    public var data = OverallMFAHistoryResponse()
     
     public init() {
         
@@ -20,12 +20,29 @@ public class AuthenticatedHistoryResponse: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.success = try container.decodeIfPresent(Bool.self, forKey: .success) ?? false
         self.status = try container.decodeIfPresent(Int32.self, forKey: .status) ?? 0
-        self.data = try container.decodeIfPresent([AuthenticatedHistoryResponseData].self, forKey: .data) ?? []
+        self.data = try container.decodeIfPresent(OverallMFAHistoryResponse.self, forKey: .data) ?? OverallMFAHistoryResponse()
+    }
+}
+public class OverallMFAHistoryResponse: Codable {
+    public var initiated: Int32 = 0
+    public var authenticated: Int32 = 0
+    public var failed: Int32 = 0
+    public var data: [MFAHistoryResponseData] = []
+    
+    public init() {
+        
+    }
+    
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.initiated = Int32(try container.decodeIfPresent(Int.self, forKey: .initiated) ?? 0)
+        self.authenticated = Int32(try container.decodeIfPresent(Int.self, forKey: .authenticated) ?? 0)
+        self.failed = Int32(try container.decodeIfPresent(Int.self, forKey: .failed) ?? 0)
+        self.data = try container.decodeIfPresent([MFAHistoryResponseData].self, forKey: .data) ?? []
     }
 }
 
-public class AuthenticatedHistoryResponseData: Codable {
-    public var sub : String = ""
+public class MFAHistoryResponseData: Codable {
     public var _id: String = ""
     public var device_info: PushDeviceInformation = PushDeviceInformation()
     public var location_details: LocationDetails = LocationDetails()
@@ -33,9 +50,6 @@ public class AuthenticatedHistoryResponseData: Codable {
     public var initial_status: String = ""
     public var final_status: String = ""
     public var authenticated: Bool = false
-    public var initiated: Int = 0
-    public var failed: Int = 0
-    public var authenticatedCount: Int = 0
     public var address: String = ""
     
     public init() {
@@ -44,11 +58,12 @@ public class AuthenticatedHistoryResponseData: Codable {
     
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.sub = try container.decodeIfPresent(String.self, forKey: .sub) ?? ""
         self._id = try container.decodeIfPresent(String.self, forKey: ._id) ?? ""
+        self.authenticated = try container.decodeIfPresent(Bool.self, forKey: .authenticated) ?? false
         self.device_info = try container.decodeIfPresent(PushDeviceInformation.self, forKey: .device_info) ?? PushDeviceInformation()
         self.auth_time = try container.decodeIfPresent(String.self, forKey: .auth_time) ?? ""
         self.location_details = try container.decodeIfPresent(LocationDetails.self, forKey: .location_details) ?? LocationDetails()
+        self.address = try container.decodeIfPresent(String.self, forKey: .address) ?? ""
     }
 }
 

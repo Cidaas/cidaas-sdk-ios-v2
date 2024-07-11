@@ -61,8 +61,8 @@ public class CidaasVerification {
         sharedViewController.getPendingNotificationList(incomingData: pendingNotificationRequest, callback: callback)
     }
     
-    public func getAuthenticatedHistoryList(authenticateHistoryRequest: AuthenticatedHistoryRequest, callback:@escaping (Result<AuthenticatedHistoryResponse>) -> Void) {
-        sharedViewController.getAuthenticatedHistoryList(incomingData: authenticateHistoryRequest, callback: callback)
+    public func getMFAHistoryList(mfaHistoryRequest: MFAHistoryRequest, callback:@escaping (Result<MFAHistoryResponse>) -> Void) {
+        sharedViewController.getMFAHistoryList(incomingData: mfaHistoryRequest, callback: callback)
     }
     
     public func updateFCM(push_id: String) {

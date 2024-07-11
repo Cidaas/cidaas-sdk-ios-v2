@@ -305,12 +305,12 @@ public class VerificationInteractor {
         }
     }
     
-    public func getAuthenticatedHistoryList(incomingData: AuthenticatedHistoryRequest, callback: @escaping (Result<AuthenticatedHistoryResponse>) -> Void) {
+    public func getMFAHistoryList(incomingData: MFAHistoryRequest, callback: @escaping (Result<MFAHistoryResponse>) -> Void) {
         // validation
         if (incomingData.sub == "") {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "sub cannot be empty", statusCode: 417)
-            sharedPresenter.getAuthenticatedHistoryList(authenticatedHistoryListResponse: nil, errorResponse: error, callback: callback)
+            sharedPresenter.getMFAHistoryList(authenticatedHistoryListResponse: nil, errorResponse: error, callback: callback)
             return
         }
         
@@ -319,13 +319,13 @@ public class VerificationInteractor {
         if (savedProp == nil) {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
-            sharedPresenter.getAuthenticatedHistoryList(authenticatedHistoryListResponse: nil, errorResponse: error, callback: callback)
+            sharedPresenter.getMFAHistoryList(authenticatedHistoryListResponse: nil, errorResponse: error, callback: callback)
             return
         }
         
         // call worker
-        sharedService.getAuthenticatedHistoryList(incomingData: incomingData, properties: savedProp!) { response, error in
-            self.sharedPresenter.getAuthenticatedHistoryList(authenticatedHistoryListResponse: response, errorResponse: error, callback: callback)
+        sharedService.getMFAHistoryList(incomingData: incomingData, properties: savedProp!) { response, error in
+            self.sharedPresenter.getMFAHistoryList(authenticatedHistoryListResponse: response, errorResponse: error, callback: callback)
         }
     }
     

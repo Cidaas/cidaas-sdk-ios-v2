@@ -69,8 +69,8 @@ public class VerificationViewController {
         VerificationInteractor.shared.getPendingNotificationList(incomingData: incomingData, callback: callback)
     }
     
-    public func getAuthenticatedHistoryList(incomingData: AuthenticatedHistoryRequest, callback: @escaping (Result<AuthenticatedHistoryResponse>) -> Void) {
-        VerificationInteractor.shared.getAuthenticatedHistoryList(incomingData: incomingData, callback: callback)
+    public func getMFAHistoryList(incomingData: MFAHistoryRequest, callback: @escaping (Result<MFAHistoryResponse>) -> Void) {
+        VerificationInteractor.shared.getMFAHistoryList(incomingData: incomingData, callback: callback)
     }
     
     public func updateFCM(push_id: String) {

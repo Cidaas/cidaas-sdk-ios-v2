@@ -365,7 +365,7 @@ public class VerificationServiceWorker {
         sharedSession.startSession(url: urlString, method: .post, parameters: bodyParams, callback: callback)
     }
     
-    public func getAuthenticatedHistoryList(incomingData: AuthenticatedHistoryRequest, properties: Dictionary<String, String>, callback: @escaping (String?, WebAuthError?) -> Void) {
+    public func getMFAHistoryList(incomingData: MFAHistoryRequest, properties: Dictionary<String, String>, callback: @escaping (String?, WebAuthError?) -> Void) {
         var urlString : String
         
         // assign base url
@@ -373,7 +373,7 @@ public class VerificationServiceWorker {
         incomingData.client_id = (properties["ClientId"])!
         
         // construct scanned url
-        urlString = baseURL + sharedURL.getAuthenticatedHistoryListURL()
+        urlString = baseURL + sharedURL.getMFAHistoryURL()
 
         
         // construct body params
