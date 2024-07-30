@@ -78,10 +78,12 @@ public class UserInformation: Codable {
     public var picture: String = ""
     public var profile: String = ""
     public var providerUserId: String = ""
+    public var name: String = ""
     
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.email = try container.decodeIfPresent(String.self, forKey: .email) ?? ""
+        self.name = try container.decodeIfPresent(String.self, forKey: .name) ?? ""
         self.given_name = try container.decodeIfPresent(String.self, forKey: .given_name) ?? ""
         self.family_name = try container.decodeIfPresent(String.self, forKey: .family_name) ?? ""
         self.mobile_number = try container.decodeIfPresent(String.self, forKey: .mobile_number) ?? ""

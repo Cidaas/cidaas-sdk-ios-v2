@@ -439,7 +439,6 @@ public class Cidaas {
             AccessTokenController.shared.getAccessToken(requestId: requestId, socialToken: socialToken, provider: provider, viewType: viewType, callback: callback)
     }
     
-    
     // get access token from refresh token
     // 1. Call getAccessToken method
     

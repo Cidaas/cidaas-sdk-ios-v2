@@ -299,7 +299,7 @@ public class VerificationPresenter {
         }
     }
     
-    public func getAuthenticatedHistoryList(authenticatedHistoryListResponse: String?, errorResponse: WebAuthError?, callback: @escaping (Result<AuthenticatedHistoryResponse>) -> Void) {
+    public func getMFAHistoryList(authenticatedHistoryListResponse: String?, errorResponse: WebAuthError?, callback: @escaping (Result<MFAHistoryResponse>) -> Void) {
         if errorResponse != nil {
             logw(errorResponse!.errorMessage, cname: "cidaas-sdk-verification-error-log")
             callback(Result.failure(error: errorResponse!))
@@ -309,7 +309,7 @@ public class VerificationPresenter {
             do {
                 let data = authenticatedHistoryListResponse!.data(using: .utf8)!
                 // decode the json data to object
-                let authResp = try decoder.decode(AuthenticatedHistoryResponse.self, from: data)
+                let authResp = try decoder.decode(MFAHistoryResponse.self, from: data)
                 
                 logw(authenticatedHistoryListResponse ?? "Empty response string", cname: "cidaas-sdk-verification-success-log")
                 // return success
@@ -390,6 +390,151 @@ public class VerificationPresenter {
             catch(let error) {
                 // return failure
                 logw("\(String(describing: error)) JSON parsing issue, Response: \(String(describing: loginResponse))", cname: "cidaas-sdk-verification-error-log")
+                callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: 400, errorMessage: error.localizedDescription, statusCode: 400)))
+            }
+        }
+    }
+    
+    public func updateFCMToken(fcmTokenResponse: String?, errorResponse: WebAuthError?, callback: @escaping (Result<UpdateFCMResponse>) -> Void) {
+        if errorResponse != nil {
+            logw(errorResponse!.errorMessage, cname: "cidaas-sdk-verification-error-log")
+            callback(Result.failure(error: errorResponse!))
+        }
+        else {
+            let decoder = JSONDecoder()
+            do {
+                let data = fcmTokenResponse!.data(using: .utf8)!
+                // decode the json data to object
+                let fcmTokenResp = try decoder.decode(UpdateFCMResponse.self, from: data)
+                
+                logw(fcmTokenResponse ?? "Empty response string", cname: "cidaas-sdk-verification-success-log")
+                // return success
+                callback(Result.success(result: fcmTokenResp))
+            }
+            catch(let error) {
+                // return failure
+                logw("\(String(describing: error)) JSON parsing issue, Response: \(String(describing: fcmTokenResponse))", cname: "cidaas-sdk-verification-error-log")
+                callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: 400, errorMessage: error.localizedDescription, statusCode: 400)))
+            }
+        }
+    }
+    
+    public func getTimeLineDetails(timeLineDetailsResponse: String?, errorResponse: WebAuthError?, callback: @escaping (Result<TimeLineDetailsResponse>) -> Void) {
+        if errorResponse != nil {
+            logw(errorResponse!.errorMessage, cname: "cidaas-sdk-verification-error-log")
+            callback(Result.failure(error: errorResponse!))
+        }
+        else {
+            let decoder = JSONDecoder()
+            do {
+                let data = timeLineDetailsResponse!.data(using: .utf8)!
+                // decode the json data to object
+                let timeLineDetailsResp = try decoder.decode(TimeLineDetailsResponse.self, from: data)
+                
+                logw(timeLineDetailsResponse ?? "Empty response string", cname: "cidaas-sdk-verification-success-log")
+                // return success
+                callback(Result.success(result: timeLineDetailsResp))
+            }
+            catch(let error) {
+                // return failure
+                logw("\(String(describing: error)) JSON parsing issue, Response: \(String(describing: timeLineDetailsResponse))", cname: "cidaas-sdk-verification-error-log")
+                callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: 400, errorMessage: error.localizedDescription, statusCode: 400)))
+            }
+        }
+    }
+    
+    public func getMFAConfiguredDeviceList(mfaConfiguredDeviceListResponse: String?, errorResponse: WebAuthError?, callback: @escaping (Result<MFAConfiguredDeviceListResponse>) -> Void) {
+        if errorResponse != nil {
+            logw(errorResponse!.errorMessage, cname: "cidaas-sdk-verification-error-log")
+            callback(Result.failure(error: errorResponse!))
+        }
+        else {
+            let decoder = JSONDecoder()
+            do {
+                let data = mfaConfiguredDeviceListResponse!.data(using: .utf8)!
+                // decode the json data to object
+                let mfaConfiguredDeviceListResp = try decoder.decode(MFAConfiguredDeviceListResponse.self, from: data)
+                
+                logw(mfaConfiguredDeviceListResponse ?? "Empty response string", cname: "cidaas-sdk-verification-success-log")
+                // return success
+                callback(Result.success(result: mfaConfiguredDeviceListResp))
+            }
+            catch(let error) {
+                // return failure
+                logw("\(String(describing: error)) JSON parsing issue, Response: \(String(describing: mfaConfiguredDeviceListResponse))", cname: "cidaas-sdk-verification-error-log")
+                callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: 400, errorMessage: error.localizedDescription, statusCode: 400)))
+            }
+        }
+    }
+    
+    public func deleteDevice(deleteDeviceResponse: String?, errorResponse: WebAuthError?, callback: @escaping (Result<DeleteResponse>) -> Void) {
+        if errorResponse != nil {
+            logw(errorResponse!.errorMessage, cname: "cidaas-sdk-verification-error-log")
+            callback(Result.failure(error: errorResponse!))
+        }
+        else {
+            let decoder = JSONDecoder()
+            do {
+                let data = deleteDeviceResponse!.data(using: .utf8)!
+                // decode the json data to object
+                let deleteDeviceResp = try decoder.decode(DeleteResponse.self, from: data)
+                
+                logw(deleteDeviceResponse ?? "Empty response string", cname: "cidaas-sdk-verification-success-log")
+                // return success
+                callback(Result.success(result: deleteDeviceResp))
+            }
+            catch(let error) {
+                // return failure
+                logw("\(String(describing: error)) JSON parsing issue, Response: \(String(describing: deleteDeviceResponse))", cname: "cidaas-sdk-verification-error-log")
+                callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: 400, errorMessage: error.localizedDescription, statusCode: 400)))
+            }
+        }
+    }
+    
+    public func getDeviceConfiguredList(deviceConfiguredListResponse: String?, errorResponse: WebAuthError?, callback: @escaping (Result<MFAListResponse>) -> Void) {
+        if errorResponse != nil {
+            logw(errorResponse!.errorMessage, cname: "cidaas-sdk-verification-error-log")
+            callback(Result.failure(error: errorResponse!))
+        }
+        else {
+            let decoder = JSONDecoder()
+            do {
+                let data = deviceConfiguredListResponse!.data(using: .utf8)!
+                // decode the json data to object
+                let deviceConfiguredListResp = try decoder.decode(MFAListResponse.self, from: data)
+                
+                logw(deviceConfiguredListResponse ?? "Empty response string", cname: "cidaas-sdk-verification-success-log")
+                // return success
+                callback(Result.success(result: deviceConfiguredListResp))
+            }
+            catch(let error) {
+                // return failure
+                logw("\(String(describing: error)) JSON parsing issue, Response: \(String(describing: deviceConfiguredListResponse))", cname: "cidaas-sdk-verification-error-log")
+                callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: 400, errorMessage: error.localizedDescription, statusCode: 400)))
+            }
+        }
+    }
+    
+    
+    public func cancelQr(cancelQrResult: String?, errorResponse: WebAuthError?, callback: @escaping (Result<CancelQrResponse>) -> Void) {
+        if errorResponse != nil {
+            logw(errorResponse!.errorMessage, cname: "cidaas-sdk-verification-error-log")
+            callback(Result.failure(error: errorResponse!))
+        }
+        else {
+            let decoder = JSONDecoder()
+            do {
+                let data = cancelQrResult!.data(using: .utf8)!
+                // decode the json data to object
+                let cancelQrResp = try decoder.decode(CancelQrResponse.self, from: data)
+                
+                logw(cancelQrResult ?? "Empty response string", cname: "cidaas-sdk-verification-success-log")
+                // return success
+                callback(Result.success(result: cancelQrResp))
+            }
+            catch(let error) {
+                // return failure
+                logw("\(String(describing: error)) JSON parsing issue, Response: \(String(describing: cancelQrResult))", cname: "cidaas-sdk-verification-error-log")
                 callback(Result.failure(error: WebAuthError.shared.serviceFailureException(errorCode: 400, errorMessage: error.localizedDescription, statusCode: 400)))
             }
         }

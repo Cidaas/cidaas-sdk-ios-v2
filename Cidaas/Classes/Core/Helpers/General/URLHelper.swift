@@ -50,7 +50,6 @@ public class URLHelper {
     public var authenticateTOTPURL = "/verification-srv/totp/authenticate"
     public var mfaContinueURL = "/login-srv/precheck/continue/sdk"
     
-    public var validateDeviceURL = "/verification-srv/device/validate"
     public var setupPatternURL = "/verification-srv/pattern/setup"
     public var scannedPatternURL = "/verification-srv/pattern/scanned"
     public var enrollPatternURL = "/verification-srv/pattern/enroll"
@@ -246,10 +245,6 @@ public class URLHelper {
     
     public func getSetupPatternURL() -> String {
         return setupPatternURL
-    }
-    
-    public func getValidateDeviceURL() -> String {
-        return validateDeviceURL
     }
     
     public func getScannedPatternURL() -> String {

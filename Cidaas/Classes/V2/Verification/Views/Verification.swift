@@ -61,8 +61,8 @@ public class CidaasVerification {
         sharedViewController.getPendingNotificationList(incomingData: pendingNotificationRequest, callback: callback)
     }
     
-    public func getAuthenticatedHistoryList(authenticateHistoryRequest: AuthenticatedHistoryRequest, callback:@escaping (Result<AuthenticatedHistoryResponse>) -> Void) {
-        sharedViewController.getAuthenticatedHistoryList(incomingData: authenticateHistoryRequest, callback: callback)
+    public func getMFAHistoryList(mfaHistoryRequest: MFAHistoryRequest, callback:@escaping (Result<MFAHistoryResponse>) -> Void) {
+        sharedViewController.getMFAHistoryList(incomingData: mfaHistoryRequest, callback: callback)
     }
     
     public func updateFCM(push_id: String) {
@@ -83,5 +83,33 @@ public class CidaasVerification {
     
     public func verify(verificationType: String, authenticateRequest: AuthenticateRequest, callback:@escaping (Result<LoginResponse>) -> Void) {
         sharedViewController.verify(verificationType: verificationType, incomingData: authenticateRequest, callback: callback)
+    }
+    
+//    public func denyNotificationRequest(sub: String, statusId: String, rejectReason: denyReason, callback: @escaping (Result<DenyNotif>) -> Void) {
+//        sharedViewController.denyNotificationRequest(push_id: push_id)
+//    }
+    
+    public func updateFCMToken(updateFCMRequest: UpdateFCMRequest, callback: @escaping (Result<UpdateFCMResponse>) -> Void) {
+        sharedViewController.updateFCMToken(updateFCMRequest: updateFCMRequest, callback: callback)
+     }
+    
+    public func getTimelineDetails(timeLineRequest: TimeLineRequest, callback: @escaping (Result<TimeLineDetailsResponse>) -> Void) {
+        sharedViewController.getTimeLineDetails(timeLineRequest: timeLineRequest, callback: callback)
+    }
+    
+    public func getMfaConfigureDeviceList(mfaConfiguredDeviceListRequest: MFAConfiguredDeviceListRequest, callback: @escaping (Result<MFAConfiguredDeviceListResponse>) -> Void) {
+        sharedViewController.getMFAConfiguredDeviceList(mfaConfiguredDeviceListRequest: mfaConfiguredDeviceListRequest, callback: callback)
+    }
+    
+    public func deleteDevice(deleteRequest: DeleteDeviceRequest, callback: @escaping (Result<DeleteResponse>) -> Void) {
+        sharedViewController.deleteDevice(deleteRequest: deleteRequest, callback: callback)
+    }
+    
+    public func getDeviceConfiguredList(mfaListRequest: MFAListRequest, callback: @escaping (Result<MFAListResponse>) -> Void) {
+        sharedViewController.getDeviceConfiguredList(mfaListRequest: mfaListRequest, callback: callback)
+    }
+    
+    public func cancelQr(verificationType: String, cancelQrRequest: CancelQrRequest,callback: @escaping (Result<CancelQrResponse>) -> Void) {
+        sharedViewController.cancelQr(verificationType: verificationType, cancelQrRequest: cancelQrRequest, callback: callback)
     }
 }
