@@ -8,7 +8,7 @@
 import Foundation
 
 public class PushNotificationEntity : Codable {
-    public var requestTime : Int64 = 0
+    public var requestTime : String = ""
     public var physicalVerificationId : String = ""
     public var statusId : String = ""
     public var sub : String = ""
