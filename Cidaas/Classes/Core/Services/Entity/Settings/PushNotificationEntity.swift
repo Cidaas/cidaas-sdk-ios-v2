@@ -37,7 +37,7 @@ public class PushNotificationEntity : Codable {
     
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.requestTime = try container.decodeIfPresent(Int64.self, forKey: .requestTime) ?? 0
+        self.requestTime = try container.decodeIfPresent(String.self, forKey: .requestTime) ?? ""
         self.physicalVerificationId = try container.decodeIfPresent(String.self, forKey: .physicalVerificationId) ?? ""
         self.statusId = try container.decodeIfPresent(String.self, forKey: .statusId) ?? ""
         self.sub = try container.decodeIfPresent(String.self, forKey: .sub) ?? ""
