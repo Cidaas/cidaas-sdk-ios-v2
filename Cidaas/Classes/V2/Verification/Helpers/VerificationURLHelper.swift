@@ -11,60 +11,56 @@ public class VerificationURLHelper {
     
     public static var shared : VerificationURLHelper = VerificationURLHelper()
     
-    public var setupURL: String = "/verification-actions-srv/setup/"
-    public var scannedURL: String = "/verification-actions-srv/setup/"
-    public var enrolledURL: String = "/verification-actions-srv/setup/"
-    public var initiateURL: String = "/verification-srv/authentication/"
-    public var cancelURL: String = "/verification-srv/authentication/"
-    public var pushAckURL: String = "/verification-srv/authentication/"
-    public var pushAllowURL: String = "/verification-srv/authentication/"
-    public var pushRejectURL: String = "/verification-srv/authentication/"
-    public var authenticateURL: String = "/verification-srv/authentication/"
-    public var deleteAllURL: String = "/verification-actions-srv/setup/device/"
-    public var deleteURL: String = "/verification-actions-srv/setup/device/"
-    public var configuredListURL: String = "/verification-actions-srv/setup/device/list"
-    public var pendingNotificationListURL: String = "/verification-actions-srv/setup/device/notification/list"
-    public var mfaHistoryURL: String = "/verification-actions-srv/mfa/history"
-    public var fcmURL: String = "/verification-actions-srv/setup/device/pushid"
+    public var setupURL: String = "/verification-srv/v2/setup/initiate/"
+    public var scannedURL: String = "/verification-srv/v2/setup/scan/"
+    public var enrolledURL: String = "/verification-srv/v2/setup/enroll/"
+    public var initiateURL: String = "/verification-srv/v2/authenticate/initiate/"
+    public var pushAckURL: String = "/verification-srv/v2/authenticate/push_acknowledge/"
+    public var pushAllowURL: String = "/verification-srv/v2/authenticate/allow/"
+    public var pushRejectURL: String = "/verification-srv/v2/authenticate/reject/"
+    public var authenticateURL: String = "/verification-srv/v2/authenticate/authenticate/"
+    public var deleteAllURL: String = "/verification-srv/v2/setup/device/configured/removeallbydeviceid/"
+    public var deleteURL: String = "/verification-srv/v2/setup/device/configured/remove/"
+    public var configuredListURL: String = "/verification-srv/v2/setup/device/configured/list"
+    public var pendingNotificationListURL: String = "/verification-srv/v2/setup/device/pending/auth/list"
+    public var mfaHistoryURL: String = "/verification-srv/v2/device/mfa/history"
+    public var fcmURL: String = "/verification-srv/v2/setup/device/update/pushid"
     public var passwordlessContinueURL: String = "/login-srv/verification/sdk/login"
-    public var unlinkURL: String = "/verification-actions-srv/device/unlink"
-    public var timeLineURL: String = "/verification-actions-srv/mfa/timeline"
-    public var listURL: String = "/verification-actions-srv/device/list"
+    public var unlinkURL: String = "/verification-srv/v2/manage/mfa/device/unlink"
+    public var timeLineURL: String = "/verification-srv/v2/device/mfa/timeline"
+    public var listURL: String = "/verification-srv/v2/manage/mfa/device/list"
+    public var cancelURL: String = "/verification-srv/v2/setup/cancel/"
     
     public func getSetupURL(verificationType: String) -> String {
-        return setupURL + verificationType + "/initiate"
+        return setupURL + verificationType
     }
     
     public func getScannedURL(verificationType: String) -> String {
-        return scannedURL + verificationType + "/scan"
+        return scannedURL + verificationType
     }
     
     public func getEnrolledURL(verificationType: String) -> String {
-        return enrolledURL + verificationType + "/verification"
+        return enrolledURL + verificationType
     }
     
     public func getInitiateURL(verificationType: String) -> String {
-        return initiateURL + verificationType + "/initiation"
-    }
-
-    public func getCancelURL(verificationType: String) -> String {
-        return cancelURL + verificationType + "/cancel"
+        return initiateURL + verificationType
     }
     
     public func getPushAcknowledgeURL(verificationType: String) -> String {
-        return pushAckURL + verificationType + "/push/acknowledge"
+        return pushAckURL + verificationType
     }
     
     public func getPushAllowURL(verificationType: String) -> String {
-        return pushAllowURL + verificationType + "/allow"
+        return pushAllowURL + verificationType
     }
     
     public func getPushRejectURL(verificationType: String) -> String {
-        return pushRejectURL + verificationType + "/reject"
+        return pushRejectURL + verificationType
     }
     
     public func getAuthenticateURL(verificationType: String) -> String {
-        return authenticateURL + verificationType + "/verification"
+        return authenticateURL + verificationType
     }
     
     public func getDeleteAllURL(deviceId: String) -> String {
@@ -106,4 +102,9 @@ public class VerificationURLHelper {
     public func getListURL() -> String {
         return listURL
     }
+    
+    public func getCancelURL(verificationType: String) -> String {
+        return cancelURL + verificationType
+    }
+
 }
