@@ -31,7 +31,7 @@ public class PendingNotificationResponseData: Codable {
     public var verification_type: String = ""
     public var request_time: String = ""
     public var requested_types: [String] = []
-    public var exchange_id : String = ""
+    public var exchange_id : ExchangeIdConfig = ExchangeIdConfig()
     
     public init() {
         
@@ -45,6 +45,6 @@ public class PendingNotificationResponseData: Codable {
         self.verification_type = try container.decodeIfPresent(String.self, forKey: .verification_type) ?? ""
         self.request_time = try container.decodeIfPresent(String.self, forKey: .request_time) ?? ""
         self.requested_types = try container.decodeIfPresent([String].self, forKey: .requested_types) ?? []
-        self.exchange_id = try container.decodeIfPresent(String.self, forKey: .exchange_id) ?? "" 
+        self.exchange_id = try container.decodeIfPresent(ExchangeIdConfig.self, forKey: .exchange_id) ?? ExchangeIdConfig()
     }
 }

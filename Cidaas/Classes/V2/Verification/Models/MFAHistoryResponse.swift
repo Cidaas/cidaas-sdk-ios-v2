@@ -59,10 +59,12 @@ public class MFAHistoryResponseData: Codable {
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self._id = try container.decodeIfPresent(String.self, forKey: ._id) ?? ""
-        self.authenticated = try container.decodeIfPresent(Bool.self, forKey: .authenticated) ?? false
         self.device_info = try container.decodeIfPresent(PushDeviceInformation.self, forKey: .device_info) ?? PushDeviceInformation()
-        self.auth_time = try container.decodeIfPresent(String.self, forKey: .auth_time) ?? ""
         self.location_details = try container.decodeIfPresent(LocationDetails.self, forKey: .location_details) ?? LocationDetails()
+        self.auth_time = try container.decodeIfPresent(String.self, forKey: .auth_time) ?? ""
+        self.initial_status = try container.decodeIfPresent(String.self, forKey: .initial_status) ?? ""
+        self.final_status = try container.decodeIfPresent(String.self, forKey: .final_status) ?? ""
+        self.authenticated = try container.decodeIfPresent(Bool.self, forKey: .authenticated) ?? false
         self.address = try container.decodeIfPresent(String.self, forKey: .address) ?? ""
     }
 }

@@ -87,6 +87,7 @@ public class ExchangeIdConfig: Codable {
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self._id = try container.decodeIfPresent(String.self, forKey: ._id) ?? ""
+        self.exchange_id = try container.decodeIfPresent(String.self, forKey: .exchange_id) ?? ""
         self.expires_at = try container.decodeIfPresent(String.self, forKey: .expires_at) ?? ""
         self.createdTime = try container.decodeIfPresent(String.self, forKey: .createdTime) ?? ""
         self.updatedTime = try container.decodeIfPresent(String.self, forKey: .updatedTime) ?? ""
