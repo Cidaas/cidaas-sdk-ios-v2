@@ -559,7 +559,7 @@ public class VerificationInteractor {
                         error.errorMessage = res_errorMessage ?? WebAuthError.shared.errorMessage
                         error.errorCode = res_errorCode ?? WebAuthError.shared.errorCode
                         let errorResponse = error.error
-                        errorResponse.error.code = res_errorCode ?? WebAuthError.shared.errorCode
+                        errorResponse.error.code = String(res_errorCode ?? 0)
                         
                         self.sharedPresenter.enroll(enrollResponse: nil, errorResponse: error, callback: callback)
                         
@@ -573,7 +573,7 @@ public class VerificationInteractor {
                 error.errorMessage = errorMessage ?? WebAuthError.shared.errorMessage
                 error.errorCode = errorCode ?? WebAuthError.shared.errorCode
                 let errorResponse = error.error
-                errorResponse.error.code = errorCode ?? WebAuthError.shared.errorCode
+                errorResponse.error.code = String(errorCode ?? 0)
                 
                 self.sharedPresenter.enroll(enrollResponse: nil, errorResponse: error, callback: callback)
                 return
@@ -596,7 +596,7 @@ public class VerificationInteractor {
                         error.errorMessage = res_errorMessage ?? WebAuthError.shared.errorMessage
                         error.errorCode = res_errorCode ?? WebAuthError.shared.errorCode
                         let errorResponse = error.error
-                        errorResponse.error.code = res_errorCode ?? WebAuthError.shared.errorCode
+                        errorResponse.error.code = String(res_errorCode ?? 0)
                         
                         self.sharedPresenter.authenticate(authenticateResponse: nil, errorResponse: error, callback: callback)
                         
@@ -610,7 +610,7 @@ public class VerificationInteractor {
                 error.errorMessage = errorMessage ?? WebAuthError.shared.errorMessage
                 error.errorCode = errorCode ?? WebAuthError.shared.errorCode
                 let errorResponse = error.error
-                errorResponse.error.code = errorCode ?? WebAuthError.shared.errorCode
+                errorResponse.error.code = String(errorCode ?? 0)
                 
                 self.sharedPresenter.authenticate(authenticateResponse: nil, errorResponse: error, callback: callback)
                 return

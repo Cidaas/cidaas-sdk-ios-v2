@@ -14,7 +14,7 @@ public class WebAuthError : Error, OauthExceptionDelegate {
     public static var shared : WebAuthError = WebAuthError()
     
     // local variables
-    public var errorCode : Int32 = WebAuthErrorCode.DEFAULT.rawValue
+    public var errorCode : Any = ""
     public var statusCode : Int = HttpStatusCode.DEFAULT.rawValue
     public var errorMessage : String = StringsHelper.shared.DEFAULT
     public var error: ErrorResponseEntity = ErrorResponseEntity()
@@ -43,7 +43,7 @@ public class WebAuthError : Error, OauthExceptionDelegate {
         WebAuthError.shared.errorMessage = StringsHelper.shared.NOTIFICATION_TIMEOUT
         WebAuthError.shared.statusCode = HttpStatusCode.EXPECTATION_FAILED.rawValue
         WebAuthError.shared.error = ErrorResponseEntity()
-        WebAuthError.shared.error.error.code = WebAuthErrorCode.NOTIFICATION_TIMEOUT.rawValue
+        WebAuthError.shared.error.error.code = String(WebAuthErrorCode.NOTIFICATION_TIMEOUT.rawValue ?? 0)
         return WebAuthError.shared
     }
     
@@ -66,8 +66,8 @@ public class WebAuthError : Error, OauthExceptionDelegate {
     }
     
     // service failure exception
-    public func serviceFailureException(errorCode : Int32, errorMessage : String, statusCode : Int, error: ErrorResponseEntity = ErrorResponseEntity()) -> WebAuthError {
-        WebAuthError.shared.errorCode = errorCode
+    public func serviceFailureException(errorCode : Any, errorMessage : String, statusCode : Int, error: ErrorResponseEntity = ErrorResponseEntity()) -> WebAuthError {
+        WebAuthError.shared.errorCode = (errorCode as? String) ?? String(describing: errorCode)
         WebAuthError.shared.errorMessage = errorMessage
         WebAuthError.shared.statusCode = statusCode
         WebAuthError.shared.error = error
@@ -80,7 +80,7 @@ public class WebAuthError : Error, OauthExceptionDelegate {
         WebAuthError.shared.errorMessage = StringsHelper.shared.NETWORK_TIMEOUT
         WebAuthError.shared.statusCode = HttpStatusCode.GATEWAY_TIMEOUT.rawValue
         WebAuthError.shared.error = ErrorResponseEntity()
-        WebAuthError.shared.error.error.code = WebAuthErrorCode.NETWORK_TIMEOUT.rawValue
+        WebAuthError.shared.error.error.code = String(WebAuthErrorCode.NETWORK_TIMEOUT.rawValue ?? 0)
         return WebAuthError.shared
     }
     
