@@ -69,8 +69,8 @@ public class VerificationViewController {
         VerificationInteractor.shared.getPendingNotificationList(incomingData: incomingData, callback: callback)
     }
     
-    public func getAuthenticatedHistoryList(incomingData: AuthenticatedHistoryRequest, callback: @escaping (Result<AuthenticatedHistoryResponse>) -> Void) {
-        VerificationInteractor.shared.getAuthenticatedHistoryList(incomingData: incomingData, callback: callback)
+    public func getMFAHistoryList(incomingData: MFAHistoryRequest, callback: @escaping (Result<MFAHistoryResponse>) -> Void) {
+        VerificationInteractor.shared.getMFAHistoryList(incomingData: incomingData, callback: callback)
     }
     
     public func updateFCM(push_id: String) {
@@ -89,5 +89,33 @@ public class VerificationViewController {
     
     public func verify(verificationType: String,incomingData: AuthenticateRequest, callback: @escaping(Result<LoginResponse>) -> Void) {
         VerificationInteractor.shared.verify(verificationType: verificationType, incomingData: incomingData, callback: callback)
+    }
+    
+//    public func denyNotificationRequest(sub: String,statusId: String, rejectReason: denyReason, callback: @escaping(Result<LoginResponse>) -> Void) {
+//        VerificationInteractor.shared.denyNotificationRequest(sub: sub, statusId: statusId, rejectReason: rejectReason, callback: callback)
+//    }
+    
+    public func updateFCMToken(updateFCMRequest: UpdateFCMRequest, callback: @escaping (Result<UpdateFCMResponse>) -> Void) {
+        VerificationInteractor.shared.updateFCMToken(updateFCMRequest: updateFCMRequest, callback: callback)
+    }
+    
+    public func getTimeLineDetails(timeLineRequest: TimeLineRequest, callback: @escaping(Result<TimeLineDetailsResponse>) -> Void) {
+        VerificationInteractor.shared.getTimeLineDetails(incomingData: timeLineRequest, callback: callback)
+    }
+    
+    
+    public func getMFAConfiguredDeviceList(mfaConfiguredDeviceListRequest: MFAConfiguredDeviceListRequest, callback: @escaping(Result<MFAConfiguredDeviceListResponse>) -> Void) {
+        VerificationInteractor.shared.getMFAConfiguredDeviceList(mfaConfiguredDeviceListRequest: mfaConfiguredDeviceListRequest, callback: callback)
+    }
+    
+    public func deleteDevice(deleteRequest: DeleteDeviceRequest, callback: @escaping(Result<DeleteResponse>) -> Void) {
+        VerificationInteractor.shared.deleteDevice(deleteDeviceRequest: deleteRequest, callback: callback)
+    }
+    
+    public func getDeviceConfiguredList(mfaListRequest: MFAListRequest, callback: @escaping(Result<MFAListResponse>) -> Void) {
+        VerificationInteractor.shared.getDeviceConfiguredList(mfaListRequest: mfaListRequest, callback: callback)
+    }
+    public func cancelQr(verificationType: String, cancelQrRequest: CancelQrRequest, callback: @escaping(Result<CancelQrResponse>) -> Void) {
+        VerificationInteractor.shared.cancelQr(verificationType: verificationType, cancelQrRequest: cancelQrRequest, callback: callback)
     }
 }

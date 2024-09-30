@@ -1,5 +1,5 @@
 //
-//  AuthenticatedHistoryRequest.swift
+//  MFAHistoryRequest.swift
 //  Cidaas
 //
 //  Created by ganesh on 23/05/19.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class AuthenticatedHistoryRequest: Codable {
+public class MFAHistoryRequest: Codable {
     
     public init() {}
     
@@ -20,4 +20,5 @@ public class AuthenticatedHistoryRequest: Codable {
     public var verification_type: String = ""
     public var start_time: String = ""
     public var end_time: String = ""
+    public var status: String = ""
 }

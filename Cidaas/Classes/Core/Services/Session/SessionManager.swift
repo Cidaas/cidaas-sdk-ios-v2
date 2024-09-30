@@ -51,14 +51,14 @@ public class SessionManager {
         
         if parameters != nil {
             bodyParams!["device_id"] = deviceInfo.deviceId
-            bodyParams!["push_id"] = push_id
+            bodyParams!["push_id"] = DBHelper.shared.getFCM()
         }
         
         for(key, value) in extraheaders {
             headers[key] = value
         }
         if let locale = bodyParams?["locale"] as? String {
-             headers["Accept-Language"]  = locale
+            headers["Accept-Language"]  = locale
         }
         
         print("=============Header============")
@@ -82,24 +82,24 @@ public class SessionManager {
             multipartFormData.append(uploadImage!, withName: "photo", fileName: "photo.jpg", mimeType: "image/jpeg")
             urlReq.addValue(multipartFormData.contentType, forHTTPHeaderField: "Content-Type")
         }, with: urlReq)
-            .responseString(completionHandler: { data in
+        .responseString(completionHandler: { data in
             self.responseRedirect(response: data, callback: callback)
         })
     }
     
     func uploadAudio(url: URLRequest, parameters: [String: String], voice: Data, callback: @escaping (String?, WebAuthError?) -> Void) {
-           var urlReq: URLRequest = url
-           session.upload(multipartFormData: { multipartFormData in
-               for (key, value) in parameters {
-                   multipartFormData.append(value.data(using: .utf8)!, withName: key)
-               }
-               multipartFormData.append(voice, withName: "voice", fileName: "voice.wav", mimeType: "audio/mpeg")
-               urlReq.addValue(multipartFormData.contentType, forHTTPHeaderField: "Content-Type")
-           }, with: urlReq)
-               .responseString(completionHandler: { data in
-               self.responseRedirect(response: data, callback: callback)
-           })
-       }
+        var urlReq: URLRequest = url
+        session.upload(multipartFormData: { multipartFormData in
+            for (key, value) in parameters {
+                multipartFormData.append(value.data(using: .utf8)!, withName: key)
+            }
+            multipartFormData.append(voice, withName: "voice", fileName: "voice.wav", mimeType: "audio/mpeg")
+            urlReq.addValue(multipartFormData.contentType, forHTTPHeaderField: "Content-Type")
+        }, with: urlReq)
+        .responseString(completionHandler: { data in
+            self.responseRedirect(response: data, callback: callback)
+        })
+    }
     
     func responseRedirect(response: AFDataResponse<String>, callback: @escaping (String?, WebAuthError?) -> Void) {
         switch response.result {
@@ -113,7 +113,7 @@ public class SessionManager {
             }
             else if response.data != nil {
                 let dataResponse = String(decoding: response.data!, as: UTF8.self)
-                callback(nil, WebAuthError.shared.serviceFailureException(errorCode: 400, errorMessage: dataResponse, statusCode: response.response?.statusCode ?? 400, error: string2error(string: dataResponse)))
+                callback(nil, WebAuthError.shared.serviceFailureException(errorCode: 400, errorMessage: dataResponse, statusCode: response.response?.statusCode ?? 400))
             }
             else {
                 callback(nil, WebAuthError.shared.serviceFailureException(errorCode: 400, errorMessage: response.description, statusCode: response.response?.statusCode ?? 400))
@@ -127,8 +127,9 @@ public class SessionManager {
                 return
             }
             if response.data != nil {
-                let dataResponse = String(decoding: response.data!, as: UTF8.self)
-                callback(nil, WebAuthError.shared.serviceFailureException(errorCode: 400, errorMessage: dataResponse, statusCode: response.response?.statusCode ?? 400, error: string2error(string: dataResponse)))
+                var dataResponse = String(decoding: response.data!, as: UTF8.self)
+                let errorData = extractErrorResponseData(from: dataResponse)
+                callback(nil, WebAuthError.shared.serviceFailureException(errorCode: errorData.errorCode, errorMessage: errorData.errorMessage ?? "", statusCode: response.response?.statusCode ?? 400))
             }
             else {
                 callback(nil, WebAuthError.shared.serviceFailureException(errorCode: 500, errorMessage: error.localizedDescription, statusCode: response.response?.statusCode ?? 400))
@@ -155,4 +156,68 @@ public class SessionManager {
             return errorResponseEntity
         }
     }
+}
+
+
+// Function to extract value dynamically for one level or two levels deep
+func getDynamicValue(from json: [String: Any], keys: [String]) -> Any? {
+    for key in keys {
+        let keyComponents = key.split(separator: ".").map { String($0) }
+        var currentObject: Any? = json
+        
+        for component in keyComponents {
+            if let dictionary = currentObject as? [String: Any] {
+                currentObject = dictionary[component]
+            } else {
+                currentObject = nil
+                break
+            }
+        }
+        
+        // If a valid value is found for the current key path, return it
+        if currentObject != nil {
+            return currentObject
+        }
+    }
+    return nil
+}
+
+// Function to parse JSON string and extract both errorCode and errorMessage
+func extractErrorResponseData(from jsonString: String) -> (errorCode: String?, errorMessage: String?) {
+    var errorCode: String = ""
+    var errorMessage: String = ""
+    
+    if let jsonData = jsonString.data(using: .utf8) {
+        do {
+            if let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
+                
+                // List of possible key paths for errorCode
+                let possibleErrorCodeKeyPaths = ["code", "error.code"]
+                
+                // Get errorCode and convert it to String if possible
+                if let value = getDynamicValue(from: jsonObject, keys: possibleErrorCodeKeyPaths) {
+                    if let stringValue = value as? String {
+                        errorCode = stringValue
+                    } else if let intValue = value as? Int {
+                        errorCode = String(intValue)
+                    }
+                }
+                
+                // Handle errorMessage for both single-level and nested "error" keys
+                if let errorValue = jsonObject["error"] {
+                    if let errorString = errorValue as? String {
+                        // Case 1: "error" is a string
+                        errorMessage = errorString
+                    } else if let errorDict = errorValue as? [String: Any], let nestedError = errorDict["error"] as? String {
+                        // Case 2: "error" is a dictionary with an inner "error" string
+                        errorMessage = nestedError
+                    }
+                }
+            }
+        } catch {
+            print("Error parsing JSON: \(error.localizedDescription)")
+        }
+    }
+    
+    return (errorCode, errorMessage)
 }

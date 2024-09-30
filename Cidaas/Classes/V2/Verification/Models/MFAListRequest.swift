@@ -12,6 +12,7 @@ public class MFAListRequest: Codable {
     public init() {}
     
     public var device_id: String = ""
+    public var linked_device_id: String = ""
     public var client_id: String = ""
     public var push_id: String = ""
     public var sub: String = ""

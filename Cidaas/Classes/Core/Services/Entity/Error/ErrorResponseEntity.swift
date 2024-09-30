@@ -40,7 +40,7 @@ public class ErrorResponseDataEntity : Codable {
     public var suggested_url: String = ""
     
     
-    public var code: Int32 = 0
+    public var code: String = ""
     public var moreInfo: String = ""
     public var type: String = ""
     public var status: Int16 = 400
@@ -64,7 +64,7 @@ public class ErrorResponseDataEntity : Codable {
         self.consent_name = try container.decodeIfPresent(String.self, forKey: .consent_name) ?? ""
         self.consent_id = try container.decodeIfPresent(String.self, forKey: .consent_id) ?? ""
         self.consent_version_id = try container.decodeIfPresent(String.self, forKey: .consent_version_id) ?? ""
-        self.code = try container.decodeIfPresent(Int32.self, forKey: .code) ?? 0
+        self.code = try container.decodeIfPresent(String.self, forKey: .code) ?? ""
         self.moreInfo = try container.decodeIfPresent(String.self, forKey: .moreInfo) ?? ""
         self.type = try container.decodeIfPresent(String.self, forKey: .type) ?? ""
         self.status = try container.decodeIfPresent(Int16.self, forKey: .status) ?? 400
