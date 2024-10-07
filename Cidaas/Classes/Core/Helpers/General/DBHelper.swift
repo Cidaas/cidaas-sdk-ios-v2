@@ -7,10 +7,8 @@
 //
 
 import Foundation
-import CoreLocation
 
-public class DBHelper : NSObject, CLLocationManagerDelegate {
-    var location: CLLocation?
+public class DBHelper : NSObject {
     
     // shared instance
     public static var shared : DBHelper = DBHelper()
@@ -185,63 +183,5 @@ public class DBHelper : NSObject, CLLocationManagerDelegate {
             return (String(splittedLocation[0]), String(splittedLocation[1]))
         }
         return ("", "")
-    }
-
-    private var locationManager = CLLocationManager()
-    private var lastKnownLocation: CLLocation?
-    private var geocoder = CLGeocoder()
-    
-    private override init() {
-        super.init()
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.startUpdatingLocation()
-    }
-    
-    public func getDeviceLocationAddress(completion: @escaping (String?) -> Void) {
-        guard let lastKnownLocation = self.lastKnownLocation else {
-            completion(nil)
-            return
-        }
-        
-        geocoder.reverseGeocodeLocation(lastKnownLocation) { placemarks, error in
-            if let error = error {
-                print("Reverse geocoding error: \(error.localizedDescription)")
-                completion(nil)
-                return
-            }
-            
-            if let placemark = placemarks?.first {
-                let addressString = placemark.compactAddress
-                completion(addressString)
-            } else {
-                completion(nil)
-            }
-        }
-    }
-    
-    public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.last else { return }
-        lastKnownLocation = location
-    }
-    
-}
-
-extension CLPlacemark {
-    var compactAddress: String {
-        if let name = name {
-            var result = name
-            
-            if let city = locality {
-                result += ", \(city)"
-            }
-            if let country = country {
-                result += ", \(country)"
-            }
-            
-            return result
-        }
-        return "Unknown"
     }
 }
