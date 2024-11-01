@@ -1,3 +1,7 @@
 Pods/
 .build
 .swiftpm
+.
+
+## Mac OS specific
+**/.DS_Store
