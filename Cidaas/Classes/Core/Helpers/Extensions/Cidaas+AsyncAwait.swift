@@ -7,68 +7,43 @@ public extension Cidaas {
         case unknownLogoutError
     }
 
-    func getUserInfo(with accessToken: String) async throws -> UserInfoEntity {
-        try await withCheckedThrowingContinuation {
-            (continuation: CheckedContinuation<UserInfoEntity, Error>) in
-            Cidaas.shared.getUserInfo(accessToken: accessToken) {
+    private func handleAsyncCall<T>(_ operation: @escaping (@escaping (Result<T>) -> Void) -> Void) async throws -> T {
+        try await withCheckedThrowingContinuation { continuation in
+            operation {
                 switch $0 {
-                case .success(let result):
-                    continuation.resume(returning: result)
-                    break
+                case .success(let value):
+                    continuation.resume(returning: value)
                 case .failure(let error):
                     continuation.resume(throwing: error)
-                    break
                 }
             }
+        }
+    }
+
+    func getUserInfo(with accessToken: String) async throws -> UserInfoEntity {
+        try await handleAsyncCall {
+            Cidaas.shared.getUserInfo(accessToken: accessToken,
+                                      callback: $0)
         }
     }
 
     func getClientInfo(requestId: String) async throws -> ClientInfoResponseDataEntity {
-        try await withCheckedThrowingContinuation {
-            (continuation: CheckedContinuation<ClientInfoResponseDataEntity, Error>) in
-            CidaasNative.shared.getClientInfo(requestId: requestId) {
-                switch $0 {
-                case .success(let result):
-                    continuation.resume(returning: result.data)
-                    break
-                case .failure(let error):
-                    continuation.resume(throwing: error)
-                    break
-                }
-            }
-        }
+        try await handleAsyncCall {
+            CidaasNative.shared.getClientInfo(requestId: requestId,
+                                              callback: $0)
+        }.data
     }
 
     func getRequestID() async throws -> String {
-        try await withCheckedThrowingContinuation {
-            (continuation: CheckedContinuation<String, Error>) in
-            CidaasNative.shared.getRequestId() {
-                switch $0 {
-                case .success(let result):
-                    continuation.resume(returning: result.data.requestId)
-                    break
-                case .failure(let error):
-                    continuation.resume(throwing: error)
-                    break
-                }
-            }
-        }
+        try await handleAsyncCall {
+            CidaasNative.shared.getRequestId(callback: $0)
+        }.data.requestId
     }
 
     func getAccessToken(with refreshToken: String) async throws -> AccessTokenEntity {
-        try await withCheckedThrowingContinuation {
-            (continuation: CheckedContinuation<AccessTokenEntity, Error>) in
-            Cidaas.shared.getAccessToken(refreshToken: refreshToken) {
-                switch $0 {
-                case .success(let result):
-                    continuation.resume(returning: result.data)
-                    break
-                case .failure(let error):
-                    continuation.resume(throwing: error)
-                    break
-                }
-            }
-        }
+        try await handleAsyncCall {
+            Cidaas.shared.getAccessToken(refreshToken: refreshToken, callback: $0)
+        }.data
     }
 
     func getSocialLoginProviders() async throws -> [String] {
@@ -77,79 +52,40 @@ public extension Cidaas {
         return clientInfo.login_providers
     }
 
-    func logout(accessToken: String) async throws -> Void {
-        try await withCheckedThrowingContinuation {
-            (continuation: CheckedContinuation<Void, Error>) in
-            CidaasNative.shared.logout(access_token: accessToken) {
-                switch $0 {
-                    // Note: The result is oddly defined as Boolean.
-                    // So there still might be an error although the SDK returned success.
-                case .success(let result):
-                    if result {
-                        continuation.resume()
-                    } else {
-                        continuation.resume(throwing: CidaasError.unknownLogoutError)
-                    }
-                    break
-                case .failure(let error):
-                    continuation.resume(throwing: error)
-                    break
-                }
-            }
-        }
-    }
-
     @discardableResult
     func loginWithBrowser(using parentViewController: UIViewController) async throws -> AccessTokenEntity {
-        try await withCheckedThrowingContinuation {
-            (continuation: CheckedContinuation<AccessTokenEntity, Error>) in
-            Cidaas.shared.loginWithBrowser(delegate: parentViewController) {
-                switch $0 {
-                case .success(let result):
-                    continuation.resume(returning: result.data)
-                    break
-                case .failure(let error):
-                    continuation.resume(throwing: error)
-                    break
-                }
-            }
-        }
+        try await handleAsyncCall {
+            Cidaas.shared.loginWithBrowser(delegate: parentViewController,
+                                           callback: $0)
+        }.data
     }
 
-    /// Provider is one of the entries defined in the provider list in `ClientInfoResponseDataEntity`. E.g. facebook or google.
     @discardableResult
-    func loginWithSocial(using parentViewController: UIViewController,
-                         provider: String,
-                         requestID: String) async throws -> AccessTokenEntity {
-        try await withCheckedThrowingContinuation {
-            (continuation: CheckedContinuation<AccessTokenEntity, Error>) in
+    func loginWithSocial(using parentViewController: UIViewController, provider: String, requestID: String) async throws -> AccessTokenEntity {
+        try await handleAsyncCall {
             Cidaas.shared.loginWithSocial(provider: provider,
                                           requestId: requestID,
-                                          delegate: parentViewController) {
-                switch $0 {
-                case .success(let result):
-                    continuation.resume(returning: result.data)
-                    break
-                case .failure(let error):
-                    continuation.resume(throwing: error)
-                    break
-                }
-            }
-        }
+                                          delegate: parentViewController,
+                                          callback: $0)
+        }.data
     }
 
     @discardableResult
     func registerWithBrowser(using parentViewController: UIViewController) async throws -> AccessTokenEntity {
-        try await withCheckedThrowingContinuation {
-            (continuation: CheckedContinuation<AccessTokenEntity, Error>) in
-            Cidaas.shared.registerWithBrowser(delegate: parentViewController) {
+        try await handleAsyncCall {
+            Cidaas.shared.registerWithBrowser(delegate: parentViewController,
+                                              callback: $0)
+        }.data
+    }
+
+    func logout(accessToken: String) async throws {
+        try await withCheckedThrowingContinuation { continuation in
+            CidaasNative.shared.logout(access_token: accessToken) {
                 switch $0 {
                 case .success(let result):
-                    continuation.resume(returning: result.data)
-                    break
+                    result ? continuation.resume() : continuation.resume(throwing: CidaasError.unknownLogoutError)
                 case .failure(let error):
                     continuation.resume(throwing: error)
-                    break
                 }
             }
         }
