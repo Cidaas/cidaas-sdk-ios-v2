@@ -51,7 +51,7 @@ public class EntityToModelConverter {
         do {
             AccessTokenModel.shared.access_token = try accessTokenEntity.access_token.aesEncrypt(key: key, iv: salt)
         } catch {
-            AccessTokenModel.shared.refresh_token = accessTokenEntity.access_token
+            AccessTokenModel.shared.access_token = accessTokenEntity.access_token
         }
         callback(AccessTokenModel.shared)
     }
@@ -85,10 +85,20 @@ public class EntityToModelConverter {
 
             accessTokenEntity.expires_in = accessTokenModel.expires_in
             accessTokenEntity.id_token = accessTokenModel.id_token
-            accessTokenEntity.refresh_token = try! accessTokenModel.refresh_token.aesDecrypt(key: key, iv: salt)
+            do {
+                accessTokenEntity.refresh_token = try accessTokenModel.refresh_token.aesDecrypt(key: key, iv: salt)
+            } catch {
+                accessTokenEntity.refresh_token =  accessTokenModel.refresh_token
+            }
+            
             accessTokenEntity.sub = accessTokenModel.sub
             
-            accessTokenEntity.access_token = try! accessTokenModel.access_token.aesDecrypt(key: key, iv: salt)
+            do {
+                accessTokenEntity.access_token = try accessTokenModel.access_token.aesDecrypt(key: key, iv: salt)
+            } catch {
+                accessTokenEntity.access_token = accessTokenModel.access_token
+            }
+            
             
             callback(accessTokenEntity)
         }
