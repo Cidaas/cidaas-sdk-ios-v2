@@ -112,8 +112,9 @@ public class SessionManager {
                 callback(nil, WebAuthError.shared.serviceFailureException(errorCode: 204, errorMessage: "No data found", statusCode: response.response?.statusCode ?? 400))
             }
             else if response.data != nil {
-                let dataResponse = String(decoding: response.data!, as: UTF8.self)
-                callback(nil, WebAuthError.shared.serviceFailureException(errorCode: 400, errorMessage: dataResponse, statusCode: response.response?.statusCode ?? 400))
+                var dataResponse = String(decoding: response.data!, as: UTF8.self)
+                let errorData = extractErrorResponseData(from: dataResponse)
+                callback(nil, WebAuthError.shared.serviceFailureException(errorCode: errorData.errorCode, errorMessage: errorData.errorMessage ?? "", statusCode: response.response?.statusCode ?? 400))
             }
             else {
                 callback(nil, WebAuthError.shared.serviceFailureException(errorCode: 400, errorMessage: response.description, statusCode: response.response?.statusCode ?? 400))

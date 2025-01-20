@@ -48,7 +48,7 @@ public class VerificationInteractor {
     
     public func scanned(verificationType: String, incomingData: ScannedRequest, callback: @escaping (Result<ScannedResponse>) -> Void) {
         // validation
-        if (verificationType == "" || incomingData.exchange_id == "" || incomingData.sub == "") {
+        if (verificationType == "" || incomingData.exchange_id == "") {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "verificationType or exchange_id or sub cannot be empty", statusCode: 417)
             sharedPresenter.scanned(scannedResponse: nil, errorResponse: error, callback: callback)
