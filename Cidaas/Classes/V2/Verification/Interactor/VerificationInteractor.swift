@@ -558,8 +558,6 @@ public class VerificationInteractor {
                         let error = WebAuthError.shared
                         error.errorMessage = res_errorMessage ?? WebAuthError.shared.errorMessage
                         error.errorCode = res_errorCode ?? WebAuthError.shared.errorCode
-                        // let errorResponse = error
-                        // errorResponse.errorCode = String(res_errorCode ?? 0)
                         
                         self.sharedPresenter.enroll(enrollResponse: nil, errorResponse: error, callback: callback)
                         
@@ -572,8 +570,6 @@ public class VerificationInteractor {
                 let error = WebAuthError.shared
                 error.errorMessage = errorMessage ?? WebAuthError.shared.errorMessage
                 error.errorCode = errorCode ?? WebAuthError.shared.errorCode
-                // let errorResponse = error
-                // errorResponse.errorCode = String(errorCode ?? 0)
                 
                 self.sharedPresenter.enroll(enrollResponse: nil, errorResponse: error, callback: callback)
                 return
@@ -595,8 +591,6 @@ public class VerificationInteractor {
                         let error = WebAuthError.shared
                         error.errorMessage = res_errorMessage ?? WebAuthError.shared.errorMessage
                         error.errorCode = res_errorCode ?? WebAuthError.shared.errorCode
-                        // let errorResponse = error
-                        // errorResponse.errorCode = String(res_errorCode ?? 0)
                         
                         self.sharedPresenter.authenticate(authenticateResponse: nil, errorResponse: error, callback: callback)
                         
