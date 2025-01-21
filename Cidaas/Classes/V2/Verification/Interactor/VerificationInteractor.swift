@@ -603,8 +603,6 @@ public class VerificationInteractor {
                 let error = WebAuthError.shared
                 error.errorMessage = errorMessage ?? WebAuthError.shared.errorMessage
                 error.errorCode = errorCode ?? WebAuthError.shared.errorCode
-//                let errorResponse = error.error
-//                errorResponse.error.code = String(errorCode ?? 0)
                 
                 self.sharedPresenter.authenticate(authenticateResponse: nil, errorResponse: error, callback: callback)
                 return
