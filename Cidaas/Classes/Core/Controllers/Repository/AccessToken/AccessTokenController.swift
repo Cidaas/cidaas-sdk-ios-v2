@@ -144,7 +144,8 @@ public class AccessTokenController {
         do {
             decryptedRefreshToken = try refreshToken.aesDecrypt(key: key, iv: salt)
         } catch {
-           decryptedRefreshToken = refreshToken 
+            // to handle crashes
+            decryptedRefreshToken = refreshToken
         }
         
         // call access token from refresh token service
