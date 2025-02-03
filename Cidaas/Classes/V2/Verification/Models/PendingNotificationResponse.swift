@@ -32,6 +32,7 @@ public class PendingNotificationResponseData: Codable {
     public var request_time: String = ""
     public var requested_types: [String] = []
     public var exchange_id : String = ""
+    public var expires_at : String = ""
     
     public init() {
         
@@ -46,5 +47,6 @@ public class PendingNotificationResponseData: Codable {
         self.request_time = try container.decodeIfPresent(String.self, forKey: .request_time) ?? ""
         self.requested_types = try container.decodeIfPresent([String].self, forKey: .requested_types) ?? []
         self.exchange_id = try container.decodeIfPresent(String.self, forKey: .exchange_id) ?? ""
+        self.expires_at = try container.decodeIfPresent(String.self, forKey: .expires_at) ?? ""
     }
 }

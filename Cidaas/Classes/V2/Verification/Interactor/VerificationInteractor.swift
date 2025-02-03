@@ -48,7 +48,7 @@ public class VerificationInteractor {
     
     public func scanned(verificationType: String, incomingData: ScannedRequest, callback: @escaping (Result<ScannedResponse>) -> Void) {
         // validation
-        if (verificationType == "" || incomingData.exchange_id == "" || incomingData.sub == "") {
+        if (verificationType == "" || incomingData.exchange_id == "") {
             // send response to presenter
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "verificationType or exchange_id or sub cannot be empty", statusCode: 417)
             sharedPresenter.scanned(scannedResponse: nil, errorResponse: error, callback: callback)
@@ -558,8 +558,6 @@ public class VerificationInteractor {
                         let error = WebAuthError.shared
                         error.errorMessage = res_errorMessage ?? WebAuthError.shared.errorMessage
                         error.errorCode = res_errorCode ?? WebAuthError.shared.errorCode
-                        let errorResponse = error.error
-                        errorResponse.error.code = String(res_errorCode ?? 0)
                         
                         self.sharedPresenter.enroll(enrollResponse: nil, errorResponse: error, callback: callback)
                         
@@ -572,8 +570,6 @@ public class VerificationInteractor {
                 let error = WebAuthError.shared
                 error.errorMessage = errorMessage ?? WebAuthError.shared.errorMessage
                 error.errorCode = errorCode ?? WebAuthError.shared.errorCode
-                let errorResponse = error.error
-                errorResponse.error.code = String(errorCode ?? 0)
                 
                 self.sharedPresenter.enroll(enrollResponse: nil, errorResponse: error, callback: callback)
                 return
@@ -595,8 +591,6 @@ public class VerificationInteractor {
                         let error = WebAuthError.shared
                         error.errorMessage = res_errorMessage ?? WebAuthError.shared.errorMessage
                         error.errorCode = res_errorCode ?? WebAuthError.shared.errorCode
-                        let errorResponse = error.error
-                        errorResponse.error.code = String(res_errorCode ?? 0)
                         
                         self.sharedPresenter.authenticate(authenticateResponse: nil, errorResponse: error, callback: callback)
                         
@@ -609,8 +603,6 @@ public class VerificationInteractor {
                 let error = WebAuthError.shared
                 error.errorMessage = errorMessage ?? WebAuthError.shared.errorMessage
                 error.errorCode = errorCode ?? WebAuthError.shared.errorCode
-                let errorResponse = error.error
-                errorResponse.error.code = String(errorCode ?? 0)
                 
                 self.sharedPresenter.authenticate(authenticateResponse: nil, errorResponse: error, callback: callback)
                 return
