@@ -76,30 +76,31 @@ public class AccessTokenController {
         let expires = accessTokenModel.expires_in
         let secs: Int64 = Int64(accessTokenModel.seconds)
         let expires_in = expires + secs - 10
+        var globalAccessTokenEntity = AccessTokenEntity()
+        
+        EntityToModelConverter.shared.accessTokenModelToAccessTokenEntity(accessTokenModel: accessTokenModel) { (accessTokenEntity) in
+            globalAccessTokenEntity = accessTokenEntity
+        }
         
         if expires_in > seconds {
-            
             if String(seconds).count < 10 {
-                self.getAccessToken(refreshToken: accessTokenModel.refresh_token, callback: callback)
+                self.getAccessToken(refreshToken: globalAccessTokenEntity.refresh_token, callback: callback)
                 return
             }
             
-            EntityToModelConverter.shared.accessTokenModelToAccessTokenEntity(accessTokenModel: accessTokenModel) { (accessTokenEntity) in
-                // return success callback
-                let response = LoginResponseEntity()
-                response.success = true
-                response.status = 200
-                response.data = accessTokenEntity
-                
-                DispatchQueue.main.async {
-                    callback(Result.success(result: response))
-                }
-                return
+            // return success callback
+            let response = LoginResponseEntity()
+            response.success = true
+            response.status = 200
+            response.data = globalAccessTokenEntity
+            
+            DispatchQueue.main.async {
+                callback(Result.success(result: response))
             }
+            return
         }
-            
         else {
-            self.getAccessToken(refreshToken: accessTokenModel.refresh_token, callback: callback)
+            self.getAccessToken(refreshToken: globalAccessTokenEntity.refresh_token, callback: callback)
         }
     }
     
@@ -116,40 +117,8 @@ public class AccessTokenController {
             return
         }
         
-        let query: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccount as String: "salt,key",
-            kSecMatchLimit as String: kSecMatchLimitOne,
-            kSecReturnAttributes as String: true,
-            kSecReturnData as String: true,
-        ]
-        
-        var item: CFTypeRef?
-        var salt: String = ""
-        var key: String = ""
-        // Check if user exists in the keychain
-        if SecItemCopyMatching(query as CFDictionary, &item) == noErr {
-            // Extract result
-            if let existingItem = item as? [String: Any], let saltKey = existingItem[kSecValueData as String] as? Data,
-               let saltKeyDecoded = String(data: saltKey, encoding: .utf8) {
-                salt = saltKeyDecoded.components(separatedBy: ",")[0]
-                key = saltKeyDecoded.components(separatedBy: ",")[1]
-                
-            }
-            
-        }
-
-        var decryptedRefreshToken = ""
-        
-        do {
-            decryptedRefreshToken = try refreshToken.aesDecrypt(key: key, iv: salt)
-        } catch {
-            // to handle crashes
-            decryptedRefreshToken = refreshToken
-        }
-        
         // call access token from refresh token service
-        AccessTokenService.shared.getAccessToken(refreshToken: decryptedRefreshToken, properties: properties!) {
+        AccessTokenService.shared.getAccessToken(refreshToken: refreshToken, properties: properties!) {
             switch $0 {
             case .failure(let error):
                 
