@@ -45,19 +45,38 @@ public class LoginInteractor {
         }
     }
     
-    public func logout(access_token : String,  callback: @escaping(Result<Bool>) -> Void){
+    public func logout(sub : String,  callback: @escaping(Result<Bool>) -> Void){
         // get saved properties
-               let savedProp = getProperties()
-               if (savedProp == nil) {
-                   // send response to presenter
-                   let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
-                   sharedPresenter.logout(response: nil, errorResponse: error, callback: callback)
-                   return
-               }
+        let savedProp = getProperties()
+        if (savedProp == nil) {
+            // send response to presenter
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "properties cannot be empty", statusCode: 417)
+            sharedPresenter.logout(response: nil, errorResponse: error, callback: callback)
+            return
+        }
+        
+        var accessToken = ""
+        
+        // get access_token using sub
+        AccessTokenController.shared.getAccessToken(sub: sub) {
+            switch $0 {
+            case .success(result: let result):
+                accessToken = result.data.access_token
+            case .failure(error: let error):
+                // return callback
+                DispatchQueue.main.async {
+                    callback(Result.failure(error: error))
+                }
+                return
+            }
+        }
+        
         // call worker
-        sharedService.logout(access_token : access_token, properties: savedProp!) { response, error in
+        sharedService.logout(access_token : accessToken, properties: savedProp!) { response, error in
+            if (error == nil) {
+                UserDefaults.standard.removeObject(forKey: "cidaas_user_details_\(sub)")
+            }
             self.sharedPresenter.logout(response: response, errorResponse: error, callback: callback)
-            
         }
     }
     

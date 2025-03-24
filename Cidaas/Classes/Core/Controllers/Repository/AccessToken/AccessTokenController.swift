@@ -99,7 +99,9 @@ public class AccessTokenController {
         }
             
         else {
-            self.getAccessToken(refreshToken: accessTokenModel.refresh_token, callback: callback)
+            if (accessTokenModel.refresh_token != "") {
+                self.getAccessToken(refreshToken: accessTokenModel.refresh_token, callback: callback)
+            }
         }
     }
     
