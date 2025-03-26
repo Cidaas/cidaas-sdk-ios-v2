@@ -12,6 +12,7 @@ public class LoginInteractor {
     public static var shared: LoginInteractor = LoginInteractor()
     var sharedService: LoginServiceWorker
     var sharedPresenter: LoginPresenter
+    var accessToken = ""
   
     
     public init() {
@@ -55,13 +56,25 @@ public class LoginInteractor {
             return
         }
         
-        var accessToken = ""
+        // check if sub is empty
+        if (sub.isEmpty) {
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "sub cannot be empty", statusCode: 417)
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+        
         
         // get access_token using sub
         AccessTokenController.shared.getAccessToken(sub: sub) {
             switch $0 {
             case .success(result: let result):
-                accessToken = result.data.access_token
+                // call worker
+                self.sharedService.logout(access_token : result.data.access_token, properties: savedProp!) { response, error in
+                    self.sharedPresenter.logout(response: response, errorResponse: error, callback: callback)
+                    UserDefaults.standard.removeObject(forKey: "cidaas_user_details_\(sub)")
+                }
             case .failure(error: let error):
                 // return callback
                 DispatchQueue.main.async {
@@ -71,13 +84,6 @@ public class LoginInteractor {
             }
         }
         
-        // call worker
-        sharedService.logout(access_token : accessToken, properties: savedProp!) { response, error in
-            if (error == nil) {
-                UserDefaults.standard.removeObject(forKey: "cidaas_user_details_\(sub)")
-            }
-            self.sharedPresenter.logout(response: response, errorResponse: error, callback: callback)
-        }
     }
     
     func getProperties() -> Dictionary<String, String>? {

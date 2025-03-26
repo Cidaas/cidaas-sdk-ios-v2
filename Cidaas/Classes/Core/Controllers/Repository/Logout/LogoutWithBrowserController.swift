@@ -66,7 +66,8 @@ public class LogoutWithBrowserController: NSObject, SFSafariViewControllerDelega
                 }
                 
                 
-                var isLogoutSuccess = self.logoutWithBrowser(from: delegate, logoutURL: logoutURL)
+                var isLogoutSuccess = self.SFLogout(from: delegate, logoutURL: logoutURL)
+                UserDefaults.standard.removeObject(forKey: "cidaas_user_details_\(sub)")
                 callback(Result.success(result: isLogoutSuccess))
                 
             case .failure(error: let error):
@@ -96,7 +97,7 @@ public class LogoutWithBrowserController: NSObject, SFSafariViewControllerDelega
         return logoutURL
     }
     
-    public func logoutWithBrowser(from viewController: UIViewController, logoutURL: URL) -> Bool {
+    public func SFLogout(from viewController: UIViewController, logoutURL: URL) -> Bool {
         
         let safariVC = SFSafariViewController(url: logoutURL)
         safariVC.delegate = self
