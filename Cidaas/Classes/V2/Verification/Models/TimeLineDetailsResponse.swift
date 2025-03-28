@@ -66,6 +66,25 @@ public class TimeLineDetailsResponseData: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.createdTime = try container.decodeIfPresent(String.self, forKey: .createdTime) ?? ""
         self._id = try container.decodeIfPresent(String.self, forKey: ._id) ?? ""
+        self.ph_id = try container.decodeIfPresent(String.self, forKey: .ph_id) ?? ""
+        self.verification_type = try container.decodeIfPresent(String.self, forKey: .verification_type) ?? ""
+        self.sub = try container.decodeIfPresent(String.self, forKey: .sub) ?? ""
+        self.client_id = try container.decodeIfPresent(String.self, forKey: .client_id) ?? ""
+        self.status = try container.decodeIfPresent(String.self, forKey: .status) ?? ""
+        self.status_id = try container.decodeIfPresent(String.self, forKey: .status_id) ?? ""
+        self.request_id = try container.decodeIfPresent(String.self, forKey: .request_id) ?? ""
+        self.medium_id = try container.decodeIfPresent(String.self, forKey: .medium_id) ?? ""
+        self.usage_type = try container.decodeIfPresent(String.self, forKey: .usage_type) ?? ""
+        self.parent_stage_id = try container.decodeIfPresent(String.self, forKey: .parent_stage_id) ?? ""
+        self.used_exchange_id = try container.decodeIfPresent(String.self, forKey: .used_exchange_id) ?? ""
+        self.rejected_reason = try container.decodeIfPresent(String.self, forKey: .rejected_reason) ?? ""
+        self.single_factor_auth = try container.decodeIfPresent(Bool.self, forKey: .single_factor_auth) ?? false
+        self.provider = try container.decodeIfPresent(String.self, forKey: .provider) ?? ""
+        self.username = try container.decodeIfPresent(String.self, forKey: .username) ?? ""
+        self.username_type = try container.decodeIfPresent(String.self, forKey: .username_type) ?? ""
+        self.exchange_id = try container.decodeIfPresent(ExchangeIdConfig.self, forKey: .exchange_id) ?? ExchangeIdConfig()
+        self.device_info = try container.decodeIfPresent(DeviceInfoModel.self, forKey: .device_info) ?? DeviceInfoModel()
+        self.location_details = try container.decodeIfPresent(LocationDetailsTracking.self, forKey: .location_details) ?? LocationDetailsTracking()
     }
 }
 
@@ -100,12 +119,21 @@ public class LocationDetailsTracking: Codable {
     // properties
     public var _id: String = ""
     public var id: String = ""
-    public var distance_meter: Int = 0
+    public var distance_metter: Float64 = 0
     public var location_info = Location()
     public var ipaddress_info = IpAddress()
 
     // constructor
     public init() {
+    }
+    
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self._id = try container.decodeIfPresent(String.self, forKey: ._id) ?? ""
+        self.id = try container.decodeIfPresent(String.self, forKey: .id) ?? ""
+        self.distance_metter = try container.decodeIfPresent(Float64.self, forKey: .distance_metter) ?? 0
+        self.location_info = try container.decodeIfPresent(Location.self, forKey: .location_info) ?? Location()
+        self.ipaddress_info = try container.decodeIfPresent(IpAddress.self, forKey: .ipaddress_info) ?? IpAddress()
     }
 
 }
@@ -119,6 +147,13 @@ public class IpAddress: Codable {
 
     // constructor
     public init() {
+    }
+    
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.ipAddress = try container.decodeIfPresent(String.self, forKey: .ipAddress) ?? ""
+        self.type = try container.decodeIfPresent(String.self, forKey: .type) ?? ""
+        self.location = try container.decodeIfPresent(Location.self, forKey: .location) ?? Location()
     }
 
 }
