@@ -226,4 +226,6 @@ public class StringsHelper {
     public var NETWORK_TIMEOUT: String = "Network Timeout"
     
     public var USER_LOGIN_INFO_SERVICE_FAILURE = "User login information service failure"
+    
+    public var LOGOUT_WITH_BROWSER_FAILURE = "Failure while logging out from Browser"
 }

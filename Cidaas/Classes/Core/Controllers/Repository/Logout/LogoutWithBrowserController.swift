@@ -54,6 +54,9 @@ public class LogoutWithBrowserController: NSObject, SFSafariViewControllerDelega
                     return
                 }
                 
+                // get RedirectURL value from plist file
+                let redirectURL = properties["RedirectURL"] ?? ""
+                
                 var logoutUrl = self.generateLogoutURL(accessToken: tokenResp.data.access_token,  postLogoutRedirectURL: postLogoutRedirectURL,properties: properties)
                 
                 
@@ -66,9 +69,20 @@ public class LogoutWithBrowserController: NSObject, SFSafariViewControllerDelega
                 }
                 
                 
-                var isLogoutSuccess = self.SFLogout(from: delegate, logoutURL: logoutURL)
-                UserDefaults.standard.removeObject(forKey: "cidaas_user_details_\(sub)")
-                callback(Result.success(result: isLogoutSuccess))
+                let logoutSession = SafariLogoutSession(logoutURL: logoutURL, redirectURL: redirectURL) {
+                    switch $0 {
+                    case .success(let logoutSuccess):
+                        print("Successfully loggedout")
+                        UserDefaults.standard.removeObject(forKey: "cidaas_user_details_\(sub)")
+                        callback(Result.success(result: logoutSuccess))
+                    case .failure(let error):
+                        print("Logout failed")
+                        DispatchQueue.main.async {
+                            callback(Result.failure(error: error))
+                        }
+                        return
+                    }
+                }
                 
             case .failure(error: let error):
                 // return callback
@@ -96,15 +110,4 @@ public class LogoutWithBrowserController: NSObject, SFSafariViewControllerDelega
         
         return logoutURL
     }
-    
-    public func SFLogout(from viewController: UIViewController, logoutURL: URL) -> Bool {
-        
-        let safariVC = SFSafariViewController(url: logoutURL)
-        safariVC.delegate = self
-        self.safariVC = safariVC
-        
-        viewController.present(safariVC, animated: true, completion: nil)
-        return true
-    }
-    
 }
