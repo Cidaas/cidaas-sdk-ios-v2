@@ -16,7 +16,7 @@ public class LogoutWithBrowserController: NSObject, SFSafariViewControllerDelega
     private var safariVC: SFSafariViewController?
     
     // logout With browser
-    public func logoutWithBrowser(delegate: UIViewController, sub: String, postLogoutRedirectURL: String,properties: Dictionary<String, String>, callback: @escaping(Result<Bool>) -> Void) {
+    public func logoutWithBrowser(delegate: UIViewController, sub: String, properties: Dictionary<String, String>, callback: @escaping(Result<Bool>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil  {
             let error = WebAuthError.shared.propertyMissingException()
@@ -31,7 +31,7 @@ public class LogoutWithBrowserController: NSObject, SFSafariViewControllerDelega
         }
         
         // check if sub is empty
-        if (sub == "") {
+        if (sub.isEmpty) {
             let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "sub cannot be empty", statusCode: 417)
             DispatchQueue.main.async {
                 callback(Result.failure(error: error))
@@ -45,7 +45,7 @@ public class LogoutWithBrowserController: NSObject, SFSafariViewControllerDelega
             case .success(result: let tokenResp):
                 var accessToken = tokenResp.data.access_token
                 
-                // check if sub is empty
+                // check if accessToken is empty
                 if (accessToken.isEmpty) {
                     let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "access_token cannot be empty", statusCode: 417)
                     DispatchQueue.main.async {
@@ -54,8 +54,8 @@ public class LogoutWithBrowserController: NSObject, SFSafariViewControllerDelega
                     return
                 }
                 
-                // get RedirectURL value from plist file
-                let redirectURL = properties["RedirectURL"] ?? ""
+                // get PostLogoutRedirectURL from properties
+                let postLogoutRedirectURL = properties["PostLogoutRedirectURL"] ?? ""
                 
                 var logoutUrl = self.generateLogoutURL(accessToken: tokenResp.data.access_token,  postLogoutRedirectURL: postLogoutRedirectURL,properties: properties)
                 
@@ -69,7 +69,7 @@ public class LogoutWithBrowserController: NSObject, SFSafariViewControllerDelega
                 }
                 
                 
-                let logoutSession = SafariLogoutSession(logoutURL: logoutURL, redirectURL: redirectURL) {
+                let logoutSession = SafariLogoutSession(logoutURL: logoutURL) {
                     switch $0 {
                     case .success(let logoutSuccess):
                         print("Successfully loggedout")
@@ -93,6 +93,85 @@ public class LogoutWithBrowserController: NSObject, SFSafariViewControllerDelega
             }
         }
         
+    }
+    
+    // logout With browser
+    public func logoutWithBrowser(delegate: UIViewController, accessToken: String, properties: Dictionary<String, String>, callback: @escaping(Result<Bool>) -> Void) {
+        // null check
+        if properties["DomainURL"] == "" || properties["DomainURL"] == nil  {
+            let error = WebAuthError.shared.propertyMissingException()
+            // log error
+            let loggerMessage = "Read properties failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+        
+        
+        // check if accessToken is empty
+        if (accessToken.isEmpty) {
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "access_token cannot be empty", statusCode: 417)
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+        
+        
+        // call get user info service
+        UsersService.shared.getUserInfo(accessToken: accessToken, properties: properties) {
+            switch $0 {
+            case .failure(let error):
+                // log error
+                let loggerMessage = "User-Info service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
+                logw(loggerMessage, cname: "cidaas-sdk-error-log")
+                
+                // return failure callback
+                DispatchQueue.main.async {
+                    callback(Result.failure(error: error))
+                }
+                return
+            case .success(let userInfoResponse):
+                // log success
+                let loggerMessage = "User-Info service success : " + "Email  - " + String(describing: userInfoResponse.email)
+                logw(loggerMessage, cname: "cidaas-sdk-success-log")
+                
+                
+                // get PostLogoutRedirectURL value from plist file
+                let postLogoutRedirectURL = properties["PostLogoutRedirectURL"] ?? ""
+                
+                var logoutUrl = self.generateLogoutURL(accessToken: accessToken, postLogoutRedirectURL: postLogoutRedirectURL, properties: properties)
+                
+                
+                guard let logoutURL = URL(string: logoutUrl) else {
+                    let error = WebAuthError.shared.serviceFailureException(errorCode: 400, errorMessage: "Invalid Logout URL: \(logoutUrl)", statusCode: 400)
+                    DispatchQueue.main.async {
+                        callback(Result.failure(error: error))
+                    }
+                    return
+                }
+                
+                
+                let logoutSession = SafariLogoutSession(logoutURL: logoutURL) {
+                    switch $0 {
+                    case .success(let logoutSuccess):
+                        print("Successfully loggedout")
+                        UserDefaults.standard.removeObject(forKey: "cidaas_user_details_\(userInfoResponse.sub)")
+                        callback(Result.success(result: logoutSuccess))
+                    case .failure(let error):
+                        print("Logout failed")
+                        DispatchQueue.main.async {
+                            callback(Result.failure(error: error))
+                        }
+                        return
+                    }
+                }
+                
+            }
+        }
     }
     
     public func generateLogoutURL(accessToken: String,  postLogoutRedirectURL: String,properties: Dictionary<String, String>) -> String {

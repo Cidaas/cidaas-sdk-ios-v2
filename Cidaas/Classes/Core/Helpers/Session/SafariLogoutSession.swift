@@ -16,19 +16,13 @@ public class SafariLogoutSession: NSObject {
     var logoutURL: URL
     var callback: (Result<Bool>) -> Void
     
-    public init(logoutURL: URL, redirectURL: String, callback: @escaping (Result<Bool>) -> Void) {
+    public init(logoutURL: URL, callback: @escaping (Result<Bool>) -> Void) {
         self.logoutURL = logoutURL
         self.callback = callback
         
         super.init()
         
-        let arrayOfURL = redirectURL.components(separatedBy: "://")
-        var shortRedirectURL = redirectURL
-        if arrayOfURL.count > 0 {
-            shortRedirectURL = arrayOfURL[0]
-        }
-        
-        self.authSession = ASWebAuthenticationSession(url: self.logoutURL, callbackURLScheme: shortRedirectURL,
+        self.authSession = ASWebAuthenticationSession(url: self.logoutURL, callbackURLScheme: "",
                                                       completionHandler: { (resultURL, resultError) in
             // Clear stored credentials/tokens
             TransactionStore.shared.clear()

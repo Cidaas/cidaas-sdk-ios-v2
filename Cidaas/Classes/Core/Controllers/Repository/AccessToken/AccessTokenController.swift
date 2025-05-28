@@ -102,6 +102,11 @@ public class AccessTokenController {
         else {
             if (globalAccessTokenEntity.refresh_token != "") {
                 self.getAccessToken(refreshToken: globalAccessTokenEntity.refresh_token, callback: callback)
+            } else {
+                let error = WebAuthError.shared.serviceFailureException(errorCode: 417, errorMessage: "user info is missing", statusCode: 417)
+                DispatchQueue.main.async {
+                    callback(Result.failure(error: error))
+                }
             }
         }
     }
