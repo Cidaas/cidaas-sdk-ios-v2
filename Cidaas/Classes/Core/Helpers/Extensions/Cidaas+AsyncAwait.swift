@@ -78,9 +78,9 @@ public extension Cidaas {
         }.data
     }
 
-    func logout(sub: String) async throws {
+    func logout(accessToken: String) async throws {
         try await withCheckedThrowingContinuation { continuation in
-            CidaasNative.shared.logout(sub: sub) {
+            CidaasNative.shared.logout(access_token: accessToken) {
                 switch $0 {
                 case .success(let result):
                     result ? continuation.resume() : continuation.resume(throwing: CidaasError.unknownLogoutError)

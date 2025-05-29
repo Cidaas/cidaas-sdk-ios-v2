@@ -15,7 +15,7 @@ public class LogoutWithBrowserController: NSObject, SFSafariViewControllerDelega
     public static var shared : LogoutWithBrowserController = LogoutWithBrowserController()
     private var safariVC: SFSafariViewController?
     
-    // logout With browser
+    // logout with browser
     public func logoutWithBrowser(delegate: UIViewController, sub: String, properties: Dictionary<String, String>, callback: @escaping(Result<Bool>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil  {
@@ -95,7 +95,7 @@ public class LogoutWithBrowserController: NSObject, SFSafariViewControllerDelega
         
     }
     
-    // logout With browser
+    // logout with browser
     public func logoutWithBrowser(delegate: UIViewController, accessToken: String, properties: Dictionary<String, String>, callback: @escaping(Result<Bool>) -> Void) {
         // null check
         if properties["DomainURL"] == "" || properties["DomainURL"] == nil  {

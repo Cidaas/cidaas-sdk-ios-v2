@@ -53,6 +53,11 @@ public class CidaasNative {
         sharedLogoutController.logout(sub : sub, callback: callback)
     }
     
+    public func logout(access_token : String, callback: @escaping(Result<Bool>) -> Void){
+        print("logout process")
+        sharedLogoutController.logout(access_token : access_token, callback: callback)
+    }
+    
     // Account verification
     public func initiateAccountVerification(accountVerificationEntity : InitiateAccountVerificationEntity, callback: @escaping (Result<InitiateAccountVerificationResponseEntity>) -> Void) {
         sharedAccountVerificationViewController.initiateAccountVerification(accountVerificationEntity: accountVerificationEntity, callback: callback)
