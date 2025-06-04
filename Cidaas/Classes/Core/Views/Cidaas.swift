@@ -27,6 +27,7 @@ public class Cidaas {
     var storage: TransactionStore
     var timer = Timer()
     var browserCallback: ((Result<LoginResponseEntity>) -> ())!
+    var browserLogoutCallback: ((Result<Bool>) -> ())!
     var propertyFileRead: Bool = false
     
     // static variables
@@ -207,6 +208,7 @@ public class Cidaas {
     public func logoutWithBrowser(delegate: UIViewController, sub: String, callback: @escaping (Result<Bool>) -> Void) {
         var savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
+            self.browserLogoutCallback = callback
             LogoutWithBrowserController.shared.logoutWithBrowser(delegate: delegate, sub: sub, properties: savedProp!, callback: callback)
             
         }
@@ -229,6 +231,7 @@ public class Cidaas {
     public func logoutWithBrowser(delegate: UIViewController, accessToken: String, callback: @escaping (Result<Bool>) -> Void) {
         var savedProp = DBHelper.shared.getPropertyFile()
         if (savedProp != nil) {
+            self.browserLogoutCallback = callback
             LogoutWithBrowserController.shared.logoutWithBrowser(delegate: delegate, accessToken: accessToken, properties: savedProp!, callback: callback)
         }
         else {
@@ -350,12 +353,16 @@ public class Cidaas {
             delegate.dismiss(animated: true, completion: nil)
         }
         
-        if browserCallback != nil {
+        if browserCallback != nil  {
             let code = url.valueOf("code") ?? ""
             if code != "" {
                 AccessTokenController.shared.getAccessToken(code: code, callback: browserCallback!)
             }
-        }
+        } else if browserLogoutCallback != nil {
+                DispatchQueue.main.async {
+                    self.browserLogoutCallback(Result.success(result: true))
+                }
+            }
     }
     
     // call biometrics

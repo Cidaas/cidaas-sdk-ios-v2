@@ -12,7 +12,6 @@ public class LoginInteractor {
     public static var shared: LoginInteractor = LoginInteractor()
     var sharedService: LoginServiceWorker
     var sharedPresenter: LoginPresenter
-    var accessToken = ""
   
     
     public init() {
@@ -65,37 +64,29 @@ public class LoginInteractor {
             return
         }
         
-        // call get user info service
-        UsersService.shared.getUserInfo(accessToken: access_token, properties: savedProp!) {
-            switch $0 {
-            case .failure(let error):
-                // log error
-                let loggerMessage = "User-Info service failure : " + "Error Code - " + String(describing: error.errorCode) + ", Error Message - " + error.errorMessage + ", Status Code - " + String(describing: error.statusCode)
-                logw(loggerMessage, cname: "cidaas-sdk-error-log")
-                
-                // return failure callback
-                DispatchQueue.main.async {
-                    callback(Result.failure(error: error))
-                }
-                return
-            case .success(let userInfoResponse):
-                // log success
-                let loggerMessage = "User-Info service success : " + "Email  - " + String(describing: userInfoResponse.email)
-                logw(loggerMessage, cname: "cidaas-sdk-success-log")
-                
-                // call worker
-                self.sharedService.logout(access_token : access_token, properties: savedProp!) { response, error in
-                    if error == nil {
-                        // remove user data if logout is success
-                        UserDefaults.standard.removeObject(forKey: "cidaas_user_details_\(userInfoResponse.sub)")
-                    }
-                    self.sharedPresenter.logout(response: response, errorResponse: error, callback: callback)
-                    
-                }
-                
+        // get sub from accessToken
+        var sub: String?
+        
+        if let subject = TokenHelper.shared.getSubFromAccessToken(from: access_token) {
+            sub = subject
+            print("Subject (sub): \(sub)")
+        } else {
+            let error = WebAuthError.shared.serviceFailureException(errorCode: 400, errorMessage: "not able to access sub from access_token", statusCode: 400)
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
             }
+            return
         }
         
+        // call worker
+        self.sharedService.logout(access_token : access_token, properties: savedProp!) { response, error in
+            if error == nil {
+                // remove user data if logout is success
+                UserDefaults.standard.removeObject(forKey: "cidaas_user_details_\(sub)")
+            }
+            self.sharedPresenter.logout(response: response, errorResponse: error, callback: callback)
+            
+        }
     }
 
     
