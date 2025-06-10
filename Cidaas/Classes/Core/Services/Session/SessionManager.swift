@@ -49,8 +49,13 @@ public class SessionManager {
         
         var bodyParams = parameters
         
-        if parameters != nil {
+        // assign device_id value if it is empty
+        if bodyParams != nil && (bodyParams?["device_id"] as? String == "") {
             bodyParams!["device_id"] = deviceInfo.deviceId
+        }
+        
+        // assign push_id value if it is empty
+        if bodyParams != nil && (bodyParams?["push_id"] as? String == "") {
             bodyParams!["push_id"] = DBHelper.shared.getFCM()
         }
         
@@ -61,10 +66,13 @@ public class SessionManager {
             headers["Accept-Language"]  = locale
         }
         
-        print("=============Header============")
+        print("===================Header==============")
         print(headers)
-        print("===================url=============")
+        print("===================url=================")
         print(url)
+        print("===================Payload=============")
+        print(bodyParams)
+        print("=======================================")
         
         session.request(url, method: method, parameters: bodyParams, encoding: JSONEncoding.default, headers: headers).validate().responseString(encoding: .utf8) { response in
             self.responseRedirect(response: response, callback: callback)
