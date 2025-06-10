@@ -8,12 +8,12 @@
 import Foundation
 import UIKit
 
-public class AuthSession: NSObject, OAuthTransactionDelegate {
+public class AuthSession<T>: NSObject, OAuthTransactionDelegate {
     
     public var state: String?
-    let callback : (Result<LoginResponseEntity>) -> ()
+    let callback : (Result<T>) -> ()
     
-    public init(state: String? = nil, callback: @escaping (Result<LoginResponseEntity>) -> ()) {
+    public init(state: String? = nil, callback: @escaping (Result<T>) -> ()) {
         self.state = state
         self.callback = callback
         super.init()

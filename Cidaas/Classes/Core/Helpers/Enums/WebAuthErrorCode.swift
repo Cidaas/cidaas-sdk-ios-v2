@@ -230,4 +230,6 @@ public enum WebAuthErrorCode : Int32 {
     case NETWORK_TIMEOUT = 10189
     
     case USER_LOGIN_INFO_SERVICE_FAILURE = 10190
+    
+    case LOGOUT_WITH_BROWSER_FAILURE = 10191
 }

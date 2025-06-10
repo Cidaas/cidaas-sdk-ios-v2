@@ -48,6 +48,11 @@ public class CidaasNative {
     }
     
     // logout service
+    public func logout(sub : String, callback: @escaping(Result<Bool>) -> Void){
+        print("logout process")
+        sharedLogoutController.logout(sub : sub, callback: callback)
+    }
+    
     public func logout(access_token : String, callback: @escaping(Result<Bool>) -> Void){
         print("logout process")
         sharedLogoutController.logout(access_token : access_token, callback: callback)

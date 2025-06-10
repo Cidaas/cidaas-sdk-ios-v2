@@ -44,7 +44,7 @@ public class LoginController {
         if #available(iOS 12.0, *) {
             
             // initiate safari session with the constructed url performing single sign on
-            let session = SafariAuthenticationSession(loginURL: loginURL, redirectURL: redirectURL, callback: callback)
+            let session = SafariAuthenticationSession<LoginResponseEntity>(urlValue: loginURL, redirectURL: redirectURL, callback: callback)
             
             // save the session
             self.storage.store(session)
@@ -55,8 +55,6 @@ public class LoginController {
             openSafari(loginURL : loginURL)
         }
     }
-    
-  
     
     // login With social
     public func loginWithSocial(provider: String, requestId: String, delegate: UIViewController, properties: Dictionary<String, String>, callback: @escaping(Result<LoginResponseEntity>) -> Void) {
@@ -80,7 +78,7 @@ public class LoginController {
        if #available(iOS 13.0, *) {
 
            // initiate safari session with the constructed url performing single sign on
-            let session = SafariAuthenticationSession(loginURL: loginURL, redirectURL: redirectURL, callback: callback)
+            let session = SafariAuthenticationSession(urlValue: loginURL, redirectURL: redirectURL, callback: callback)
            // save the session
            self.storage.store(session)
        }

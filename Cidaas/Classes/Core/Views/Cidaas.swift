@@ -27,6 +27,7 @@ public class Cidaas {
     var storage: TransactionStore
     var timer = Timer()
     var browserCallback: ((Result<LoginResponseEntity>) -> ())!
+    var browserLogoutCallback: ((Result<Bool>) -> ())!
     var propertyFileRead: Bool = false
     
     // static variables
@@ -203,6 +204,51 @@ public class Cidaas {
         }
     }
     
+    // login with browser
+    public func logoutWithBrowser(delegate: UIViewController, sub: String, callback: @escaping (Result<Bool>) -> Void) {
+        var savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            self.browserLogoutCallback = callback
+            LogoutWithBrowserController.shared.logoutWithBrowser(delegate: delegate, sub: sub, properties: savedProp!, callback: callback)
+            
+        }
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+    }
+    
+    // login with browser
+    public func logoutWithBrowser(delegate: UIViewController, accessToken: String, callback: @escaping (Result<Bool>) -> Void) {
+        var savedProp = DBHelper.shared.getPropertyFile()
+        if (savedProp != nil) {
+            self.browserLogoutCallback = callback
+            LogoutWithBrowserController.shared.logoutWithBrowser(delegate: delegate, accessToken: accessToken, properties: savedProp!, callback: callback)
+        }
+        else {
+            // log error
+            let loggerMessage = "Read properties file failure : " + "Error Code -  10001, Error Message -  File not found, Status Code - 404"
+            logw(loggerMessage, cname: "cidaas-sdk-error-log")
+            
+            let error = WebAuthError.shared.fileNotFoundException()
+            
+            // return failure callback
+            DispatchQueue.main.async {
+                callback(Result.failure(error: error))
+            }
+            return
+        }
+    }
+    
     
     // register with browser
     public func registerWithBrowser(delegate: UIViewController, extraParams: Dictionary<String, String> = Dictionary<String, String>(), callback: @escaping (Result<LoginResponseEntity>) -> Void) {
@@ -307,12 +353,16 @@ public class Cidaas {
             delegate.dismiss(animated: true, completion: nil)
         }
         
-        if browserCallback != nil {
+        if browserCallback != nil  {
             let code = url.valueOf("code") ?? ""
             if code != "" {
                 AccessTokenController.shared.getAccessToken(code: code, callback: browserCallback!)
             }
-        }
+        } else if browserLogoutCallback != nil {
+                DispatchQueue.main.async {
+                    self.browserLogoutCallback(Result.success(result: true))
+                }
+            }
     }
     
     // call biometrics

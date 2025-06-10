@@ -16,7 +16,14 @@ public class LogoutController{
     }
     
     // logout service
+    // logout with sub
+    public func logout(sub : String,  callback: @escaping(Result<Bool>) -> Void) {
+        sharedInteractor.logout(sub: sub, callback: callback)
+    }
+    
+    // logout service
+    // logout with access_token
     public func logout(access_token : String,  callback: @escaping(Result<Bool>) -> Void) {
-        sharedInteractor.logout(access_token : access_token, callback: callback)
+        sharedInteractor.logout(access_token: access_token, callback: callback)
     }
 }

@@ -49,6 +49,16 @@ public class FileHelper: NSObject {
                     callback(Result.failure(error: WebAuthError.shared.propertyMissingException()))
                     return
                 }
+                
+                if let postLogoutRedirectURL = dict.object(forKey: "PostLogoutRedirectURL") {
+                    properties["PostLogoutRedirectURL"] = (postLogoutRedirectURL as? String) ?? ""
+                }
+                else {
+                    // PostLogoutRedirectURL not found
+                    // return failure
+                    callback(Result.failure(error: WebAuthError.shared.propertyMissingException()))
+                    return
+                }
 
                  if let cidaasVersion = dict.object(forKey: "CidaasVersion") {
                     properties["CidaasVersion"] = (cidaasVersion as? String) ?? ""

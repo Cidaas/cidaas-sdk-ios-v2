@@ -10,13 +10,18 @@ import SafariServices
 import AuthenticationServices
 
 @available(iOS 12.0, *)
-public class SafariAuthenticationSession : AuthSession {
+public class SafariAuthenticationSession<T> : AuthSession<T>, ASWebAuthenticationPresentationContextProviding {
+    
+    public func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
+        return UIApplication.shared.windows.filter({ $0.isKeyWindow }).last ?? ASPresentationAnchor()
+    }
+    
     
     var authSession: ASWebAuthenticationSession?
-    var loginURL: URL
+    var urlValue: URL
     
-    public init(loginURL : URL, redirectURL : String, callback: @escaping (Result<LoginResponseEntity>) -> ()) {
-        self.loginURL = loginURL
+    public init(urlValue : URL, redirectURL : String, sub: String = "",callback: @escaping (Result<T>) -> ()) {
+        self.urlValue = urlValue
         super.init(callback: callback)
         let arrayOfURL = redirectURL.components(separatedBy: "://")
         var shortRedirectURL = redirectURL
@@ -24,7 +29,7 @@ public class SafariAuthenticationSession : AuthSession {
             shortRedirectURL = arrayOfURL[0]
         }
         
-        self.authSession = ASWebAuthenticationSession(url: self.loginURL, callbackURLScheme:shortRedirectURL,
+        self.authSession = ASWebAuthenticationSession(url: self.urlValue, callbackURLScheme:shortRedirectURL,
         completionHandler: { (resultURL, resultError) in
             guard resultError == nil, let callbackURL = resultURL else {
                 if case SFAuthenticationError.canceledLogin = resultError! {
@@ -34,7 +39,14 @@ public class SafariAuthenticationSession : AuthSession {
                 }
                 return TransactionStore.shared.clear()
             }
+            
+            if T.self == Bool.self {
+                // clear user data on logout
+                UserDefaults.standard.removeObject(forKey: "cidaas_user_details_\(sub)")
+            }
+            
             _ = TransactionStore.shared.resume(callbackURL, options: [:])
+             
         })
         
         if #available(iOS 13.0, *) {
@@ -42,13 +54,4 @@ public class SafariAuthenticationSession : AuthSession {
         }
         self.authSession?.start()
     }
-}
-
-@available(iOS 13.0, *)
-extension SafariAuthenticationSession: ASWebAuthenticationPresentationContextProviding {
-
-    public func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
-        return UIApplication.shared.windows.filter({ $0.isKeyWindow }).last ?? ASPresentationAnchor()
-    }
-
 }

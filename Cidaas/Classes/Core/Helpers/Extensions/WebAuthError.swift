@@ -120,6 +120,15 @@ public class WebAuthError : Error, OauthExceptionDelegate {
         return WebAuthError.shared
     }
     
+    // logoutWithBrowser failure exception
+    public func logoutWithBrowserFailureException() -> WebAuthError {
+        WebAuthError.shared.errorCode = String(WebAuthErrorCode.LOGOUT_WITH_BROWSER_FAILURE.rawValue ?? 0)
+        WebAuthError.shared.errorMessage = StringsHelper.shared.LOGOUT_WITH_BROWSER_FAILURE
+        WebAuthError.shared.statusCode = HttpStatusCode.GATEWAY_TIMEOUT.rawValue
+        WebAuthError.shared.error = ErrorResponseEntity()
+        return WebAuthError.shared
+    }
+    
     // code not found exception
     public func codeNotFoundException() -> WebAuthError {
         WebAuthError.shared.errorCode = String(WebAuthErrorCode.CODE_NOT_FOUND.rawValue ?? 0)
