@@ -30,6 +30,8 @@ public class PushAcknowledgeResponseData : Codable {
     public var push_id: String = ""
     public var device_id: String = ""
     public var client_id: String = ""
+    public var client_name: String = ""
+    public var message: String = ""
     public var address: PushAddress = PushAddress()
     public var device_info: PushDeviceInformation = PushDeviceInformation()
     
@@ -41,6 +43,8 @@ public class PushAcknowledgeResponseData : Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.sub = try container.decodeIfPresent(String.self, forKey: .sub) ?? ""
         self.status_id = try container.decodeIfPresent(String.self, forKey: .status_id) ?? ""
+        self.client_name = try container.decodeIfPresent(String.self, forKey: .client_name) ?? ""
+        self.message = try container.decodeIfPresent(String.self, forKey: .message) ?? ""
         self.exchange_id = try container.decodeIfPresent(ExchangeIdResponse.self, forKey: .exchange_id) ?? ExchangeIdResponse()
         self.push_id = try container.decodeIfPresent(String.self, forKey: .push_id) ?? ""
         self.device_id = try container.decodeIfPresent(String.self, forKey: .device_id) ?? ""
